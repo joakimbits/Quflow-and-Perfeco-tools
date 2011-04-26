@@ -1,5 +1,4 @@
-# Requires bugfix for issue 1889 in sympy.core.ast_parser.py:64
-#         return eval(e, global_dict, local_dict)
+# https://github.com/joakimbits/Quflow-and-Perfeco-tools/blob/master/algebra.py
 from re import compile
 from sympy import Basic, Symbol, Matrix, sympify, lambdify, solve, Mul
 from collections import Iterable
@@ -31,7 +30,7 @@ def _systemize(s):
     else: raise TypeError('No system: %r'%s)
 
 def systemize(s):
-    "Basic equations of a source system"
+    "Compile a system of equations"
     return tuple(_systemize(s))
 
 
@@ -43,10 +42,9 @@ def _system_parameters(s):
         for a in s.atoms(Symbol): yield (a.name, a)
 
 def system_parameters(s):
-    "Parameters of a system"
+    "Extract parameters from a system of equations"
     return dict(_system_parameters(s))
 
-debug=False
 class System( Basic ):
     """
     A utility for defining and using mathematical expressions.
@@ -63,22 +61,27 @@ class System( Basic ):
     arrays, any such data is temporarily converted to symbols until all
     parameters are defined.
     
-    Example 1: Solving for parameters in an expression
+    Example 1: Solving for parameters in an expression.
     >>> charging = System('E == (n - C V/e)^2 e^2/(2 C)'); charging.E
     -V*e*n + 0.5*C*V**2 + 0.5*e**2*n**2/C
     >>> E = charging.E(V=0); E
     0.5*e**2*n**2/C
 
-    Example 2: Using physical constants, uncertainties and arrays
-    >>> from quantities import constants, F, eV
+    Example 2: Using physical constants, arrays and uncertainties.
+    >>> from quantities import constants, K, F, eV
     >>> from statistics import std, confidence
     >>> from numpy import array
-    >>> dE = System( E(n=1) - E(n=0), constants); dE #showing temporary symbols
+    >>> blockade = System( Symbol('dE') - (E(n=1) - E(n=0)), constants)
+    >>> dE = blockade.dE; dE # showing temporary symbols
     1.28348474774783e-38*_A**2*_s**2/C /. _s=UnitTime('second', 's'), _A=UnitCurrent('ampere', 'A')
-    >>> confidence( dE(C = std(2,1)*1e-18*F).rescale(eV), 0.99)
-    array([ 0.00367171,  0.07643711]) * eV
-    >>> dE(C = array([1,2,3])*1e-18*F).rescale(eV)
-    array([ 0.08010882,  0.04005441,  0.02670294]) * eV
+    >>> C = blockade.C; C
+    1.28348474774783e-38*_A**2*_s**2/dE /. _s=UnitTime('second', 's'), _A=UnitCurrent('ampere', 'A')
+    >>> C(dE = constants.k*array([ 300, 600, 900 ])*K).rescale(F)
+    array([  3.09874425e-18,   1.54937213e-18,   1.03291475e-18]) * F
+    >>> confidence( dE(C = std( 1, .1 )*1e-18*F).rescale(eV), 0.99 )
+    array([ 0.0537534 ,  0.10646425]) * eV
+    >>> dE(C = confidence( std( 1, .1 )*1e-18*F, 0.99 )).rescale(eV)
+    array([ 0.11938638,  0.06027773]) * eV
     """
     
     # object data - names are defined here to make __getattribute__ easier.
@@ -91,8 +94,8 @@ class System( Basic ):
     subsystem           = None # simplified equations
     
     def __new__( cls, * scopes, ** scope ):
-        # Collect source and parameters
-        source_system = list() # str, list or Basic
+        # Collect equations and parameters
+        source_system = list() # Matrix, Basic, str, list
         source_parameters = dict() # anything else
         for s in scopes + (scope,):
             if isinstance( s, (Matrix, Basic, str, list) ):
@@ -105,10 +108,6 @@ class System( Basic ):
         parameters = system_parameters(system)
         defined   = dictmap( set(parameters).intersection(source_parameters),
                              source_parameters.get )
-        if debug:
-            print 'System:'
-            print source_system
-            print '%r /. %s' % (system, params(defined))
         # Work around objects that sympify can't handle. Can be fixed by
         # improving the interoperability between sympy, numpy and quantity. 
         quantities = dict([(n, v) for n, v in defined.iteritems()
@@ -159,11 +158,6 @@ class System( Basic ):
         else:
             if subsystem.shape == (1,1): subsystem = subsystem[0,0]
             else: subsystem = list(subsystem)
-            if debug:
-                print 'Solution:'
-                print '%r /. %s' % (system, params(defined))
-                print '%r /. %s' % (params(welldefined), params(implicit))
-                print '%r /. %s' % (subsystem, params(implicit))
             self.default = dict()
             try:
                 y = lambdify( implicit, subsystem )(* implicit.values())
