@@ -1,16 +1,17 @@
-#! Calculations with uncertainties
-#!---------------------------------
-#! Based on uncertainquantities.py from quantities-0.9.0.
-#!
-#! Changes:
-#!
-#! 1. UncertainQuantity: fixed code in __add__, __sub__, repeat and flatten.
-#!
-#! 2. Added ln, sqrt, oo, std, interval, independent, corners, collect, inverf,
-#!    confidence.
-#!
-#! Fixed code
-#!---------------
+#https://github.com/joakimbits/Quflow-and-Perfeco-tools/blob/master/statistics.py
+"""
+Statistics for uncertainties in physical quantities
+
+Based on uncertainquantities.py from quantities-0.9.0.
+
+Changes:
+
+ 1. UncertainQuantity: fixed bugs in __add__, __sub__, repeat and flatten.
+
+ 2. Added ln, sqrt, oo, oo_, inverf, std, interval, independent, corners,
+    collect, probability, score, confidence
+"""
+
 from __future__ import division
 import sys
 import numpy as np
@@ -356,7 +357,7 @@ def collect( * quantity ):
     [UncertainQuantity(array(0.0), dimensionless, array(0.0)), UncertainQuantity(array(1.0), dimensionless, array(0.1))]
     >>> x = collect(* x); x
     UncertainQuantity(array([ 0.,  1.]), dimensionless, array([ 0. ,  0.1]))
-    >>> collect(*[x+i for i in range(2)])
+    >>> collect(* [x+i for i in range(2)])
     UncertainQuantity(array([[ 0.,  1.],
            [ 1.,  2.]]), dimensionless, array([[ 0. ,  0.1],
            [ 0. ,  0.1]]))

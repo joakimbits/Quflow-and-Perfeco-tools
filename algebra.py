@@ -1,4 +1,8 @@
-# https://github.com/joakimbits/Quflow-and-Perfeco-tools/blob/master/algebra.py
+#https://github.com/joakimbits/Quflow-and-Perfeco-tools/blob/master/algebra.py
+"""
+Algebra with symbols, physical constants, arrays and uncertainties
+"""
+
 from re import compile
 from sympy import Basic, Symbol, Matrix, sympify, lambdify, solve, Mul
 from collections import Iterable
@@ -71,15 +75,11 @@ class System( Basic ):
     >>> from quantities import constants, K, F, eV
     >>> from statistics import std, confidence
     >>> from numpy import array
-    >>> blockade = System( Symbol('dE') - (E(n=1) - E(n=0)), constants)
-    >>> dE = blockade.dE; dE # showing temporary symbols
-    1.28348474774783e-38*_A**2*_s**2/C /. _s=UnitTime('second', 's'), _A=UnitCurrent('ampere', 'A')
-    >>> C = blockade.C; C
+    >>> blockade = System( (E(n=1) - E(n=0)) - Symbol('dE'), constants )
+    >>> dE = blockade.dE; C = blockade.C; C # showing temporary symbols
     1.28348474774783e-38*_A**2*_s**2/dE /. _s=UnitTime('second', 's'), _A=UnitCurrent('ampere', 'A')
     >>> C(dE = constants.k*array([ 300, 600, 900 ])*K).rescale(F)
     array([  3.09874425e-18,   1.54937213e-18,   1.03291475e-18]) * F
-    >>> confidence( dE(C = std( 1, .1 )*1e-18*F).rescale(eV), 0.99 )
-    array([ 0.0537534 ,  0.10646425]) * eV
     >>> dE(C = confidence( std( 1, .1 )*1e-18*F, 0.99 )).rescale(eV)
     array([ 0.11938638,  0.06027773]) * eV
     """
