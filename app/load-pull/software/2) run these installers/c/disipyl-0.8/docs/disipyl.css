@@ -1,0 +1,101 @@
+/*  disipyl documentation styles
+    
+    Attempts to emulate the default pydoc look
+    
+*/
+body {
+    background-color: #FFFFFF;
+    color: #000000;
+    font-family: Georgia,Times New;
+    font-size: 10pt;
+    /* margin-left: 5%; */
+    /*margin-right: 5%;*/
+}
+
+td.headline {
+    font-family: Helvetica;
+    font-size: 20pt;
+}
+h1,h2,h3,h4,h5 {
+    font-family: Helvetica;
+    color: #FFFFFF;
+    background-color: #6699FF;
+    padding-left:3pt;
+    margin-top:4pt;
+    margin-bottom:2pt;
+    /*margin-left: -4%; */
+    border-style:none;
+    border-width:thin;
+    width:100%;
+}
+h1 {
+    background-color: #7799ee;
+    font-size: 18pt;
+}
+
+h1.navbar {
+	background-color: #55aa55;
+	width: 1.75in;
+}
+
+h1.title {
+    background-color: #7799ee;
+    font-size: 18pt;
+    text-align: center;
+}
+
+h2 {
+    background-color: #aa55cc;
+    font-size: 16pt;
+    padding-left:6pt;
+}
+
+h3 {
+    background-color: #ee77aa;
+    font-size: 12pt;
+    padding-left:9pt;
+}
+h4 {
+    background-color: #eeaa77;
+    font-size: 10pt;
+    padding-left:12pt;
+}
+
+h5 {
+	background-color: #55aa55;
+    font-size: 8pt;
+    padding-left:15pt;
+}
+
+
+tt,pre,code {
+    font-family: Lucida Console,Courier New,Courier,monotype;
+    font-size: 9pt;
+}
+
+pre.code {
+    font-family: Lucida Console,Courier New,Courier,monotype;
+    background-color: #E0E0E0;
+    padding-left: 15pt;
+    width: 90%;
+    padding: 0.5em;
+}
+
+
+div.author {
+    color: #000000;
+    background-color: #FFFFFF;
+    text-align: center;
+    font-size: 14pt;
+    padding: 1em;  
+}
+
+div.sidebar {
+    color: #000000;
+    background-color: #ffc8d8;
+    border: solid; 
+    border-width: thin;     
+    font-size: 10pt;
+    width: 90%;
+}
+

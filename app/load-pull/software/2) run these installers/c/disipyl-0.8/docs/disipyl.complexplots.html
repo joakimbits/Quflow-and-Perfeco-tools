@@ -1,0 +1,332 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module disipyl.complexplots</title>
+<style type="text/css"><!--
+TT { font-family: lucidatypewriter, lucida console, courier }
+--></style></head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="disipyl.html"><font color="#ffffff">disipyl</font></a>.complexplots</strong></big></big> (version 1.2)</font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/pmagwene/data/pmag/pyth/disipyl/complexplots.py">/home/pmagwene/data/pmag/pyth/disipyl/complexplots.py</a></font></td></tr></table>
+    <p><tt>Plot&nbsp;functions&nbsp;for&nbsp;dealing&nbsp;with&nbsp;complex&nbsp;valued&nbsp;data.<br>
+&nbsp;<br>
+-----------------------------------------------------------------------------<br>
+(c)&nbsp;Copyright&nbsp;by&nbsp;Paul&nbsp;M.&nbsp;Magwene,&nbsp;2002&nbsp;&nbsp;(mailto:paul.magwene@yale.edu)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Permission&nbsp;to&nbsp;use,&nbsp;copy,&nbsp;modify,&nbsp;and&nbsp;distribute&nbsp;this&nbsp;software&nbsp;and&nbsp;its<br>
+&nbsp;&nbsp;&nbsp;&nbsp;documentation&nbsp;for&nbsp;any&nbsp;purpose&nbsp;and&nbsp;without&nbsp;fee&nbsp;or&nbsp;royalty&nbsp;is&nbsp;hereby&nbsp;granted,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;provided&nbsp;that&nbsp;the&nbsp;above&nbsp;copyright&nbsp;notice&nbsp;appear&nbsp;in&nbsp;all&nbsp;copies&nbsp;and&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;both&nbsp;that&nbsp;copyright&nbsp;notice&nbsp;and&nbsp;this&nbsp;permission&nbsp;notice&nbsp;appear&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;supporting&nbsp;documentation&nbsp;or&nbsp;portions&nbsp;thereof,&nbsp;including&nbsp;modifications,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;you&nbsp;make.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;THE&nbsp;AUTHOR&nbsp;PAUL&nbsp;M.&nbsp;MAGWENE&nbsp;DISCLAIMS&nbsp;ALL&nbsp;WARRANTIES&nbsp;WITH&nbsp;REGARD&nbsp;TO<br>
+&nbsp;&nbsp;&nbsp;&nbsp;THIS&nbsp;SOFTWARE,&nbsp;INCLUDING&nbsp;ALL&nbsp;IMPLIED&nbsp;WARRANTIES&nbsp;OF&nbsp;MERCHANTABILITY&nbsp;AND<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FITNESS,&nbsp;IN&nbsp;NO&nbsp;EVENT&nbsp;SHALL&nbsp;THE&nbsp;AUTHOR&nbsp;BE&nbsp;LIABLE&nbsp;FOR&nbsp;ANY&nbsp;SPECIAL,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;INDIRECT&nbsp;OR&nbsp;CONSEQUENTIAL&nbsp;DAMAGES&nbsp;OR&nbsp;ANY&nbsp;DAMAGES&nbsp;WHATSOEVER&nbsp;RESULTING<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;LOSS&nbsp;OF&nbsp;USE,&nbsp;DATA&nbsp;OR&nbsp;PROFITS,&nbsp;WHETHER&nbsp;IN&nbsp;AN&nbsp;ACTION&nbsp;OF&nbsp;CONTRACT,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NEGLIGENCE&nbsp;OR&nbsp;OTHER&nbsp;TORTIOUS&nbsp;ACTION,&nbsp;ARISING&nbsp;OUT&nbsp;OF&nbsp;OR&nbsp;IN&nbsp;CONNECTION<br>
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;THE&nbsp;USE&nbsp;OR&nbsp;PERFORMANCE&nbsp;OF&nbsp;THIS&nbsp;SOFTWARE&nbsp;!<br>
+-----------------------------------------------------------------------------</tt></p>
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="Numeric.html">Numeric</a><br>
+</td><td width="25%" valign=top><a href="cmath.html">cmath</a><br>
+</td><td width="25%" valign=top><a href="disipyl.plots.html">disipyl.plots</a><br>
+</td><td width="25%" valign=top><a href="disipyl.pxdislin.html">disipyl.pxdislin</a><br>
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="disipyl.plots.html#ScatterPlot">disipyl.plots.ScatterPlot</a>(<a href="disipyl.plots.html#Plot2D">disipyl.plots.Plot2D</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.complexplots.html#ScatterPlot">ScatterPlot</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="disipyl.plots.html#VectorPlot">disipyl.plots.VectorPlot</a>(<a href="disipyl.plots.html#Plot2D">disipyl.plots.Plot2D</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.complexplots.html#VectorPlot">VectorPlot</a>
+</font></dt></dl>
+</dd>
+</dl>
+ 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ScatterPlot">class <strong>ScatterPlot</strong></a>(<a href="disipyl.plots.html#ScatterPlot">disipyl.plots.ScatterPlot</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Create&nbsp;scatter&nbsp;plot&nbsp;from&nbsp;list&nbsp;of&nbsp;complex&nbsp;numbers.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.complexplots.html#ScatterPlot">ScatterPlot</a></dd>
+<dd><a href="disipyl.plots.html#ScatterPlot">disipyl.plots.ScatterPlot</a></dd>
+<dd><a href="disipyl.plots.html#Plot2D">disipyl.plots.Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="ScatterPlot-__init__"><strong>__init__</strong></a>(self, pts, **keywords)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Create scatter plot from list of complex numbers.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.complexplots'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#ScatterPlot">disipyl.plots.ScatterPlot</a>:<br>
+<dl><dt><a name="ScatterPlot-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot2D">disipyl.plots.Plot2D</a>:<br>
+<dl><dt><a name="ScatterPlot-refresh"><strong>refresh</strong></a> = setup_plot(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="ScatterPlot-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="ScatterPlot-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="ScatterPlot-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#ScatterPlot-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="VectorPlot">class <strong>VectorPlot</strong></a>(<a href="disipyl.plots.html#VectorPlot">disipyl.plots.VectorPlot</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2>&nbsp;</td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.complexplots.html#VectorPlot">VectorPlot</a></dd>
+<dd><a href="disipyl.plots.html#VectorPlot">disipyl.plots.VectorPlot</a></dd>
+<dd><a href="disipyl.plots.html#Plot2D">disipyl.plots.Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="VectorPlot-__init__"><strong>__init__</strong></a>(self, startpts, endpts, **keywords)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__module__</strong> = 'disipyl.complexplots'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#VectorPlot">disipyl.plots.VectorPlot</a>:<br>
+<dl><dt><a name="VectorPlot-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.plots.html#VectorPlot">disipyl.plots.VectorPlot</a>:<br>
+<dl><dt><strong>__doc__</strong> = None</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot2D">disipyl.plots.Plot2D</a>:<br>
+<dl><dt><a name="VectorPlot-refresh"><strong>refresh</strong></a> = setup_plot(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="VectorPlot-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="VectorPlot-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="VectorPlot-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="VectorPlot-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="VectorPlot-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="VectorPlot-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="VectorPlot-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="VectorPlot-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="VectorPlot-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="VectorPlot-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="VectorPlot-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="VectorPlot-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#VectorPlot-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#VectorPlot-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#VectorPlot-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#VectorPlot-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#VectorPlot-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#VectorPlot-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#VectorPlot-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><strong>__author__</strong> = 'Paul M. Magwene <paul.magwene@yale.edu>'<br>
+<strong>__credits__</strong> = ''<br>
+<strong>__file__</strong> = '/home/pmagwene/data/pmag/pyth/disipyl/complexplots.py'<br>
+<strong>__name__</strong> = 'disipyl.complexplots'<br>
+<strong>__version__</strong> = '$Revision: 1.1.1.1 $'</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%">Paul&nbsp;M.&nbsp;Magwene&nbsp;&lt;paul.magwene@yale.edu&gt;</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Credits</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"></td></tr></table>
+</body></html>

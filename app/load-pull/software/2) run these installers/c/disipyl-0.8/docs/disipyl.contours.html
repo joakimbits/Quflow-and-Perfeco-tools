@@ -1,0 +1,879 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module disipyl.contours</title>
+<style type="text/css"><!--
+TT { font-family: lucidatypewriter, lucida console, courier }
+--></style></head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="disipyl.html"><font color="#ffffff">disipyl</font></a>.contours</strong></big></big> (version 1.3)</font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/pmagwene/data/pmag/pyth/disipyl/contours.py">/home/pmagwene/data/pmag/pyth/disipyl/contours.py</a></font></td></tr></table>
+    <p><tt>A&nbsp;module&nbsp;for&nbsp;creating&nbsp;contour&nbsp;plots&nbsp;and&nbsp;3-D&nbsp;color&nbsp;plots.<br>
+&nbsp;<br>
+-----------------------------------------------------------------------------<br>
+(c)&nbsp;Copyright&nbsp;by&nbsp;Paul&nbsp;M.&nbsp;Magwene,&nbsp;2002&nbsp;&nbsp;(mailto:paul.magwene@yale.edu)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Permission&nbsp;to&nbsp;use,&nbsp;copy,&nbsp;modify,&nbsp;and&nbsp;distribute&nbsp;this&nbsp;software&nbsp;and&nbsp;its<br>
+&nbsp;&nbsp;&nbsp;&nbsp;documentation&nbsp;for&nbsp;any&nbsp;purpose&nbsp;and&nbsp;without&nbsp;fee&nbsp;or&nbsp;royalty&nbsp;is&nbsp;hereby&nbsp;granted,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;provided&nbsp;that&nbsp;the&nbsp;above&nbsp;copyright&nbsp;notice&nbsp;appear&nbsp;in&nbsp;all&nbsp;copies&nbsp;and&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;both&nbsp;that&nbsp;copyright&nbsp;notice&nbsp;and&nbsp;this&nbsp;permission&nbsp;notice&nbsp;appear&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;supporting&nbsp;documentation&nbsp;or&nbsp;portions&nbsp;thereof,&nbsp;including&nbsp;modifications,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;you&nbsp;make.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;THE&nbsp;AUTHOR&nbsp;PAUL&nbsp;M.&nbsp;MAGWENE&nbsp;DISCLAIMS&nbsp;ALL&nbsp;WARRANTIES&nbsp;WITH&nbsp;REGARD&nbsp;TO<br>
+&nbsp;&nbsp;&nbsp;&nbsp;THIS&nbsp;SOFTWARE,&nbsp;INCLUDING&nbsp;ALL&nbsp;IMPLIED&nbsp;WARRANTIES&nbsp;OF&nbsp;MERCHANTABILITY&nbsp;AND<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FITNESS,&nbsp;IN&nbsp;NO&nbsp;EVENT&nbsp;SHALL&nbsp;THE&nbsp;AUTHOR&nbsp;BE&nbsp;LIABLE&nbsp;FOR&nbsp;ANY&nbsp;SPECIAL,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;INDIRECT&nbsp;OR&nbsp;CONSEQUENTIAL&nbsp;DAMAGES&nbsp;OR&nbsp;ANY&nbsp;DAMAGES&nbsp;WHATSOEVER&nbsp;RESULTING<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;LOSS&nbsp;OF&nbsp;USE,&nbsp;DATA&nbsp;OR&nbsp;PROFITS,&nbsp;WHETHER&nbsp;IN&nbsp;AN&nbsp;ACTION&nbsp;OF&nbsp;CONTRACT,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NEGLIGENCE&nbsp;OR&nbsp;OTHER&nbsp;TORTIOUS&nbsp;ACTION,&nbsp;ARISING&nbsp;OUT&nbsp;OF&nbsp;OR&nbsp;IN&nbsp;CONNECTION<br>
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;THE&nbsp;USE&nbsp;OR&nbsp;PERFORMANCE&nbsp;OF&nbsp;THIS&nbsp;SOFTWARE&nbsp;!<br>
+-----------------------------------------------------------------------------</tt></p>
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="Numeric.html">Numeric</a><br>
+<a href="disipyl.pydislin.html">disipyl.pydislin</a><br>
+</td><td width="25%" valign=top><a href="disipyl.plots.html">disipyl.plots</a><br>
+<a href="disipyl.pxdislin.html">disipyl.pxdislin</a><br>
+</td><td width="25%" valign=top><a href="types.html">types</a><br>
+<a href="disipyl.utilities.html">disipyl.utilities</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="disipyl.pxdislin.html#AxisSystem2D">disipyl.pxdislin.AxisSystem2D</a>(<a href="disipyl.pxdislin.html#AxisSystem">disipyl.pxdislin.AxisSystem</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.contours.html#AxisSystemColor">AxisSystemColor</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a>(<a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.contours.html#ColorMatrix">ColorMatrix</a>
+</font></dt><dt><font face="helvetica, arial"><a href="disipyl.contours.html#ContourObject">ContourObject</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.contours.html#Contour">Contour</a>
+</font></dt><dt><font face="helvetica, arial"><a href="disipyl.contours.html#ContourMatrix">ContourMatrix</a>
+</font></dt><dt><font face="helvetica, arial"><a href="disipyl.contours.html#ShadedContours">ShadedContours</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>(<a href="__builtin__.html#object">__builtin__.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.contours.html#FunctionContours">FunctionContours</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="disipyl.plots.html#Plot2D">disipyl.plots.Plot2D</a>(<a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.contours.html#ColorPlot">ColorPlot</a>
+</font></dt></dl>
+</dd>
+</dl>
+ 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="AxisSystemColor">class <strong>AxisSystemColor</strong></a>(<a href="disipyl.pxdislin.html#AxisSystem2D">disipyl.pxdislin.AxisSystem2D</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Axis&nbsp;system&nbsp;object&nbsp;for&nbsp;3D-color&nbsp;plots.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;xaxis,&nbsp;yaxis,&nbsp;zaxis:&nbsp;Axis&nbsp;objects.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.contours.html#AxisSystemColor">AxisSystemColor</a></dd>
+<dd><a href="disipyl.pxdislin.html#AxisSystem2D">disipyl.pxdislin.AxisSystem2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#AxisSystem">disipyl.pxdislin.AxisSystem</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="AxisSystemColor-__init__"><strong>__init__</strong></a>(self, xaxis<font color="#909090">=None</font>, yaxis<font color="#909090">=None</font>, zaxis<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-addZ"><strong>addZ</strong></a>(self, zaxis)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-displayit"><strong>displayit</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-draw"><strong>draw</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-postdisplay"><strong>postdisplay</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Axis system object for 3D-color plots.\n    \n ...      * xaxis, yaxis, zaxis: Axis objects.\n    '</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.contours'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#AxisSystem2D">disipyl.pxdislin.AxisSystem2D</a>:<br>
+<dl><dt><a name="AxisSystemColor-addX"><strong>addX</strong></a>(self, xaxis)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-addY"><strong>addY</strong></a>(self, yaxis)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-limits"><strong>limits</strong></a>(self, xmin, xmax, ymin, ymax)</dt><dd><tt>A&nbsp;convenience&nbsp;function&nbsp;for&nbsp;quickly&nbsp;setting&nbsp;limits&nbsp;of&nbsp;x&nbsp;and&nbsp;y&nbsp;axes.</tt></dd></dl>
+
+<dl><dt><a name="AxisSystemColor-postaxis"><strong>postaxis</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-squareup"><strong>squareup</strong></a>(self)</dt><dd><tt>Causes&nbsp;x,y&nbsp;scaling&nbsp;to&nbsp;be&nbsp;equal.</tt></dd></dl>
+
+<dl><dt><a name="AxisSystemColor-ticks"><strong>ticks</strong></a>(self, xstart, xstep, ystart, ystep)</dt><dd><tt>A&nbsp;convenience&nbsp;function&nbsp;for&nbsp;quickly&nbsp;setting&nbsp;tickstart/step&nbsp;of&nbsp;x&nbsp;and&nbsp;y&nbsp;axes.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#AxisSystem">disipyl.pxdislin.AxisSystem</a>:<br>
+<dl><dt><a name="AxisSystemColor-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="AxisSystemColor-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="AxisSystemColor-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="AxisSystemColor-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="AxisSystemColor-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="AxisSystemColor-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#AxisSystemColor-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="AxisSystemColor-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#AxisSystemColor-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="AxisSystemColor-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#AxisSystemColor-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="AxisSystemColor-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="AxisSystemColor-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#AxisSystemColor-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="AxisSystemColor-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#AxisSystemColor-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="AxisSystemColor-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#AxisSystemColor-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#AxisSystemColor-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ColorMatrix">class <strong>ColorMatrix</strong></a>(<a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="disipyl.pxdislin.html#Object">Object</a>&nbsp;representing&nbsp;3D&nbsp;color&nbsp;matrix.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.contours.html#ColorMatrix">ColorMatrix</a></dd>
+<dd><a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="ColorMatrix-__init__"><strong>__init__</strong></a>(self, matrix<font color="#909090">=None</font>, nrows<font color="#909090">=None</font>, ncols<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="ColorMatrix-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorMatrix-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Object representing 3D color matrix.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.contours'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a>:<br>
+<dl><dt><a name="ColorMatrix-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorMatrix-draw"><strong>draw</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="ColorMatrix-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="ColorMatrix-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="ColorMatrix-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="ColorMatrix-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="ColorMatrix-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="ColorMatrix-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorMatrix-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="ColorMatrix-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="ColorMatrix-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="ColorMatrix-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="ColorMatrix-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ColorMatrix-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ColorMatrix-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#ColorMatrix-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ColorMatrix-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#ColorMatrix-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="ColorMatrix-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="ColorMatrix-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#ColorMatrix-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="ColorMatrix-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ColorMatrix-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="ColorMatrix-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#ColorMatrix-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#ColorMatrix-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ColorPlot">class <strong>ColorPlot</strong></a>(<a href="disipyl.plots.html#Plot2D">disipyl.plots.Plot2D</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Base&nbsp;class&nbsp;for&nbsp;constructing&nbsp;3D&nbsp;color&nbsp;plots.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.contours.html#ColorPlot">ColorPlot</a></dd>
+<dd><a href="disipyl.plots.html#Plot2D">disipyl.plots.Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="ColorPlot-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Base class for constructing 3D color plots.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.contours'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot2D">disipyl.plots.Plot2D</a>:<br>
+<dl><dt><a name="ColorPlot-__init__"><strong>__init__</strong></a>(self, **keywords)</dt></dl>
+
+<dl><dt><a name="ColorPlot-refresh"><strong>refresh</strong></a> = setup_plot(self)</dt></dl>
+
+<dl><dt><a name="ColorPlot-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="ColorPlot-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorPlot-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorPlot-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="ColorPlot-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="ColorPlot-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorPlot-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorPlot-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="ColorPlot-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorPlot-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorPlot-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="ColorPlot-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="ColorPlot-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorPlot-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorPlot-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorPlot-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="ColorPlot-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="ColorPlot-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="ColorPlot-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="ColorPlot-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="ColorPlot-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="ColorPlot-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ColorPlot-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="ColorPlot-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="ColorPlot-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="ColorPlot-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="ColorPlot-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ColorPlot-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ColorPlot-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#ColorPlot-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ColorPlot-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#ColorPlot-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="ColorPlot-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="ColorPlot-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#ColorPlot-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="ColorPlot-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ColorPlot-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="ColorPlot-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#ColorPlot-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#ColorPlot-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Contour">class <strong>Contour</strong></a>(<a href="disipyl.contours.html#ContourObject">ContourObject</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="disipyl.pxdislin.html#Object">Object</a>&nbsp;representing&nbsp;a&nbsp;single&nbsp;contour.<br>
+&nbsp;<br>
+xlist,&nbsp;ylist&nbsp;--&nbsp;lists&nbsp;of&nbsp;x,y&nbsp;coordinates<br>
+zlist&nbsp;--&nbsp;list&nbsp;or&nbsp;matrix&nbsp;with&nbsp;z-values&nbsp;corresponding&nbsp;to&nbsp;x,y&nbsp;coordinates<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.contours.html#Contour">Contour</a></dd>
+<dd><a href="disipyl.contours.html#ContourObject">ContourObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="Contour-__init__"><strong>__init__</strong></a>(self, xlist<font color="#909090">=[]</font>, ylist<font color="#909090">=[]</font>, zlist<font color="#909090">=[]</font>, level<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="Contour-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Object representing a single contour.\n    \n  ... z-values corresponding to x,y coordinates\n    '</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.contours'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.contours.html#ContourObject">ContourObject</a>:<br>
+<dl><dt><a name="Contour-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Contour-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a>:<br>
+<dl><dt><a name="Contour-draw"><strong>draw</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="Contour-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="Contour-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="Contour-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="Contour-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="Contour-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="Contour-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Contour-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="Contour-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="Contour-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="Contour-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="Contour-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#Contour-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="Contour-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#Contour-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="Contour-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#Contour-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="Contour-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="Contour-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#Contour-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="Contour-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#Contour-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="Contour-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#Contour-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#Contour-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ContourMatrix">class <strong>ContourMatrix</strong></a>(<a href="disipyl.contours.html#ContourObject">ContourObject</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="disipyl.pxdislin.html#Object">Object</a>&nbsp;representing&nbsp;a&nbsp;single&nbsp;contour&nbsp;representation&nbsp;of&nbsp;a&nbsp;matrix.<br>
+&nbsp;<br>
+*&nbsp;Drawn&nbsp;using&nbsp;current&nbsp;X,Y-axis&nbsp;values.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;zmatrix:&nbsp;2-D&nbsp;Numeric&nbsp;array.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;level:&nbsp;level&nbsp;at&nbsp;which&nbsp;to&nbsp;draw&nbsp;contour<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.contours.html#ContourMatrix">ContourMatrix</a></dd>
+<dd><a href="disipyl.contours.html#ContourObject">ContourObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="ContourMatrix-__init__"><strong>__init__</strong></a>(self, zmatrix<font color="#909090">=None</font>, level<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="ContourMatrix-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Object representing a single contour representa...   * level: level at which to draw contour\n    '</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.contours'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.contours.html#ContourObject">ContourObject</a>:<br>
+<dl><dt><a name="ContourMatrix-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ContourMatrix-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a>:<br>
+<dl><dt><a name="ContourMatrix-draw"><strong>draw</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="ContourMatrix-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="ContourMatrix-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="ContourMatrix-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="ContourMatrix-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="ContourMatrix-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="ContourMatrix-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ContourMatrix-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="ContourMatrix-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="ContourMatrix-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="ContourMatrix-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="ContourMatrix-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ContourMatrix-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ContourMatrix-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#ContourMatrix-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ContourMatrix-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#ContourMatrix-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="ContourMatrix-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="ContourMatrix-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#ContourMatrix-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="ContourMatrix-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ContourMatrix-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="ContourMatrix-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#ContourMatrix-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#ContourMatrix-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ContourObject">class <strong>ContourObject</strong></a>(<a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Base&nbsp;class&nbsp;for&nbsp;contour&nbsp;objects.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.contours.html#ContourObject">ContourObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="ContourObject-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ContourObject-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ContourObject-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Base class for contour objects.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.contours'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a>:<br>
+<dl><dt><a name="ContourObject-__init__"><strong>__init__</strong></a>(self, disfunc<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="ContourObject-draw"><strong>draw</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="ContourObject-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="ContourObject-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="ContourObject-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="ContourObject-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="ContourObject-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="ContourObject-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ContourObject-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="ContourObject-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="ContourObject-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="ContourObject-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="ContourObject-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ContourObject-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ContourObject-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#ContourObject-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ContourObject-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#ContourObject-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="ContourObject-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="ContourObject-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#ContourObject-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="ContourObject-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ContourObject-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="ContourObject-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#ContourObject-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#ContourObject-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FunctionContours">class <strong>FunctionContours</strong></a>(<a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="disipyl.pxdislin.html#Object">Object</a>&nbsp;representing&nbsp;contours&nbsp;for&nbsp;a&nbsp;given&nbsp;function,&nbsp;f(x,y).<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;func:&nbsp;function&nbsp;which&nbsp;accepted&nbsp;two&nbsp;arguments&nbsp;and&nbsp;returns&nbsp;single&nbsp;value<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;xstart,&nbsp;xstop,&nbsp;xstep:&nbsp;starting&nbsp;and&nbsp;ending&nbsp;values,&nbsp;and&nbsp;step&nbsp;size&nbsp;over&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;which&nbsp;to&nbsp;calculate&nbsp;contours.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ystart,&nbsp;ystop,&nbsp;ystep:&nbsp;see&nbsp;above.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;zstep:&nbsp;contour&nbsp;interval.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.contours.html#FunctionContours">FunctionContours</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="FunctionContours-__init__"><strong>__init__</strong></a>(self, func<font color="#909090">=None</font>, xstart<font color="#909090">=None</font>, xstop<font color="#909090">=None</font>, xstep<font color="#909090">=None</font>, ystart<font color="#909090">=None</font>, ystop<font color="#909090">=None</font>, ystep<font color="#909090">=None</font>, zstep<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="FunctionContours-draw"><strong>draw</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionContours-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionContours-setup_contours"><strong>setup_contours</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionContours-setup_data"><strong>setup_data</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Object representing contours for a given functi...above.\n        * zstep: contour interval.\n    '</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.contours'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="FunctionContours-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="FunctionContours-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionContours-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="FunctionContours-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="FunctionContours-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="FunctionContours-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="FunctionContours-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionContours-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="FunctionContours-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="FunctionContours-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="FunctionContours-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="FunctionContours-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#FunctionContours-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="FunctionContours-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#FunctionContours-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="FunctionContours-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#FunctionContours-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="FunctionContours-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="FunctionContours-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#FunctionContours-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="FunctionContours-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#FunctionContours-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="FunctionContours-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#FunctionContours-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#FunctionContours-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ShadedContours">class <strong>ShadedContours</strong></a>(<a href="disipyl.contours.html#ContourObject">ContourObject</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="disipyl.pxdislin.html#Object">Object</a>&nbsp;representing&nbsp;shaded&nbsp;contours.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;xlist,&nbsp;ylist:&nbsp;sequences&nbsp;of&nbsp;x&nbsp;and&nbsp;y&nbsp;values&nbsp;over&nbsp;which&nbsp;function&nbsp;is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;calculated<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;zmatrix:<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.contours.html#ShadedContours">ShadedContours</a></dd>
+<dd><a href="disipyl.contours.html#ContourObject">ContourObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="ShadedContours-__init__"><strong>__init__</strong></a>(self, xlist<font color="#909090">=[]</font>, ylist<font color="#909090">=[]</font>, zmatrix<font color="#909090">=[]</font>, levels<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="ShadedContours-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ShadedContours-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Object representing shaded contours.\n    \n   ...           calculated\n        * zmatrix: \n    '</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.contours'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.contours.html#ContourObject">ContourObject</a>:<br>
+<dl><dt><a name="ShadedContours-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#DrawObject">disipyl.pxdislin.DrawObject</a>:<br>
+<dl><dt><a name="ShadedContours-draw"><strong>draw</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="ShadedContours-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="ShadedContours-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="ShadedContours-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="ShadedContours-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="ShadedContours-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="ShadedContours-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ShadedContours-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="ShadedContours-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="ShadedContours-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="ShadedContours-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="ShadedContours-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ShadedContours-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ShadedContours-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#ShadedContours-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ShadedContours-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#ShadedContours-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="ShadedContours-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="ShadedContours-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#ShadedContours-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="ShadedContours-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ShadedContours-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="ShadedContours-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#ShadedContours-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#ShadedContours-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><strong>__author__</strong> = 'Paul M. Magwene <paul.magwene@yale.edu>'<br>
+<strong>__credits__</strong> = ''<br>
+<strong>__file__</strong> = '/home/pmagwene/data/pmag/pyth/disipyl/contours.py'<br>
+<strong>__name__</strong> = 'disipyl.contours'<br>
+<strong>__version__</strong> = '$Revision: 1.1.1.1 $'<br>
+<strong>clridxloop</strong> = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1...246, 247, 248, 249, 250, 251, 252, 253, 254, 255]</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%">Paul&nbsp;M.&nbsp;Magwene&nbsp;&lt;paul.magwene@yale.edu&gt;</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Credits</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"></td></tr></table>
+</body></html>

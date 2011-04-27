@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>disipyl Installation</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="disipyl.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<h1 class="title">disipyl Installation</h1>
+
+<div class="author">
+Author: Paul M. Magwene<br>
+Email: <a href="mailto:paul.magwene@yale.edu">paul.magwene@yale.edu</a></div>
+
+<h2>Prerequisites</h2>
+
+<p><code>disipyl</code> requires the followingitemsunction properly:</p>
+<ul>
+  <li>Python (version 2.0 or later)  - available from <a
+    href="http://www.python.org">http://www.python.org</a></li>
+  <li>DISLIN (version 7.5 or later) - available from <a
+    href="http://www.linmpi.mpg.de/dislin/">http://www.linmpi.mpg.de/dislin/</a></li>
+  <li>Numpy - Python Numerical extension module - available from <a
+    href="http://sourceforge.net/projects/numpy">http://sourceforge.net/projects/numpy</a></li>
+</ul>
+
+<p></p>
+
+<p>One you've obtained each of the above follow the platform-specific
+instructions.  Once you think you've got everything properly installed, run
+the python interpreter (either from a command-prompt or via IDLE) and type
+the following:</p>
+<pre class="code">&gt;&gt;&gt; import Numeric
+&gt;&gt;&gt; import dislin
+&gt;&gt;&gt;</pre>
+If you get any error messages, something hasn't been installed correctly.
+You'll need to get the above working before you can use <code>disipyl</code>.
+
+<h2>Installing disipyl</h2>
+
+<p>Once you've got Numeric and dislin properly installed you can install
+disipyl.  You have two alternatives:</p>
+
+<h3>Using distutils to install disipyl</h3>
+
+<p>The easiest option is to use the included setup.py script (driven by
+<code>distutils</code>) to install disipyl, like so:</p>
+<pre class="code">c:\tmp\disipyl-0.5\python setup.py build</pre>
+
+<h3>Installation without distutils</h3>
+
+<p>Alternatively, you can just copy the <code>disipyl</code> folder to a
+directory somewhere on your <code>PYTHONPATH</code> (the site-packages
+subdirectory of your Python installation is probably a good choice).</p>
+</body>
+</html>

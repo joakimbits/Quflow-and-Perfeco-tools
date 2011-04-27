@@ -1,0 +1,399 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>disipyl Tutorial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="disipyl.css" type="text/css" rel="stylesheet">
+  <link>
+</head>
+
+<body>
+<h1 class="title">disipyl Tutorial</h1>
+
+<div class="author">
+Author: Paul M. Magwene<br>
+Email: <a href="mailto:paul.magwene@yale.edu">paul.magwene@yale.edu</a></div>
+
+<h2>Overview</h2>
+
+<p>The following tutorial leads the user through the creation of
+<strong>disipyl</strong> plots using the interactive Python interpreter.  I
+also provide some longer examples in which I show the user how to derive
+specialized classes and functions to suit particular plotting needs.</p>
+
+<p>You may find it useful to open another browser window with the
+auto-generated documentation.  Doing so will help you gain familiarity with
+the function and classes which make up <strong>disipyl</strong>.</p>
+
+<p>The tutorial assumes you've already installed <strong>disipyl</strong>
+(and DISLIN) somewhere where the Python interpretter can find it (see the
+section on installation for more details).  I also assume the modules
+<code>Numeric</code> and <code>RandomArray</code> (both part of the NumPy
+package) are available</p>
+
+<h4>Conventions</h4>
+
+<p>Throughout the tutorial we'll be creating and manipulating
+<strong>disipyl</strong> objects both from the Python interactive
+interpretter and in module files.  Both interactive sessions and module code
+will be setoff with grey boxes in a fixed font (assuming your browser
+supports CSS). Interactive sessions will be distinguished from module code by
+the presence of the interpretter prompt symbol
+(<code>&gt;&gt;&gt;</code>).</p>
+
+<p>For example, the following indicates an interactive session (the lines
+without the prompts show what values [if any] the interpetter returns).</p>
+<pre class="code">&gt;&gt;&gt; print "hello, python world!"
+hello, python world!
+&gt;&gt;&gt;</pre>
+
+<p>This example shows a hypothetical function and class in a module:</p>
+<pre class="code">## test.py
+
+def helloFunction(name):
+    print "Hello %s, it's nice to meet you!" % name
+    
+
+class AClass:
+    def __init__(self):
+        print "AClass created"
+        
+    def __del__(self):
+        print "AClass destroyed"</pre>
+
+<h2>Getting Started</h2>
+
+<p>Fire up the Python interpretter (see the documentation which came with you
+Python distribution if you don't know how to do that).</p>
+
+<p>We'll check that everything is ready to go by running some demos. Type the
+following:</p>
+<pre class="code">&gt;&gt;&gt; from disipyl import demos
+&gt;&gt;&gt; demos.showdemos()</pre>
+
+<p>A series of example plots will begin to appear. After each plot appears
+the program will wait until you hit the return key or click on the plot
+window with your right-mouse button before continuing.</p>
+
+<div class="sidebar">
+Note: If you get an error message than disipyl hasn't been installed
+correctly.  See <a href="installation.html" class="sidebar">Installation</a>
+for more info.</div>
+
+<p>To see a similar set of demos using the Tkinter GUI, type the following at
+the command-line from within the the <strong>disipyl</strong> directory (this
+assumes that the python interpretter is in your path):</p>
+<pre class="code">$ python tkdisipyl.py</pre>
+
+<p>A small window with two buttons will appear, offering you a choice between
+the 2D and 3D demos.  You can play around with both sets of demos.  The 3D
+demos are particularly interesting because they provide a set of navigation
+buttons (e.g., rotate left, zoom in, etc.) so you can interactively explore
+the 3D plots.</p>
+
+<h2>Creating Plots</h2>
+
+<h3>The Parts of a Plot</h3>
+
+<p>Every valid drawing in <strong>disipyl</strong> consists of at least one
+instance of each of the following classes (or their descendants):</p>
+<ol>
+  <li><code>Canvas</code></li>
+  <li><code>PlotObject</code></li>
+  <li><code>AxisSystem</code></li>
+</ol>
+
+<p>All three of these classes are primarily container classes - they maintain
+a list of the subobjects which they are responsible for, and call each of
+these subojects to draw themselves in turn.  For example, a
+<code>PlotObject</code> instance must be assigned a valid
+<code>AxisSystem</code> (in the <code>.axes</code> attribute).  Similarly an
+<code>AxisSystem</code> should have two or more <code>Axis</code> objects
+(<code>.xaxis</code>, <code>.yaxis</code>, and sometimes a
+<code>.zaxis</code>).</p>
+
+<div class="sidebar">
+<strong>Note:</strong> If a PlotObject finds that it hasn't been assigned to
+a Canvas it will generate its own Canvas instance in order to draw
+itself.</div>
+
+<p></p>
+
+<p>All <code>disipyl</code> objects are ultimately derived from the
+<code>Object</code> class, defined in the file <code>pxdislin.py</code>.  All
+classes derived from <code>Object</code> maintain a private attribute
+(currently a list) called <code>__options__</code> which is used to track and
+maintain the different types of options which affect how the object is drawn.
+This dictionary of options is accessed in a somewhat roundabout way - options
+are set using the __call__ method of the class, options are retrieved using
+the standard <code>__getattr__</code> function. We can examine all the
+options of an object by using the __call__ method without any argument.  To
+see how this works in action examine the following code:</p>
+
+<p></p>
+<pre class="code">&gt;&gt;&gt; from disipyl import pxdislin
+&gt;&gt;&gt; message = pxdislin.Text(text='hello, disipyl world!')
+&gt;&gt;&gt; message()
+
+*BEGIN OBJECT: Text
+  TeX = 0
+  color = fore
+  font = default
+  fonttype = hardware
+  height = 36
+  justify = left
+  position = (0, 0)
+  rotation = 0
+  text = 'hello, disipyl world!'
+  ucoords = 1
+*END OBJECT: Text
+
+&gt;&gt;&gt; message(color = 'red', height = 48)
+&gt;&gt;&gt; message.color
+'red'
+&gt;&gt;&gt;</pre>
+
+<p>After importing the appropriate module, we created a <code>Text</code>
+object to which we gave the name <code>message</code>.  We then invoked the
+<code>__call__ </code>method (<code>message()</code>) without any arguments,
+which returned a printed message showing the various options for this object.
+We invoked the <code>__call__</code> method a second time with keyword
+arguments.  These keyword arguments corresponded to the options we wished to
+set.  Finally, we examined a single option (<code>message.color</code>) using
+the standard attribute calling mechanism.</p>
+
+<p>Note, that options can be set using either the normal attribute calling
+mechanism (<code>.attribute</code>) or via the <code>__call__</code> method,
+but you should always prefer the <code>__call__</code> method because only
+then can <strong>disipyl</strong> ensure that the options you are setting are
+relevant for the given object.</p>
+
+<h3>Simple Plot Creation</h3>
+
+<p>The first plot we will create will be a simple scatter plot.  The module,
+<code>disipyl.plots</code>, provides a class, <code>ScatterPlot</code>, which
+provides reasonable default values for scatter plots.  Once we've created our
+plot, it's easy to refine it to get it <em>just right</em>.</p>
+
+<p>Let's create the scatter plot:</p>
+<pre class="code">&gt;&gt;&gt; from disipyl import plots
+&gt;&gt;&gt; s = plots.ScatterPlot(range(10),range(10))
+&gt;&gt;&gt; s.draw()</pre>
+
+<p>After importing the plots module we created a ScatterPlot object to which
+we assigned the variable name 's' (when working in the interactive
+interpretter it's most convenient to use short variable names; when creating
+module files you should use more descriptive names).</p>
+
+<p>The plot we've just created isn't very exciting.  It's a simple scatter
+plot where the x- and y-values are identical.  We're going to spice up the
+plot, but first let's explore the plot object a little:</p>
+<pre class="code">&gt;&gt;&gt; s()
+
+*BEGIN OBJECT: ScatterPlot
+  TeXmode = 1
+  defaultcanvastype = disipyl.pxdislin.Canvas
+  symbols = &lt;disipyl.pxdislin.SymbolGroup instance at 014197FC&gt;
+*END OBJECT: ScatterPlot</pre>
+
+<p>Any <strong>disipyl</strong> object derived from the base class
+<code>Object</code> will display it's options when called without any
+arguments.  The <code>ScatterPlot</code> has relatively few options of its
+own.  The option <code>TeXmode</code> specifies whether TeX style formatting
+of equations is available.  The option <code>defaultcanvastype</code>
+specifies the type of Canvas object the plot should generate if it needs to
+draw itself (as opposed to being draw as a sub-object of a Canvas).</p>
+
+<p>When a <code>ScatterPlot</code> object is created the initial set of data
+is represented by a <code>SymbolGroup</code> object.  A
+<code>SymbolGroup</code> is simply a collection of individual
+<code>Symbol</code> objects with similar options (color, shape, etc.).  The
+reason that the <code>ScatterPlot</code> object has relatively few options is
+that it is primarily a container object, as noted above.  When we call the
+draw method for the <code>ScatterPlot</code> object it in turn invokes the
+draw methods of each of it's sub-objects.</p>
+
+<h4>Finding out about Object options</h4>
+
+<p>What are the valid settings for the various options?  In version of
+<strong>disipyl</strong> previous to 0.6 you just had to browse the source
+code to find out.  In version 0.6 and higher there is a new method for
+querying objects about their options.  This mechanism is accessed through the
+<code>info()</code> method, as shown below:</p>
+<pre class="code">&gt;&gt;&gt; s.info('TeXmode')
+Specifies whether the TeX mode should be used for text objects.
+Since this doesn't adversely affect anything else, it's probably
+simplest to leave this on.
+Valid: 0 (off) or 1 (on)
+------- 
+Default: 1
+
+&gt;&gt;&gt; s.info('defaultcanvastype')
+Specifies the default Canvas type (Canvas or its descendants)
+which is created when a plot finds itself without a canvas object
+to draw on.
+Valid: Any object derived from Canvas
+------- 
+Default: Canvas
+
+&gt;&gt;&gt; s.info('symbols')
+Undocumented option.
+&gt;&gt;&gt; s.info('foo')
+No such option for ScatterPlot</pre>
+
+<p>As you can see, the argument to the <code>info()</code> method is a string
+with the name of the option you want to know more about.  If the option is
+currently undocumented, then you are informed of this and you'll have to
+browse into the source code to figure out what the option does (if it's not
+obvious from the name).  Eventually I hope to have all the options will be
+documented.</p>
+
+<p>If you're creating new <strong>disipyl</strong> classes youreself you can
+specify a file which holds the option documentation by specifying the
+<code>INFOMODULE</code> attribute in a call to <code>setoptions</code>.  For
+example, in the file <code>pxdislin</code> the <code>setdefaults</code>
+method of the <code>Page</code> object  is defined as so:</p>
+<pre class="code"># snippet from pxdislin.py
+# from defintion of class Page
+
+    def set_defaults(self):
+        self.setoptions(
+            fillcolor = None,
+            border = 0,
+            width = 3000,
+            height = 2200,
+            scale = 1,
+            scalingmode = 'down',
+            INFOMODULE = "optioninfo.page",
+        )</pre>
+
+<p>The <code>INFOMODULE</code> attribute points to a Python module
+<code>optioninfo.page</code> (the file <code>page.py</code> in the
+subdirectory <code>optioninfo</code>).  Simply change this value to an
+appropriate value for your new class.</p>
+
+<h4>Jazzing up the Plot</h4>
+
+<p>Now we're ready to add some pizzaz to this plot.</p>
+<pre class="code">&gt;&gt;&gt; s.symbols(color='red', size=35, shape='fill triangle')
+&gt;&gt;&gt; s.axes.xaxis(name='X-Axis', nameheight=40)
+&gt;&gt;&gt; s.axes.yaxis(name='Y-Axis', nameheight=40)
+&gt;&gt;&gt; s.draw()</pre>
+
+<p>This code changes the color, size and shape of the symbols used to
+represent the scatter of the data, and adds some axis labels.</p>
+
+<p>What if we want to then add some more data to the plot?  For example, we
+might want to add some more symbols representing another set of observations.
+This is relatively easy to do:</p>
+<pre class="code">&gt;&gt;&gt; group2 = pxdislin.SymbolGroup(range(10),range(9,-1,-1),color='blue', shape='fill circle',size=35)
+&gt;&gt;&gt; s.add(group2)
+&gt;&gt;&gt; s.draw()</pre>
+
+<p>Finally, we'll center and square-up the graph so that the units are the
+same length in the x- and y-directions.  We'll also add a title:</p>
+<pre class="code">&gt;&gt;&gt; s.axes(squared=1,centered=1,grids=1,ngridlines=(2,2))
+&gt;&gt;&gt; s.title = pxdislin.Title(text="A Simple Graph",offset=-200)
+&gt;&gt;&gt; s.draw()</pre>
+
+<h4>Interacting with a Plot</h4>
+
+<p><strong>disipyl</strong> 0.6 introduces a new mechanism by which you can
+interact with a 2D plot - the <code>explore()</code> method.  When you use
+the <code>explore()</code> method with an instance of any class derived from
+<code>PlotObject</code> you can click on the plot with mouse button one, and
+the plot coordinates will be recorded.  Click mouse button two to stop
+recording. After the plot exits the x- and y-coordinates which you clicked
+will be returned as a tuple containing two lists.  Here's an example (in
+which I clicked the plot three times)::</p>
+<pre class="code">&gt;&gt;&gt; s = plots.ScatterPlot(range(10), range(10))
+&gt;&gt;&gt; s.explore()
+([1.2486993823422159, 3.4129315248323104, 5.5969735725168217], [2.2377216588389341, 4.4729876516275269, 7.018894839788552])
+</pre>
+
+<p>Currently the possibilties of plot interaction are very basic, but I will
+include derived clases with more functionality in future releases (and you
+can write such classes yourself - see the source code for
+<code>PlotObject.draw()</code> and <code>PlotObject.explore()</code> in
+<code>pxdislin.py</code> and the  function <code>getMouseClicks</code> in
+<code>pydislin.py</code>)</p>
+
+<h3>Creating a 3D Plot</h3>
+
+<p>We're now going to use disipyl to create a 3-D plot of the function:
+<em>f(x,y) = Imag(Log(x+iy))</em>.  There's two ways to do this - the easy
+way and the hard way.  We'll start with the easy way, to show you just how
+quickly one can create a plot in disipyl.  Then for completeness we'll do it
+the hard way.</p>
+
+<h4>The easy way</h4>
+<pre class="code">&gt;&gt;&gt; import cmath 
+&gt;&gt;&gt; from disipyl import plots
+&gt;&gt;&gt; def func(x,y): 
+        if x==0 and y==0:
+            return 0
+        z = cmath.log(complex(x,y)) 
+        return z.imag
+ 
+&gt;&gt;&gt; easy = plots.SurfacePlot(func,-2,2,0.5,-2,2,0.5) # set function to plot and axis limits
+&gt;&gt;&gt; easy.axes(lengths3D=(2,2,1))
+&gt;&gt;&gt; easy.surface(topcolor=50,bottomcolor=200)
+&gt;&gt;&gt; easy.title = pxdislin.Title(text="$f(x,y)=Im(\log(x+iy))$") 
+&gt;&gt;&gt; easy.draw()</pre>
+Most of the above is self-explanatory.  The only additional operations
+performed after creating the plot were to change the relative scaling by
+which each of the axes is draw (by setting the <code>lengths3D</code>
+option),  to set the colors used to draw the top and bottom of the surface
+object, and to create a title.
+
+<div class="sidebar">
+<strong>Note:</strong> You can use standard TeX commands for formatting
+formulas.</div>
+
+<h4>The hard way</h4>
+<pre class="code">&gt;&gt;&gt; hard = plots.Plot3D()
+&gt;&gt;&gt; surface = pxdislin3D.FunctionSurface(func, 0.3,0.3,3,3)
+&gt;&gt;&gt; surface(topcolor=50,bottomcolor=200)
+&gt;&gt;&gt; hard.add(surface)
+&gt;&gt;&gt; hard.axes.limits(-2,2,-2,2,-3,3)
+&gt;&gt;&gt; hard.axes(lengths3D=(2,2,1))
+&gt;&gt;&gt; hard.title = pxdislin.Title(text="$f(x,y)=Im(\log(x+iy))$")
+&gt;&gt;&gt; hard.draw()</pre>
+
+<p>As you can see, the "hard way" isn't all that hard.  The only real
+difference is that we had to create our own <code>FunctionSurface</code>
+object (in the easy example the <code>SurfacePlot</code> object created it
+for you), and we had to set our own axis limits..</p>
+
+<p>If you are using the IDLE development environment you can use the
+<code>Diddle</code> classes in <code>tkdisipyl.py</code> to interactively
+explore your plot.</p>
+<pre class="code">&gt;&gt;&gt; from disipyl import tkdisipyl
+&gt;&gt;&gt; d = tkdisipyl.Diddle(hard)</pre>
+
+<p>When you create a <code>Diddle</code> object a Tk window should pop up
+containing the plot and a number of navigation buttons.  Try rotating,
+tilting and zooming in on the plot.</p>
+
+<h2>Creating a New Plot Class</h2>
+
+<p>The <code>dispyl</code> package comes with a fairly good variety of
+"pre-canned" plot types.  However, sooner or later you'll want to make a
+specialized plot for which none of the supplied classes is appropriate.  In
+such cases it's desirable to derive your own specialized plot class.</p>
+
+<p>Most specialized plots can be derived from either the <code>Plot2D</code>
+or <code>Plot3D</code> classes.  If you have very specialized needs you may
+need to derive your class from the <code>PlotObject</code>.  The files
+<code>plots.py</code> and <code>mlabplots.py</code> are filled with examples
+of specialized plot classes.</p>
+
+<h2>For More Information</h2>
+
+<p>If you want to learn more about how to create disipyl plots, check out the
+demo plots in <code>demos.py</code>.  I'll also try and add more examples to
+this tutorial as development continues, so please check the disipyl website
+for updates.</p>
+</body>
+</html>

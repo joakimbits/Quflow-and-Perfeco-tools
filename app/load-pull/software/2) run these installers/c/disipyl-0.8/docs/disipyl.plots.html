@@ -1,0 +1,1370 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module disipyl.plots</title>
+<style type="text/css"><!--
+TT { font-family: lucidatypewriter, lucida console, courier }
+--></style></head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="disipyl.html"><font color="#ffffff">disipyl</font></a>.plots</strong></big></big> (version 1.4)</font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/pmagwene/data/pmag/pyth/disipyl/plots.py">/home/pmagwene/data/pmag/pyth/disipyl/plots.py</a></font></td></tr></table>
+    <p><tt>Plot&nbsp;base&nbsp;objects&nbsp;and&nbsp;some&nbsp;useful&nbsp;standard&nbsp;plots&nbsp;for&nbsp;disipyl.<br>
+&nbsp;<br>
+-----------------------------------------------------------------------------<br>
+(c)&nbsp;Copyright&nbsp;by&nbsp;Paul&nbsp;M.&nbsp;Magwene,&nbsp;2000-2002&nbsp;&nbsp;(mailto:paul.magwene@yale.edu)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Permission&nbsp;to&nbsp;use,&nbsp;copy,&nbsp;modify,&nbsp;and&nbsp;distribute&nbsp;this&nbsp;software&nbsp;and&nbsp;its<br>
+&nbsp;&nbsp;&nbsp;&nbsp;documentation&nbsp;for&nbsp;any&nbsp;purpose&nbsp;and&nbsp;without&nbsp;fee&nbsp;or&nbsp;royalty&nbsp;is&nbsp;hereby&nbsp;granted,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;provided&nbsp;that&nbsp;the&nbsp;above&nbsp;copyright&nbsp;notice&nbsp;appear&nbsp;in&nbsp;all&nbsp;copies&nbsp;and&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;both&nbsp;that&nbsp;copyright&nbsp;notice&nbsp;and&nbsp;this&nbsp;permission&nbsp;notice&nbsp;appear&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;supporting&nbsp;documentation&nbsp;or&nbsp;portions&nbsp;thereof,&nbsp;including&nbsp;modifications,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;you&nbsp;make.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;THE&nbsp;AUTHOR&nbsp;PAUL&nbsp;M.&nbsp;MAGWENE&nbsp;DISCLAIMS&nbsp;ALL&nbsp;WARRANTIES&nbsp;WITH&nbsp;REGARD&nbsp;TO<br>
+&nbsp;&nbsp;&nbsp;&nbsp;THIS&nbsp;SOFTWARE,&nbsp;INCLUDING&nbsp;ALL&nbsp;IMPLIED&nbsp;WARRANTIES&nbsp;OF&nbsp;MERCHANTABILITY&nbsp;AND<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FITNESS,&nbsp;IN&nbsp;NO&nbsp;EVENT&nbsp;SHALL&nbsp;THE&nbsp;AUTHOR&nbsp;BE&nbsp;LIABLE&nbsp;FOR&nbsp;ANY&nbsp;SPECIAL,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;INDIRECT&nbsp;OR&nbsp;CONSEQUENTIAL&nbsp;DAMAGES&nbsp;OR&nbsp;ANY&nbsp;DAMAGES&nbsp;WHATSOEVER&nbsp;RESULTING<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;LOSS&nbsp;OF&nbsp;USE,&nbsp;DATA&nbsp;OR&nbsp;PROFITS,&nbsp;WHETHER&nbsp;IN&nbsp;AN&nbsp;ACTION&nbsp;OF&nbsp;CONTRACT,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NEGLIGENCE&nbsp;OR&nbsp;OTHER&nbsp;TORTIOUS&nbsp;ACTION,&nbsp;ARISING&nbsp;OUT&nbsp;OF&nbsp;OR&nbsp;IN&nbsp;CONNECTION<br>
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;THE&nbsp;USE&nbsp;OR&nbsp;PERFORMANCE&nbsp;OF&nbsp;THIS&nbsp;SOFTWARE&nbsp;!<br>
+-----------------------------------------------------------------------------</tt></p>
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="Numeric.html">Numeric</a><br>
+<a href="math.html">math</a><br>
+</td><td width="25%" valign=top><a href="disipyl.pxdislin.html">disipyl.pxdislin</a><br>
+<a href="disipyl.pxdislin3D.html">disipyl.pxdislin3D</a><br>
+</td><td width="25%" valign=top><a href="disipyl.utilities.html">disipyl.utilities</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>(<a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.plots.html#Plot2D">Plot2D</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.plots.html#CurvePlot">CurvePlot</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.plots.html#FunctionPlot">FunctionPlot</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="disipyl.plots.html#HistogramPlot">HistogramPlot</a>
+</font></dt><dt><font face="helvetica, arial"><a href="disipyl.plots.html#Plot3D">Plot3D</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.plots.html#CurvePlot3D">CurvePlot3D</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.plots.html#ScatterPlot3D">ScatterPlot3D</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="disipyl.plots.html#SurfacePlot">SurfacePlot</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="disipyl.plots.html#ScatterPlot">ScatterPlot</a>
+</font></dt><dt><font face="helvetica, arial"><a href="disipyl.plots.html#VectorPlot">VectorPlot</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
+</dl>
+ 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="CurvePlot">class <strong>CurvePlot</strong></a>(<a href="disipyl.plots.html#Plot2D">Plot2D</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Two-dimensional&nbsp;Curve&nbsp;plot.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.plots.html#CurvePlot">CurvePlot</a></dd>
+<dd><a href="disipyl.plots.html#Plot2D">Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="CurvePlot-__init__"><strong>__init__</strong></a>(self, xlist, ylist, curveoptions<font color="#909090">={}</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="CurvePlot-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Two-dimensional Curve plot.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.plots'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot2D">Plot2D</a>:<br>
+<dl><dt><a name="CurvePlot-refresh"><strong>refresh</strong></a> = setup_plot(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="CurvePlot-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="CurvePlot-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="CurvePlot-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="CurvePlot-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="CurvePlot-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="CurvePlot-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="CurvePlot-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="CurvePlot-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="CurvePlot-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="CurvePlot-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="CurvePlot-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="CurvePlot-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#CurvePlot-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#CurvePlot-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#CurvePlot-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#CurvePlot-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#CurvePlot-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#CurvePlot-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#CurvePlot-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="CurvePlot3D">class <strong>CurvePlot3D</strong></a>(<a href="disipyl.plots.html#Plot3D">Plot3D</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Plots&nbsp;3D&nbsp;scatter&nbsp;of&nbsp;points.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.plots.html#CurvePlot3D">CurvePlot3D</a></dd>
+<dd><a href="disipyl.plots.html#Plot3D">Plot3D</a></dd>
+<dd><a href="disipyl.plots.html#Plot2D">Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="CurvePlot3D-__init__"><strong>__init__</strong></a>(self, xlist, ylist, zlist, curveoptions<font color="#909090">={}</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Plots 3D scatter of points.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.plots'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot3D">Plot3D</a>:<br>
+<dl><dt><a name="CurvePlot3D-rotate_down"><strong>rotate_down</strong></a>(self, val<font color="#909090">=10</font>)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-rotate_left"><strong>rotate_left</strong></a>(self, val<font color="#909090">=10</font>)</dt><dd><tt>#These&nbsp;rotation&nbsp;functions&nbsp;only&nbsp;work&nbsp;if&nbsp;using&nbsp;the&nbsp;'angle'&nbsp;viewtype</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot3D-rotate_right"><strong>rotate_right</strong></a>(self, val<font color="#909090">=10</font>)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-rotate_up"><strong>rotate_up</strong></a>(self, val<font color="#909090">=10</font>)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-tilt_left"><strong>tilt_left</strong></a>(self, val<font color="#909090">=5</font>)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-tilt_right"><strong>tilt_right</strong></a>(self, val<font color="#909090">=5</font>)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-zoom_in"><strong>zoom_in</strong></a>(self, val<font color="#909090">=1</font>)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-zoom_out"><strong>zoom_out</strong></a>(self, val<font color="#909090">=1</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot2D">Plot2D</a>:<br>
+<dl><dt><a name="CurvePlot3D-refresh"><strong>refresh</strong></a> = setup_plot(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="CurvePlot3D-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot3D-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot3D-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="CurvePlot3D-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot3D-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot3D-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="CurvePlot3D-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="CurvePlot3D-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#CurvePlot3D-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot3D-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#CurvePlot3D-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot3D-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#CurvePlot3D-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot3D-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot3D-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#CurvePlot3D-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot3D-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#CurvePlot3D-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="CurvePlot3D-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#CurvePlot3D-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#CurvePlot3D-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FunctionPlot">class <strong>FunctionPlot</strong></a>(<a href="disipyl.plots.html#CurvePlot">CurvePlot</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Two-dimensional&nbsp;plot&nbsp;representing&nbsp;y=f(x).<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.plots.html#FunctionPlot">FunctionPlot</a></dd>
+<dd><a href="disipyl.plots.html#CurvePlot">CurvePlot</a></dd>
+<dd><a href="disipyl.plots.html#Plot2D">Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="FunctionPlot-__init__"><strong>__init__</strong></a>(self, func, first, last, step, **keywords)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Two-dimensional plot representing y=f(x).'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.plots'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#CurvePlot">CurvePlot</a>:<br>
+<dl><dt><a name="FunctionPlot-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot2D">Plot2D</a>:<br>
+<dl><dt><a name="FunctionPlot-refresh"><strong>refresh</strong></a> = setup_plot(self)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="FunctionPlot-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="FunctionPlot-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="FunctionPlot-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="FunctionPlot-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="FunctionPlot-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="FunctionPlot-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="FunctionPlot-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="FunctionPlot-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#FunctionPlot-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="FunctionPlot-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#FunctionPlot-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="FunctionPlot-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#FunctionPlot-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="FunctionPlot-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="FunctionPlot-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#FunctionPlot-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="FunctionPlot-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#FunctionPlot-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="FunctionPlot-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#FunctionPlot-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#FunctionPlot-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="HistogramPlot">class <strong>HistogramPlot</strong></a>(<a href="disipyl.plots.html#Plot2D">Plot2D</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Constructs&nbsp;histogram&nbsp;plot&nbsp;from&nbsp;bin&nbsp;values&nbsp;and&nbsp;heights.<br>
+&nbsp;<br>
+Comments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Uses&nbsp;reasonable&nbsp;starting&nbsp;axis&nbsp;values&nbsp;but&nbsp;may&nbsp;have&nbsp;to&nbsp;be&nbsp;adjusted.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;The&nbsp;bin&nbsp;values&nbsp;represent&nbsp;the&nbsp;ticks&nbsp;over&nbsp;which&nbsp;the&nbsp;bars&nbsp;are&nbsp;centered.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.plots.html#HistogramPlot">HistogramPlot</a></dd>
+<dd><a href="disipyl.plots.html#Plot2D">Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="HistogramPlot-__init__"><strong>__init__</strong></a>(self, bins, heights, baroptions<font color="#909090">={}</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Constructs histogram plot from bin values and h...he ticks over which the bars are centered.\n    '</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.plots'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot2D">Plot2D</a>:<br>
+<dl><dt><a name="HistogramPlot-refresh"><strong>refresh</strong></a> = setup_plot(self)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="HistogramPlot-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="HistogramPlot-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="HistogramPlot-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="HistogramPlot-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="HistogramPlot-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="HistogramPlot-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="HistogramPlot-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="HistogramPlot-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#HistogramPlot-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="HistogramPlot-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#HistogramPlot-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="HistogramPlot-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#HistogramPlot-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="HistogramPlot-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="HistogramPlot-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#HistogramPlot-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="HistogramPlot-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#HistogramPlot-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="HistogramPlot-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#HistogramPlot-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#HistogramPlot-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Plot2D">class <strong>Plot2D</strong></a>(<a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Base&nbsp;class&nbsp;for&nbsp;two-dimensional&nbsp;plots.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.plots.html#Plot2D">Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="Plot2D-__init__"><strong>__init__</strong></a>(self, **keywords)</dt></dl>
+
+<dl><dt><a name="Plot2D-refresh"><strong>refresh</strong></a> = <a href="#Plot2D-setup_plot">setup_plot</a>(self)</dt></dl>
+
+<dl><dt><a name="Plot2D-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="Plot2D-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot2D-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot2D-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot2D-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Base class for two-dimensional plots.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.plots'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="Plot2D-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="Plot2D-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot2D-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot2D-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="Plot2D-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot2D-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot2D-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="Plot2D-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="Plot2D-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot2D-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot2D-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot2D-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="Plot2D-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="Plot2D-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="Plot2D-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="Plot2D-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="Plot2D-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="Plot2D-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot2D-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="Plot2D-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="Plot2D-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="Plot2D-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="Plot2D-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#Plot2D-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="Plot2D-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#Plot2D-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="Plot2D-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#Plot2D-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="Plot2D-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="Plot2D-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#Plot2D-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="Plot2D-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#Plot2D-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="Plot2D-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#Plot2D-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#Plot2D-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Plot3D">class <strong>Plot3D</strong></a>(<a href="disipyl.plots.html#Plot2D">Plot2D</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Base&nbsp;class&nbsp;for&nbsp;three-dimensional&nbsp;plots.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.plots.html#Plot3D">Plot3D</a></dd>
+<dd><a href="disipyl.plots.html#Plot2D">Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="Plot3D-rotate_down"><strong>rotate_down</strong></a>(self, val<font color="#909090">=10</font>)</dt></dl>
+
+<dl><dt><a name="Plot3D-rotate_left"><strong>rotate_left</strong></a>(self, val<font color="#909090">=10</font>)</dt><dd><tt>#These&nbsp;rotation&nbsp;functions&nbsp;only&nbsp;work&nbsp;if&nbsp;using&nbsp;the&nbsp;'angle'&nbsp;viewtype</tt></dd></dl>
+
+<dl><dt><a name="Plot3D-rotate_right"><strong>rotate_right</strong></a>(self, val<font color="#909090">=10</font>)</dt></dl>
+
+<dl><dt><a name="Plot3D-rotate_up"><strong>rotate_up</strong></a>(self, val<font color="#909090">=10</font>)</dt></dl>
+
+<dl><dt><a name="Plot3D-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot3D-tilt_left"><strong>tilt_left</strong></a>(self, val<font color="#909090">=5</font>)</dt></dl>
+
+<dl><dt><a name="Plot3D-tilt_right"><strong>tilt_right</strong></a>(self, val<font color="#909090">=5</font>)</dt></dl>
+
+<dl><dt><a name="Plot3D-zoom_in"><strong>zoom_in</strong></a>(self, val<font color="#909090">=1</font>)</dt></dl>
+
+<dl><dt><a name="Plot3D-zoom_out"><strong>zoom_out</strong></a>(self, val<font color="#909090">=1</font>)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Base class for three-dimensional plots.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.plots'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot2D">Plot2D</a>:<br>
+<dl><dt><a name="Plot3D-__init__"><strong>__init__</strong></a>(self, **keywords)</dt></dl>
+
+<dl><dt><a name="Plot3D-refresh"><strong>refresh</strong></a> = setup_plot(self)</dt></dl>
+
+<dl><dt><a name="Plot3D-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="Plot3D-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot3D-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot3D-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="Plot3D-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="Plot3D-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot3D-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot3D-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="Plot3D-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot3D-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot3D-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="Plot3D-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="Plot3D-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot3D-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot3D-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot3D-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="Plot3D-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="Plot3D-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="Plot3D-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="Plot3D-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="Plot3D-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="Plot3D-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Plot3D-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="Plot3D-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="Plot3D-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="Plot3D-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="Plot3D-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#Plot3D-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="Plot3D-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#Plot3D-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="Plot3D-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#Plot3D-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="Plot3D-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="Plot3D-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#Plot3D-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="Plot3D-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#Plot3D-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="Plot3D-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#Plot3D-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#Plot3D-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ScatterPlot">class <strong>ScatterPlot</strong></a>(<a href="disipyl.plots.html#Plot2D">Plot2D</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Simple&nbsp;scatter&nbsp;plot&nbsp;from&nbsp;sequences&nbsp;of&nbsp;x&nbsp;and&nbsp;y&nbsp;values.<br>
+&nbsp;<br>
+Comments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Symbols&nbsp;are&nbsp;represented&nbsp;as&nbsp;a&nbsp;SymbolGroup<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.plots.html#ScatterPlot">ScatterPlot</a></dd>
+<dd><a href="disipyl.plots.html#Plot2D">Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="ScatterPlot-__init__"><strong>__init__</strong></a>(self, xlist, ylist, labels<font color="#909090">=None</font>, symboloptions<font color="#909090">={}</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Simple scatter plot from sequences of x and y v...* Symbols are represented as a SymbolGroup\n    '</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.plots'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot2D">Plot2D</a>:<br>
+<dl><dt><a name="ScatterPlot-refresh"><strong>refresh</strong></a> = setup_plot(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="ScatterPlot-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="ScatterPlot-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="ScatterPlot-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="ScatterPlot-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#ScatterPlot-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ScatterPlot3D">class <strong>ScatterPlot3D</strong></a>(<a href="disipyl.plots.html#CurvePlot3D">CurvePlot3D</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Plots&nbsp;3D&nbsp;scatter&nbsp;of&nbsp;points.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.plots.html#ScatterPlot3D">ScatterPlot3D</a></dd>
+<dd><a href="disipyl.plots.html#CurvePlot3D">CurvePlot3D</a></dd>
+<dd><a href="disipyl.plots.html#Plot3D">Plot3D</a></dd>
+<dd><a href="disipyl.plots.html#Plot2D">Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="ScatterPlot3D-__init__"><strong>__init__</strong></a>(self, xlist, ylist, zlist, symboloptions<font color="#909090">={}</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Plots 3D scatter of points.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.plots'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#CurvePlot3D">CurvePlot3D</a>:<br>
+<dl><dt><a name="ScatterPlot3D-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot3D">Plot3D</a>:<br>
+<dl><dt><a name="ScatterPlot3D-rotate_down"><strong>rotate_down</strong></a>(self, val<font color="#909090">=10</font>)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-rotate_left"><strong>rotate_left</strong></a>(self, val<font color="#909090">=10</font>)</dt><dd><tt>#These&nbsp;rotation&nbsp;functions&nbsp;only&nbsp;work&nbsp;if&nbsp;using&nbsp;the&nbsp;'angle'&nbsp;viewtype</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot3D-rotate_right"><strong>rotate_right</strong></a>(self, val<font color="#909090">=10</font>)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-rotate_up"><strong>rotate_up</strong></a>(self, val<font color="#909090">=10</font>)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-tilt_left"><strong>tilt_left</strong></a>(self, val<font color="#909090">=5</font>)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-tilt_right"><strong>tilt_right</strong></a>(self, val<font color="#909090">=5</font>)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-zoom_in"><strong>zoom_in</strong></a>(self, val<font color="#909090">=1</font>)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-zoom_out"><strong>zoom_out</strong></a>(self, val<font color="#909090">=1</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot2D">Plot2D</a>:<br>
+<dl><dt><a name="ScatterPlot3D-refresh"><strong>refresh</strong></a> = setup_plot(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="ScatterPlot3D-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot3D-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot3D-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="ScatterPlot3D-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot3D-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot3D-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="ScatterPlot3D-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="ScatterPlot3D-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot3D-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot3D-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot3D-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot3D-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot3D-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot3D-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot3D-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot3D-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot3D-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot3D-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="ScatterPlot3D-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#ScatterPlot3D-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#ScatterPlot3D-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="SurfacePlot">class <strong>SurfacePlot</strong></a>(<a href="disipyl.plots.html#Plot3D">Plot3D</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Plots&nbsp;3D&nbsp;surface&nbsp;representing&nbsp;f(x,y).<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.plots.html#SurfacePlot">SurfacePlot</a></dd>
+<dd><a href="disipyl.plots.html#Plot3D">Plot3D</a></dd>
+<dd><a href="disipyl.plots.html#Plot2D">Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="SurfacePlot-__init__"><strong>__init__</strong></a>(self, function, xstart, xstop, xstep, ystart, ystop, ystep, **keywords)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Plots 3D surface representing f(x,y).'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.plots'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot3D">Plot3D</a>:<br>
+<dl><dt><a name="SurfacePlot-rotate_down"><strong>rotate_down</strong></a>(self, val<font color="#909090">=10</font>)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-rotate_left"><strong>rotate_left</strong></a>(self, val<font color="#909090">=10</font>)</dt><dd><tt>#These&nbsp;rotation&nbsp;functions&nbsp;only&nbsp;work&nbsp;if&nbsp;using&nbsp;the&nbsp;'angle'&nbsp;viewtype</tt></dd></dl>
+
+<dl><dt><a name="SurfacePlot-rotate_right"><strong>rotate_right</strong></a>(self, val<font color="#909090">=10</font>)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-rotate_up"><strong>rotate_up</strong></a>(self, val<font color="#909090">=10</font>)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-tilt_left"><strong>tilt_left</strong></a>(self, val<font color="#909090">=5</font>)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-tilt_right"><strong>tilt_right</strong></a>(self, val<font color="#909090">=5</font>)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-zoom_in"><strong>zoom_in</strong></a>(self, val<font color="#909090">=1</font>)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-zoom_out"><strong>zoom_out</strong></a>(self, val<font color="#909090">=1</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot2D">Plot2D</a>:<br>
+<dl><dt><a name="SurfacePlot-refresh"><strong>refresh</strong></a> = setup_plot(self)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="SurfacePlot-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="SurfacePlot-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="SurfacePlot-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="SurfacePlot-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="SurfacePlot-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="SurfacePlot-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="SurfacePlot-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="SurfacePlot-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#SurfacePlot-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="SurfacePlot-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#SurfacePlot-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="SurfacePlot-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#SurfacePlot-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="SurfacePlot-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="SurfacePlot-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#SurfacePlot-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="SurfacePlot-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#SurfacePlot-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="SurfacePlot-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#SurfacePlot-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#SurfacePlot-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="VectorPlot">class <strong>VectorPlot</strong></a>(<a href="disipyl.plots.html#Plot2D">Plot2D</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Simple&nbsp;two-dimensional&nbsp;vector&nbsp;plot.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="disipyl.plots.html#VectorPlot">VectorPlot</a></dd>
+<dd><a href="disipyl.plots.html#Plot2D">Plot2D</a></dd>
+<dd><a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a></dd>
+<dd><a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="VectorPlot-__init__"><strong>__init__</strong></a>(self, xstarts, ystarts, xends, yends, **keywords)</dt></dl>
+
+<dl><dt><a name="VectorPlot-set_axes"><strong>set_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-set_dataobjects"><strong>set_dataobjects</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Simple two-dimensional vector plot.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.plots'</dl>
+
+<hr>
+Methods inherited from <a href="disipyl.plots.html#Plot2D">Plot2D</a>:<br>
+<dl><dt><a name="VectorPlot-refresh"><strong>refresh</strong></a> = setup_plot(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-setDataOptions"><strong>setDataOptions</strong></a>(self, n<font color="#909090">=None</font>, **keywords)</dt></dl>
+
+<dl><dt><a name="VectorPlot-set_defaults"><strong>set_defaults</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-setup_plot"><strong>setup_plot</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#PlotObject">disipyl.pxdislin.PlotObject</a>:<br>
+<dl><dt><a name="VectorPlot-add"><strong>add</strong></a>(self, *obj)</dt></dl>
+
+<dl><dt><a name="VectorPlot-cleanup"><strong>cleanup</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-configure"><strong>configure</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-draw"><strong>draw</strong></a>(self, canvas<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="VectorPlot-drawaxes"><strong>drawaxes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-drawdataobjects"><strong>drawdataobjects</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-drawdispostaxis"><strong>drawdispostaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;levels&nbsp;2&nbsp;or&nbsp;3</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-drawdispreaxis"><strong>drawdispreaxis</strong></a>(self)</dt><dd><tt>Execute&nbsp;any&nbsp;extra&nbsp;functions&nbsp;which&nbsp;should&nbsp;be&nbsp;done&nbsp;at&nbsp;DISLIN&nbsp;level&nbsp;1</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-drawtitle"><strong>drawtitle</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-explore"><strong>explore</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-finish_axes"><strong>finish_axes</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-save"><strong>save</strong></a>(self, filename, format<font color="#909090">='postscript'</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><a name="VectorPlot-__call__"><strong>__call__</strong></a>(self, **kw)</dt><dd><tt>Set&nbsp;options&nbsp;or&nbsp;data&nbsp;for&nbsp;object.</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-deldata"><strong>deldata</strong></a>(self, dat)</dt></dl>
+
+<dl><dt><a name="VectorPlot-deloption"><strong>deloption</strong></a>(self, opt)</dt></dl>
+
+<dl><dt><a name="VectorPlot-info"><strong>info</strong></a>(self, option)</dt></dl>
+
+<dl><dt><a name="VectorPlot-option_string"><strong>option_string</strong></a>(self)</dt><dd><tt>Returns&nbsp;string&nbsp;containing&nbsp;all&nbsp;the&nbsp;options&nbsp;and&nbsp;their&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-print_options"><strong>print_options</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="VectorPlot-set_info"><strong>set_info</strong></a>(self, infomodule)</dt></dl>
+
+<dl><dt><a name="VectorPlot-set_keywords"><strong>set_keywords</strong></a>(self, kw)</dt></dl>
+
+<dl><dt><a name="VectorPlot-setdata"><strong>setdata</strong></a>(self, **kw)</dt></dl>
+
+<dl><dt><a name="VectorPlot-setoptions"><strong>setoptions</strong></a>(self, **kw)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="disipyl.pxdislin.html#Object">disipyl.pxdislin.Object</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Object' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="VectorPlot-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#VectorPlot-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#VectorPlot-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#VectorPlot-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#VectorPlot-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#VectorPlot-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="VectorPlot-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#VectorPlot-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;object's&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object&gt;<dd><tt>T.<a href="#VectorPlot-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;object&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt><a name="-applyCycle"><strong>applyCycle</strong></a>(plot, option, cycle)</dt><dd><tt>Applies&nbsp;a&nbsp;cycle&nbsp;to&nbsp;the&nbsp;dataobjects&nbsp;(not&nbsp;objects)&nbsp;of&nbsp;a&nbsp;plot.</tt></dd></dl>
+ <dl><dt><a name="-auto_axes2D"><strong>auto_axes2D</strong></a>(xlist, ylist, squared<font color="#909090">=0</font>, axes<font color="#909090">=None</font>)</dt><dd><tt>Utility&nbsp;function&nbsp;for&nbsp;calculating&nbsp;nice&nbsp;looking&nbsp;2-D&nbsp;axis&nbsp;options.</tt></dd></dl>
+ <dl><dt><a name="-auto_axes3D"><strong>auto_axes3D</strong></a>(xlist, ylist, zlist, axes<font color="#909090">=None</font>)</dt><dd><tt>Utility&nbsp;function&nbsp;for&nbsp;calculating&nbsp;decent&nbsp;looking&nbsp;default&nbsp;3-D&nbsp;axis&nbsp;options.</tt></dd></dl>
+ <dl><dt><a name="-auto_axis"><strong>auto_axis</strong></a>(xlist)</dt><dd><tt>Estimates&nbsp;generally&nbsp;nice&nbsp;axis&nbsp;values&nbsp;for&nbsp;a&nbsp;single&nbsp;axis.</tt></dd></dl>
+</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><strong>__author__</strong> = 'Paul M. Magwene <paul.magwene@yale.edu>'<br>
+<strong>__credits__</strong> = ''<br>
+<strong>__file__</strong> = '/home/pmagwene/data/pmag/pyth/disipyl/plots.py'<br>
+<strong>__name__</strong> = 'disipyl.plots'<br>
+<strong>__version__</strong> = '$Revision: 1.1.1.1 $'<br>
+<strong>colorlist</strong> = ['fore', 'red', 'green', 'blue', 'cyan', 'orange', 100, 125, 150, 175, 200, 225, 250]<br>
+<strong>colorloop</strong> = ['fore', 'red', 'green', 'blue', 'cyan', 'orange', 100, 125, 150, 175, 200, 225, 250]<br>
+<strong>symbollist</strong> = ['fill circle', 'fill square', 'fill triangle', 'fill diamond', 'circle', 'square', 'triangle', 'cross', 'diamond', 'star']<br>
+<strong>symbolloop</strong> = ['fill circle', 'fill square', 'fill triangle', ...'square', 'triangle', 'cross', 'diamond', 'star']</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%">Paul&nbsp;M.&nbsp;Magwene&nbsp;&lt;paul.magwene@yale.edu&gt;</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Credits</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"></td></tr></table>
+</body></html>

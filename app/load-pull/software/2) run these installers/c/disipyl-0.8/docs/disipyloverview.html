@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org">
+<title>disipyl Project</title>
+<meta http-equiv="Content-Type" content=
+"text/html; charset=iso-8859-1">
+<link href="disipyl.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<h1 class="title">disipyl Project Overview</h1>
+
+<div class="author">Author: Paul M. Magwene<br>
+Email: <a href=
+"mailto:paul.magwene@yale.edu">paul.magwene@yale.edu</a></div>
+
+<h2>Description</h2>
+
+<p><strong>disipyl</strong> is an object-oriented wrapper around
+the DISLIN plotting library. <strong>disipyl</strong> provides a
+set of classes which represent various aspects of DISLIN plots, as
+well as providing some easy to use classes for creating commonly
+used plot formats (e.g. scatter plots, histograms, 3-D surface
+plots). A major goal in designing the library was to facilitate
+interactive data exploration and plot creation.</p>
+
+<p>A longer list of the feature provided by <strong>disipyl</strong> can be found <a href="disipylFeatures.html">here</a>.
+
+<h3>What's DISLIN?</h3>
+
+<p>DISLIN is a powerful and flexible multiplatform (Win32, Unix,
+Linux, etc.) programming library designed for displaying scientific
+data. DISLIN's author, Helmut Michels, has made available a free
+DISLIN plotting extension for the Python programming language (see
+the <a href="http://www.linmpi.mpg.de/dislin">DISLIN</a> homepage
+for more details).</p>
+
+<p>The default Python interface provided with DISLIN is very terse,
+and essentially mirrors it's C and Fortran interfaces. To create a
+complex plot the user must make a series of function calls in just
+the right order. Despite it's terseness, when employed
+effectively, DISLIN can churn out detailed, publication
+quality plots. <strong>disipyl</strong> makes it easy to do so!</p>
+
+<h3>What's Included?</h3>
+
+<p>In addition to the wrapper classes and functions,
+<strong>disipyl</strong> includes a variety of "extensions":</p>
+
+<ul>
+<li>Two demo programs: 
+
+<ul>
+<li>Non-interactive demo -- a slide show of example plots.</li>
+
+<li>Interactive Tkinter-base demo (including a demonstration of a
+3D plot explorer).</li>
+</ul>
+</li>
+
+<li>Classes for working with Tkinter (the default Python GUI)</li>
+
+<li>A module of MATLAB like plotting functions.</li>
+
+<li>The zipfile, for Win32 systems, includes the dislin.dll so you can get started
+right away. For other platforms you'll need to download the correct
+package from the <a href="http://www.linmpi.mpg.de/dislin">DISLIN
+homepage</a>.</li>
+</ul>
+
+<h2>History</h2>
+
+<p><strong>disipyl</strong> descends from pxDislin, a previous
+wrapper-library I designed. <strong>disipyl</strong> shares much in
+common with pxDislin but represents a complete rewrite.
+<strong>disipyl</strong> presents a <em>much</em> cleaner
+interface, and is easier to maintain and extend. By starting "from
+scratch" I was able to keep the things I liked about pxDislin while
+ridding myself of the extra baggage that had accumulated around my
+earlier design.</p>
+
+<p>The library has been tested on WinNT and FreeBSD, but I
+anticipate that it should work on any platform which can make use
+of Python, Numpy, and the DISLIN python extensions.</p>
+
+<h2>Status</h2>
+
+<p>This is the first public release of <strong>disipyl</strong>,
+and as such it should be regarded as "beta" quality code. I've
+spent a lot of time using the library myself, and I've tried to
+create demos and test code which puts the library through its
+paces. Nevertheless, there are bound to be bugs. I'm interested in
+<em>quickly</em> squashing those bugs and moving rapidly towards a
+stable 1.0 release. In order to do this I will need lots of
+feedback from users. <em>Please</em> make sure to submit any and
+all bug reports. I am shooting for a turn around of less than 24
+hours for fixes on bug reports submitted with example code.</p>
+
+<p>I believe the interface is pretty much stable. There maybe a few
+tweaks and fiddlings here and there, but barring any major
+complaints from users, all the base classes should be pretty close
+to done.</p>
+
+<h2>What's Next?</h2>
+
+<p>A few classes could use some more attention (e.g. PieChart), and
+a small number of DISLIN features that I've never used (e.g., map
+plots) need to be wrapped. It would also be useful to improve the
+error checking.</p>
+</body>
+</html>

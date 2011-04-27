@@ -1,0 +1,234 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module disipyl.utilities</title>
+<style type="text/css"><!--
+TT { font-family: lucidatypewriter, lucida console, courier }
+--></style></head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="disipyl.html"><font color="#ffffff">disipyl</font></a>.utilities</strong></big></big> (version 1.3)</font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/pmagwene/data/pmag/pyth/disipyl/utilities.py">/home/pmagwene/data/pmag/pyth/disipyl/utilities.py</a></font></td></tr></table>
+    <p><tt>Utility&nbsp;functions&nbsp;for&nbsp;disipyl.<br>
+&nbsp;<br>
+-----------------------------------------------------------------------------<br>
+(c)&nbsp;Copyright&nbsp;by&nbsp;Paul&nbsp;M.&nbsp;Magwene,&nbsp;2002&nbsp;&nbsp;(mailto:paul.magwene@yale.edu)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Permission&nbsp;to&nbsp;use,&nbsp;copy,&nbsp;modify,&nbsp;and&nbsp;distribute&nbsp;this&nbsp;software&nbsp;and&nbsp;its<br>
+&nbsp;&nbsp;&nbsp;&nbsp;documentation&nbsp;for&nbsp;any&nbsp;purpose&nbsp;and&nbsp;without&nbsp;fee&nbsp;or&nbsp;royalty&nbsp;is&nbsp;hereby&nbsp;granted,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;provided&nbsp;that&nbsp;the&nbsp;above&nbsp;copyright&nbsp;notice&nbsp;appear&nbsp;in&nbsp;all&nbsp;copies&nbsp;and&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;both&nbsp;that&nbsp;copyright&nbsp;notice&nbsp;and&nbsp;this&nbsp;permission&nbsp;notice&nbsp;appear&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;supporting&nbsp;documentation&nbsp;or&nbsp;portions&nbsp;thereof,&nbsp;including&nbsp;modifications,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;you&nbsp;make.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;THE&nbsp;AUTHOR&nbsp;PAUL&nbsp;M.&nbsp;MAGWENE&nbsp;DISCLAIMS&nbsp;ALL&nbsp;WARRANTIES&nbsp;WITH&nbsp;REGARD&nbsp;TO<br>
+&nbsp;&nbsp;&nbsp;&nbsp;THIS&nbsp;SOFTWARE,&nbsp;INCLUDING&nbsp;ALL&nbsp;IMPLIED&nbsp;WARRANTIES&nbsp;OF&nbsp;MERCHANTABILITY&nbsp;AND<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FITNESS,&nbsp;IN&nbsp;NO&nbsp;EVENT&nbsp;SHALL&nbsp;THE&nbsp;AUTHOR&nbsp;BE&nbsp;LIABLE&nbsp;FOR&nbsp;ANY&nbsp;SPECIAL,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;INDIRECT&nbsp;OR&nbsp;CONSEQUENTIAL&nbsp;DAMAGES&nbsp;OR&nbsp;ANY&nbsp;DAMAGES&nbsp;WHATSOEVER&nbsp;RESULTING<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;LOSS&nbsp;OF&nbsp;USE,&nbsp;DATA&nbsp;OR&nbsp;PROFITS,&nbsp;WHETHER&nbsp;IN&nbsp;AN&nbsp;ACTION&nbsp;OF&nbsp;CONTRACT,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NEGLIGENCE&nbsp;OR&nbsp;OTHER&nbsp;TORTIOUS&nbsp;ACTION,&nbsp;ARISING&nbsp;OUT&nbsp;OF&nbsp;OR&nbsp;IN&nbsp;CONNECTION<br>
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;THE&nbsp;USE&nbsp;OR&nbsp;PERFORMANCE&nbsp;OF&nbsp;THIS&nbsp;SOFTWARE&nbsp;!<br>
+-----------------------------------------------------------------------------</tt></p>
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="Numeric.html">Numeric</a><br>
+<a href="UserList.html">UserList</a><br>
+</td><td width="25%" valign=top><a href="cPickle.html">cPickle</a><br>
+<a href="copy.html">copy</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+<a href="pickle.html">pickle</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+<a href="types.html">types</a><br>
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="disipyl.utilities.html#Histogram">Histogram</a>
+</font></dt><dt><font face="helvetica, arial"><a href="UserList.html#UserList">UserList.UserList</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.utilities.html#Loop">Loop</a>
+</font></dt></dl>
+</dd>
+</dl>
+ 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Histogram">class <strong>Histogram</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Histogram">Histogram</a>&nbsp;in&nbsp;one&nbsp;variable<br>
+&nbsp;<br>
+From&nbsp;Konrad&nbsp;Hinsen's&nbsp;ScientificPython&nbsp;Package.<br>
+&nbsp;<br>
+Constructor:&nbsp;<a href="#Histogram">Histogram</a>(|data|,&nbsp;|bins|,&nbsp;|range|=None)<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;<br>
+|data|&nbsp;--&nbsp;a&nbsp;sequence&nbsp;of&nbsp;data&nbsp;points<br>
+&nbsp;<br>
+|bins|&nbsp;--&nbsp;the&nbsp;number&nbsp;of&nbsp;bins&nbsp;into&nbsp;which&nbsp;the&nbsp;data&nbsp;is&nbsp;to&nbsp;be&nbsp;sorted<br>
+&nbsp;<br>
+|range|&nbsp;--&nbsp;a&nbsp;tuple&nbsp;of&nbsp;two&nbsp;values,&nbsp;specifying&nbsp;the&nbsp;lower&nbsp;and<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;upper&nbsp;end&nbsp;of&nbsp;the&nbsp;interval&nbsp;spanned&nbsp;by&nbsp;the&nbsp;bins.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any&nbsp;data&nbsp;point&nbsp;outside&nbsp;this&nbsp;interval&nbsp;will&nbsp;be&nbsp;ignored.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;no&nbsp;range&nbsp;is&nbsp;given,&nbsp;the&nbsp;smallest&nbsp;and&nbsp;largest<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;values&nbsp;are&nbsp;used&nbsp;to&nbsp;define&nbsp;the&nbsp;interval.<br>
+&nbsp;<br>
+The&nbsp;bin&nbsp;index&nbsp;and&nbsp;the&nbsp;number&nbsp;of&nbsp;points&nbsp;in&nbsp;a&nbsp;bin&nbsp;can&nbsp;be&nbsp;obtained&nbsp;by<br>
+indexing&nbsp;the&nbsp;histogram&nbsp;with&nbsp;the&nbsp;bin&nbsp;number.&nbsp;Application&nbsp;of&nbsp;len()<br>
+yields&nbsp;the&nbsp;number&nbsp;of&nbsp;bins.&nbsp;A&nbsp;histogram&nbsp;thus&nbsp;behaves&nbsp;like&nbsp;a<br>
+sequence&nbsp;of&nbsp;bin&nbsp;index&nbsp;-&nbsp;bin&nbsp;count&nbsp;pairs.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Histogram-__getitem__"><strong>__getitem__</strong></a>(self, index)</dt></dl>
+
+<dl><dt><a name="Histogram-__getslice__"><strong>__getslice__</strong></a>(self, first, last)</dt></dl>
+
+<dl><dt><a name="Histogram-__init__"><strong>__init__</strong></a>(self, data, nbins, range<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="Histogram-__len__"><strong>__len__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Histogram-_addData"><strong>_addData</strong></a>(self, data)</dt></dl>
+
+<dl><dt><a name="Histogram-addData"><strong>addData</strong></a>(self, data)</dt><dd><tt>Add&nbsp;the&nbsp;values&nbsp;in&nbsp;|data|&nbsp;(a&nbsp;sequence&nbsp;of&nbsp;numbers)&nbsp;to&nbsp;the<br>
+originally&nbsp;supplied&nbsp;data.&nbsp;Note&nbsp;that&nbsp;this&nbsp;does&nbsp;not&nbsp;affect&nbsp;the<br>
+default&nbsp;range&nbsp;of&nbsp;the&nbsp;histogram,&nbsp;which&nbsp;is&nbsp;fixed&nbsp;when&nbsp;the<br>
+histogram&nbsp;is&nbsp;created.</tt></dd></dl>
+
+<dl><dt><a name="Histogram-normalize"><strong>normalize</strong></a>(self, norm<font color="#909090">=1.0</font>)</dt><dd><tt>Scales&nbsp;all&nbsp;counts&nbsp;by&nbsp;the&nbsp;same&nbsp;factor&nbsp;such&nbsp;that&nbsp;their&nbsp;sum&nbsp;is&nbsp;|norm|.</tt></dd></dl>
+
+<dl><dt><a name="Histogram-normalizeArea"><strong>normalizeArea</strong></a>(self, norm<font color="#909090">=1.0</font>)</dt><dd><tt>Scales&nbsp;all&nbsp;counts&nbsp;by&nbsp;the&nbsp;same&nbsp;factor&nbsp;such&nbsp;that&nbsp;the&nbsp;area&nbsp;under<br>
+the&nbsp;histogram&nbsp;is&nbsp;|norm|.</tt></dd></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Histogram in one variable\n    \n    From Konra...  sequence of bin index - bin count pairs.\n    '</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.utilities'</dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Loop">class <strong>Loop</strong></a>(<a href="UserList.html#UserList">UserList.UserList</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Circular&nbsp;sequence&nbsp;object.<br>
+&nbsp;<br>
+Indexing&nbsp;past&nbsp;last&nbsp;value&nbsp;loops&nbsp;back&nbsp;to&nbsp;the&nbsp;beginning.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Loop-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Circular sequence object.\n    \n    Indexing past last value loops back to the beginning.\n'</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.utilities'</dl>
+
+<hr>
+Methods inherited from <a href="UserList.html#UserList">UserList.UserList</a>:<br>
+<dl><dt><a name="Loop-_UserList__cast"><strong>_UserList__cast</strong></a> = __cast(self, other)</dt></dl>
+
+<dl><dt><a name="Loop-__add__"><strong>__add__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="Loop-__cmp__"><strong>__cmp__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="Loop-__contains__"><strong>__contains__</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="Loop-__delitem__"><strong>__delitem__</strong></a>(self, i)</dt></dl>
+
+<dl><dt><a name="Loop-__delslice__"><strong>__delslice__</strong></a>(self, i, j)</dt></dl>
+
+<dl><dt><a name="Loop-__eq__"><strong>__eq__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="Loop-__ge__"><strong>__ge__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="Loop-__getslice__"><strong>__getslice__</strong></a>(self, i, j)</dt></dl>
+
+<dl><dt><a name="Loop-__gt__"><strong>__gt__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="Loop-__iadd__"><strong>__iadd__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="Loop-__imul__"><strong>__imul__</strong></a>(self, n)</dt></dl>
+
+<dl><dt><a name="Loop-__init__"><strong>__init__</strong></a>(self, initlist<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="Loop-__le__"><strong>__le__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="Loop-__len__"><strong>__len__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Loop-__lt__"><strong>__lt__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="Loop-__mul__"><strong>__mul__</strong></a>(self, n)</dt></dl>
+
+<dl><dt><a name="Loop-__ne__"><strong>__ne__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="Loop-__radd__"><strong>__radd__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="Loop-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Loop-__rmul__"><strong>__rmul__</strong></a> = __mul__(self, n)</dt></dl>
+
+<dl><dt><a name="Loop-__setitem__"><strong>__setitem__</strong></a>(self, i, item)</dt></dl>
+
+<dl><dt><a name="Loop-__setslice__"><strong>__setslice__</strong></a>(self, i, j, other)</dt></dl>
+
+<dl><dt><a name="Loop-append"><strong>append</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="Loop-count"><strong>count</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="Loop-extend"><strong>extend</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="Loop-index"><strong>index</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="Loop-insert"><strong>insert</strong></a>(self, i, item)</dt></dl>
+
+<dl><dt><a name="Loop-pop"><strong>pop</strong></a>(self, i<font color="#909090">=-1</font>)</dt></dl>
+
+<dl><dt><a name="Loop-remove"><strong>remove</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="Loop-reverse"><strong>reverse</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Loop-sort"><strong>sort</strong></a>(self, *args)</dt></dl>
+
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><strong>__author__</strong> = 'Paul M. Magwene <paul.magwene@yale.edu>'<br>
+<strong>__credits__</strong> = ''<br>
+<strong>__file__</strong> = '/home/pmagwene/data/pmag/pyth/disipyl/utilities.pyc'<br>
+<strong>__name__</strong> = 'disipyl.utilities'<br>
+<strong>__version__</strong> = '$Revision: 1.1.1.1 $'</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%">Paul&nbsp;M.&nbsp;Magwene&nbsp;&lt;paul.magwene@yale.edu&gt;</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Credits</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"></td></tr></table>
+</body></html>

@@ -1,0 +1,35 @@
+Version 0.8
+- Added bugfixes and CanvasMultiPlot class submitted by Martin Lüthi <tinu@email.ch>
+- Added setCharacterCode function submitted by Martín Argañaraz <amartin@softlab.com.ar>
+
+Version 0.7
+
+- Added support for generating PNG and PDF versions of plots as string buffers
+  (useful for serving figures to web pages)
+- Fixed a bug in Text class
+- include a wxPython demo based on an example submitted by Les Schaffer
+- fixed bug in FunctionPlot class 
+- modified the format of the INFOMODULE option to take both a module name
+and a class name
+- Implemented "mylabels" options for Axis, as submitted by Reggie Duggard
+- updated optioninfo documentation
+
+Version 0.6
+
+- setoptions() and setdata() mechanisms implemented resulting in
+    significant simplification of the interface for deriving
+    new classes and supporting option information queries (see below)
+- changed __slots__ to __options__
+- added __data__ attribute
+- new class method info() implemented to support documentation for
+    options relevant to particular disipyl objects
+- added support for plot interaction via explore() call on classes derived
+    from PlotObject
+- updated Tutorial
+- initial support for Jython
+
+
+Version 0.5
+
+- initial public release of disipyl.  disipyl was based on rewrite
+    of a previous DISLIN wrapper called pxDislin.

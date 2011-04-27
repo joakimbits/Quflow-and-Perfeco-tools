@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: disipyl
+Version: 0.8
+Summary: 2D and 3D Plotting for Python
+Home-page: http://pantheon.yale.edu/~pmm34/disipyl.html
+Author: Paul Magwene
+Author-email: paul.magwene@yale.edu
+License: GPL
+Description: disipyl is an object-oriented 2D and 3D plotting module for Python.
+        disipyl is based on the plotting library DISLIN.
+Platform: UNKNOWN

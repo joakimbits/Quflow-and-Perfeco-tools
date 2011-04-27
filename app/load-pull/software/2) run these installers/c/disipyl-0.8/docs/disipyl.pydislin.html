@@ -1,0 +1,801 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module disipyl.pydislin</title>
+<style type="text/css"><!--
+TT { font-family: lucidatypewriter, lucida console, courier }
+--></style></head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="disipyl.html"><font color="#ffffff">disipyl</font></a>.pydislin</strong></big></big> (version 1.2)</font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/pmagwene/data/pmag/pyth/disipyl/pydislin.py">/home/pmagwene/data/pmag/pyth/disipyl/pydislin.py</a></font></td></tr></table>
+    <p><tt>A&nbsp;light&nbsp;wrapper&nbsp;around&nbsp;the&nbsp;dislin&nbsp;library<br>
+&nbsp;<br>
+An&nbsp;attempt&nbsp;to&nbsp;make&nbsp;the&nbsp;DISLIN&nbsp;library&nbsp;more&nbsp;pythonic&nbsp;and&nbsp;readable.<br>
+&nbsp;<br>
+-----------------------------------------------------------------------------<br>
+(c)&nbsp;Copyright&nbsp;by&nbsp;Paul&nbsp;M.&nbsp;Magwene,&nbsp;2000-2002&nbsp;&nbsp;(mailto:paul.magwene@yale.edu)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Permission&nbsp;to&nbsp;use,&nbsp;copy,&nbsp;modify,&nbsp;and&nbsp;distribute&nbsp;this&nbsp;software&nbsp;and&nbsp;its<br>
+&nbsp;&nbsp;&nbsp;&nbsp;documentation&nbsp;for&nbsp;any&nbsp;purpose&nbsp;and&nbsp;without&nbsp;fee&nbsp;or&nbsp;royalty&nbsp;is&nbsp;hereby&nbsp;granted,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;provided&nbsp;that&nbsp;the&nbsp;above&nbsp;copyright&nbsp;notice&nbsp;appear&nbsp;in&nbsp;all&nbsp;copies&nbsp;and&nbsp;that<br>
+&nbsp;&nbsp;&nbsp;&nbsp;both&nbsp;that&nbsp;copyright&nbsp;notice&nbsp;and&nbsp;this&nbsp;permission&nbsp;notice&nbsp;appear&nbsp;in<br>
+&nbsp;&nbsp;&nbsp;&nbsp;supporting&nbsp;documentation&nbsp;or&nbsp;portions&nbsp;thereof,&nbsp;including&nbsp;modifications,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;you&nbsp;make.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;THE&nbsp;AUTHOR&nbsp;PAUL&nbsp;M.&nbsp;MAGWENE&nbsp;DISCLAIMS&nbsp;ALL&nbsp;WARRANTIES&nbsp;WITH&nbsp;REGARD&nbsp;TO<br>
+&nbsp;&nbsp;&nbsp;&nbsp;THIS&nbsp;SOFTWARE,&nbsp;INCLUDING&nbsp;ALL&nbsp;IMPLIED&nbsp;WARRANTIES&nbsp;OF&nbsp;MERCHANTABILITY&nbsp;AND<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FITNESS,&nbsp;IN&nbsp;NO&nbsp;EVENT&nbsp;SHALL&nbsp;THE&nbsp;AUTHOR&nbsp;BE&nbsp;LIABLE&nbsp;FOR&nbsp;ANY&nbsp;SPECIAL,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;INDIRECT&nbsp;OR&nbsp;CONSEQUENTIAL&nbsp;DAMAGES&nbsp;OR&nbsp;ANY&nbsp;DAMAGES&nbsp;WHATSOEVER&nbsp;RESULTING<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;LOSS&nbsp;OF&nbsp;USE,&nbsp;DATA&nbsp;OR&nbsp;PROFITS,&nbsp;WHETHER&nbsp;IN&nbsp;AN&nbsp;ACTION&nbsp;OF&nbsp;CONTRACT,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NEGLIGENCE&nbsp;OR&nbsp;OTHER&nbsp;TORTIOUS&nbsp;ACTION,&nbsp;ARISING&nbsp;OUT&nbsp;OF&nbsp;OR&nbsp;IN&nbsp;CONNECTION<br>
+&nbsp;&nbsp;&nbsp;&nbsp;WITH&nbsp;THE&nbsp;USE&nbsp;OR&nbsp;PERFORMANCE&nbsp;OF&nbsp;THIS&nbsp;SOFTWARE&nbsp;!<br>
+-----------------------------------------------------------------------------</tt></p>
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="UserList.html">UserList</a><br>
+</td><td width="25%" valign=top><a href="dislin.html">dislin</a><br>
+</td><td width="25%" valign=top><a href="types.html">types</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="UserList.html#UserList">UserList.UserList</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="disipyl.pydislin.html#DislinVCR">DislinVCR</a>
+</font></dt></dl>
+</dd>
+</dl>
+ 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="DislinVCR">class <strong>DislinVCR</strong></a>(<a href="UserList.html#UserList">UserList.UserList</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>List-like&nbsp;object&nbsp;for&nbsp;creating&nbsp;plots&nbsp;from&nbsp;a&nbsp;sequence&nbsp;of&nbsp;dislin/pydislin&nbsp;functions.<br>
+&nbsp;<br>
+A&nbsp;plot&nbsp;is&nbsp;drawn&nbsp;by&nbsp;using&nbsp;the&nbsp;'play'&nbsp;function&nbsp;to&nbsp;execute&nbsp;the&nbsp;specified<br>
+function,&nbsp;argument&nbsp;pairs.<br>
+&nbsp;<br>
+Items&nbsp;should&nbsp;be&nbsp;added&nbsp;as&nbsp;tuples&nbsp;of&nbsp;form&nbsp;(func,&nbsp;(args)).&nbsp;&nbsp;You&nbsp;can&nbsp;use<br>
+all&nbsp;the&nbsp;standard&nbsp;list&nbsp;methods&nbsp;to&nbsp;append,&nbsp;insert,&nbsp;delete,&nbsp;etc.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="DislinVCR-play"><strong>play</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'List-like object for creating plots from a sequ...st methods to append, insert, delete, etc.\n    '</dl>
+
+<dl><dt><strong>__module__</strong> = 'disipyl.pydislin'</dl>
+
+<hr>
+Methods inherited from <a href="UserList.html#UserList">UserList.UserList</a>:<br>
+<dl><dt><a name="DislinVCR-_UserList__cast"><strong>_UserList__cast</strong></a> = __cast(self, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__add__"><strong>__add__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__cmp__"><strong>__cmp__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__contains__"><strong>__contains__</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__delitem__"><strong>__delitem__</strong></a>(self, i)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__delslice__"><strong>__delslice__</strong></a>(self, i, j)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__eq__"><strong>__eq__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__ge__"><strong>__ge__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__getitem__"><strong>__getitem__</strong></a>(self, i)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__getslice__"><strong>__getslice__</strong></a>(self, i, j)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__gt__"><strong>__gt__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__iadd__"><strong>__iadd__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__imul__"><strong>__imul__</strong></a>(self, n)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__init__"><strong>__init__</strong></a>(self, initlist<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__le__"><strong>__le__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__len__"><strong>__len__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__lt__"><strong>__lt__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__mul__"><strong>__mul__</strong></a>(self, n)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__ne__"><strong>__ne__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__radd__"><strong>__radd__</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__rmul__"><strong>__rmul__</strong></a> = __mul__(self, n)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__setitem__"><strong>__setitem__</strong></a>(self, i, item)</dt></dl>
+
+<dl><dt><a name="DislinVCR-__setslice__"><strong>__setslice__</strong></a>(self, i, j, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-append"><strong>append</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="DislinVCR-count"><strong>count</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="DislinVCR-extend"><strong>extend</strong></a>(self, other)</dt></dl>
+
+<dl><dt><a name="DislinVCR-index"><strong>index</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="DislinVCR-insert"><strong>insert</strong></a>(self, i, item)</dt></dl>
+
+<dl><dt><a name="DislinVCR-pop"><strong>pop</strong></a>(self, i<font color="#909090">=-1</font>)</dt></dl>
+
+<dl><dt><a name="DislinVCR-remove"><strong>remove</strong></a>(self, item)</dt></dl>
+
+<dl><dt><a name="DislinVCR-reverse"><strong>reverse</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="DislinVCR-sort"><strong>sort</strong></a>(self, *args)</dt></dl>
+
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt><a name="-addLegendLine"><strong>addLegendLine</strong></a>(line, n)</dt><dd><tt>Add&nbsp;a&nbsp;line&nbsp;to&nbsp;a&nbsp;DISLIN&nbsp;legend.</tt></dd></dl>
+ <dl><dt><a name="-autoAxisScaling"><strong>autoAxisScaling</strong></a>(vlist, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Tries&nbsp;to&nbsp;determine&nbsp;reasonable&nbsp;axis&nbsp;scaling&nbsp;based&nbsp;on&nbsp;passed&nbsp;in&nbsp;values.<br>
+&nbsp;<br>
+Use&nbsp;with&nbsp;caution.</tt></dd></dl>
+ <dl><dt><a name="-axis2D"><strong>axis2D</strong></a>(xlow, xhigh, xfirst, xstep, ylow, yhigh, yfirst, ystep)</dt><dd><tt>Set&nbsp;up&nbsp;2D&nbsp;axis.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;xlow,&nbsp;xhigh:&nbsp;min&nbsp;and&nbsp;max&nbsp;values&nbsp;of&nbsp;x-axis.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;xfirst,&nbsp;xstep:&nbsp;start/step&nbsp;values&nbsp;for&nbsp;ticks&nbsp;on&nbsp;x-axis.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ylow,&nbsp;yhigh,&nbsp;yfirst,&nbsp;ystep:&nbsp;see&nbsp;above&nbsp;for&nbsp;x-axis.</tt></dd></dl>
+ <dl><dt><a name="-axis3D"><strong>axis3D</strong></a>(xlow, xhigh, xfirst, xstep, ylow, yhigh, yfirst, ystep, zlow, zhigh, zfirst, zstep)</dt><dd><tt>Set&nbsp;up&nbsp;3D&nbsp;axis.</tt></dd></dl>
+ <dl><dt><a name="-calcArrowHead"><strong>calcArrowHead</strong></a>(ratio<font color="#909090">=1</font>, size<font color="#909090">=3</font>, form<font color="#909090">='empty'</font>, position<font color="#909090">='end'</font>)</dt><dd><tt>Calculates&nbsp;arrow&nbsp;head&nbsp;code&nbsp;for&nbsp;vectors.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;ratio:&nbsp;ratio&nbsp;of&nbsp;width&nbsp;to&nbsp;length&nbsp;(1..9)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;size:&nbsp;size&nbsp;of&nbsp;arrowhead&nbsp;(1..9)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;form:&nbsp;form&nbsp;of&nbsp;arrowhead&nbsp;('filled',&nbsp;'empty',&nbsp;'open',&nbsp;'closed')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;position:&nbsp;where&nbsp;arrow&nbsp;heads&nbsp;will&nbsp;be&nbsp;drawn&nbsp;('none',&nbsp;'end',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'opposite',&nbsp;'same')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;'none'&nbsp;means&nbsp;no&nbsp;arrowheads&nbsp;drawn<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;'end'&nbsp;means&nbsp;arrow&nbsp;heads&nbsp;draw&nbsp;at&nbsp;end&nbsp;points&nbsp;only<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;'opposite'&nbsp;means&nbsp;arrowheads&nbsp;drawn&nbsp;at&nbsp;start&nbsp;and&nbsp;end&nbsp;points<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp;arrowheads&nbsp;pointing&nbsp;in&nbsp;opposite&nbsp;direction<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;'same'&nbsp;means&nbsp;arrowheads&nbsp;drawn&nbsp;at&nbsp;start&nbsp;and&nbsp;end&nbsp;points<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp;arrowhead&nbsp;pointing&nbsp;in&nbsp;same&nbsp;direction</tt></dd></dl>
+ <dl><dt><a name="-calculateLighting"><strong>calculateLighting</strong></a>(x, y, z, xnormal, ynormal, znormal)</dt><dd><tt>Calculates&nbsp;colr&nbsp;values&nbsp;for&nbsp;given&nbsp;point&nbsp;and&nbsp;the&nbsp;point&nbsp;normal.<br>
+&nbsp;<br>
+See&nbsp;DISLIN&nbsp;manual&nbsp;(GETLIT)</tt></dd></dl>
+ <dl><dt><a name="-centerAxis"><strong>centerAxis</strong></a>()</dt><dd><tt>Centers&nbsp;an&nbsp;axis&nbsp;system&nbsp;on&nbsp;the&nbsp;page.</tt></dd></dl>
+ <dl><dt><a name="-clearScreen"><strong>clearScreen</strong></a>()</dt><dd><tt>Erase&nbsp;the&nbsp;DISLIN&nbsp;plot.</tt></dd></dl>
+ <dl><dt><a name="-colorAxis3D"><strong>colorAxis3D</strong></a>(xlow, xhigh, xfirst, xstep, ylow, yhigh, yfirst, ystep, zlow, zhigh, zfirst, zstep)</dt><dd><tt>Setup&nbsp;3D-color&nbsp;axes.</tt></dd></dl>
+ <dl><dt><a name="-disableAxisClipping"><strong>disableAxisClipping</strong></a>()</dt><dd><tt>Disables&nbsp;clipping&nbsp;of&nbsp;objects&nbsp;outside&nbsp;axes(and&nbsp;pages?)</tt></dd></dl>
+ <dl><dt><a name="-drawBar"><strong>drawBar</strong></a>(xlist, ylist0, ylist1)</dt><dd><tt>Creates&nbsp;bars&nbsp;for&nbsp;bar&nbsp;graphs.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;xlist:&nbsp;the&nbsp;positions&nbsp;along&nbsp;x-axis&nbsp;for&nbsp;drawing&nbsp;bars<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ylist0,&nbsp;ylist1:&nbsp;start/end&nbsp;points&nbsp;along&nbsp;y-axis</tt></dd></dl>
+ <dl><dt><a name="-drawCircle"><strong>drawCircle</strong></a>(x, y, radius, ucoords<font color="#909090">=1</font>)</dt><dd><tt>Draws&nbsp;circle&nbsp;at&nbsp;x,y&nbsp;with&nbsp;given&nbsp;radius.</tt></dd></dl>
+ <dl><dt><a name="-drawColorColumn"><strong>drawColorColumn</strong></a>(x, yseq, zseq)</dt><dd><tt>See&nbsp;DISLIN&nbsp;docs&nbsp;CURVY3.</tt></dd></dl>
+ <dl><dt><a name="-drawColorCurve"><strong>drawColorCurve</strong></a>(xseq, yseq, zseq)</dt><dd><tt>See&nbsp;DISLIN&nbsp;docs&nbsp;CURVE3.</tt></dd></dl>
+ <dl><dt><a name="-drawColorMatrix"><strong>drawColorMatrix</strong></a>(matrix, nrows, ncols, xinterp<font color="#909090">=1</font>, yinterp<font color="#909090">=1</font>)</dt><dd><tt>Draw&nbsp;matrix&nbsp;as&nbsp;3D-color&nbsp;graph.<br>
+&nbsp;<br>
+Arguments:&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;matrix&nbsp;--&nbsp;array&nbsp;or&nbsp;list&nbsp;containing&nbsp;values<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;nrows,&nbsp;ncols&nbsp;--&nbsp;dimensions&nbsp;of&nbsp;matrix<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;xinterp,&nbsp;yinterp&nbsp;--&nbsp;the&nbsp;number&nbsp;of&nbsp;interpolations&nbsp;between&nbsp;grid&nbsp;lines</tt></dd></dl>
+ <dl><dt><a name="-drawColorRow"><strong>drawColorRow</strong></a>(xseq, y, zseq)</dt><dd><tt>See&nbsp;DISLIN&nbsp;docs&nbsp;CURVX3.</tt></dd></dl>
+ <dl><dt><a name="-drawContour"><strong>drawContour</strong></a>(xlist, ylist, zmatrix, level)</dt><dd><tt>Draws&nbsp;contour&nbsp;for&nbsp;f(x,y)&nbsp;where&nbsp;f(x,y)&nbsp;values&nbsp;are&nbsp;given&nbsp;by&nbsp;zmatrix.</tt></dd></dl>
+ <dl><dt><a name="-drawContourLine"><strong>drawContourLine</strong></a>(xlist, ylist, level)</dt><dd><tt>Draw&nbsp;contour&nbsp;line&nbsp;at&nbsp;given&nbsp;xlist,&nbsp;ylist&nbsp;coordiantes.&nbsp;&nbsp;Label&nbsp;given&nbsp;by&nbsp;level.</tt></dd></dl>
+ <dl><dt><a name="-drawCurve"><strong>drawCurve</strong></a>(xlist, ylist)</dt><dd><tt>Draws&nbsp;curve&nbsp;which&nbsp;goes&nbsp;through&nbsp;points&nbsp;specified&nbsp;by&nbsp;xlist,ylist.</tt></dd></dl>
+ <dl><dt><a name="-drawCurve3D"><strong>drawCurve3D</strong></a>(xlist, ylist, zlist)</dt><dd><tt>Draws&nbsp;curve&nbsp;in&nbsp;user&nbsp;3D&nbsp;coordinates.</tt></dd></dl>
+ <dl><dt><a name="-drawEllipse"><strong>drawEllipse</strong></a>(x, y, a, b, ucoords<font color="#909090">=1</font>)</dt><dd><tt>Draws&nbsp;ellipse&nbsp;at&nbsp;x,y&nbsp;with&nbsp;given&nbsp;radii&nbsp;(a,b).</tt></dd></dl>
+ <dl><dt><a name="-drawEllipticArc"><strong>drawEllipticArc</strong></a>(x, y, a, b, alpha, beta, theta, ucoords<font color="#909090">=1</font>)</dt><dd><tt>Draw&nbsp;elliptical&nbsp;arc&nbsp;centered&nbsp;at&nbsp;x,y.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;x,y:&nbsp;coordinates&nbsp;of&nbsp;center<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;a,b:&nbsp;radii&nbsp;of&nbsp;major/minor&nbsp;axes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;alpha,&nbsp;beta:&nbsp;starting/ending&nbsp;angles&nbsp;(degrees,&nbsp;counter-clockwise)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;theta:&nbsp;angle&nbsp;of&nbsp;rotation&nbsp;of&nbsp;whole&nbsp;figure&nbsp;(degrees,&nbsp;counter-clockwise)</tt></dd></dl>
+ <dl><dt><a name="-drawErrorBars"><strong>drawErrorBars</strong></a>(xlist, ylist, elow, ehigh, symbol<font color="#909090">='square'</font>, symbolsize<font color="#909090">=30</font>, horizontal<font color="#909090">=0</font>)</dt><dd><tt>Draws&nbsp;error&nbsp;bars.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;xlist,&nbsp;ylist:&nbsp;the&nbsp;x,y&nbsp;values&nbsp;of&nbsp;center&nbsp;of&nbsp;each&nbsp;error&nbsp;bar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;elow,&nbsp;ehigh:&nbsp;the&nbsp;high/low&nbsp;values&nbsp;of&nbsp;the&nbsp;errors&nbsp;at&nbsp;each&nbsp;point<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;symbol:&nbsp;the&nbsp;symbol&nbsp;used&nbsp;to&nbsp;indicate&nbsp;center&nbsp;of&nbsp;error&nbsp;bar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;symbolsize:&nbsp;size&nbsp;of&nbsp;symbol&nbsp;drawn&nbsp;at&nbsp;center&nbsp;of&nbsp;error&nbsp;bar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;horizontal:&nbsp;whether&nbsp;error&nbsp;bars&nbsp;should&nbsp;be&nbsp;drawn&nbsp;horizontal&nbsp;rather&nbsp;than<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vertical</tt></dd></dl>
+ <dl><dt><a name="-drawFunctionSurface"><strong>drawFunctionSurface</strong></a>(function, xgrid, ygrid, xinterp, yinterp)</dt><dd><tt>Draw&nbsp;3D&nbsp;surface&nbsp;grid,&nbsp;calculated&nbsp;from&nbsp;a&nbsp;given&nbsp;function.<br>
+&nbsp;<br>
+Arguments:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;function:&nbsp;a&nbsp;python&nbsp;function&nbsp;object&nbsp;representing&nbsp;the&nbsp;function&nbsp;to&nbsp;be<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;visualized&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;xgridx,&nbsp;ygrid:&nbsp;the&nbsp;distance&nbsp;in&nbsp;user&nbsp;coordinates&nbsp;between&nbsp;grid&nbsp;lines<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;plotted&nbsp;on&nbsp;the&nbsp;fsuface.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;xinterp,&nbsp;yinterp:&nbsp;the&nbsp;number&nbsp;of&nbsp;points&nbsp;between&nbsp;grid&nbsp;lines&nbsp;used<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;interpolate&nbsp;the&nbsp;surface.&nbsp;&nbsp;More&nbsp;points&nbsp;means&nbsp;longer&nbsp;plot&nbsp;times.</tt></dd></dl>
+ <dl><dt><a name="-drawIrregularSurface"><strong>drawIrregularSurface</strong></a>(xlist, ylist, zmatrix)</dt><dd><tt>Draws&nbsp;3D&nbsp;surface&nbsp;from&nbsp;arbitrary&nbsp;x,y,z&nbsp;lists.&nbsp;z&nbsp;can&nbsp;be&nbsp;a&nbsp;matrix.</tt></dd></dl>
+ <dl><dt><a name="-drawIsoSurface"><strong>drawIsoSurface</strong></a>(xlist, ylist, zlist, values, levels)</dt><dd><tt>Draws&nbsp;isosurfaces&nbsp;of&nbsp;form&nbsp;f(x,y,z)=constant.</tt></dd></dl>
+ <dl><dt><a name="-drawLegend"><strong>drawLegend</strong></a>(pos<font color="#909090">='pageUR'</font>)</dt><dd><tt>Draw&nbsp;DISLIN&nbsp;legend&nbsp;at&nbsp;given&nbsp;position.<br>
+&nbsp;<br>
+valid&nbsp;positions:&nbsp;pageLL,&nbsp;pageLR,&nbsp;pageUR,&nbsp;pageUL,&nbsp;axisLL,&nbsp;axisLR,&nbsp;axisUR,&nbsp;axisUL<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;where&nbsp;page/axis&nbsp;refers&nbsp;to&nbsp;axis&nbsp;system&nbsp;or&nbsp;page&nbsp;system&nbsp;and&nbsp;LL,&nbsp;LR,&nbsp;UR,&nbsp;UL<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correspond&nbsp;to&nbsp;lower-left,&nbsp;lower-right,&nbsp;upper-right,&nbsp;and&nbsp;upper-left</tt></dd></dl>
+ <dl><dt><a name="-drawLine"><strong>drawLine</strong></a>(x0, y0, x1, y1, ucoords<font color="#909090">=1</font>)</dt><dd><tt>Draws&nbsp;a&nbsp;Line&nbsp;from&nbsp;(x0,y0)&nbsp;to&nbsp;(x1,y1),&nbsp;either&nbsp;page&nbsp;or&nbsp;user&nbsp;coords.</tt></dd></dl>
+ <dl><dt><a name="-drawLine3D"><strong>drawLine3D</strong></a>(x0, y0, z0, x1, y1, z1)</dt><dd><tt>Draws&nbsp;3D&nbsp;line&nbsp;in&nbsp;absolute&nbsp;3D&nbsp;coordinates.</tt></dd></dl>
+ <dl><dt><a name="-drawMatrixContour"><strong>drawMatrixContour</strong></a>(zmatrix, nrows, ncols, level)</dt><dd><tt>Draw&nbsp;contour&nbsp;over&nbsp;current&nbsp;x,y&nbsp;axis&nbsp;values.<br>
+&nbsp;<br>
+See&nbsp;CONMAT&nbsp;function&nbsp;in&nbsp;DISLIN&nbsp;manual&nbsp;for&nbsp;more&nbsp;info.</tt></dd></dl>
+ <dl><dt><a name="-drawMessage"><strong>drawMessage</strong></a>(txt, x, y, ucoords<font color="#909090">=1</font>)</dt><dd><tt>Draws&nbsp;a&nbsp;text&nbsp;message&nbsp;at&nbsp;(x,y).<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;txt:&nbsp;the&nbsp;text&nbsp;message&nbsp;to&nbsp;draw<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;x,y:&nbsp;coordinates&nbsp;at&nbsp;which&nbsp;text&nbsp;is&nbsp;drawn<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ucoords:&nbsp;if&nbsp;true&nbsp;then&nbsp;draw,&nbsp;using&nbsp;user&nbsp;coordinates,&nbsp;else&nbsp;drawn<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;using&nbsp;page&nbsp;coordinates</tt></dd></dl>
+ <dl><dt><a name="-drawNumber"><strong>drawNumber</strong></a>(n, ndig, x, y, ucoords<font color="#909090">=1</font>, fmt<font color="#909090">='float'</font>)</dt><dd><tt>Draws&nbsp;a&nbsp;number&nbsp;at&nbsp;(x,y).<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;n:&nbsp;the&nbsp;number&nbsp;to&nbsp;draw<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ndig:&nbsp;number&nbsp;of&nbsp;digits&nbsp;following&nbsp;decimal&nbsp;point&nbsp;(-1&nbsp;=&nbsp;Integer)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ucoords:&nbsp;if&nbsp;true&nbsp;then&nbsp;draw,&nbsp;using&nbsp;user&nbsp;coordinates,&nbsp;else&nbsp;drawn<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;using&nbsp;page&nbsp;coordinates</tt></dd></dl>
+ <dl><dt><a name="-drawPageHeader"><strong>drawPageHeader</strong></a>(pre<font color="#909090">=''</font>, post<font color="#909090">=''</font>, corner<font color="#909090">=3</font>, direction<font color="#909090">=0</font>)</dt><dd><tt>Draws&nbsp;a&nbsp;header&nbsp;at&nbsp;a&nbsp;corner&nbsp;of&nbsp;the&nbsp;page.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;pre:&nbsp;character&nbsp;string&nbsp;preceding&nbsp;the&nbsp;header&nbsp;line<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;post:&nbsp;character&nbsp;string&nbsp;following&nbsp;header&nbsp;line<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;corner:&nbsp;&nbsp;1:&nbsp;lower&nbsp;left,&nbsp;2:&nbsp;lower&nbsp;right,&nbsp;3:&nbsp;upper&nbsp;right,&nbsp;4:&nbsp;upper&nbsp;left<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;direction:&nbsp;0:&nbsp;horizontal,&nbsp;1:&nbsp;vertical</tt></dd></dl>
+ <dl><dt><a name="-drawParametricSurface"><strong>drawParametricSurface</strong></a>(function, umin, umax, ustep, tmin, tmax, tstep)</dt><dd><tt>Draws&nbsp;surface&nbsp;from&nbsp;parametric&nbsp;function:&nbsp;x=f(u,t),&nbsp;y=g(u,t),&nbsp;z=h(u,t)<br>
+&nbsp;<br>
+Function&nbsp;should&nbsp;take&nbsp;two&nbsp;values,&nbsp;and&nbsp;an&nbsp;axis&nbsp;indicator:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;e.g.&nbsp;def&nbsp;func(u,t,axis):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;....<br>
+If&nbsp;axis&nbsp;=&nbsp;1,&nbsp;should&nbsp;return&nbsp;x&nbsp;values,&nbsp;axis&nbsp;=&nbsp;2&nbsp;should&nbsp;return&nbsp;y&nbsp;values,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;axis&nbsp;=&nbsp;3&nbsp;should&nbsp;return&nbsp;z&nbsp;values</tt></dd></dl>
+ <dl><dt><a name="-drawPie"><strong>drawPie</strong></a>(x, y, radius, alpha, beta, ucoords<font color="#909090">=1</font>)</dt><dd><tt>Draw&nbsp;pie&nbsp;slice&nbsp;at&nbsp;x,y&nbsp;with&nbsp;given&nbsp;radius&nbsp;and&nbsp;angles.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;x,y:&nbsp;coordinates&nbsp;of&nbsp;center<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;radius:&nbsp;radius&nbsp;of&nbsp;pie<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;alpha,&nbsp;beta:&nbsp;starting/ending&nbsp;angles&nbsp;(degrees,&nbsp;counter-clockwise)</tt></dd></dl>
+ <dl><dt><a name="-drawPieChart"><strong>drawPieChart</strong></a>(xlist, labels<font color="#909090">=[]</font>)</dt><dd><tt>Draws&nbsp;a&nbsp;Pie&nbsp;chart&nbsp;with&nbsp;slice&nbsp;sizes&nbsp;defined&nbsp;by&nbsp;values&nbsp;of&nbsp;xlist.<br>
+&nbsp;<br>
+See&nbsp;DISLIN&nbsp;docs&nbsp;on&nbsp;PIEGRF&nbsp;function.</tt></dd></dl>
+ <dl><dt><a name="-drawPolygon"><strong>drawPolygon</strong></a>(xlist, ylist, ucoords<font color="#909090">=1</font>)</dt><dd><tt>Draw&nbsp;polygon&nbsp;with&nbsp;coordinates&nbsp;given&nbsp;by&nbsp;xlist,&nbsp;ylist.</tt></dd></dl>
+ <dl><dt><a name="-drawRectangle"><strong>drawRectangle</strong></a>(x, y, width, height, rounding<font color="#909090">=0</font>, ucoords<font color="#909090">=1</font>)</dt><dd><tt>Draw&nbsp;rectangle&nbsp;with&nbsp;upper&nbsp;left&nbsp;corner&nbsp;at&nbsp;x,y.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;x,y:&nbsp;coordinates&nbsp;of&nbsp;upper&nbsp;left&nbsp;corner<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;width,&nbsp;height:&nbsp;width&nbsp;and&nbsp;height&nbsp;of&nbsp;rectangle<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;rounding:&nbsp;the&nbsp;amount&nbsp;of&nbsp;rounding&nbsp;of&nbsp;corners&nbsp;(0...9)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ucoords:&nbsp;whether&nbsp;user&nbsp;or&nbsp;page&nbsp;coords&nbsp;should&nbsp;be&nbsp;used</tt></dd></dl>
+ <dl><dt><a name="-drawRegularSurface"><strong>drawRegularSurface</strong></a>(matrix, nx, ny, xinterp, yinterp)</dt><dd><tt>Draws&nbsp;3D&nbsp;surface&nbsp;from&nbsp;a&nbsp;2D&nbsp;array.&nbsp;&nbsp;Assumes&nbsp;linear&nbsp;grid&nbsp;in&nbsp;X,Y-plane.&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;nx,&nbsp;ny&nbsp;--&nbsp;number&nbsp;of&nbsp;rows&nbsp;and&nbsp;columns&nbsp;of&nbsp;matrix<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;xdensity,&nbsp;ydensity&nbsp;:&nbsp;the&nbsp;number&nbsp;of&nbsp;points&nbsp;between&nbsp;grid&nbsp;lines&nbsp;used<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;interpolate&nbsp;the&nbsp;surface.&nbsp;&nbsp;More&nbsp;points&nbsp;means&nbsp;longer&nbsp;plot&nbsp;times.</tt></dd></dl>
+ <dl><dt><a name="-drawShadedContours"><strong>drawShadedContours</strong></a>(xlist, ylist, zmatrix, levels)</dt><dd><tt>Draws&nbsp;contours&nbsp;with&nbsp;colors&nbsp;between&nbsp;contour&nbsp;lines.</tt></dd></dl>
+ <dl><dt><a name="-drawShadedCurve"><strong>drawShadedCurve</strong></a>(x0list, y0list, x1list, y1list)</dt><dd><tt>Draws&nbsp;a&nbsp;shaded&nbsp;region&nbsp;between&nbsp;two&nbsp;curves.</tt></dd></dl>
+ <dl><dt><a name="-drawShadedSurface"><strong>drawShadedSurface</strong></a>(xlist, ylist, zmatrix)</dt><dd><tt>Draws&nbsp;a&nbsp;3D&nbsp;surface&nbsp;with&nbsp;shaded&nbsp;colors.</tt></dd></dl>
+ <dl><dt><a name="-drawSphere3D"><strong>drawSphere3D</strong></a>(x0, y0, z0, radius, hres, vres)</dt><dd><tt>Draws&nbsp;sphere&nbsp;in&nbsp;absolute&nbsp;3D&nbsp;coordinates.</tt></dd></dl>
+ <dl><dt><a name="-drawSymbol"><strong>drawSymbol</strong></a>(x, y, nsymb<font color="#909090">='circle'</font>, ucoords<font color="#909090">=1</font>)</dt><dd><tt>Draws&nbsp;a&nbsp;symbol&nbsp;at&nbsp;(x,y),&nbsp;either&nbsp;page&nbsp;or&nbsp;user&nbsp;coords.</tt></dd></dl>
+ <dl><dt><a name="-drawText"><strong>drawText</strong></a>(txt, x, y, ucoords<font color="#909090">=1</font>, TeX<font color="#909090">=0</font>)</dt><dd><tt>Draw&nbsp;text&nbsp;message&nbsp;at&nbsp;x,y.&nbsp;Uses&nbsp;TeX&nbsp;fonts&nbsp;if&nbsp;TeX&nbsp;is&nbsp;true.</tt></dd></dl>
+ <dl><dt><a name="-drawVector"><strong>drawVector</strong></a>(x0, y0, x1, y1, vtype<font color="#909090">='normal fill'</font>, ucoords<font color="#909090">=1</font>)</dt><dd><tt>Draws&nbsp;a&nbsp;vector&nbsp;from&nbsp;(x0,y0)&nbsp;to&nbsp;(x1,y1),&nbsp;either&nbsp;page&nbsp;or&nbsp;user&nbsp;coords.</tt></dd></dl>
+ <dl><dt><a name="-drawVector3D"><strong>drawVector3D</strong></a>(x0, y0, z0, x1, y1, z1, vtype<font color="#909090">='normal'</font>)</dt><dd><tt>Draws&nbsp;3D&nbsp;vector&nbsp;in&nbsp;absolute&nbsp;3D&nbsp;coordinates.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;<br>
+*&nbsp;x0,y0,z0,x1,y1,z1&nbsp;:&nbsp;the&nbsp;starting&nbsp;an&nbsp;ending&nbsp;3D&nbsp;coordinates&nbsp;of&nbsp;the&nbsp;vector<br>
+&nbsp;<br>
+*&nbsp;vtype&nbsp;--&nbsp;the&nbsp;type&nbsp;of&nbsp;head&nbsp;drawn&nbsp;on&nbsp;the&nbsp;vector</tt></dd></dl>
+ <dl><dt><a name="-drawVectorField"><strong>drawVectorField</strong></a>(x0list, y0list, x1list, y1list, vtype<font color="#909090">='normal'</font>)</dt><dd><tt>Draws&nbsp;a&nbsp;vector&nbsp;field&nbsp;based&nbsp;on&nbsp;list&nbsp;of&nbsp;starting/ending&nbsp;x,y&nbsp;values.</tt></dd></dl>
+ <dl><dt><a name="-end_axis"><strong>end_axis</strong></a>()</dt><dd><tt>Terminate&nbsp;axis&nbsp;system.</tt></dd></dl>
+ <dl><dt><a name="-expandColorBarScaling"><strong>expandColorBarScaling</strong></a>(direction<font color="#909090">='none'</font>)</dt><dd><tt>Expands&nbsp;the&nbsp;numbering&nbsp;of&nbsp;log&nbsp;scaled&nbsp;Z-axis&nbsp;to&nbsp;next&nbsp;order&nbsp;of&nbsp;magnitude&nbsp;up/down.<br>
+&nbsp;<br>
+From&nbsp;DISLIN&nbsp;docs:<br>
+The&nbsp;routine&nbsp;EXPZLB&nbsp;expands&nbsp;the&nbsp;numbering&nbsp;of&nbsp;a&nbsp;logarithmically&nbsp;scaled&nbsp;Z-axis&nbsp;<br>
+to&nbsp;the&nbsp;next&nbsp;order&nbsp;of&nbsp;magnitude&nbsp;that&nbsp;lies&nbsp;up&nbsp;or&nbsp;down&nbsp;the&nbsp;axis&nbsp;limits.&nbsp;<br>
+The&nbsp;scaling&nbsp;of&nbsp;the&nbsp;colour&nbsp;bar&nbsp;will&nbsp;not&nbsp;be&nbsp;changed.&nbsp;This&nbsp;routine&nbsp;is&nbsp;useful&nbsp;<br>
+if&nbsp;the&nbsp;range&nbsp;of&nbsp;the&nbsp;Z-axis&nbsp;scaling&nbsp;is&nbsp;smaller&nbsp;than&nbsp;1&nbsp;order&nbsp;of&nbsp;magnitude.</tt></dd></dl>
+ <dl><dt><a name="-generateFunctionMatrix"><strong>generateFunctionMatrix</strong></a>(xlist, ylist, zlist, nx, ny, defaultz<font color="#909090">=0</font>, gridx<font color="#909090">=2</font>, gridy<font color="#909090">=2</font>, gridweight<font color="#909090">=2.0</font>)</dt><dd><tt>For&nbsp;a&nbsp;set&nbsp;of&nbsp;x,y,z&nbsp;values&nbsp;generate&nbsp;a&nbsp;function&nbsp;matrix&nbsp;of&nbsp;dim(nx,ny).<br>
+&nbsp;<br>
+Used&nbsp;in&nbsp;conjunction&nbsp;with&nbsp;drawRegularSurface.<br>
+See&nbsp;DISLIN&nbsp;documentation,&nbsp;GETMAT&nbsp;function&nbsp;for&nbsp;detailed&nbsp;discussion.</tt></dd></dl>
+ <dl><dt><a name="-getAxisData"><strong>getAxisData</strong></a>(axis)</dt></dl>
+ <dl><dt><a name="-getAxisLengths"><strong>getAxisLengths</strong></a>()</dt></dl>
+ <dl><dt><a name="-getAxisOrigin"><strong>getAxisOrigin</strong></a>()</dt></dl>
+ <dl><dt><a name="-getAxisPosition"><strong>getAxisPosition</strong></a>()</dt></dl>
+ <dl><dt><a name="-getAxisScaling"><strong>getAxisScaling</strong></a>()</dt></dl>
+ <dl><dt><a name="-getColorBarRange"><strong>getColorBarRange</strong></a>()</dt></dl>
+ <dl><dt><a name="-getColorIndex"><strong>getColorIndex</strong></a>()</dt></dl>
+ <dl><dt><a name="-getColorRGB"><strong>getColorRGB</strong></a>()</dt></dl>
+ <dl><dt><a name="-getContourPoints"><strong>getContourPoints</strong></a>(xlist, ylist, zmatrix, level, maxpts, maxcurves)</dt><dd><tt>Generates&nbsp;contour&nbsp;points.</tt></dd></dl>
+ <dl><dt><a name="-getFileFormat"><strong>getFileFormat</strong></a>()</dt></dl>
+ <dl><dt><a name="-getFileName"><strong>getFileName</strong></a>()</dt></dl>
+ <dl><dt><a name="-getLineStyle"><strong>getLineStyle</strong></a>()</dt></dl>
+ <dl><dt><a name="-getLineWidth"><strong>getLineWidth</strong></a>()</dt></dl>
+ <dl><dt><a name="-getMouseClick"><strong>getMouseClick</strong></a>(plotcoords<font color="#909090">=0</font>)</dt><dd><tt>Returns&nbsp;the&nbsp;coordinates&nbsp;of&nbsp;a&nbsp;single&nbsp;mouse&nbsp;click.<br>
+&nbsp;<br>
+If&nbsp;plotcoords&nbsp;!=&nbsp;0,&nbsp;returns&nbsp;values&nbsp;in&nbsp;"plot&nbsp;coordinates",&nbsp;otherwise<br>
+returns&nbsp;values&nbsp;in&nbsp;user&nbsp;coordinates.</tt></dd></dl>
+ <dl><dt><a name="-getMouseClicks"><strong>getMouseClicks</strong></a>(plotcoords<font color="#909090">=0</font>)</dt><dd><tt>Returns&nbsp;the&nbsp;coordinates&nbsp;of&nbsp;multiple&nbsp;mouse&nbsp;clicks.&nbsp;&nbsp;Finishes&nbsp;when&nbsp;mouse&nbsp;button&nbsp;2&nbsp;is&nbsp;pressed.<br>
+&nbsp;<br>
+If&nbsp;plotcoords&nbsp;!=&nbsp;0,&nbsp;return&nbsp;values&nbsp;in&nbsp;"plot&nbsp;coordinates",&nbsp;otherwise<br>
+returns&nbsp;values&nbsp;in&nbsp;user&nbsp;coordinates</tt></dd></dl>
+ <dl><dt><a name="-getPageSize"><strong>getPageSize</strong></a>()</dt></dl>
+ <dl><dt><a name="-getRGBFromIndex"><strong>getRGBFromIndex</strong></a>(idx)</dt></dl>
+ <dl><dt><a name="-getScreenSize"><strong>getScreenSize</strong></a>()</dt></dl>
+ <dl><dt><a name="-getShadingPattern"><strong>getShadingPattern</strong></a>()</dt></dl>
+ <dl><dt><a name="-getTerminalType"><strong>getTerminalType</strong></a>()</dt></dl>
+ <dl><dt><a name="-getTextAngle"><strong>getTextAngle</strong></a>()</dt></dl>
+ <dl><dt><a name="-getTextHeight"><strong>getTextHeight</strong></a>()</dt></dl>
+ <dl><dt><a name="-getWindowGeometry"><strong>getWindowGeometry</strong></a>()</dt></dl>
+ <dl><dt><a name="-getWindowID"><strong>getWindowID</strong></a>()</dt></dl>
+ <dl><dt><a name="-include_metafile"><strong>include_metafile</strong></a>(filename)</dt><dd><tt>Draws&nbsp;a&nbsp;metafile&nbsp;on&nbsp;the&nbsp;page.&nbsp;&nbsp;See&nbsp;also&nbsp;fillbox.</tt></dd></dl>
+ <dl><dt><a name="-initialize"><strong>initialize</strong></a>()</dt><dd><tt>Initialize&nbsp;DISLIN&nbsp;drawing.&nbsp;Set&nbsp;to&nbsp;DISLIN&nbsp;level&nbsp;1.</tt></dd></dl>
+ <dl><dt><a name="-initializeLegend"><strong>initializeLegend</strong></a>(nlines, maxlen)</dt><dd><tt>Initialize&nbsp;a&nbsp;DISLIN&nbsp;legend.</tt></dd></dl>
+ <dl><dt><a name="-initializePlane3D"><strong>initializePlane3D</strong></a>(ll<font color="#909090">=(-1, -1, 0)</font>, lr<font color="#909090">=(1, -1, 0)</font>, ur<font color="#909090">=(1, 1, 0)</font>)</dt><dd><tt>Setup&nbsp;2D&nbsp;Plane&nbsp;in&nbsp;3D&nbsp;space.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ll,&nbsp;lr,&nbsp;ur&nbsp;--&nbsp;absolute&nbsp;3D&nbsp;coordinates&nbsp;of&nbsp;lower-left,&nbsp;lower-right,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;upper-right&nbsp;corners&nbsp;of&nbsp;plane&nbsp;(the&nbsp;default&nbsp;coordinates&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;give&nbsp;a&nbsp;xy-plane,&nbsp;perpendicular&nbsp;to&nbsp;the&nbsp;z-axis&nbsp;at&nbsp;absolute<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z-coordinate&nbsp;zero)</tt></dd></dl>
+ <dl><dt><a name="-isPostscript"><strong>isPostscript</strong></a>(fmt)</dt><dd><tt>Returns&nbsp;true&nbsp;if&nbsp;passed&nbsp;format&nbsp;is&nbsp;a&nbsp;postscript&nbsp;or&nbsp;PDF&nbsp;format.</tt></dd></dl>
+ <dl><dt><a name="-isScreen"><strong>isScreen</strong></a>(fmt)</dt><dd><tt>Returns&nbsp;true&nbsp;if&nbsp;passed&nbsp;format&nbsp;is&nbsp;a&nbsp;screen&nbsp;or&nbsp;console&nbsp;format.</tt></dd></dl>
+ <dl><dt><a name="-isWMF"><strong>isWMF</strong></a>(fmt)</dt><dd><tt>Returns&nbsp;true&nbsp;if&nbsp;format&nbsp;is&nbsp;a&nbsp;windows&nbsp;metafile&nbsp;format.</tt></dd></dl>
+ <dl><dt><a name="-noAxisLines"><strong>noAxisLines</strong></a>(axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Suppresses&nbsp;the&nbsp;plotting&nbsp;of&nbsp;axis&nbsp;lines.</tt></dd></dl>
+ <dl><dt><a name="-noAxisSystem"><strong>noAxisSystem</strong></a>()</dt><dd><tt>Suppresses&nbsp;the&nbsp;plotting&nbsp;of&nbsp;an&nbsp;axis&nbsp;system.</tt></dd></dl>
+ <dl><dt><a name="-noCheck"><strong>noCheck</strong></a>()</dt><dd><tt>Suppresses&nbsp;listing&nbsp;of&nbsp;points&nbsp;outside&nbsp;of&nbsp;axis.</tt></dd></dl>
+ <dl><dt><a name="-plotToUser"><strong>plotToUser</strong></a>(x<font color="#909090">=0</font>, y<font color="#909090">=0</font>)</dt><dd><tt>Converts&nbsp;plot&nbsp;x,y&nbsp;coordinates&nbsp;to&nbsp;user&nbsp;coordinates.</tt></dd></dl>
+ <dl><dt><a name="-qbar"><strong>qbar</strong></a>(xlist)</dt><dd><tt>interface&nbsp;to&nbsp;dislin&nbsp;quick&nbsp;bar&nbsp;plot&nbsp;function.</tt></dd></dl>
+ <dl><dt><a name="-qcolor3D"><strong>qcolor3D</strong></a>(zmatrix, nx, ny)</dt><dd><tt>interface&nbsp;to&nbsp;dislin&nbsp;quick&nbsp;3d&nbsp;color&nbsp;plot&nbsp;function.</tt></dd></dl>
+ <dl><dt><a name="-qcontour"><strong>qcontour</strong></a>(zmatrix, nx, ny, nlevels)</dt><dd><tt>interface&nbsp;to&nbsp;dislin&nbsp;quick&nbsp;contour&nbsp;plot&nbsp;function.</tt></dd></dl>
+ <dl><dt><a name="-qline"><strong>qline</strong></a>(xlist, ylist)</dt><dd><tt>Interface&nbsp;to&nbsp;dislin&nbsp;quick&nbsp;line&nbsp;plot&nbsp;function</tt></dd></dl>
+ <dl><dt><a name="-qpie"><strong>qpie</strong></a>(xlist)</dt><dd><tt>interface&nbsp;to&nbsp;dislin&nbsp;quick&nbsp;pie&nbsp;plot&nbsp;function.</tt></dd></dl>
+ <dl><dt><a name="-qscatter"><strong>qscatter</strong></a>(xlist, ylist)</dt><dd><tt>Interface&nbsp;to&nbsp;dislin&nbsp;quick&nbsp;scatter&nbsp;function.</tt></dd></dl>
+ <dl><dt><a name="-qsetup"><strong>qsetup</strong></a>(format<font color="#909090">='screen'</font>, filename<font color="#909090">='dis.out'</font>)</dt><dd><tt>Performs&nbsp;useful&nbsp;setup&nbsp;calls&nbsp;for&nbsp;'quick'&nbsp;functions.</tt></dd></dl>
+ <dl><dt><a name="-qsurface"><strong>qsurface</strong></a>(zmatrix, nx, ny)</dt><dd><tt>interface&nbsp;to&nbsp;dislin&nbsp;quick&nbsp;surface&nbsp;plot&nbsp;function.</tt></dd></dl>
+ <dl><dt><a name="-resetParameter"><strong>resetParameter</strong></a>(pname)</dt><dd><tt>Reset&nbsp;given&nbsp;DISLIN&nbsp;parameter.</tt></dd></dl>
+ <dl><dt><a name="-resetTransformations"><strong>resetTransformations</strong></a>()</dt><dd><tt>Resets&nbsp;all&nbsp;base&nbsp;transformations&nbsp;of&nbsp;plot&nbsp;vectors.</tt></dd></dl>
+ <dl><dt><a name="-secondaryXaxis"><strong>secondaryXaxis</strong></a>(low, high, first, step, length, name, direction, x, y, log<font color="#909090">=0</font>)</dt><dd><tt>Plots&nbsp;a&nbsp;secondary&nbsp;X&nbsp;axis.&nbsp;See&nbsp;XAXIS&nbsp;in&nbsp;DISLIN&nbsp;docs.</tt></dd></dl>
+ <dl><dt><a name="-secondaryYaxis"><strong>secondaryYaxis</strong></a>(low, high, first, step, length, name, direction, x, y, log<font color="#909090">=0</font>)</dt><dd><tt>Plots&nbsp;a&nbsp;secondary&nbsp;Y&nbsp;axis.&nbsp;See&nbsp;YAXIS&nbsp;in&nbsp;DISLIN&nbsp;docs.</tt></dd></dl>
+ <dl><dt><a name="-sendBuffer"><strong>sendBuffer</strong></a>()</dt><dd><tt>Send's&nbsp;the&nbsp;DISLIN&nbsp;buffer&nbsp;to&nbsp;the&nbsp;screen.</tt></dd></dl>
+ <dl><dt><a name="-setAutoColorResolution"><strong>setAutoColorResolution</strong></a>(nx, ny)</dt><dd><tt>Given&nbsp;#&nbsp;of&nbsp;pts&nbsp;in&nbsp;x,y&nbsp;directions,&nbsp;automatically&nbsp;sets&nbsp;color-plot&nbsp;resolution.</tt></dd></dl>
+ <dl><dt><a name="-setAxisAllColor"><strong>setAxisAllColor</strong></a>(idx<font color="#909090">=-1</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;color(index)&nbsp;for&nbsp;all&nbsp;axis&nbsp;parts.</tt></dd></dl>
+ <dl><dt><a name="-setAxisBackground"><strong>setAxisBackground</strong></a>(idx<font color="#909090">=-1</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;color(index)&nbsp;of&nbsp;the&nbsp;background&nbsp;for&nbsp;axis&nbsp;systems.</tt></dd></dl>
+ <dl><dt><a name="-setAxisColors"><strong>setAxisColors</strong></a>(line<font color="#909090">=-1</font>, tick<font color="#909090">=-1</font>, label<font color="#909090">=-1</font>, name<font color="#909090">=-1</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;color&nbsp;for&nbsp;indicated&nbsp;elements&nbsp;of&nbsp;an&nbsp;axis.</tt></dd></dl>
+ <dl><dt><a name="-setAxisLabelColor"><strong>setAxisLabelColor</strong></a>(idx<font color="#909090">=-1</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;color(index)&nbsp;for&nbsp;axis&nbsp;labels.</tt></dd></dl>
+ <dl><dt><a name="-setAxisLengths3D"><strong>setAxisLengths3D</strong></a>(x<font color="#909090">=2.0</font>, y<font color="#909090">=2.0</font>, z<font color="#909090">=2.0</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;lengths&nbsp;of&nbsp;axes&nbsp;in&nbsp;absolute&nbsp;3D&nbsp;coordinates.&nbsp;See&nbsp;DISLIN&nbsp;manual.</tt></dd></dl>
+ <dl><dt><a name="-setAxisLineColor"><strong>setAxisLineColor</strong></a>(idx<font color="#909090">=-1</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;color(index)&nbsp;for&nbsp;axis&nbsp;lines.</tt></dd></dl>
+ <dl><dt><a name="-setAxisName"><strong>setAxisName</strong></a>(name, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;name&nbsp;(title)&nbsp;drawn&nbsp;next&nbsp;to&nbsp;an&nbsp;axis.</tt></dd></dl>
+ <dl><dt><a name="-setAxisNameColor"><strong>setAxisNameColor</strong></a>(idx<font color="#909090">=-1</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;color(index)&nbsp;for&nbsp;axis&nbsp;names.</tt></dd></dl>
+ <dl><dt><a name="-setAxisNameDistance"><strong>setAxisNameDistance</strong></a>(dist, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;distance&nbsp;(in&nbsp;plot&nbsp;coordinates)&nbsp;between&nbsp;axis&nbsp;labels&nbsp;and&nbsp;axis&nbsp;names.</tt></dd></dl>
+ <dl><dt><a name="-setAxisNameHeight"><strong>setAxisNameHeight</strong></a>(h)</dt><dd><tt>Sets&nbsp;the&nbsp;height&nbsp;(in&nbsp;plot&nbsp;coordinates)&nbsp;of&nbsp;axis&nbsp;names.</tt></dd></dl>
+ <dl><dt><a name="-setAxisNameJustification"><strong>setAxisNameJustification</strong></a>(jus, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;justification&nbsp;of&nbsp;axis&nbsp;names.</tt></dd></dl>
+ <dl><dt><a name="-setAxisPageOrigin"><strong>setAxisPageOrigin</strong></a>(x, y)</dt><dd><tt>Sets&nbsp;the&nbsp;position&nbsp;(in&nbsp;plot&nbsp;coordinates)&nbsp;of&nbsp;origin&nbsp;of&nbsp;crossed-axis&nbsp;system.</tt></dd></dl>
+ <dl><dt><a name="-setAxisPagePosition"><strong>setAxisPagePosition</strong></a>(x, y)</dt><dd><tt>Sets&nbsp;the&nbsp;plot&nbsp;coordinates&nbsp;of&nbsp;the&nbsp;lower&nbsp;left&nbsp;corner&nbsp;of&nbsp;an&nbsp;axis&nbsp;system.</tt></dd></dl>
+ <dl><dt><a name="-setAxisPageSize"><strong>setAxisPageSize</strong></a>(width, height)</dt><dd><tt>Defines&nbsp;the&nbsp;size&nbsp;(in&nbsp;plot&nbsp;coordinates)&nbsp;of&nbsp;an&nbsp;axis&nbsp;system.</tt></dd></dl>
+ <dl><dt><a name="-setAxisParts"><strong>setAxisParts</strong></a>(lowx<font color="#909090">='all'</font>, lefty<font color="#909090">='all'</font>, upx<font color="#909090">='ticks'</font>, righty<font color="#909090">='ticks'</font>)</dt><dd><tt>Determines&nbsp;the&nbsp;parts&nbsp;of&nbsp;an&nbsp;axis&nbsp;system&nbsp;which&nbsp;will&nbsp;be&nbsp;drawn.<br>
+&nbsp;<br>
+valid&nbsp;arguments:&nbsp;none,&nbsp;lines,&nbsp;ticks,&nbsp;labels,&nbsp;all<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;none:&nbsp;complete&nbsp;axes&nbsp;suppressed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;lines:&nbsp;only&nbsp;axis&nbsp;lines&nbsp;drawn<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ticks:&nbsp;lines&nbsp;and&nbsp;ticks&nbsp;drawn<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;labels:&nbsp;lines,&nbsp;ticks,&nbsp;and&nbsp;labels&nbsp;drawn<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;all:&nbsp;lines,&nbsp;ticks,&nbsp;labels,&nbsp;and&nbsp;axis&nbsp;names&nbsp;drawn</tt></dd></dl>
+ <dl><dt><a name="-setAxisScaling"><strong>setAxisScaling</strong></a>(scalingtype<font color="#909090">='linear'</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Determines&nbsp;the&nbsp;type&nbsp;of&nbsp;the&nbsp;axis&nbsp;system.<br>
+&nbsp;<br>
+valid&nbsp;scalingtypes:&nbsp;linear,&nbsp;log<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;scalingtype:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;axes:&nbsp;determines&nbsp;which&nbsp;axis&nbsp;to&nbsp;apply&nbsp;the&nbsp;operation&nbsp;to.</tt></dd></dl>
+ <dl><dt><a name="-setAxisTickColor"><strong>setAxisTickColor</strong></a>(idx<font color="#909090">=-1</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;color(index)&nbsp;for&nbsp;axis&nbsp;ticks.</tt></dd></dl>
+ <dl><dt><a name="-setAxisType"><strong>setAxisType</strong></a>(axistype<font color="#909090">='rectangular'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;type&nbsp;of&nbsp;axis&nbsp;system&nbsp;drawn.<br>
+&nbsp;<br>
+Valid:&nbsp;&nbsp;'rectangular',&nbsp;'crossed'</tt></dd></dl>
+ <dl><dt><a name="-setBar3DLook"><strong>setBar3DLook</strong></a>(depth<font color="#909090">=-1</font>, ang<font color="#909090">=45</font>)</dt><dd><tt>Sets&nbsp;appearance&nbsp;of&nbsp;3D&nbsp;bars.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;depth:&nbsp;floating&nbsp;point&nbsp;number&nbsp;defining&nbsp;depth&nbsp;of&nbsp;bar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ang:&nbsp;angle&nbsp;(in&nbsp;degrees)&nbsp;between&nbsp;front&nbsp;and&nbsp;side&nbsp;panels</tt></dd></dl>
+ <dl><dt><a name="-setBarBorderColor"><strong>setBarBorderColor</strong></a>(clr<font color="#909090">=-1</font>)</dt><dd><tt>Set&nbsp;color(index)&nbsp;of&nbsp;bar&nbsp;borders.&nbsp;-1&nbsp;indicates&nbsp;current&nbsp;color.</tt></dd></dl>
+ <dl><dt><a name="-setBarColor"><strong>setBarColor</strong></a>(front<font color="#909090">=-1</font>, side<font color="#909090">=-1</font>, top<font color="#909090">=-1</font>)</dt><dd><tt>Sets&nbsp;colors(index)&nbsp;for&nbsp;front,&nbsp;side,&nbsp;and&nbsp;top&nbsp;of&nbsp;bars.&nbsp;-1&nbsp;indicates&nbsp;current&nbsp;color.</tt></dd></dl>
+ <dl><dt><a name="-setBarGroups"><strong>setBarGroups</strong></a>(ngroups, gap)</dt><dd><tt>Puts&nbsp;bars&nbsp;with&nbsp;same&nbsp;axis&nbsp;position&nbsp;into&nbsp;groups.</tt></dd></dl>
+ <dl><dt><a name="-setBarLabelStyle"><strong>setBarLabelStyle</strong></a>(mode<font color="#909090">='none'</font>, position<font color="#909090">='auto'</font>, digits<font color="#909090">=1</font>, color<font color="#909090">=-1</font>)</dt><dd><tt>Sets&nbsp;various&nbsp;label&nbsp;options&nbsp;for&nbsp;bar&nbsp;graphs.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;mode&nbsp;:&nbsp;defines&nbsp;what&nbsp;kind&nbsp;of&nbsp;labels&nbsp;will&nbsp;be&nbsp;used<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;valid&nbsp;modes:&nbsp;none,&nbsp;second,&nbsp;first,&nbsp;delta&nbsp;--&nbsp;see&nbsp;DISLIN&nbsp;docs.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;position&nbsp;:&nbsp;defines&nbsp;position&nbsp;of&nbsp;labels<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;valid&nbsp;positions:&nbsp;inside,&nbsp;outside,&nbsp;left,&nbsp;right,&nbsp;center,&nbsp;auto<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;digits&nbsp;:&nbsp;number&nbsp;of&nbsp;digits&nbsp;used&nbsp;in&nbsp;labels<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;color&nbsp;:&nbsp;label&nbsp;color&nbsp;(index)</tt></dd></dl>
+ <dl><dt><a name="-setBarPosition"><strong>setBarPosition</strong></a>(pos<font color="#909090">='none'</font>)</dt><dd><tt>Defines&nbsp;how&nbsp;bars&nbsp;will&nbsp;be&nbsp;drawn&nbsp;relative&nbsp;to&nbsp;axes/ticks.<br>
+&nbsp;<br>
+valid&nbsp;positions:&nbsp;none,&nbsp;ticks,&nbsp;axis,&nbsp;both<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;none:&nbsp;positions&nbsp;defined&nbsp;by&nbsp;drawBar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ticks:&nbsp;centered&nbsp;on&nbsp;major&nbsp;ticks<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;axis:&nbsp;vertical&nbsp;bars&nbsp;start&nbsp;at&nbsp;x-axis,&nbsp;horizontal&nbsp;at&nbsp;y-axis<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;both:&nbsp;combines&nbsp;ticks&nbsp;and&nbsp;axis</tt></dd></dl>
+ <dl><dt><a name="-setBarType"><strong>setBarType</strong></a>(bartype<font color="#909090">='vertical'</font>)</dt><dd><tt>Sets&nbsp;direction&nbsp;and&nbsp;appearance&nbsp;of&nbsp;bars.<br>
+&nbsp;<br>
+valid&nbsp;bartypes:&nbsp;vertical,&nbsp;horizontal,&nbsp;vertical3D,&nbsp;horizontal3D</tt></dd></dl>
+ <dl><dt><a name="-setBarWidth"><strong>setBarWidth</strong></a>(w<font color="#909090">=0.75</font>)</dt><dd><tt>Sets&nbsp;width&nbsp;of&nbsp;bars&nbsp;for&nbsp;bar&nbsp;graphs.</tt></dd></dl>
+ <dl><dt><a name="-setBarWidthMode"><strong>setBarWidthMode</strong></a>(mode<font color="#909090">='fixed'</font>)</dt><dd><tt>Set&nbsp;width&nbsp;mode&nbsp;for&nbsp;bar&nbsp;graphs.<br>
+&nbsp;<br>
+valid&nbsp;modes:&nbsp;fixed,&nbsp;variable</tt></dd></dl>
+ <dl><dt><a name="-setBorder"><strong>setBorder</strong></a>()</dt><dd><tt>Plots&nbsp;a&nbsp;border&nbsp;around&nbsp;the&nbsp;page.</tt></dd></dl>
+ <dl><dt><a name="-setBorder3D"><strong>setBorder3D</strong></a>()</dt><dd><tt>Enables&nbsp;a&nbsp;box&nbsp;to&nbsp;be&nbsp;drawn&nbsp;around&nbsp;3D&nbsp;axis&nbsp;systems.</tt></dd></dl>
+ <dl><dt><a name="-setCameraRotation3D"><strong>setCameraRotation3D</strong></a>(ang)</dt><dd><tt>Defines&nbsp;camera&nbsp;rotation&nbsp;around&nbsp;viewing&nbsp;axis&nbsp;in&nbsp;degrees&nbsp;clockwise.</tt></dd></dl>
+ <dl><dt><a name="-setClipping3D"><strong>setClipping3D</strong></a>(system<font color="#909090">='world'</font>, eyevalues<font color="#909090">=(1, -1)</font>)</dt><dd><tt>Defines&nbsp;whether&nbsp;clipping&nbsp;is&nbsp;done&nbsp;in&nbsp;world&nbsp;or&nbsp;eye&nbsp;coordinate&nbsp;system.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;system:&nbsp;'world'&nbsp;or&nbsp;'eye'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;eyevalues:&nbsp;if&nbsp;system='eye',&nbsp;the&nbsp;distances&nbsp;in&nbsp;absolute&nbsp;coordinates<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;clip&nbsp;front&nbsp;and&nbsp;back&nbsp;planes.&nbsp;&nbsp;Negative&nbsp;value&nbsp;means&nbsp;infinity.</tt></dd></dl>
+ <dl><dt><a name="-setColor"><strong>setColor</strong></a>(clr)</dt><dd><tt>Sets&nbsp;the&nbsp;color&nbsp;used&nbsp;to&nbsp;draw&nbsp;DISLIN&nbsp;object.<br>
+&nbsp;<br>
+Works&nbsp;with&nbsp;strings&nbsp;(basic&nbsp;color&nbsp;name),&nbsp;integers&nbsp;(color&nbsp;index),&nbsp;and&nbsp;3-tuples&nbsp;(RGB).</tt></dd></dl>
+ <dl><dt><a name="-setColorAxisLengths"><strong>setColorAxisLengths</strong></a>(x, y, z)</dt><dd><tt>Sets&nbsp;lengths&nbsp;(in&nbsp;plot&nbsp;coordinates)&nbsp;of&nbsp;3-D&nbsp;color&nbsp;axes.</tt></dd></dl>
+ <dl><dt><a name="-setColorBarPositionHoriz"><strong>setColorBarPositionHoriz</strong></a>(pos)</dt><dd><tt>Sets&nbsp;horizontal&nbsp;position&nbsp;of&nbsp;color&nbsp;bar&nbsp;relative&nbsp;to&nbsp;axis&nbsp;system.<br>
+&nbsp;<br>
+Default&nbsp;is&nbsp;85&nbsp;plot&nbsp;coordinates&nbsp;to&nbsp;the&nbsp;right&nbsp;of&nbsp;axis&nbsp;system.<br>
+Positive&nbsp;values&nbsp;move&nbsp;bar&nbsp;further&nbsp;to&nbsp;right&nbsp;(away&nbsp;from&nbsp;axis&nbsp;system),<br>
+while&nbsp;negative&nbsp;values&nbsp;move&nbsp;bar&nbsp;closer&nbsp;to&nbsp;axis&nbsp;system.</tt></dd></dl>
+ <dl><dt><a name="-setColorBarPositionVert"><strong>setColorBarPositionVert</strong></a>(pos)</dt></dl>
+ <dl><dt><a name="-setColorBarRange"><strong>setColorBarRange</strong></a>(start<font color="#909090">=1</font>, end<font color="#909090">=254</font>)</dt><dd><tt>Sets&nbsp;range&nbsp;of&nbsp;colors&nbsp;used&nbsp;in&nbsp;3D-color&nbsp;plot&nbsp;color&nbsp;bar.</tt></dd></dl>
+ <dl><dt><a name="-setColorBarWidth"><strong>setColorBarWidth</strong></a>(width)</dt><dd><tt>Sets&nbsp;width&nbsp;(in&nbsp;plot&nbsp;coordinates)&nbsp;of&nbsp;colobar.</tt></dd></dl>
+ <dl><dt><a name="-setColorIndex"><strong>setColorIndex</strong></a>(idx)</dt><dd><tt>Sets&nbsp;color&nbsp;using&nbsp;integer&nbsp;in&nbsp;range&nbsp;0&nbsp;to&nbsp;255</tt></dd></dl>
+ <dl><dt><a name="-setColorMode"><strong>setColorMode</strong></a>(mode<font color="#909090">='full'</font>)</dt><dd><tt>Defines&nbsp;the&nbsp;color&nbsp;mode&nbsp;(low,&nbsp;none)&nbsp;for&nbsp;X11&nbsp;output.<br>
+&nbsp;<br>
+Valid:&nbsp;'low'&nbsp;or&nbsp;'full'</tt></dd></dl>
+ <dl><dt><a name="-setColorRGB"><strong>setColorRGB</strong></a>(r, g, b)</dt><dd><tt>Sets&nbsp;color&nbsp;using&nbsp;RGB&nbsp;values<br>
+&nbsp;<br>
+Dislin&nbsp;uses&nbsp;values&nbsp;between&nbsp;(0,1).&nbsp;I&nbsp;assume&nbsp;you'll&nbsp;want&nbsp;to&nbsp;use&nbsp;standard<br>
+values&nbsp;in&nbsp;range&nbsp;(0,255)&nbsp;so&nbsp;I&nbsp;do&nbsp;an&nbsp;automatic&nbsp;conversion.&nbsp;<br>
+&nbsp;<br>
+Dislin&nbsp;only&nbsp;supports&nbsp;256&nbsp;colors</tt></dd></dl>
+ <dl><dt><a name="-setColorResolution"><strong>setColorResolution</strong></a>(width<font color="#909090">=1</font>, height<font color="#909090">=1</font>)</dt><dd><tt>Defines&nbsp;the&nbsp;dimensions&nbsp;of&nbsp;rectangles&nbsp;used&nbsp;in&nbsp;color&nbsp;plots.</tt></dd></dl>
+ <dl><dt><a name="-setColorString"><strong>setColorString</strong></a>(clr)</dt><dd><tt>Sets&nbsp;color&nbsp;using&nbsp;simple&nbsp;string</tt></dd></dl>
+ <dl><dt><a name="-setColorTable"><strong>setColorTable</strong></a>(table<font color="#909090">='rainbow'</font>)</dt><dd><tt>Sets&nbsp;a&nbsp;standard&nbsp;DISLIN&nbsp;supplied&nbsp;color&nbsp;table.<br>
+&nbsp;<br>
+valid&nbsp;tables:&nbsp;small,&nbsp;vga,&nbsp;grescale,&nbsp;rainbow,&nbsp;violet,&nbsp;reverse&nbsp;grey,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reverse&nbsp;rainbow,&nbsp;reverse&nbsp;violet</tt></dd></dl>
+ <dl><dt><a name="-setContourFilling"><strong>setContourFilling</strong></a>(mode<font color="#909090">='cell'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;filling&nbsp;mode&nbsp;for&nbsp;shaded&nbsp;contours.<br>
+&nbsp;<br>
+valid&nbsp;modes:&nbsp;cell,&nbsp;polygon.</tt></dd></dl>
+ <dl><dt><a name="-setContourLabelColor"><strong>setContourLabelColor</strong></a>(clrindex)</dt><dd><tt>Sets&nbsp;color&nbsp;of&nbsp;contour&nbsp;labels.</tt></dd></dl>
+ <dl><dt><a name="-setContourLabelDistance"><strong>setContourLabelDistance</strong></a>(distance<font color="#909090">=500</font>)</dt><dd><tt>Sets&nbsp;distance&nbsp;between&nbsp;contour&nbsp;labels&nbsp;in&nbsp;plot&nbsp;coordinates.</tt></dd></dl>
+ <dl><dt><a name="-setContourLabelGap"><strong>setContourLabelGap</strong></a>(gap)</dt><dd><tt>Defines&nbsp;distance&nbsp;between&nbsp;contour&nbsp;lines&nbsp;and&nbsp;labels.</tt></dd></dl>
+ <dl><dt><a name="-setContourLabelString"><strong>setContourLabelString</strong></a>(text<font color="#909090">=''</font>)</dt><dd><tt>Defines&nbsp;a&nbsp;character&nbsp;string&nbsp;used&nbsp;for&nbsp;contour&nbsp;labels.</tt></dd></dl>
+ <dl><dt><a name="-setContourLabels"><strong>setContourLabels</strong></a>(mode<font color="#909090">='none'</font>, ndigits<font color="#909090">=1</font>)</dt><dd><tt>Determines&nbsp;the&nbsp;manner&nbsp;in&nbsp;which&nbsp;contour&nbsp;labels&nbsp;are&nbsp;drawn.<br>
+&nbsp;<br>
+valid&nbsp;modes:&nbsp;none,&nbsp;float,&nbsp;string<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;none:&nbsp;no&nbsp;contour&nbsp;labels&nbsp;plotted.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;float:&nbsp;level&nbsp;values&nbsp;used&nbsp;for&nbsp;labels<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;string:&nbsp;labels&nbsp;defined&nbsp;by&nbsp;setContourLabelString&nbsp;used.</tt></dd></dl>
+ <dl><dt><a name="-setContourMode"><strong>setContourMode</strong></a>(interval, quotient)</dt><dd><tt>See&nbsp;CONMOD&nbsp;in&nbsp;DISLIN&nbsp;docs.</tt></dd></dl>
+ <dl><dt><a name="-setCurveInterpolation"><strong>setCurveInterpolation</strong></a>(mode)</dt><dd><tt>Sets&nbsp;interpolation&nbsp;mode&nbsp;for&nbsp;curve&nbsp;drawing.<br>
+&nbsp;<br>
+valid&nbsp;modes:&nbsp;linear,&nbsp;step,&nbsp;stairs,&nbsp;bars,&nbsp;stem,&nbsp;spline,&nbsp;pspline<br>
+&nbsp;<br>
+See&nbsp;DISLIN&nbsp;docs&nbsp;for&nbsp;POLCRV&nbsp;for&nbsp;more&nbsp;info.</tt></dd></dl>
+ <dl><dt><a name="-setCurveSymbols"><strong>setCurveSymbols</strong></a>(step<font color="#909090">=0</font>, shape<font color="#909090">='circle'</font>, size<font color="#909090">=30</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;symbols&nbsp;used&nbsp;to&nbsp;mark&nbsp;points&nbsp;on&nbsp;curves.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;step:&nbsp;if&nbsp;step=0,&nbsp;no&nbsp;symbols&nbsp;are&nbsp;drawn,&nbsp;only&nbsp;lines.&nbsp;&nbsp;If&nbsp;step&nbsp;is&nbsp;negative,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;only&nbsp;every&nbsp;n-th&nbsp;symbols&nbsp;is&nbsp;drawn,&nbsp;without&nbsp;lines.&nbsp;&nbsp;If&nbsp;step&nbsp;is&nbsp;positive<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lines&nbsp;are&nbsp;drawn,&nbsp;and&nbsp;every&nbsp;n-th&nbsp;symbol&nbsp;is&nbsp;drawn.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;symbolshape:&nbsp;the&nbsp;shape&nbsp;of&nbsp;the&nbsp;symbols&nbsp;to&nbsp;use&nbsp;(see&nbsp;symboldict)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;size:&nbsp;size&nbsp;of&nbsp;the&nbsp;symbols</tt></dd></dl>
+ <dl><dt><a name="-setCurveWidth"><strong>setCurveWidth</strong></a>(w)</dt><dd><tt>Sets&nbsp;the&nbsp;thickness&nbsp;of&nbsp;DISLIN&nbsp;curves.</tt></dd></dl>
+ <dl><dt><a name="-setDislinFont"><strong>setDislinFont</strong></a>(font<font color="#909090">='default'</font>)</dt><dd><tt>Sets&nbsp;font&nbsp;type&nbsp;to&nbsp;DISLIN&nbsp;build&nbsp;in&nbsp;font.</tt></dd></dl>
+ <dl><dt><a name="-setErrorDevice"><strong>setErrorDevice</strong></a>(device<font color="#909090">='file'</font>)</dt><dd><tt>Specifies&nbsp;whether&nbsp;DISLIN&nbsp;errors&nbsp;are&nbsp;written&nbsp;to&nbsp;the&nbsp;error&nbsp;file&nbsp;or&nbsp;screen.<br>
+&nbsp;<br>
+valid:&nbsp;file,&nbsp;screen</tt></dd></dl>
+ <dl><dt><a name="-setErrorFile"><strong>setErrorFile</strong></a>(fname<font color="#909090">='dis.err'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;file&nbsp;to&nbsp;which&nbsp;DISLIN&nbsp;errors&nbsp;are&nbsp;written.</tt></dd></dl>
+ <dl><dt><a name="-setFilename"><strong>setFilename</strong></a>(filename<font color="#909090">='dis.out'</font>, overwrite<font color="#909090">=0</font>)</dt><dd><tt>Set&nbsp;filename&nbsp;used&nbsp;for&nbsp;output.<br>
+&nbsp;<br>
+Arguments:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;filename:&nbsp;name&nbsp;of&nbsp;file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;overwrite:&nbsp;whether&nbsp;files&nbsp;with&nbsp;same&nbsp;filename&nbsp;should&nbsp;be&nbsp;overwritten.</tt></dd></dl>
+ <dl><dt><a name="-setFocus3D"><strong>setFocus3D</strong></a>(x, y, z, focustype<font color="#909090">='absolute'</font>)</dt><dd><tt>Sets&nbsp;position&nbsp;of&nbsp;the&nbsp;3D&nbsp;focus.<br>
+&nbsp;<br>
+valid&nbsp;focustypes:&nbsp;absolute,&nbsp;user</tt></dd></dl>
+ <dl><dt><a name="-setFont"><strong>setFont</strong></a>(font<font color="#909090">='default'</font>, hardware<font color="#909090">=1</font>)</dt><dd><tt>Sets&nbsp;a&nbsp;font&nbsp;depending&nbsp;on&nbsp;current&nbsp;DISLIN&nbsp;file&nbsp;format.</tt></dd></dl>
+ <dl><dt><a name="-setFormat"><strong>setFormat</strong></a>(format<font color="#909090">='screen'</font>)</dt><dd><tt>The&nbsp;DISLIN&nbsp;output&nbsp;format.<br>
+&nbsp;<br>
+Specifies&nbsp;the&nbsp;filetype&nbsp;or&nbsp;screen&nbsp;type&nbsp;on&nbsp;which&nbsp;the&nbsp;plot&nbsp;will&nbsp;be&nbsp;drawn.&nbsp;<br>
+&nbsp;<br>
+Valid:&nbsp;cgm,&nbsp;color&nbsp;postscript,&nbsp;console,&nbsp;png,&nbsp;postscript,&nbsp;pdf,&nbsp;screen,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tiff,&nbsp;virtual,&nbsp;window1,&nbsp;wmf</tt></dd></dl>
+ <dl><dt><a name="-setFrameThickness"><strong>setFrameThickness</strong></a>(n<font color="#909090">=1</font>)</dt><dd><tt>Determines&nbsp;thickness&nbsp;of&nbsp;frame&nbsp;drawn&nbsp;around&nbsp;axis&nbsp;systems.</tt></dd></dl>
+ <dl><dt><a name="-setGrid"><strong>setGrid</strong></a>(nx, ny, gridtype<font color="#909090">='square'</font>)</dt><dd><tt>Sets&nbsp;grid&nbsp;(of&nbsp;gridtype)&nbsp;with&nbsp;spacing&nbsp;given&nbsp;by&nbsp;nx,&nbsp;ny.<br>
+&nbsp;<br>
+valid&nbsp;gridtypes:&nbsp;square,&nbsp;polar</tt></dd></dl>
+ <dl><dt><a name="-setGrid3D"><strong>setGrid3D</strong></a>(nlinesx, nlinesy, planetype<font color="#909090">='all'</font>)</dt><dd><tt>Adds&nbsp;grids&nbsp;to&nbsp;3D&nbsp;axes.<br>
+&nbsp;<br>
+Valid&nbsp;planetypes:&nbsp;all,&nbsp;back,&nbsp;bottom<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;all:&nbsp;grids&nbsp;in&nbsp;xy,xz,yz&nbsp;planes&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;back:&nbsp;grids&nbsp;in&nbsp;xz&nbsp;and&nbsp;yz&nbsp;planes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;bottom:&nbsp;grid&nbsp;only&nbsp;in&nbsp;xy&nbsp;plane</tt></dd></dl>
+ <dl><dt><a name="-setHardwareFont"><strong>setHardwareFont</strong></a>()</dt><dd><tt>Sets&nbsp;sensible&nbsp;default&nbsp;fonts&nbsp;depending&nbsp;on&nbsp;the&nbsp;file&nbsp;type.</tt></dd></dl>
+ <dl><dt><a name="-setIntegerLabels"><strong>setIntegerLabels</strong></a>()</dt><dd><tt>Causes&nbsp;axes&nbsp;labels&nbsp;to&nbsp;be&nbsp;drawn&nbsp;using&nbsp;integer&nbsp;values.</tt></dd></dl>
+ <dl><dt><a name="-setLabelDigits"><strong>setLabelDigits</strong></a>(digits<font color="#909090">=1</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;number&nbsp;of&nbsp;digits&nbsp;after&nbsp;the&nbsp;decimal&nbsp;point&nbsp;for&nbsp;axis&nbsp;labels.</tt></dd></dl>
+ <dl><dt><a name="-setLabelDistance"><strong>setLabelDistance</strong></a>(dist<font color="#909090">=24</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Determines&nbsp;the&nbsp;distance&nbsp;(in&nbsp;plot&nbsp;coordinates)&nbsp;between&nbsp;axis&nbsp;ticks&nbsp;and&nbsp;labels.</tt></dd></dl>
+ <dl><dt><a name="-setLabelJustification"><strong>setLabelJustification</strong></a>(justify<font color="#909090">='auto'</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Defines&nbsp;justification&nbsp;of&nbsp;axis&nbsp;labels.<br>
+&nbsp;<br>
+valid&nbsp;justify:&nbsp;auto,&nbsp;left,&nbsp;right,&nbsp;outward,&nbsp;inward<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;auto:&nbsp;automatically&nbsp;determined&nbsp;by&nbsp;DISLIN<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;left:&nbsp;left-justified<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;right:&nbsp;right-justified<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;outward:&nbsp;left&nbsp;justified&nbsp;on&nbsp;left&nbsp;and&nbsp;lower&nbsp;axes,&nbsp;right-justified&nbsp;on<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;right&nbsp;and&nbsp;upper&nbsp;axes.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;inward:&nbsp;opposite&nbsp;of&nbsp;outward.</tt></dd></dl>
+ <dl><dt><a name="-setLabelOrientation"><strong>setLabelOrientation</strong></a>(orientation<font color="#909090">='horizontal'</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Defines&nbsp;the&nbsp;orientation&nbsp;of&nbsp;axis&nbsp;labels.<br>
+&nbsp;<br>
+valid&nbsp;orientations:&nbsp;horizontal,&nbsp;vertical</tt></dd></dl>
+ <dl><dt><a name="-setLabelPosition"><strong>setLabelPosition</strong></a>(position<font color="#909090">='ticks'</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Defines&nbsp;how&nbsp;axis&nbsp;labels&nbsp;are&nbsp;drawn&nbsp;relative&nbsp;to&nbsp;ticks.<br>
+&nbsp;<br>
+valid&nbsp;positions:&nbsp;ticks,&nbsp;center,&nbsp;shift<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ticks:&nbsp;labels&nbsp;drawn&nbsp;at&nbsp;major&nbsp;ticks<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;center:&nbsp;labels&nbsp;drawn&nbsp;between&nbsp;major&nbsp;ticks<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;shift:&nbsp;starting/ending&nbsp;labels&nbsp;shifted</tt></dd></dl>
+ <dl><dt><a name="-setLabelType"><strong>setLabelType</strong></a>(ltype<font color="#909090">='float'</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;type&nbsp;of&nbsp;labels&nbsp;which&nbsp;will&nbsp;be&nbsp;plotted&nbsp;on&nbsp;an&nbsp;axis.<br>
+&nbsp;<br>
+See&nbsp;DISLIN&nbsp;docs&nbsp;on&nbsp;LABELS&nbsp;for&nbsp;more&nbsp;info.</tt></dd></dl>
+ <dl><dt><a name="-setLegendFrameWidth"><strong>setLegendFrameWidth</strong></a>(w<font color="#909090">=1</font>)</dt><dd><tt>Sets&nbsp;width&nbsp;of&nbsp;frame&nbsp;drawn&nbsp;around&nbsp;legend&nbsp;boxes.</tt></dd></dl>
+ <dl><dt><a name="-setLegendPattern"><strong>setLegendPattern</strong></a>(nline, lwidth<font color="#909090">=1</font>, lstyle<font color="#909090">=None</font>, symbol<font color="#909090">=None</font>, color<font color="#909090">=-1</font>, pattern<font color="#909090">=None</font>)</dt><dd><tt>Sets&nbsp;aspect&nbsp;of&nbsp;the&nbsp;given&nbsp;legend&nbsp;line.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;nline:&nbsp;integer&nbsp;value&nbsp;corresponding&nbsp;to&nbsp;the&nbsp;legend&nbsp;item&nbsp;to&nbsp;be&nbsp;set.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;lwidth:&nbsp;width&nbsp;of&nbsp;line&nbsp;drawn&nbsp;for&nbsp;legend&nbsp;item<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;lstyle:&nbsp;style&nbsp;of&nbsp;line&nbsp;drawn&nbsp;for&nbsp;legend&nbsp;item&nbsp;(see&nbsp;linedict)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;symbol:&nbsp;shape&nbsp;of&nbsp;symbol&nbsp;draw&nbsp;for&nbsp;legend&nbsp;item&nbsp;(see&nbsp;symboldict)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;color:&nbsp;color(index)&nbsp;for&nbsp;legend&nbsp;item<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;pattern:&nbsp;shading&nbsp;pattern&nbsp;for&nbsp;legend&nbsp;item</tt></dd></dl>
+ <dl><dt><a name="-setLegendTitle"><strong>setLegendTitle</strong></a>(title)</dt><dd><tt>Sets&nbsp;text&nbsp;of&nbsp;title&nbsp;drawn&nbsp;for&nbsp;legend.</tt></dd></dl>
+ <dl><dt><a name="-setLightPosition"><strong>setLightPosition</strong></a>(lightID, x, y, z, coordmode<font color="#909090">='absolute'</font>)</dt><dd><tt>Sets&nbsp;position&nbsp;of&nbsp;individual&nbsp;light.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;lightID:&nbsp;ID&nbsp;of&nbsp;light&nbsp;(1..8).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;x,y,z:&nbsp;3D&nbsp;coordinates&nbsp;of&nbsp;light.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;coordmode:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;valid&nbsp;coordmodes:&nbsp;absolure,&nbsp;user,&nbsp;angle</tt></dd></dl>
+ <dl><dt><a name="-setLightingOptions"><strong>setLightingOptions</strong></a>(lightID, val, otype)</dt><dd><tt>Sets&nbsp;various&nbsp;lighting&nbsp;options.<br>
+&nbsp;<br>
+Modifies&nbsp;the&nbsp;ambient,&nbsp;diffuse&nbsp;and&nbsp;specular&nbsp;intensities&nbsp;and&nbsp;the&nbsp;constant,&nbsp;<br>
+linear&nbsp;and&nbsp;quadratic&nbsp;attentuation&nbsp;factors&nbsp;of&nbsp;light&nbsp;sources.&nbsp;See&nbsp;DISLIN<br>
+manual&nbsp;(LITOPT).</tt></dd></dl>
+ <dl><dt><a name="-setLineStyle"><strong>setLineStyle</strong></a>(style<font color="#909090">='solid'</font>)</dt><dd><tt>Sets&nbsp;style&nbsp;with&nbsp;which&nbsp;lines&nbsp;are&nbsp;drawn.<br>
+&nbsp;<br>
+valid&nbsp;styles:&nbsp;solid,&nbsp;dot,&nbsp;dash,&nbsp;chain&nbsp;dash,&nbsp;chain&nbsp;dot,&nbsp;medium&nbsp;dash,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;large&nbsp;dot,&nbsp;large&nbsp;dash</tt></dd></dl>
+ <dl><dt><a name="-setLineWidth"><strong>setLineWidth</strong></a>(w<font color="#909090">=1</font>)</dt><dd><tt>Sets&nbsp;width&nbsp;of&nbsp;DISLIN&nbsp;lines.</tt></dd></dl>
+ <dl><dt><a name="-setMaterialParameters"><strong>setMaterialParameters</strong></a>(val, ptype)</dt><dd><tt>Defines&nbsp;material&nbsp;parameters&nbsp;for&nbsp;ambient,&nbsp;diffuse,&nbsp;and&nbsp;specular&nbsp;lighting.<br>
+&nbsp;<br>
+See&nbsp;DISLIN&nbsp;manual&nbsp;(MATOPT).</tt></dd></dl>
+ <dl><dt><a name="-setMyColorTable"><strong>setMyColorTable</strong></a>(lr, lg, lb)</dt><dd><tt>Defines&nbsp;a&nbsp;custom&nbsp;color&nbsp;table.</tt></dd></dl>
+ <dl><dt><a name="-setNoHiddenLines"><strong>setNoHiddenLines</strong></a>()</dt><dd><tt>Causes&nbsp;hidden&nbsp;lines&nbsp;to&nbsp;be&nbsp;drawn&nbsp;for&nbsp;surface&nbsp;plots.</tt></dd></dl>
+ <dl><dt><a name="-setNoZeroColor"><strong>setNoZeroColor</strong></a>()</dt><dd><tt>Suppresses&nbsp;3D-color&nbsp;plotting&nbsp;of&nbsp;points&nbsp;with&nbsp;zero&nbsp;value.</tt></dd></dl>
+ <dl><dt><a name="-setOriginLines"><strong>setOriginLines</strong></a>(val<font color="#909090">='xy'</font>)</dt><dd><tt>Draws&nbsp;vertical&nbsp;and&nbsp;horizontal&nbsp;lines&nbsp;through&nbsp;the&nbsp;origin&nbsp;of&nbsp;axis&nbsp;system.<br>
+&nbsp;<br>
+Specify:&nbsp;"x"&nbsp;--&nbsp;for&nbsp;x=0&nbsp;only<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"y"&nbsp;--&nbsp;for&nbsp;y=0&nbsp;only<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"xy"&nbsp;--&nbsp;for&nbsp;x=0&nbsp;and&nbsp;y=0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"cross"&nbsp;--&nbsp;for&nbsp;x=0,y=0&nbsp;plus&nbsp;ticks</tt></dd></dl>
+ <dl><dt><a name="-setPSFont"><strong>setPSFont</strong></a>(font<font color="#909090">='default'</font>)</dt><dd><tt>Sets&nbsp;font&nbsp;type&nbsp;to&nbsp;postscript&nbsp;fonts.</tt></dd></dl>
+ <dl><dt><a name="-setPageFill"><strong>setPageFill</strong></a>(ncolor)</dt><dd><tt>Fills&nbsp;the&nbsp;entire&nbsp;page&nbsp;with&nbsp;a&nbsp;single&nbsp;color.<br>
+&nbsp;<br>
+Valid:&nbsp;int&nbsp;[0,255]</tt></dd></dl>
+ <dl><dt><a name="-setPageSize"><strong>setPageSize</strong></a>(x, y)</dt><dd><tt>Sets&nbsp;the&nbsp;page&nbsp;size&nbsp;for&nbsp;DISLIN&nbsp;plots&nbsp;(in&nbsp;plot&nbsp;coordinates).<br>
+&nbsp;<br>
+Valid:&nbsp;(int,&nbsp;int)</tt></dd></dl>
+ <dl><dt><a name="-setPieAppearance"><strong>setPieAppearance</strong></a>(cycle<font color="#909090">='pattern'</font>, ptype<font color="#909090">='2D'</font>)</dt><dd><tt>Defines&nbsp;how&nbsp;Pie&nbsp;colors/patterns&nbsp;change,&nbsp;and&nbsp;whether&nbsp;to&nbsp;use&nbsp;2D/3D&nbsp;look.</tt></dd></dl>
+ <dl><dt><a name="-setPieArrowType"><strong>setPieArrowType</strong></a>(linetype<font color="#909090">='broken'</font>, head<font color="#909090">=2301</font>)</dt><dd><tt>Sets&nbsp;aspect&nbsp;of&nbsp;the&nbsp;arrows&nbsp;drawn&nbsp;from&nbsp;labels&nbsp;to&nbsp;pie&nbsp;slices.</tt></dd></dl>
+ <dl><dt><a name="-setPieAutoOffset"><strong>setPieAutoOffset</strong></a>()</dt><dd><tt>Offsets&nbsp;pie&nbsp;slices.</tt></dd></dl>
+ <dl><dt><a name="-setPieBorderColor"><strong>setPieBorderColor</strong></a>(colorindex)</dt><dd><tt>Set&nbsp;the&nbsp;color(index)&nbsp;of&nbsp;the&nbsp;borders&nbsp;on&nbsp;pie&nbsp;graphs.</tt></dd></dl>
+ <dl><dt><a name="-setPieLabelStyle"><strong>setPieLabelStyle</strong></a>(mode<font color="#909090">='percent'</font>, position<font color="#909090">='internal'</font>, justify<font color="#909090">='center'</font>, digits<font color="#909090">=1</font>, color<font color="#909090">=-1</font>)</dt><dd><tt>Sets&nbsp;label&nbsp;style&nbsp;for&nbsp;Pie&nbsp;slice&nbsp;labels.<br>
+&nbsp;<br>
+valid&nbsp;modes:&nbsp;none,&nbsp;percent,&nbsp;data,&nbsp;both&nbsp;(see&nbsp;DISLIN&nbsp;docs)<br>
+valid&nbsp;positions:&nbsp;internal,&nbsp;external,&nbsp;aligned&nbsp;(see&nbsp;DISLIN&nbsp;docs)<br>
+valids&nbsp;justify:&nbsp;center,&nbsp;left,&nbsp;right,&nbsp;outwards,&nbsp;inwards&nbsp;(see&nbsp;DISLIN&nbsp;docs)</tt></dd></dl>
+ <dl><dt><a name="-setPieLabels"><strong>setPieLabels</strong></a>(label, position)</dt><dd><tt>Sets&nbsp;Labels&nbsp;drawn&nbsp;on&nbsp;left&nbsp;or&nbsp;right&nbsp;of&nbsp;data&nbsp;values&nbsp;in&nbsp;pie&nbsp;graphs<br>
+&nbsp;<br>
+valid&nbsp;positions:&nbsp;left,&nbsp;right</tt></dd></dl>
+ <dl><dt><a name="-setPieOptions3D"><strong>setPieOptions3D</strong></a>(thickness<font color="#909090">=0.20000000000000001</font>, angle<font color="#909090">=45.0</font>)</dt><dd><tt>Sets&nbsp;thickness&nbsp;and&nbsp;viewing&nbsp;angle&nbsp;for&nbsp;3D&nbsp;pie&nbsp;graphs.</tt></dd></dl>
+ <dl><dt><a name="-setPieSliceColors"><strong>setPieSliceColors</strong></a>(topcolors, sidecolors)</dt><dd><tt>Sets&nbsp;colors(index)&nbsp;of&nbsp;top/side&nbsp;of&nbsp;pie&nbsp;slices.</tt></dd></dl>
+ <dl><dt><a name="-setPlotRotation"><strong>setPlotRotation</strong></a>(ang, x, y)</dt><dd><tt>Affects&nbsp;rotation&nbsp;of&nbsp;plot&nbsp;vectors.</tt></dd></dl>
+ <dl><dt><a name="-setPlotScaling"><strong>setPlotScaling</strong></a>(x, y)</dt><dd><tt>Affects&nbsp;scaling&nbsp;of&nbsp;plot&nbsp;vectors.</tt></dd></dl>
+ <dl><dt><a name="-setPlotShift"><strong>setPlotShift</strong></a>(x, y)</dt><dd><tt>Shifts&nbsp;plot&nbsp;vector&nbsp;given&nbsp;amount&nbsp;in&nbsp;x,y&nbsp;direction.</tt></dd></dl>
+ <dl><dt><a name="-setPolarGrid"><strong>setPolarGrid</strong></a>(nc, nl)</dt><dd><tt>Overlay&nbsp;polar&nbsp;grid&nbsp;on&nbsp;axis&nbsp;system,&nbsp;with&nbsp;nc&nbsp;circles&nbsp;and&nbsp;nl&nbsp;sector&nbsp;lines.</tt></dd></dl>
+ <dl><dt><a name="-setProtectSurfaces"><strong>setProtectSurfaces</strong></a>()</dt><dd><tt>Protects&nbsp;surface&nbsp;from&nbsp;being&nbsp;overwritten.<br>
+&nbsp;<br>
+Applies&nbsp;to&nbsp;routines&nbsp;derived&nbsp;from&nbsp;SURFUN,&nbsp;SURMAT&nbsp;and&nbsp;SURFCE</tt></dd></dl>
+ <dl><dt><a name="-setScaling"><strong>setScaling</strong></a>(factor<font color="#909090">=1.0</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;scaling&nbsp;factor&nbsp;for&nbsp;an&nbsp;entire&nbsp;DISLIN&nbsp;plot.<br>
+&nbsp;<br>
+Valid:&nbsp;float&nbsp;(0,inf]</tt></dd></dl>
+ <dl><dt><a name="-setScalingMode"><strong>setScalingMode</strong></a>(mode<font color="#909090">='down'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;method&nbsp;by&nbsp;which&nbsp;graphics&nbsp;are&nbsp;scaled&nbsp;to&nbsp;hardware&nbsp;devices.<br>
+&nbsp;<br>
+valid&nbsp;modes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;down:&nbsp;graphics&nbsp;larger&nbsp;than&nbsp;hardware&nbsp;page&nbsp;size&nbsp;are&nbsp;scaled&nbsp;down.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;full:&nbsp;graphics&nbsp;scaled&nbsp;up/down&nbsp;depending&nbsp;on&nbsp;hardware&nbsp;page&nbsp;size.</tt></dd></dl>
+ <dl><dt><a name="-setScreenMode"><strong>setScreenMode</strong></a>(mode<font color="#909090">='normal'</font>)</dt><dd><tt>Set&nbsp;the&nbsp;foreground/background&nbsp;color&nbsp;for&nbsp;DISLIN&nbsp;plots.<br>
+&nbsp;<br>
+valid&nbsp;modes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;normal:&nbsp;white&nbsp;background&nbsp;with&nbsp;black&nbsp;default&nbsp;foreground&nbsp;color<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;black:&nbsp;black&nbsp;background&nbsp;with&nbsp;white&nbsp;default&nbsp;foreground&nbsp;color</tt></dd></dl>
+ <dl><dt><a name="-setShadingPattern"><strong>setShadingPattern</strong></a>(pattern, outline<font color="#909090">=1</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;shading&nbsp;pattern&nbsp;for&nbsp;DISLIN&nbsp;objects.</tt></dd></dl>
+ <dl><dt><a name="-setSplineMode"><strong>setSplineMode</strong></a>(order<font color="#909090">=3</font>, npts<font color="#909090">=200</font>)</dt><dd><tt>Defines&nbsp;the&nbsp;order&nbsp;of&nbsp;polynomial&nbsp;and&nbsp;number&nbsp;of&nbsp;points&nbsp;for&nbsp;splined&nbsp;curves.</tt></dd></dl>
+ <dl><dt><a name="-setSquareGrid"><strong>setSquareGrid</strong></a>(nx, ny)</dt><dd><tt>Overlay&nbsp;grid&nbsp;on&nbsp;axis&nbsp;system,&nbsp;with&nbsp;nx&nbsp;and&nbsp;ny&nbsp;grid&nbsp;lines&nbsp;between&nbsp;labels.</tt></dd></dl>
+ <dl><dt><a name="-setSurfaceColorScale"><strong>setSurfaceColorScale</strong></a>(low, high)</dt><dd><tt>Sets&nbsp;color&nbsp;scale&nbsp;for&nbsp;3D&nbsp;surface&nbsp;plots.</tt></dd></dl>
+ <dl><dt><a name="-setSurfaceColors"><strong>setSurfaceColors</strong></a>(topcolor<font color="#909090">=-1</font>, bottomcolor<font color="#909090">=-1</font>)</dt><dd><tt>Determines&nbsp;color&nbsp;of&nbsp;top&nbsp;and&nbsp;bottom&nbsp;of&nbsp;surfaces.&nbsp;Color&nbsp;=&nbsp;index.<br>
+&nbsp;<br>
+Applies&nbsp;to&nbsp;routines&nbsp;derived&nbsp;from&nbsp;SURFUN,&nbsp;SURMAT&nbsp;and&nbsp;SURFCE</tt></dd></dl>
+ <dl><dt><a name="-setSurfaceMeshColor"><strong>setSurfaceMeshColor</strong></a>(clr<font color="#909090">=-1</font>)</dt><dd><tt>Defines&nbsp;color(index)&nbsp;for&nbsp;surface&nbsp;mesh/grid&nbsp;lines.</tt></dd></dl>
+ <dl><dt><a name="-setSurfaceMeshing"><strong>setSurfaceMeshing</strong></a>(state<font color="#909090">='off'</font>, shading<font color="#909090">=1</font>)</dt><dd><tt>Sets&nbsp;additional&nbsp;mesh/grid&nbsp;lines&nbsp;for&nbsp;surfaces.</tt></dd></dl>
+ <dl><dt><a name="-setSurfaceShadingMode"><strong>setSurfaceShadingMode</strong></a>(mode<font color="#909090">='flat'</font>)</dt><dd><tt>Determines&nbsp;the&nbsp;type&nbsp;of&nbsp;shading&nbsp;applied&nbsp;to&nbsp;colored&nbsp;surfaces.<br>
+&nbsp;<br>
+valid&nbsp;modes:&nbsp;flat,&nbsp;smooth<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;smooth:&nbsp;can&nbsp;only&nbsp;be&nbsp;applied&nbsp;to&nbsp;raster&nbsp;output&nbsp;formats&nbsp;(screens,&nbsp;TIFF,&nbsp;png,&nbsp;etc).</tt></dd></dl>
+ <dl><dt><a name="-setSurfaceSize"><strong>setSurfaceSize</strong></a>(xmin, xmax, ymin, ymax)</dt><dd><tt>Alternate&nbsp;way&nbsp;to&nbsp;set&nbsp;surface&nbsp;size&nbsp;for&nbsp;drawRegularSurface&nbsp;function.</tt></dd></dl>
+ <dl><dt><a name="-setSurfaceVisibility"><strong>setSurfaceVisibility</strong></a>(visible<font color="#909090">='both'</font>)</dt><dd><tt>Determines&nbsp;whether&nbsp;top,&nbsp;bottom,&nbsp;or&nbsp;both&nbsp;parts&nbsp;of&nbsp;surface&nbsp;are&nbsp;visible.<br>
+&nbsp;<br>
+Applies&nbsp;to&nbsp;routines&nbsp;derived&nbsp;from&nbsp;SURFUN,&nbsp;SURMAT&nbsp;and&nbsp;SURFCE</tt></dd></dl>
+ <dl><dt><a name="-setSymbolRotation"><strong>setSymbolRotation</strong></a>(deg<font color="#909090">=0</font>)</dt><dd><tt>Sets&nbsp;rotation&nbsp;angle&nbsp;of&nbsp;symbol&nbsp;(in&nbsp;degrees).</tt></dd></dl>
+ <dl><dt><a name="-setSymbolSize"><strong>setSymbolSize</strong></a>(x<font color="#909090">=30</font>)</dt><dd><tt>Sets&nbsp;symbol&nbsp;size&nbsp;(in&nbsp;plot&nbsp;coordinates).</tt></dd></dl>
+ <dl><dt><a name="-setTTFont"><strong>setTTFont</strong></a>(font<font color="#909090">='default'</font>)</dt><dd><tt>Sets&nbsp;font&nbsp;type&nbsp;to&nbsp;true&nbsp;type&nbsp;fonts.</tt></dd></dl>
+ <dl><dt><a name="-setTeXMode"><strong>setTeXMode</strong></a>(mode)</dt><dd><tt>Sets&nbsp;TeXMode&nbsp;for&nbsp;font&nbsp;drawing.</tt></dd></dl>
+ <dl><dt><a name="-setTextAngle"><strong>setTextAngle</strong></a>(deg<font color="#909090">=0</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;angle&nbsp;(in&nbsp;degrees)&nbsp;at&nbsp;which&nbsp;text&nbsp;is&nbsp;drawn.</tt></dd></dl>
+ <dl><dt><a name="-setTextHeight"><strong>setTextHeight</strong></a>(h<font color="#909090">=36</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;character&nbsp;height&nbsp;of&nbsp;text.</tt></dd></dl>
+ <dl><dt><a name="-setTextJustification"><strong>setTextJustification</strong></a>(justify<font color="#909090">='left'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;justification&nbsp;of&nbsp;text.</tt></dd></dl>
+ <dl><dt><a name="-setTickLength"><strong>setTickLength</strong></a>(major<font color="#909090">=24</font>, minor<font color="#909090">=16</font>)</dt><dd><tt>Sets&nbsp;lengths&nbsp;(in&nbsp;plot&nbsp;coordinates)&nbsp;of&nbsp;major/minor&nbsp;ticks.</tt></dd></dl>
+ <dl><dt><a name="-setTickNumber"><strong>setTickNumber</strong></a>(n<font color="#909090">=2</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;number&nbsp;of&nbsp;ticks&nbsp;between&nbsp;labels&nbsp;on&nbsp;axes.</tt></dd></dl>
+ <dl><dt><a name="-setTickPosition"><strong>setTickPosition</strong></a>(position<font color="#909090">='sameaslabels'</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Sets&nbsp;position&nbsp;of&nbsp;ticks&nbsp;on&nbsp;given&nbsp;axis.<br>
+&nbsp;<br>
+Valid:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;sameaslabels:&nbsp;ticks&nbsp;plotted&nbsp;on&nbsp;same&nbsp;side&nbsp;as&nbsp;labels.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;inside:&nbsp;ticks&nbsp;plotted&nbsp;on&nbsp;inside&nbsp;of&nbsp;axis&nbsp;line.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;center:&nbsp;ticks&nbsp;centered&nbsp;on&nbsp;axis&nbsp;line.</tt></dd></dl>
+ <dl><dt><a name="-setTitle"><strong>setTitle</strong></a>(title, height<font color="#909090">=48</font>, justify<font color="#909090">='center'</font>, pos<font color="#909090">='above'</font>, offset<font color="#909090">=0</font>)</dt><dd><tt>Draws&nbsp;title&nbsp;for&nbsp;an&nbsp;axis&nbsp;system.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;title:&nbsp;text&nbsp;of&nbsp;title&nbsp;(can&nbsp;contain&nbsp;line&nbsp;ends)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;height:&nbsp;height&nbsp;of&nbsp;title&nbsp;text<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;justify:&nbsp;justification&nbsp;of&nbsp;title&nbsp;text<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;pos:&nbsp;position&nbsp;of&nbsp;title&nbsp;text&nbsp;relative&nbsp;to&nbsp;axis&nbsp;system&nbsp;(above,&nbsp;below)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;offset:&nbsp;spacing&nbsp;of&nbsp;title&nbsp;relative&nbsp;to&nbsp;axis&nbsp;system.&nbsp;&nbsp;Negative&nbsp;values<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;move&nbsp;title&nbsp;closer&nbsp;to&nbsp;axis&nbsp;system.&nbsp;&nbsp;Positive&nbsp;values&nbsp;move&nbsp;title<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;further&nbsp;away&nbsp;from&nbsp;axis&nbsp;system.</tt></dd></dl>
+ <dl><dt><a name="-setUserColorBar"><strong>setUserColorBar</strong></a>(low, high, start, step, length, plotx, ploty, axisname<font color="#909090">=''</font>, tickoption<font color="#909090">='clockwise'</font>, direction<font color="#909090">='horizontal'</font>, log<font color="#909090">=0</font>)</dt><dd><tt>Allows&nbsp;user&nbsp;to&nbsp;setup&nbsp;a&nbsp;customized&nbsp;color&nbsp;bar.&nbsp;&nbsp;see&nbsp;ZAXIS&nbsp;in&nbsp;DISLIN&nbsp;docs.<br>
+&nbsp;<br>
+Arguments:&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;low,high&nbsp;--&nbsp;upper&nbsp;and&nbsp;lower&nbsp;limits&nbsp;of&nbsp;color&nbsp;bar.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;start,&nbsp;stop&nbsp;--&nbsp;start/step&nbsp;values&nbsp;for&nbsp;labels<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;length&nbsp;--&nbsp;length&nbsp;of&nbsp;the&nbsp;color&nbsp;bar&nbsp;in&nbsp;plot&nbsp;coordinates<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;plotx,&nbsp;ploty&nbsp;--&nbsp;posiition,&nbsp;in&nbsp;plot&nbsp;coordinates,&nbsp;of&nbsp;lower&nbsp;left&nbsp;corner&nbsp;of&nbsp;bar.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;axisname&nbsp;--&nbsp;title&nbsp;displayed&nbsp;for&nbsp;the&nbsp;color&nbsp;bar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;tickoption&nbsp;--&nbsp;determines&nbsp;direction&nbsp;for&nbsp;plotting&nbsp;ticks/labels&nbsp;('clockwise',&nbsp;'ctrclockwise').<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;direction&nbsp;--&nbsp;direction&nbsp;of&nbsp;the&nbsp;color&nbsp;bar&nbsp;('vertical','horizontal')&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;log&nbsp;--&nbsp;whether&nbsp;axis&nbsp;should&nbsp;be&nbsp;logarithmic</tt></dd></dl>
+ <dl><dt><a name="-setView3D"><strong>setView3D</strong></a>(x, y, z, viewtype<font color="#909090">='absolute'</font>)</dt><dd><tt>Sets&nbsp;position&nbsp;of&nbsp;the&nbsp;3D&nbsp;viewpoint.<br>
+&nbsp;<br>
+valid&nbsp;viewtypes:&nbsp;absolute,&nbsp;users,&nbsp;angle<br>
+&nbsp;<br>
+Arugments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;x,y,z&nbsp;--&nbsp;the&nbsp;coordinates&nbsp;of&nbsp;the&nbsp;view&nbsp;point.&nbsp;&nbsp;Default<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setting&nbsp;is&nbsp;to&nbsp;use&nbsp;two&nbsp;angles&nbsp;(x,&nbsp;y)&nbsp;and&nbsp;a&nbsp;distance&nbsp;(Z),&nbsp;but<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;other&nbsp;settings&nbsp;are&nbsp;available&nbsp;using&nbsp;viewtype&nbsp;attribute&nbsp;(see&nbsp;DISLIN<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;documentation).&nbsp;&nbsp;In&nbsp;default&nbsp;setting&nbsp;x&nbsp;represents&nbsp;rotation&nbsp;in&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XY-plane,&nbsp;y&nbsp;represents&nbsp;rotation&nbsp;in&nbsp;the&nbsp;YZ-plane,&nbsp;and&nbsp;z<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;represents&nbsp;distance&nbsp;of&nbsp;viewpoint&nbsp;from&nbsp;the&nbsp;axis&nbsp;system.</tt></dd></dl>
+ <dl><dt><a name="-setViewAngle3D"><strong>setViewAngle3D</strong></a>(ang)</dt><dd><tt>Defines&nbsp;the&nbsp;field&nbsp;of&nbsp;view&nbsp;angle&nbsp;for&nbsp;3D&nbsp;plots&nbsp;in&nbsp;degrees.</tt></dd></dl>
+ <dl><dt><a name="-setWindowApp"><strong>setWindowApp</strong></a>(w<font color="#909090">=0</font>)</dt><dd><tt>Makes&nbsp;DISLIN&nbsp;windows&nbsp;act&nbsp;like&nbsp;a&nbsp;console&nbsp;or&nbsp;window&nbsp;app&nbsp;with&nbsp;respect&nbsp;to&nbsp;errors.<br>
+&nbsp;<br>
+Specifies&nbsp;DISLIN's&nbsp;error&nbsp;behavior&nbsp;-&nbsp;acting&nbsp;either&nbsp;like&nbsp;a&nbsp;windows<br>
+application&nbsp;(popping&nbsp;up&nbsp;annoying&nbsp;dialogs)&nbsp;or&nbsp;like&nbsp;a&nbsp;console&nbsp;app&nbsp;(writing<br>
+the&nbsp;mistake&nbsp;to&nbsp;stdout).<br>
+&nbsp;<br>
+Valid:&nbsp;0&nbsp;(console)&nbsp;or&nbsp;1&nbsp;(window)</tt></dd></dl>
+ <dl><dt><a name="-setWindowGeometry"><strong>setWindowGeometry</strong></a>(x, y, width, height)</dt><dd><tt>Sets&nbsp;the&nbsp;screen&nbsp;geometry&nbsp;(x,y,width,height)&nbsp;of&nbsp;DISLIN&nbsp;windows.<br>
+&nbsp;<br>
+Valid:&nbsp;(int,&nbsp;int,&nbsp;int,&nbsp;int)</tt></dd></dl>
+ <dl><dt><a name="-setWindowHold"><strong>setWindowHold</strong></a>(mode<font color="#909090">='hold'</font>)</dt><dd><tt>Sets&nbsp;the&nbsp;windows&nbsp;termination&nbsp;handling.<br>
+&nbsp;<br>
+Valid:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;hold:&nbsp;DISFIN&nbsp;waits&nbsp;for&nbsp;mouse&nbsp;button&nbsp;2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;nohold:&nbsp;no&nbsp;waiting&nbsp;for&nbsp;mouse&nbsp;button,&nbsp;after&nbsp;DISFIN&nbsp;all&nbsp;windows&nbsp;are&nbsp;closed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;noerase:&nbsp;program&nbsp;blocked&nbsp;but&nbsp;windows&nbsp;not&nbsp;deleted&nbsp;after&nbsp;program&nbsp;continuation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;none:&nbsp;program&nbsp;not&nbsp;blocked&nbsp;and&nbsp;windows&nbsp;not&nbsp;deleted</tt></dd></dl>
+ <dl><dt><a name="-setWindowID"><strong>setWindowID</strong></a>(wid<font color="#909090">=0</font>, wtype<font color="#909090">='none'</font>)</dt><dd><tt>Makes&nbsp;DISLIN&nbsp;draw&nbsp;to&nbsp;window&nbsp;with&nbsp;given&nbsp;ID&nbsp;(handle)</tt></dd></dl>
+ <dl><dt><a name="-setWindowKey"><strong>setWindowKey</strong></a>(key<font color="#909090">='return'</font>)</dt><dd><tt>Determines&nbsp;what&nbsp;mouse&nbsp;clicks&nbsp;and&nbsp;keys&nbsp;enable&nbsp;program&nbsp;continuation.<br>
+&nbsp;<br>
+valid:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;click:&nbsp;only&nbsp;a&nbsp;click&nbsp;of&nbsp;mouse&nbsp;button&nbsp;two&nbsp;enables&nbsp;continuation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;return:&nbsp;return&nbsp;key&nbsp;or&nbsp;mouse&nbsp;button&nbsp;two&nbsp;enable&nbsp;continuation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;escape:&nbsp;escape&nbsp;key&nbsp;or&nbsp;mouse&nbsp;button&nbsp;two&nbsp;enable&nbsp;continuation</tt></dd></dl>
+ <dl><dt><a name="-setWindowSize"><strong>setWindowSize</strong></a>(width, height)</dt><dd><tt>Sets&nbsp;the&nbsp;width,&nbsp;height&nbsp;of&nbsp;DISLIN&nbsp;windows.</tt></dd></dl>
+ <dl><dt><a name="-setWindowStore"><strong>setWindowStore</strong></a>(s<font color="#909090">=0</font>)</dt><dd><tt>Whether&nbsp;X11&nbsp;backing&nbsp;store&nbsp;will&nbsp;be&nbsp;used&nbsp;when&nbsp;windows&nbsp;are&nbsp;drawn.<br>
+&nbsp;<br>
+Valid:&nbsp;0&nbsp;(no&nbsp;store),&nbsp;1&nbsp;(store)</tt></dd></dl>
+ <dl><dt><a name="-setX11Font"><strong>setX11Font</strong></a>(font<font color="#909090">='default'</font>, ending<font color="#909090">='STANDARD'</font>)</dt><dd><tt>Sets&nbsp;font&nbsp;type&nbsp;to&nbsp;X11&nbsp;fonts.</tt></dd></dl>
+ <dl><dt><a name="-setup"><strong>setup</strong></a>()</dt><dd><tt>Convenience&nbsp;function&nbsp;for&nbsp;setting&nbsp;up&nbsp;screen&nbsp;for&nbsp;interactive&nbsp;use.</tt></dd></dl>
+ <dl><dt><a name="-suppressColorBar"><strong>suppressColorBar</strong></a>()</dt><dd><tt>Suppresses&nbsp;plotting&nbsp;of&nbsp;color&nbsp;bars&nbsp;for&nbsp;3D-color&nbsp;plots.</tt></dd></dl>
+ <dl><dt><a name="-suppressLabels"><strong>suppressLabels</strong></a>(mode<font color="#909090">='none'</font>, axes<font color="#909090">='XYZ'</font>)</dt><dd><tt>Suppresses&nbsp;particular&nbsp;labels&nbsp;on&nbsp;axes.<br>
+&nbsp;<br>
+valid&nbsp;modes:&nbsp;none,&nbsp;first,&nbsp;nofirst,&nbsp;last,&nbsp;nolast,&nbsp;ends,&nbsp;noends<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;none:&nbsp;all&nbsp;labels&nbsp;displayed.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;first:&nbsp;only&nbsp;starting&nbsp;label&nbsp;displayed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;nofirst:&nbsp;starting&nbsp;label&nbsp;NOT&nbsp;displayed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;ends:&nbsp;only&nbsp;ending&nbsp;label&nbsp;displayed<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;noends:&nbsp;ending&nbsp;label&nbsp;NOT&nbsp;displayed</tt></dd></dl>
+ <dl><dt><a name="-suppressMessages"><strong>suppressMessages</strong></a>()</dt><dd><tt>Suppresses&nbsp;DISLIN&nbsp;error&nbsp;messages.</tt></dd></dl>
+ <dl><dt><a name="-terminate"><strong>terminate</strong></a>()</dt><dd><tt>Terminate&nbsp;DISLIN&nbsp;drawing.&nbsp;Set&nbsp;to&nbsp;DISLIN&nbsp;level&nbsp;0.</tt></dd></dl>
+ <dl><dt><a name="-terminatePlane3D"><strong>terminatePlane3D</strong></a>()</dt><dd><tt>Terminate&nbsp;2D&nbsp;Plane&nbsp;in&nbsp;3D&nbsp;space.</tt></dd></dl>
+ <dl><dt><a name="-turnLightOff"><strong>turnLightOff</strong></a>(ID)</dt><dd><tt>Turns&nbsp;individual&nbsp;light&nbsp;off&nbsp;(1...8).</tt></dd></dl>
+ <dl><dt><a name="-turnLightOn"><strong>turnLightOn</strong></a>(ID)</dt><dd><tt>Turns&nbsp;individual&nbsp;light&nbsp;on&nbsp;(1...8).</tt></dd></dl>
+ <dl><dt><a name="-turnLightingSystemOff"><strong>turnLightingSystemOff</strong></a>()</dt><dd><tt>Disables&nbsp;lighting&nbsp;values&nbsp;for&nbsp;surface&nbsp;plots.</tt></dd></dl>
+ <dl><dt><a name="-turnLightingSystemOn"><strong>turnLightingSystemOn</strong></a>()</dt><dd><tt>Enables&nbsp;lighting&nbsp;values&nbsp;for&nbsp;surface&nbsp;plots.</tt></dd></dl>
+ <dl><dt><a name="-userToPlot"><strong>userToPlot</strong></a>(x<font color="#909090">=0</font>, y<font color="#909090">=0</font>, z<font color="#909090">=0</font>)</dt><dd><tt>Converts&nbsp;user&nbsp;coordinates&nbsp;to&nbsp;plot&nbsp;coordinates.</tt></dd></dl>
+ <dl><dt><a name="-userToPlotX"><strong>userToPlotX</strong></a>(x)</dt><dd><tt>Converts&nbsp;user&nbsp;x&nbsp;coordinates&nbsp;to&nbsp;plot&nbsp;x&nbsp;coordinates.</tt></dd></dl>
+ <dl><dt><a name="-userToPlotY"><strong>userToPlotY</strong></a>(y)</dt><dd><tt>Converts&nbsp;user&nbsp;y&nbsp;coordinates&nbsp;to&nbsp;plot&nbsp;x&nbsp;coordinates.</tt></dd></dl>
+ <dl><dt><a name="-userToPlotZ"><strong>userToPlotZ</strong></a>(z)</dt><dd><tt>Converts&nbsp;user&nbsp;z&nbsp;coordinates&nbsp;to&nbsp;plot&nbsp;x&nbsp;coordinates.</tt></dd></dl>
+</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><strong>__author__</strong> = 'Paul M. Magwene <paul.magwene@yale.edu>'<br>
+<strong>__credits__</strong> = ''<br>
+<strong>__file__</strong> = '/home/pmagwene/data/pmag/pyth/disipyl/pydislin.py'<br>
+<strong>__name__</strong> = 'disipyl.pydislin'<br>
+<strong>__version__</strong> = '$Revision: 1.1.1.1 $'<br>
+<strong>bardict</strong> = {None: -1, 'horizontal': 'HORI', 'horizontal3D': '3DHORI', 'vertical': 'VERT', 'vertical3D': '3DVERT'}<br>
+<strong>fontdict</strong> = {None: -1, 'complex': &lt;built-in function complx&gt;, 'default': &lt;built-in function disalf&gt;, 'double': &lt;built-in function duplx&gt;, 'simple': &lt;built-in function simplx&gt;, 'triple': &lt;built-in function triplx&gt;}<br>
+<strong>justdict</strong> = {'center': 'CENT', 'left': 'LEFT', 'right': 'RIGHT'}<br>
+<strong>linedict</strong> = {None: -1, 'chain dash': 3, 'chain dot': 4, 'dash': 2, 'dot': 1, 'large dash': 7, 'large dot': 6, 'medium dash': 5, 'solid': 0}<br>
+<strong>shadingdict</strong> = {None: -1, 'dash': 17, 'diagonal1': 1, 'diagonal2': 2, 'diagonal3': 3, 'diagonal4': 4, 'diagonal5': 8, 'diagonal6': 12, 'hatch1': 5, 'hatch2': 7, ...}<br>
+<strong>symboldict</strong> = {None: -1, 'circle': 15, 'cross': 3, 'dbl triangle': 11, 'diamond': 5, 'fill circle': 21, 'fill diamond': 19, 'fill octagon': 17, 'fill rtriangle': 20, 'fill square': 16, ...}<br>
+<strong>vectordict</strong> = {None: -1, 'fork': 1421, 'normal': 1311, 'normal fill': 1301, 'tiny': 1111}<br>
+<strong>withjython</strong> = 0</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Author</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%">Paul&nbsp;M.&nbsp;Magwene&nbsp;&lt;paul.magwene@yale.edu&gt;</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#7799ee">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Credits</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#7799ee"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"></td></tr></table>
+</body></html>
