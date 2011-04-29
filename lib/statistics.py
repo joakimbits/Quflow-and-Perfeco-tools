@@ -8,8 +8,8 @@ Changes:
 
  1. UncertainQuantity: fixed bugs in __add__, __sub__, repeat and flatten.
 
- 2. Added sqrt, ln, oo, oo_, inverf, std, interval, independent, corners,
-    collect, probability, score, confidence
+ 2. Added sqrt, ln, oo, oo_, norm, invnorm, erf, inverf, probability, score,
+    confidence, std, interval, independent, corners, collect
 """
 
 from __future__ import division
@@ -263,17 +263,15 @@ ln = log
 oo = float('inf')
 oo_ = 1e308
 
-norm = lambda x: 0.5*erf(x/sqrt(2))
+norm = lambda x: 0.5*(1 + erf(x/sqrt(2)))
 
 def invnorm(p):
     """"
     http://home.online.no/~pjacklam/notes/invnorm/#Python
-    >>> 3/sqrt(2)
-    2.1213203435596424
-    >>> norm(_)
-    0.4986501019683699
+    >>> norm(3)
+    0.9986501019683699
     >>> invnorm(_)
-    0.9973002039367398
+    2.9999999995780815
     """
     assert 0 < p < 1, p
     a = (-3.969683028665376e+01,  2.209460984245205e+02, \
