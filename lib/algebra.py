@@ -4,7 +4,7 @@ Algebra with symbols, physical constants, arrays and uncertainties
 """
 
 from re import compile
-from sympy import Basic, Symbol, Matrix, sympify, lambdify, solve, Mul
+from sympy import Basic, Symbol, Matrix, sympify, lambdify, solve
 from collections import Iterable
 from quantities import Quantity
 from quantities.unitquantity import \
@@ -27,7 +27,11 @@ _skip = dictmap("COSINEQ", Symbol) # Skip one-letter definitions in sympy
 
 def _systemize(s):
     if isinstance( s, Basic ): yield s
-    elif isinstance( s, str ): yield sympify( pythonified(s), _skip.copy() )
+    elif isinstance( s, str ):
+        try:
+            yield sympify( pythonified(s), _skip.copy() )
+        except:
+            raise TypeError('Cannot parse %s.'% s)
     elif isinstance( s, (Iterable, Matrix) ):
         for ss in s:
             for e in _systemize(ss): yield e
@@ -76,12 +80,15 @@ class System( Basic ):
     >>> from statistics import std, confidence
     >>> from numpy import array
     >>> blockade = System( (E(n=1) - E(n=0)) - Symbol('dE'), constants )
-    >>> dE = blockade.dE; C = blockade.C; C # showing temporary symbols
+    >>> C = blockade.C; C # showing temporary symbols
     1.28348474774783e-38*_A**2*_s**2/dE /. _s=UnitTime('second', 's'), _A=UnitCurrent('ampere', 'A')
-    >>> C(dE = constants.k*array([ 300, 600, 900 ])*K).rescale(F)
+    >>> kT = constants.k*array([ 300, 600, 900 ])*K
+    >>> C = blockade.C(dE = kT).rescale(F); C
     array([  3.09874425e-18,   1.54937213e-18,   1.03291475e-18]) * F
-    >>> dE(C = confidence( std( 1, .1 )*1e-18*F, 0.99 )).rescale(eV)
-    array([ 0.11938638,  0.06027773]) * eV
+    >>> C0 = confidence( std( 1, .1 )*1e-18*F, 0.99 ); C0
+    array([  6.71004729e-19,   1.32899527e-18]) * F
+    >>> blockade( C = C0.max(), dE = kT ).rescale(eV)
+    array([ 0.03442571,  0.00857368, -0.01727835]) * eV
     """
     
     # object data - names are defined here to make __getattribute__ easier.

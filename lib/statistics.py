@@ -8,7 +8,7 @@ Changes:
 
  1. UncertainQuantity: fixed bugs in __add__, __sub__, repeat and flatten.
 
- 2. Added ln, sqrt, oo, oo_, inverf, std, interval, independent, corners,
+ 2. Added sqrt, ln, oo, oo_, inverf, std, interval, independent, corners,
     collect, probability, score, confidence
 """
 
@@ -21,7 +21,7 @@ from quantities.registry import unit_registry
 from quantities.decorators import with_doc
 from quantities.units import dimensionless, pi
 from numpy import array, zeros
-from math import log as ln
+from math import erf, log
 
 class UncertainQuantity(Quantity):
 
@@ -259,11 +259,22 @@ UncertainQuantity = UncertainQuantity
 #! Added functions and constants
 #! ------------------------------
 sqrt = lambda x: x**0.5
+ln = log
 oo = float('inf')
 oo_ = 1e308
 
-def inverf(p):
-    "http://home.online.no/~pjacklam/notes/invnorm/#Python"
+norm = lambda x: 0.5*erf(x/sqrt(2))
+
+def invnorm(p):
+    """"
+    http://home.online.no/~pjacklam/notes/invnorm/#Python
+    >>> 3/sqrt(2)
+    2.1213203435596424
+    >>> norm(_)
+    0.4986501019683699
+    >>> invnorm(_)
+    0.9973002039367398
+    """
     assert 0 < p < 1, p
     a = (-3.969683028665376e+01,  2.209460984245205e+02, \
          -2.759285104469687e+02,  1.383577518672690e+02, \
@@ -290,7 +301,56 @@ def inverf(p):
     r = q*q
     return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q / \
            (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1)
+
+def inverf(p):
+    """
+    >>> 3/sqrt(2)
+    2.1213203435596424
+    >>> erf(_)
+    0.9973002039367398
+    >>> inverf(_)
+    2.121320343261301
+    """
+    return invnorm((p+1)/2)/sqrt(2) 
     
+def probability(z):
+    """
+    Calculates the probability p for a standard score z. This is the probability
+    to find a random variable x with normal distribution
+        dp/dx = exp(-x^2/2)/sqrt(2 pi)
+    within the interval [mu-z*sigma, mu+z*sigma].
+
+    >>> probability(3)
+    0.9973002039367398
+    """
+    return erf(z/sqrt(2))
+
+def score(p):
+    """
+    Calculates the standard score z for a probability p. This defines the
+    confidence interval [mu-z*sigma, mu+z*sigma] where the probability is p to
+    find a random variable x with normal distribution exp((x-mu)/sigma).
+
+    >>> score(0.9973002039367398)
+    2.9999999995780815
+    """
+    return sqrt(2)*inverf(p)
+
+def confidence( x, p ):
+    """
+    Calculates the forecast interval [x0, x1] where the probability is exactly
+    p to find x and the span x1-x0 is minimized.
+
+    Assumption: x in an UncertainQuantity representing a random variable with
+    normal distribution exp((x-mu)/sigma), where mu = x.magnitude and
+    sigma = x.uncertainty.
+
+    http://www.jstor.org/stable/pdfplus/1391361.pdf
+    """
+    x0 = x.magnitude*x.units
+    dx = score(p)*x.uncertainty
+    return collect(* [x0-dx, x0+dx])
+
 def std( x0 = 0, sigma = 0, unit = dimensionless):
     return UncertainQuantity( x0, unit, sigma)
 
@@ -374,36 +434,6 @@ def collect( * quantity ):
     if (d != 0).any(): return UncertainQuantity( x, u, d )
     return Quantity( x, u )
 
-def probability(z):
-    """
-    Calculates the probability p for a standard score z. This is the probability
-    to find a random variable x with normal distribution exp((x-mu)/sigma)
-    within the interval [mu-z*sigma, mu+z*sigma].
-    """
-    return erf(z/sqrt(2))
-
-def score(p):
-    """
-    Calculates the standard score z for a probability p. This defines the
-    confidence interval [mu-z*sigma, mu+z*sigma] where the probability is p to
-    find a random variable x with normal distribution exp((x-mu)/sigma).
-    """
-    return sqrt(2)*inverf(p)
-
-def confidence( x, p ):
-    """
-    Calculates the forecast interval [x0, x1] where the probability is exactly
-    p to find x and the span x1-x0 is minimized.
-
-    Assumption: x in an UncertainQuantity representing a random variable with
-    normal distribution exp((x-mu)/sigma), where mu = x.magnitude and
-    sigma = x.uncertainty.
-
-    http://www.jstor.org/stable/pdfplus/1391361.pdf
-    """
-    x0 = x.magnitude*x.units
-    dx = score(p)*x.uncertainty
-    return collect(* [x0-dx, x0+dx])
 
 if __name__ == '__main__':
     import doctest
