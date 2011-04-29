@@ -315,7 +315,9 @@ def probability(z):
     """
     Calculates the probability p for a standard score z. This is the probability
     to find a random variable x with normal distribution
+    
         dp/dx = exp(-x^2/2)/sqrt(2 pi)
+    
     within the interval [mu-z*sigma, mu+z*sigma].
 
     >>> probability(3)
@@ -327,10 +329,12 @@ def score(p):
     """
     Calculates the standard score z for a probability p. This defines the
     confidence interval [mu-z*sigma, mu+z*sigma] where the probability is p to
-    find a random variable x with normal distribution exp((x-mu)/sigma).
+    find a random variable x with normal distribution
+    
+        dp/dx = exp(-x^2/2)/sqrt(2 pi).
 
-    >>> score(0.9973002039367398)
-    2.9999999995780815
+    >>> score(0.9973)
+    2.9999769922817587
     """
     return sqrt(2)*inverf(p)
 
@@ -340,10 +344,16 @@ def confidence( x, p ):
     p to find x and the span x1-x0 is minimized.
 
     Assumption: x in an UncertainQuantity representing a random variable with
-    normal distribution exp((x-mu)/sigma), where mu = x.magnitude and
-    sigma = x.uncertainty.
+    normal distribution
+    
+        dp/dx = exp(-((x-mu)/sigma)^2/2)/(sigma sqrt(2 pi)),
+    
+    where mu = x.magnitude and sigma = x.uncertainty.
 
-    http://www.jstor.org/stable/pdfplus/1391361.pdf
+    On forecasting - http://www.jstor.org/stable/pdfplus/1391361.pdf
+
+    >>> confidence( std( 0, 1 ), 0.9973 )
+    array([-2.99997699,  2.99997699]) * dimensionless
     """
     x0 = x.magnitude*x.units
     dx = score(p)*x.uncertainty
