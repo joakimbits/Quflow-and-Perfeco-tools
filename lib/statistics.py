@@ -20,7 +20,8 @@ from quantities.quantity import Quantity, scale_other_units
 from quantities.registry import unit_registry
 from quantities.decorators import with_doc
 from quantities.units import dimensionless, pi
-from numpy import array, zeros
+from numpy import array, ndarray, zeros
+from collections import Iterable
 from math import erf, log
 
 class UncertainQuantity(Quantity):
@@ -318,7 +319,7 @@ def probability(z):
     
         dp/dx = exp(-x^2/2)/sqrt(2 pi)
     
-    within the interval [mu-z*sigma, mu+z*sigma].
+    within the interval [-z, z].
 
     >>> probability(3)
     0.9973002039367398
@@ -328,8 +329,8 @@ def probability(z):
 def score(p):
     """
     Calculates the standard score z for a probability p. This defines the
-    confidence interval [mu-z*sigma, mu+z*sigma] where the probability is p to
-    find a random variable x with normal distribution
+    confidence interval [-z, z] where the probability is p to find a random
+    variable x with normal distribution
     
         dp/dx = exp(-x^2/2)/sqrt(2 pi).
 
@@ -359,7 +360,7 @@ def confidence( x, p ):
     dx = score(p)*x.uncertainty
     return collect(* [x0-dx, x0+dx])
 
-def std( x0 = 0, sigma = 0, unit = dimensionless):
+def std( x0 = 0, sigma = 1, unit = dimensionless):
     return UncertainQuantity( x0, unit, sigma)
 
 def interval( min = -oo, max = oo, unit = dimensionless):
@@ -381,43 +382,86 @@ def independent(* quantities):
     +/-[ 10.  20.   5.  10.] dimensionless (1 sigma)
     >>> 
     """
+    if len(quantities) == 1: quantities = quantities[0]
     N = 1
     quantities = list(quantities)
     for i, x in enumerate(quantities):
-        n = x.size
-        quantities[i] = x.repeat(N)
-        N *= n
+        try: 
+            n = x.size
+            if n > 1:
+                quantities[i] = x.repeat(N)
+                N *= n
+        except AttributeError:
+            pass
     for i, x in enumerate(quantities):
-        n = x.size
-        x.shape = (1, n)
-        x = x.repeat( int(N/n), 0)
-        quantities[i] = x.flatten()
+        try:
+            n = x.size
+            if n > 1:
+                x.shape = (1, n)
+                x = x.repeat( int(N/n), 0)
+                quantities[i] = x.flatten()
+        except AttributeError:
+            pass
     return quantities
 
 def corners( * quantities ):
     """
-    Iterate over all corners.
+    Iterate over all quantity corners.
+
+    Simplifies to Quantity, array, float and int when possible.
 
     >>> x = interval( 10, 20 )
     >>> y = interval( 1, 2 )
-    >>> array( list( corners( x, y )))
+    >>> array(list(corners( x, y )))
     array([[10,  1],
            [20,  2]])
-    >>> for xi, yi in corners( * independent( x, y )): print (xi, yi)
-    (array(10) * dimensionless, array(1) * dimensionless)
-    (array(20) * dimensionless, array(1) * dimensionless)
-    (array(10) * dimensionless, array(2) * dimensionless)
-    (array(20) * dimensionless, array(2) * dimensionless)
+    >>> array(list(corners(* independent( x, y ))))
+    array([[10,  1],
+           [20,  1],
+           [10,  2],
+           [20,  2]])
+    >>> for x, y, z in corners( 1.0, 2, [3.14,  4] ): print x, y, z
+    1 2 3.14
+    1 2 4
     """
-    x = array([q.magnitude for q in quantities])
-    u = [q.units for q in quantities]
-    z = zeros(x[0].size)
+    if len(quantities) == 1: quantities = quantities[0]
+    N = 1
+    for q in quantities:
+        try:
+            N = len(q)
+            if N > 1: break
+        except: pass
+    try: x = array([(q if (isinstance( q, Iterable )
+                           and (q.size if isinstance( q, ndarray )
+                                else len(q)) != 1)
+                     else array([q.magnitude if isinstance( q, Quantity )
+                                 else q]*N))
+                    for q in quantities])
+    except:
+        print quantities
+        for q in quantities:
+            try:
+                array(q) if (isinstance( q, ndarray ) and q.size != 1) \
+                         or (isinstance( q, Iterable ) and len(q) != 1) \
+                         else array([q]*N)
+            except:
+                print (q if (isinstance( q, Iterable )
+                             and (q.size if isinstance( q, ndarray )
+                                  else len(q)) != 1)
+                             else array([q]*N))
+                raise
+    u = [q.units if isinstance( q, Quantity ) else dimensionless
+         for q in quantities]
+    z = zeros(N)
     d = array([q.uncertainty if isinstance( q, UncertainQuantity ) else z
                for q in quantities])
     for xi, di in zip(x.T, d.T):
         yield [UncertainQuantity( xij, uj, dij ) if dij != 0
-               else Quantity( xij, uj )
-               for xij, uj, dij in zip( xi, u, di )]
+               else Quantity( xij, uj ) if not uj == dimensionless
+               else array( xij ) if xij.size != 1
+               else int(xij) if xij == int(xij)
+               else float(xij) if xij == float(xij)
+               else xij.astype(xij.dtype) for xij, uj, dij in zip( xi, u, di )]
     
 def collect( * quantity ):
     """
