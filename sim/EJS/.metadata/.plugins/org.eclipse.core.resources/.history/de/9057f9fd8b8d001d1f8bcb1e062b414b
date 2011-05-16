@@ -1,0 +1,38 @@
+/*Oval.java
+ *CS193J
+ *Summer 2001
+ */
+
+import java.awt.*;
+import java.awt.event.*;
+
+ /** constructs an Oval object */
+public class Oval extends Shape {
+
+  public Oval (int x1, int y1, int x2, int y2) {
+    super (x1,y1,x2,y2);
+  }
+    
+    /** creates a copy of this Oval object.  This method creates a new Oval,
+	sets its locations, sets its select state, and returns the new Oval.
+    */
+
+  public Object clone () {
+      Oval o = new Oval (x1,y1,x2,y2);
+    o.setLocation (getLocation());
+    o.setSelectState (getSelectState());
+    return o;
+  }
+
+  public void paint (Graphics g) {
+      super.paint(g);
+      
+      if (GlobalDebug.isOn) 
+	  System.out.println ("Oval.paint()");
+      
+    g.setColor (Color.black);
+    g.drawOval (0,0,Math.abs(x2-x1)-1,Math.abs(y2-y1)-1);
+
+  }
+  
+}

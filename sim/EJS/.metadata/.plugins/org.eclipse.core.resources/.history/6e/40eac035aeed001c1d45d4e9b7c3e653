@@ -1,0 +1,589 @@
+/**
+ * The package contains the main functionality of Osejs
+ * Copyright (c) November 2001 F. Esquembre
+ * @author F. Esquembre (http://fem.um.es).
+ */
+
+package org.colos.ejs.osejs.utils;
+
+import java.io.*;
+
+import javax.swing.*;
+import java.util.*;
+import java.util.jar.*;
+import java.util.zip.*;
+import javax.swing.filechooser.FileSystemView;
+
+import org.opensourcephysics.tools.*;
+import org.opensourcephysics.tools.minijar.MiniJar;
+import org.opensourcephysics.tools.minijar.PathAndFile;
+import org.opensourcephysics.controls.*;
+import org.colos.ejs.osejs.OsejsCommon;
+import org.colos.ejs.osejs.edition.Editor;
+import org.opensourcephysics.display.*;
+
+/**
+ * Creates a Launcher JAR file out of the list of simulation directories.
+ * It runs as a separate process which calls LaunchBuilder to let the user
+ * configure the Launcher file.
+ *
+ * @param sources AbstractList The list of app directories
+ * @param target File The target compressed file.
+ */
+public class PackagerBuilder implements Runnable {
+  static private final ResourceUtil res = new ResourceUtil("Resources");
+//  static private final String TMP_DIR = "EjsLauncher.tmp";
+
+  private List<File> simulationDirs=null;
+  private List<String> libsRequired=null, addedList=null;
+  private File binDir=null, outputDir=null, target=null, tmpDir=null;
+  private JTextArea output=null;
+  private boolean rebuilding = false; // Whether we are rebuilding an existing JAR
+
+  private PackagerBuilder (List<File> _simulations, List<String> _libsRequired,
+                           File _binDir, File _outputDir, File _tmpDir, File _target,
+                           JTextArea _output) {
+    simulationDirs = _simulations;
+    if (_libsRequired==null) libsRequired = new ArrayList<String>();
+    else {
+      libsRequired = _libsRequired;
+      rebuilding = true;
+    }
+    binDir = _binDir;
+    outputDir = _outputDir;
+    tmpDir = _tmpDir;
+    target = _target;
+    output = _output;
+  }
+
+  /**
+   * Reads the list of applications in the package info file
+   * @param _source File
+   * @param _libraries true if you want the list of libraries, false if you want the applications
+   * @return AbstractList
+   */
+  static public boolean isEjsPackage(File _sourceJar) {
+    if (_sourceJar.exists()==false) return false;
+    try {
+      ZipInputStream input = new ZipInputStream(new FileInputStream(_sourceJar));
+      ZipEntry zipEntry = null;
+      while ( (zipEntry =input.getNextEntry()) != null) {
+        if (zipEntry.isDirectory()) continue; // don't include directories
+        //System.out.println("Comparing it to <"+zipEntry.getName()+">");
+        if (zipEntry.getName().equals("EjsPackageInfo.xml")) { input.close(); return true; }
+      }
+      input.close();
+    } catch (Exception exc) {};
+    return false;
+  }
+
+  /**
+   * Creates a Launcher JAR file.
+   * This is called when you want the user to create a new JAR file from scratch.
+   * That is, with no previous files in the temporary directory
+   * @param _simulationDirs List<File> The list of simulation directories to pack
+   * @param _binDir File The EJS's bin directory
+   * @param _exportDir File The EJS's export directory
+   * @param _target File The tentative target file
+   * @param _output JTextArea An optional output text area where to print messages
+   */
+  static public void create (List<File> _simulationDirs, File _binDir, File _outputDir, File _targetFile, JTextArea _output) {
+    if (_simulationDirs.size() <= 0) return;
+    try {
+      // Read it for later use
+      boolean defaultLaF = JFrame.isDefaultLookAndFeelDecorated();
+      
+      // --- Choose the target JAR file
+      boolean warnBeforeOverwritting = true;
+      JFileChooser chooser=OSPRuntime.createChooser("JAR",new String[]{"jar"});
+      chooser.setCurrentDirectory(_targetFile.getParentFile());
+      chooser.setSelectedFile(_targetFile);
+      String targetName = OSPRuntime.chooseFilename(chooser);
+      if (targetName==null) return;
+      if (!targetName.toLowerCase().endsWith(".jar")) targetName = targetName + ".jar";
+      else warnBeforeOverwritting = false; // the chooser already checked if the target file exists
+      _targetFile = new File(targetName);
+      if (warnBeforeOverwritting && _targetFile.exists()){
+        int selected = JOptionPane.showConfirmDialog(null,DisplayRes.getString("DrawingFrame.ReplaceExisting_message") + " " +
+            _targetFile.getName() +DisplayRes.getString("DrawingFrame.QuestionMark"),
+            DisplayRes.getString("DrawingFrame.ReplaceFile_option_title"),
+            JOptionPane.YES_NO_CANCEL_OPTION);
+        if (selected != JOptionPane.YES_OPTION) return;
+      }
+      
+      // In case the OSPRuntime changed this...
+      JFrame.setDefaultLookAndFeelDecorated(defaultLaF);
+      JDialog.setDefaultLookAndFeelDecorated(defaultLaF);
+
+      // --- Create a temporary directory
+      File tempDir = null;
+      try {
+        // File parentDir = _targetFile.getParentFile();
+        // if (parentDir==null) parentDir = _exportDir;
+//        System.out.println ("Target parent = "+parentDir);
+        tempDir = File.createTempFile("EjsLauncher", ".tmp", _targetFile.getParentFile()); // Get a unique name for our temporary directory
+        tempDir.delete();        // remove the created file
+      } 
+      catch (Exception exc) { exc.printStackTrace(); tempDir = null; }
+      if (tempDir==null || !tempDir.mkdirs()) { // and re-create it as a directory
+        String[] message=new String[]{res.getString("Package.JarFileNotCreated") ,res.getString("Package.NotTempDirError")};
+        JOptionPane.showMessageDialog((JFrame)null,message,res.getString("Package.Error"),JOptionPane.WARNING_MESSAGE);
+        return;
+      }
+      
+      // Ready to start
+      if (_output!=null) println(_output,res.getString("Package.PreparingFiles"));
+      
+      // --- Launch the packager
+      PackagerBuilder builder = new PackagerBuilder(_simulationDirs,null,_binDir, _outputDir, tempDir, _targetFile,_output);
+      java.lang.Thread thread = new Thread(builder);
+      thread.setPriority(Thread.NORM_PRIORITY);
+      thread.start();
+    } catch (Exception exception) { exception.printStackTrace(); }
+  }
+
+  /**
+   * Creates a Launcher JAR file from an existing temporary directory plus a list of regenerated simulationDirs.
+   * That is, with no previous files in the temporary directory
+   * @param _simulations AbstractList The list of simulation directories
+   * @param _rootDir File The Simulations directory
+   * @param _target File The tentative target file
+   * @param _output JTextArea An optional output text area where to print messages
+   */
+  static public void rebuild (List _simulations, List _addedList, File _rootDir, File _outputDir, File _tmpDir, File _target, JTextArea _output) {
+    // --- Find the libraries already required by existing simulationDirs
+    List libs = readPackageInfo(_tmpDir,true); // true for libraries
+    // --- Launch the packager
+    PackagerBuilder builder = new PackagerBuilder(_simulations,libs,_rootDir,_outputDir, _tmpDir,_target,_output);
+    builder.addedList = _addedList;
+/*
+    for (Iterator it=_simulations.iterator(); it.hasNext(); ) {
+      System.out.println ("Sim = "+it.next());
+    }
+    for (Iterator it=libs.iterator(); it.hasNext(); ) {
+      System.out.println ("Lib = "+it.next());
+    }
+ */
+    java.lang.Thread thread = new Thread(builder);
+    thread.setPriority(Thread.NORM_PRIORITY);
+    thread.start();
+  }
+
+  /**
+   * Reads the list of applications in the package info file
+   * @param _source File
+   * @param _libraries true if you want the list of libraries, false if you want the applications
+   * @return AbstractList
+   */
+  static public List<String> readPackageInfo(File _source, boolean _libraries) {
+    List<String> list = new ArrayList<String>();
+    try {
+      File file = new File (_source,"EjsPackageInfo.xml");
+      Reader reader = new FileReader(file);
+      LineNumberReader l = new LineNumberReader(reader);
+      String sl = l.readLine();
+      while (sl != null) {
+        if (_libraries) {
+          int begin = sl.indexOf("<library>");
+          if (begin>=0) list.add(sl.substring(begin+9,sl.indexOf("</library>")));
+        }
+        else {
+          int begin = sl.indexOf("<class>");
+          if (begin>=0) list.add(sl.substring(begin+7,sl.indexOf("</class>")));
+        }
+        sl = l.readLine();
+      }
+      reader.close();
+    } catch (Exception ex) { ex.printStackTrace(); }
+    return list;
+  }
+
+  /**
+   * Uncompresses an existing Launcher package to a temporary directory
+   * @param _source File
+   * @return File
+   */
+  static public File uncompressToTemp(File _source, File _rootDir) {
+    // Create a temporary directory
+    File tempDir = null;
+    try {
+      File parentDir = _source.getParentFile();
+      if (parentDir==null) parentDir = _rootDir;
+      tempDir = File.createTempFile("EjsLauncher", ".tmp", parentDir); // Get a unique name for our temporary directory
+      tempDir.delete();        // remove the created file
+//      tempDir = new File (_source.getParentFile(),TMP_DIR);
+//      if (tempDir.exists()) JarTool.remove(tempDir);
+    } catch (Exception exc) { tempDir = null; }
+    if (tempDir==null || !tempDir.mkdirs()) return null;
+    if (JarTool.unzip(_source,tempDir)) return tempDir;
+    else return null;
+  }
+
+  /**
+   * For internal purposes only. Implementation of the Runnable interface. Not to be used by end-users
+   * This is where the work is done!
+   */
+  public void run () {
+    boolean defaultLaF = JFrame.isDefaultLookAndFeelDecorated();
+
+    // --- Prepare a root launch node
+    String rootName = target.getName();
+    if (rootName.endsWith(".jar")) rootName = rootName.substring(0,rootName.length()-4);
+    LaunchNode rootnode = new LaunchNode(rootName);
+    rootnode.setHTML(0, res.getString("Generate.HtmlEjsGenerated"),"_ejs_library/html/EjsLauncher.html");
+    String label = res.getString("Generate.HtmlEjsGenerated")+" Easy Java Simulations";
+    rootnode.setTooltip(label);
+    // The node for adding entries when rebuilding packages
+    LaunchNode addednode = new LaunchNode(res.getString("EjsConsole.Added"));
+    addednode.setHTML(0, res.getString("Generate.HtmlEjsGenerated"),"_ejs_library/html/EjsLauncher.html");
+    addednode.setTooltip(label);
+
+    // Create an instance of MiniJar and prepare it
+    MiniJar minijar= new MiniJar();
+//    minijar.setOutputFile(target);
+//    minijar.setManifestFile(MiniJar.createManifest(".",_ejs.getExecutionClassname()));
+    minijar.addExclude ("++Thumbs.db");
+    minijar.addDesired("org/opensourcephysics/resources/++");
+    minijar.addDesired("org/opensourcephysics/numerics/++.class");
+    minijar.addDesired("org/opensourcephysics/ode/++.class");
+    
+    minijar.addClasspath(FileUtils.getPath(new File(binDir,"osp.jar")));
+    minijar.addClasspath(FileUtils.getPath(new File(binDir,"ejs_lib.jar")));
+    
+    // --- Process all simulation directories adding parameters to the minijar, and fill the dictionary
+    Hashtable<File,String> dictionary = new Hashtable<File,String>(); // This is a dictionary that translates from app directory to class
+    StringBuffer errorMessage = new StringBuffer();
+
+    int steps = simulationDirs.size(), interval=1, counter=0;
+    if (steps>10) {
+      interval = Math.round(steps/10.0f);
+      steps = 10;
+    }
+    ProgressDialog pD = new ProgressDialog(steps+1,res.getString("Package.PackageAllSimulations"),new java.awt.Dimension(350,150));
+    String pdMessage = res.getString("Package.PreparingFiles");
+    String binDirPath = FileUtils.getPath(binDir);
+    String outputDirPath = FileUtils.getPath(outputDir);
+    
+    for (File appDir : simulationDirs) {
+      if (counter % interval==0) pD.reportProgress(pdMessage);
+      counter++;
+      println (output,res.getString("Package.ProcessingSimulation") + " "+appDir.getName());
+      if (appDir==null || !appDir.isDirectory()) errorMessage.append(res.getString("Package.AppDirNotExistingError")+" "+appDir);
+      else {
+        if (rebuilding && addedList.contains(appDir)) {
+          errorMessage.append(processSimulationFiles(minijar,binDirPath,outputDirPath,tmpDir,appDir,label,addednode,libsRequired,dictionary));
+          addedList.remove(appDir); // Not to add this one twice
+        }
+        else errorMessage.append(processSimulationFiles(minijar,binDirPath,outputDirPath,tmpDir,appDir,label,rootnode,libsRequired,dictionary));
+      }
+    }
+    
+    // --- Now compile the minijar list of dependent files
+    // Get matches
+    List<PathAndFile> matches = minijar.getMatches();
+    
+    // Copy files in the minijar list to the temporary directory
+    for (PathAndFile paf : matches) {
+      System.out.println ("Copy "+paf.getPath());
+      if (!FileUtils.copy(paf.getInputStream(), new File(tmpDir,paf.getPath()))) 
+        errorMessage.append(res.getString("Generate.JarFileResourceNotFound")+" "+paf.getPath()+"\n");
+    }
+
+    // Copy all the files in the library directory 
+    // for (File file : JarTool.getContents(new File(_ejs.getBinDirectory(),"_ejs_library")))
+    for (Iterator it = JarTool.getContents(new File(binDir,"_ejs_library")).iterator(); it.hasNext(); ) {
+      File file = (File) it.next();
+      JarTool.copy(file,new File(tmpDir,FileUtils.getRelativePath(FileUtils.getPath(file), binDirPath, false)));
+    }
+    
+    String error = errorMessage.toString().trim();
+    if (error.length()>0) { // There was an error!
+      String[] message=new String[]{res.getString("Package.JarFileNotCreated") ,error};
+      JOptionPane.showMessageDialog((JFrame)null,message,res.getString("Package.Error"),JOptionPane.WARNING_MESSAGE);
+      // JarTool.remove(tmpDir);
+      // pD.dispose();
+      return;
+    }
+
+    // --- Write or update the package information file
+    List<String> appsList = new ArrayList<String>();
+    if (rebuilding) appsList.addAll(readPackageInfo(tmpDir,false)); // false for classes
+
+    for (File appFile : simulationDirs) { // Build the list of applications
+      String mainClass = dictionary.get(appFile);
+      if (!appsList.contains(mainClass)) appsList.add(mainClass);
+    }
+    
+    // Save the list of classes and libraries for next time
+    // TODO : get rid of this
+    StringBuffer pckgBuffer = new StringBuffer();
+    pckgBuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    pckgBuffer.append("<package name=\""+rootName+"\">\n");
+    for (String app : appsList)     pckgBuffer.append("<class>"  +app+"</class>\n");
+    for (String lib : libsRequired) pckgBuffer.append("<library>"+lib+"</library>\n");
+    pckgBuffer.append("</package>\n");
+    try {  FileUtils.saveToFile(new File (tmpDir,"EjsPackageInfo.xml"),pckgBuffer.toString()); }
+    catch (Exception exc) {
+      exc.printStackTrace();
+      println(output,res.getString("Package.JarFileNotCreated"));
+      pD.dispose();
+      return;
+    }
+
+    // --- Write the Launcher description file
+    Launcher launcher = new Launcher(false);
+//      Launcher.setJarsOnly(false);
+    launcher.setEditorEnabled(true);
+
+    if (rebuilding) {
+      //launcher.setHasToShow(false);
+      String xsetName = getXsetName(tmpDir);
+      if (xsetName==null) xsetName = rootName;
+      println (output,"xset = "+xsetName);
+      XMLControlElement old_control = new XMLControlElement();
+      old_control.read(tmpDir.getAbsolutePath() + "/" + xsetName+".xset");
+      launcher.open(old_control.toXML()); // This line requires launcher.setHasToShow(false);
+      // Add the new entries
+      if (addednode.getChildCount()>0) {
+        XMLControl addednodeControl = new XMLControlElement(addednode);
+        launcher.open(addednodeControl.toXML());
+      }
+      Launcher.LaunchSet set = launcher.new LaunchSet();
+      XMLControl control = new XMLControlElement(set);
+      control.write(tmpDir.getAbsolutePath()+"/"+xsetName+".xset");
+    }
+    else { // Not rebuilding
+      // Add the new entries
+      XMLControl rootnodeControl = new XMLControlElement(rootnode);
+      //    rootnodeControl.setValue("editor_enabled", true);
+      launcher.open(rootnodeControl.toXML());
+      Launcher.LaunchSet set = launcher.new LaunchSet();
+      XMLControl control = new XMLControlElement(set);
+      control.write(tmpDir.getAbsolutePath()+"/"+rootName+".xset");
+      
+      // --- Write the default xset file
+      StringBuffer xsetBuffer = new StringBuffer();
+      xsetBuffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+      xsetBuffer.append("<object class=\"org.opensourcephysics.tools.Launcher$LaunchSet\">\n");
+      xsetBuffer.append("    <property name=\"launch_nodes\" type=\"collection\" class=\"java.util.ArrayList\">\n");
+      xsetBuffer.append("        <property name=\"item\" type=\"string\">"+rootName+".xset</property>\n");
+      xsetBuffer.append("    </property>\n");
+      xsetBuffer.append("</object>\n");
+      try { FileUtils.saveToFile(new File (tmpDir,"launcher_default.xset"),pckgBuffer.toString()); }
+      catch (Exception exc) {
+        exc.printStackTrace();
+        println(output,res.getString("Package.JarFileNotCreated"));
+        pD.dispose();
+        return;
+      }
+    }
+
+    // Preparatory work done
+    JFrame.setDefaultLookAndFeelDecorated(defaultLaF);
+    JDialog.setDefaultLookAndFeelDecorated(defaultLaF);
+    pD.dispose();
+
+    // --- Now call LaunchBuilder and wait for it to finish
+    if (output!=null) println(output,res.getString("Package.WaitingLaunchBuilder"));
+    Runner runner = new Runner(tmpDir);
+    java.lang.Thread thread = new Thread(runner);
+    thread.setPriority(Thread.NORM_PRIORITY);
+    thread.start();
+    while (thread.isAlive()) {
+      try { Thread.sleep(500); }
+      catch (Exception exc) {}
+    }
+
+    // --- Compress the resulting package and remove the temporary file
+    if (output!=null) println(output,res.getString("Package.PackagingJarFile")+" "+target.getName());
+    boolean success = false;
+    if (runner.succeeded()) {
+      // pack everything into a single compressed file
+      if (JarTool.compress(tmpDir, target, JarTool.createManifest(null,"org.opensourcephysics.tools.Launcher"))) success = true;
+      else {
+        String[] message=new String[]{res.getString("Package.JarFileNotCreated"),
+                                      res.getString("Package.CompressError")+target.getAbsolutePath()};
+        JOptionPane.showMessageDialog((JFrame)null,message,res.getString("Package.Error"),JOptionPane.WARNING_MESSAGE);
+      }
+    }
+    // Wait a bit so that no process block the removing process
+    try { Thread.sleep(500); } // Thread.currentThread().sleep(500); }
+    catch (Exception exc) {}
+    JarTool.remove(tmpDir);
+
+    // --- And that's it!
+    if (output!=null) {
+      if (success) println(output,res.getString("Package.JarFileCreated")+" "+target.getName());
+      else println(output,res.getString("Package.JarFileNotCreated"));
+    }
+  }
+
+  static private String getXsetName(File tmpDir) {
+    try {
+      File file = new File(tmpDir,"launcher_default.xset");
+      BufferedReader in = new BufferedReader(new FileReader(file));
+      String line = in.readLine();
+      while(line!=null) {
+        String xsetName = OsejsCommon.getPiece(line,"<property name=\"item\" type=\"string\">" ,".xset</property>",false);
+        if (xsetName!=null) return xsetName;
+        line = in.readLine();
+      }
+      in.close();
+    } catch(IOException ex) { ex.printStackTrace(); }
+    return null;
+  }
+
+  static private void println (JTextArea _textArea, String _text) {
+    _textArea.append (_text+"\n");
+    _textArea.repaint();
+    _textArea.setCaretPosition (_textArea.getText().length());
+  }
+
+  /**
+   * Add to the list of required library files for the jar file in this simulation directory,
+   * fill the dictionary, and add a Launch node to the root node
+   */
+  static private StringBuffer processSimulationFiles (MiniJar _minijar, String _binDirPath, String _outputDirPath, 
+                                              File _tempDir, File _appDir,
+                                              String _label, LaunchNode _rootnode,
+                                              List _libList, Hashtable<File,String> _dictionary) {
+    FileSystemView fsView = FileSystemView.getFileSystemView();
+    String appName = FileUtils.getPlainName(_appDir);
+    String appDirPath = FileUtils.getPath(_appDir);
+
+    // Contribute to MiniJar
+    File metadataFile = new File(_appDir,appName+".metadata");
+    String metadataString = FileUtils.readTextFile(metadataFile);
+    String metadata[] = metadataString.split("\n");
+    String mainClass=null;
+    for (int i=0,n=metadata.length; i<n; i++) {
+      String packInfo = OsejsCommon.getPiece(metadata[i],"<PackJar><![CDATA[","]]></PackJar>",false);
+      if (packInfo!=null) {
+        _minijar.addClasspath(appDirPath+packInfo);
+        continue;
+      }
+      packInfo = OsejsCommon.getPiece(metadata[i],"<PackResource><![CDATA[","]]></PackResource>",false);
+      if (packInfo!=null) {
+        _minijar.addDesired(packInfo); 
+        continue;
+      }
+      packInfo = OsejsCommon.getPiece(metadata[i],"<PackClassname><![CDATA[","]]></PackClassname>",false);
+      if (packInfo!=null) {
+        mainClass = packInfo; 
+        continue;
+      }
+    }
+    // Process the main class
+    if (mainClass==null) return new StringBuffer(res.getString("Package.IncorrectMetadata")+" "+FileUtils.getPath(metadataFile)+".\n");
+    _dictionary.put(_appDir,mainClass); // This will be used to create EjsPackageInfo.xml
+    _minijar.addSourcePath(appDirPath); // add the app directory to the minijar source path
+    _minijar.addDesired(mainClass.replace('.', '/')+".class"); // add the main class file to the minijar search
+    
+
+    // Copy all files in the output (generated) directory but process the HTML files
+    String pathToAppDir = FileUtils.getRelativePath(appDirPath, _outputDirPath,false);
+    File filesDir = new File (_tempDir,pathToAppDir+"files");
+    if (!filesDir.exists()) { // Might exist if the user recompiled the same simulation using both flat and full-path compilations
+      if (!filesDir.mkdirs())return new StringBuffer(res.getString("Package.CantCreateDir") + " " + filesDir.getAbsolutePath() + ".\n");
+    }
+//    for (File file : JarTool.getContents(_appDir)) {
+    for (Iterator it = JarTool.getContents(_appDir).iterator(); it.hasNext(); ) {
+      File file = (File) it.next();
+      String relPath = FileUtils.getRelativePath(FileUtils.getPath(file), _outputDirPath, false);
+      System.out.println ("RelPath is "+relPath);
+      File targetFile = new File(filesDir,relPath); // _tempDir,relPath);
+      String lowercaseName = file.getName().toLowerCase();
+      if (lowercaseName.endsWith(".html") || lowercaseName.endsWith(".htm")) {
+        String modified = FileUtils.replaceString(FileUtils.readTextFile(file), _binDirPath, "");
+        try { 
+          targetFile.mkdirs();
+          FileUtils.saveToFile(targetFile,modified); 
+        }
+        catch (Exception exc) { 
+          exc.printStackTrace();
+          return new StringBuffer(res.getString("Package.CopyError") + " " + FileUtils.getPath(file) + "\n" +
+            " -> "+FileUtils.getPath(targetFile)+"\n"); 
+          }
+      }
+      else if (!JarTool.copy(file, targetFile)) {
+        return new StringBuffer(res.getString("Package.CopyError") + " " + FileUtils.getPath(file) + ".\n");
+      }
+    }
+
+    // Add a Launcher node
+    LaunchNode node = new LaunchNode(appName);
+    node.setSingleVM(true); // This is very important for external applications!
+    node.setLaunchClass(mainClass);
+    node.setDescription(_label);
+    OsejsCommon.fillLaunchNode(metadataString,node);
+
+    File htmlContentsFile = new File (_appDir,appName+"_Contents.html");
+    if (htmlContentsFile.exists()) { // add user-defined HTML pages to the node
+      try {
+        int counter=1;
+        Reader reader = new FileReader(htmlContentsFile);
+        LineNumberReader l = new LineNumberReader(reader);
+        String sl = l.readLine();
+        while (sl != null) {
+//          code.append("      <div class=\"intro\"><a href=\""+ link+"\" target=\"central\">" + editor.getName()+"</a></div>"+ret);
+          int index = sl.indexOf("class=\"intro\"");
+          if (index>=0) { // Found an entry
+            String link = appName + "_Intro "+counter+".html"; // default link
+            int linkBegin = sl.indexOf("<a href=\"",index);  // find the actual link
+            if (linkBegin>0) {
+              String linkPiece = sl.substring(linkBegin+9);
+              link = linkPiece.substring(0,linkPiece.indexOf("\" target"));
+            }
+            int beg = sl.indexOf("\"central\">",index);
+            if (beg>0) {
+              String piece = sl.substring(beg+10);
+              String title = piece.substring(0,piece.indexOf('<'));
+//              System.out.println("Add <"+title+">="+link);
+              node.setHTML(counter-1,title,pathToAppDir+link); // +"/files/"+link);
+              counter++;
+            }
+          }
+          sl = l.readLine();
+        }
+        reader.close();
+      } catch (Exception ex) { ex.printStackTrace(); }
+    }
+    _rootnode.add(node);
+
+    return new StringBuffer();
+  }
+
+
+  static private class Runner implements Runnable {
+    File tempDir;
+    boolean success = true;
+
+    Runner(File _tempDir) { tempDir = _tempDir; }
+
+    public void run () {
+      try {
+        final Vector<String> cmd = new Vector<String>();
+        String javaHome = System.getProperty("java.home");
+        if (javaHome != null) cmd.add(javaHome + java.io.File.separator + "bin" + java.io.File.separator + "java");
+        else cmd.add("java");
+        cmd.add("-classpath");
+        cmd.add(".");
+        cmd.add("org.opensourcephysics.tools.LaunchBuilder");
+        // Run the command
+//        System.out.println("Running command = "+cmd.toString());
+//        System.out.println("in dir  = "+tempDir.getAbsolutePath());
+        Process proc = Runtime.getRuntime().exec((String[]) cmd.toArray(new String[0]), null, tempDir);
+        int error = proc.waitFor();
+//        System.out.println("Process finished error = "+error);
+        success = (error==0);
+      }
+      catch (Exception exc) { exc.printStackTrace(); success = false; }
+    }
+
+    public boolean succeeded() { return success; }
+
+  } // End of inner class
+
+
+}
+

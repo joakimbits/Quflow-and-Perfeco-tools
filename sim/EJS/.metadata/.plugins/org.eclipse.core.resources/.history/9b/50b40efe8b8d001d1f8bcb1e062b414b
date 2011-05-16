@@ -1,0 +1,51 @@
+
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.print.*;
+import java.util.*;
+
+public class ShapeContainer extends Container implements Printable {
+    
+    public ShapeContainer () {
+	super ();     
+	setBackground (Color.white);	
+    }
+    
+    public void paint(Graphics g) {
+	g.setColor(getBackground());
+	g.fillRect(0, 0, getWidth(), getHeight());
+	g.setColor (Color.black);
+	super.paint(g);
+    }
+
+    public Dimension getPreferredSize () {
+	return new Dimension (440,400);
+    }
+     
+
+    public void printShapeContainer() {
+	PrinterJob printerJob = PrinterJob.getPrinterJob();
+	Book book = new Book();
+	book.append(new ShapeContainer(), new PageFormat());
+	printerJob.setPageable(book);
+	boolean doPrint = printerJob.printDialog();
+	
+	if (doPrint) {
+	    try {
+		printerJob.print();
+	    } catch (PrinterException exception) {
+		System.out.println("Printing Error " + exception);
+	    }		    	    
+	}
+	
+    }
+    
+    public int print(Graphics g, PageFormat format, int pageIndex) {
+	return Printable.PAGE_EXISTS;
+    }
+}
+
+
+
+
+

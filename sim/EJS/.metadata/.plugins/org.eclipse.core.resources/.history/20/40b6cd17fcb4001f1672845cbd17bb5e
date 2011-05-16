@@ -1,0 +1,37 @@
+<html>
+  <head>
+  <title>Web Server Reader model element</title>
+      <link rel="stylesheet" type="text/css" href="style.css"></link>
+  </head>
+  <body">
+    <h2>
+      <img src="./WebServerReader.png"> Web Server model element 
+    </h2>
+    <p>
+      A web server reader sends commands to an HTTP web server and reads its response.
+    </p>
+    <h3>Usage</h3>
+      <p>
+      To add a web server reader element to your model, drag the icon element to the list of your model elements and 
+      set the "Server address" field to the base URL of your server or link it to a String model variable (as in <i>%myServerURLString%</i>) that will contain it.
+      </p>
+    </p>
+    <p>
+    A web server reader element does not connect to the web server until you instruct it to do so (in any suitable part) in your model code.
+    </p>
+    <p>
+    A call to the element method <i>String readOutput(String _command)</i> will send the _command string appened to the server address and will read
+    teh server's output. This makes it easy to send PHP commands to a given server or read different pages from the same server. The method returns a
+    String with the server response to the command, or null if there was any error in the process.
+    </p>
+    <h3>Example of use</h3>
+    <pre>
+String responseStr = webReader.readOutput("index.html");
+if (responseStr==null) {
+  _println("Could not read response from "+webReader.getServerAddress());
+  return;
+}
+// Now, do whatever you want with the response string...
+    </pre>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+/*Move.java
+ *CS193J
+ *Summer 2001
+ */
+
+import java.awt.*;
+import java.awt.event.*;
+
+public class Move extends Shape {
+
+  /** constructs a Move object */
+
+  public Move (int x1, int y1, int x2, int y2) {
+    super (x1,y1,x2,y2);
+  }
+
+  /** creates a copy of this Move object.  This method creates a new Move,
+      sets its locations, sets its select state, and returns the new Move.
+  */
+
+  public Object clone () {
+    Move m = new Move (x1,y1,x2,y2);
+    m.setLocation (getLocation());
+    m.setSelectState (getSelectState());
+    return m;
+  }
+
+  /** this method paints the line.  */
+
+  public void paint (Graphics g) {
+    super.paint(g);
+
+    if (GlobalDebug.isOn) 
+      System.out.println ("Move.paint()");
+    
+    g.setColor (Color.black);
+
+    //Assuming y1<=y2
+    g.drawRect(0,0,5,5);
+    g.drawLine (7,7,x2-x1-8,y2-y1-8);
+    g.drawLine (7,7,7,10);
+    g.drawLine (7,7, 10,7);
+    g.drawRect(x2-x1-6,y2-y1-6,5,5);
+  }
+
+}

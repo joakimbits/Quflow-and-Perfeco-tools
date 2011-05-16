@@ -1,0 +1,92 @@
+/*PaletteController.java
+ *CS193J
+ *Summer 2001
+ */
+ 
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+
+
+/**implemets a listener to the DrawingIcon press on palette
+ *
+ * @see ActionListener Interface
+ * @see Palette
+ *
+ * @author Jatinder Pal Singh
+ */
+
+public class PaletteController implements ActionListener {
+
+  private Palette dPalette;
+
+  private Vector dDrawingIconSelectionListeners = new Vector();
+
+  private static final String dInitallySelectedDrawingCommand = "Line";
+
+  /** the icon that is initally selected when the application starts. */
+  private DrawingIcon dIntiallySelectedIcon;
+
+  public PaletteController (Palette aPalette) {
+    dPalette = aPalette;
+
+    /** add this as a listener to all DrawingIcons in the Palette. */
+    Enumeration e = dPalette.getAllDrawingIcons();
+    while (e.hasMoreElements())
+	((DrawingIcon)e.nextElement()).addActionListener(this);
+  }
+
+  public DrawingIcon getInitiallySelectedDrawingIcon () {
+      Enumeration e = dPalette.getAllDrawingIcons();
+      DrawingIcon dI = null;
+      while (e.hasMoreElements())	  
+	  {
+	      dI = (DrawingIcon)e.nextElement();
+	      if (dI.getCommand().equals(dInitallySelectedDrawingCommand))
+		  return dI;
+	  }
+		  
+      return null;
+  }
+    
+
+    public void addDrawingIconSelectionListener
+	(DrawingIconSelectionEventListener aDISE) {
+	dDrawingIconSelectionListeners.add(aDISE); 
+    }
+    
+    public void removeDrawingIconSelectionListener
+	(DrawingIconSelectionEventListener aDISE) {
+	dDrawingIconSelectionListeners.remove(aDISE);
+    }
+    
+  public void actionPerformed (ActionEvent ae) {
+    /** Figure out which button went down,
+	pop all others up, 
+	generate a DrawingIconSelectionEvent, and
+	send to all DrawingIconSelectionEventListeners
+    */
+      String strActionCmd = ae.getActionCommand();
+      DrawingIcon dI;
+      DrawingIcon diSourceOfEvent = null;
+      if (GlobalDebug.isOn)
+	  System.out.println("PaletteController.actionPerformed():" +
+			     strActionCmd + " pressed");
+      Enumeration e = dPalette.getAllDrawingIcons();
+      while (e.hasMoreElements())
+	  {
+	      dI = (DrawingIcon)e.nextElement();
+	      if (dI.getCommand().equals(strActionCmd))
+		  {
+		      dI.setState(true);
+		      diSourceOfEvent = dI;
+		  }
+	      else 
+		  dI.setState(false);
+	  }
+      
+      Enumeration enum =  dDrawingIconSelectionListeners.elements();
+      while(enum.hasMoreElements())
+	  ((DrawingIconSelectionEventListener)enum.nextElement()).iconSelected( new DrawingIconSelectionEvent(diSourceOfEvent));
+  }
+}

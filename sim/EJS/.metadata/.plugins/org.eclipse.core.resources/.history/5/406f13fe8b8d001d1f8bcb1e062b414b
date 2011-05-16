@@ -1,0 +1,46 @@
+/*Smily.java
+ *CS193J
+ *Summer 2001
+ */
+
+import java.awt.*;
+import java.awt.event.*;
+
+ /** constructs a Smily object */
+public class Smily extends Shape {
+
+  public Smily (int x1, int y1, int x2, int y2) {
+    super (x1,y1,x2,y2);
+  }
+    
+    /** creates a copy of this Smily object.  This method creates a new Smily,
+	sets its locations, sets its select state, and returns the new Smily.
+    */
+
+  public Object clone () {
+       Smily s = new Smily (x1,y1,x2,y2);
+       s.setLocation (getLocation());
+       s.setSelectState (getSelectState());
+       return s;
+  }
+
+  public void paint (Graphics g) {
+      super.paint(g);
+      int d = Math.abs(y2 - y1) - 1;
+      int w = Math.abs(x2 - x1) - 1;
+ 
+      if (GlobalDebug.isOn) 
+	  System.out.println ("Smily.paint()");
+      
+    g.setColor (Color.black);
+    g.drawOval (0,0,w,d);
+    g.fillOval ( (int)(w/3 - w/20), (int)(d/4 - d/20), (int)(w/10),
+		 (int)(d/10) );
+    g.fillOval ( (int)(2*w/3 - w/20), (int)(d/4 - d/20), (int)(w/10),
+		 (int)(d/10) );
+    g.drawLine ( (int)(w/2), (int)(d/3), (int)(w/2), (int)(2*d/3) );
+    g.drawArc ( (int)(w/3), (int)(2*d/3), (int)(w/3), (int)(d/6), 0, -180 );       
+
+  }
+  
+}

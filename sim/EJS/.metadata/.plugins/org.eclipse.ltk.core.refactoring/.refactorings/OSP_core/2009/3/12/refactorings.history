@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename method &apos;org.opensourcephysics.display3d.simple3d.Element.getPanel()&apos; to &apos;getDrawingPanel3D&apos;&#x0D;&#x0A;- Original project: &apos;OSP_core&apos;&#x0D;&#x0A;- Original element: &apos;org.opensourcephysics.display3d.simple3d.Element.getPanel()&apos;&#x0D;&#x0A;- Renamed element: &apos;org.opensourcephysics.display3d.simple3d.Element.getDrawingPanel3D()&apos;&#x0D;&#x0A;- Update references to refactored element" delegate="false" deprecate="false" description="Rename method &apos;getPanel&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.method" input="/src&lt;org.opensourcephysics.display3d.simple3d{Element.java[Element~getPanel" name="getDrawingPanel3D" references="true" stamp="1237306526996" version="1.0"/>
+</session>

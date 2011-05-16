@@ -1,0 +1,5 @@
+package org.colos.ejs.model_elements.input_output;
+
+public class PackageElements {
+
+}

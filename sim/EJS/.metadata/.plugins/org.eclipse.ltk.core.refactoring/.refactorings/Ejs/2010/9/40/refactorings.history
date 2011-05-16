@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Ejs/distribution/bin/extensions/model_elements/External apps&apos; to &apos;ExternalApps&apos;" description="Rename resource &apos;External apps&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="distribution/bin/extensions/model_elements/External apps" name="ExternalApps" stamp="1285671952123" updateReferences="true"/>
+</session>

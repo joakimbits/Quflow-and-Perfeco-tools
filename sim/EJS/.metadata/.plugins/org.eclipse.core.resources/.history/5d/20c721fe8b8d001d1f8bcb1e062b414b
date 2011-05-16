@@ -1,0 +1,25 @@
+
+public class WhiteboardConstants {
+
+  // File Menu
+  public static String NEW_MENU_ITEM = "New";
+  public static String IMPORT_MENU_ITEM = "Import...";
+  public static String SAVE_AS_MENU_ITEM = "Save As...";
+     public static String PRINT_MENU_ITEM = "Print";
+  public static String EXIT_MENU_ITEM = "Exit";
+   
+  // Edit Menu
+  public static String CUT_MENU_ITEM = "Cut";
+  public static String COPY_MENU_ITEM = "Copy";
+  public static String PASTE_MENU_ITEM = "Paste";
+  public static String CLEAR_MENU_ITEM = "Clear";
+ public static String FRONT_MENU_ITEM = "Bring To Front";
+ public static String BACK_MENU_ITEM = "Send To Back";
+
+  // Help Menu
+  public static String ABOUT_MENU_ITEM = "About";
+
+    //Total number of menu items
+    public static int NO_OF_MENU_ITEMS = 12;
+
+}

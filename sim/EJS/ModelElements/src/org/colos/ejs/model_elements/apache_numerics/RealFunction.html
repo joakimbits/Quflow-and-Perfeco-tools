@@ -1,0 +1,45 @@
+<html>
+  <head>
+  <title>Function model element</title>
+      <link rel="stylesheet" type="text/css" href="style.css"></link>
+  </head>
+  <body">
+    <h2>
+      <img src="./RealFunction.gif"> Function model element 
+    </h2>
+    <p>
+      Function defines a real function of one variable [y = f(x)] and provides root finding and integration capabilities for it.
+    </p>
+    <p> 
+    The element encapsulates access to <a href="http://commons.apache.org/math/userguide/analysis.html">Analysis routines</a>
+    in the <a href="http://commons.apache.org/math/">Apache Common numerics library</a>.
+    <h3>Usage</h3>
+      <p>
+      To add a real function element to your model, drag the icon element to the list of your model elements 
+      and edit it to define the function and (optionally) change the root finding and integration methods.
+      </p>
+    <p>The element implements the following basic methods:
+    <ul>
+    <li><i>double value(double x)</i>: evaluates the function at the argument</li>
+    <li><i>double solve(double min, double max)</i>: finds a root in the given interval</li>
+    <li><i>double solve(double min, double max, double start)</i>: finds a root in the given interval starting at the given point</li>
+    <li><i>double integrate(double min, double max)</i>: integrates the function in the given interval</li>
+    </ul>
+    All these methods print an error message and return a Double.NaN value if there was any error in the computation.</p>
+    </p>
+    <p>Besides this, the encapsulated Apache objects can be accessed using the methods:
+    <ul>
+    <li><i>void setSolver(UnivariateRealSolver solver)</i>: sets the root finding solver</li>
+    <li><i>UnivariateRealSolver getSolver()</i>: returns the root finding solver</li>
+    <li><i>void setIntegrator(UnivariateRealIntegrator integrator)</i>: sets the integrator</li>
+    <li><i>UnivariateRealIntegrator getIntegrator()</i>: returns the integrator</li>
+    </ul>
+    </p>
+        <h3>Example of use</h3>
+    <pre>
+double y = function.value(0); // Evaluates the function at 0 
+double root = function.solve(0,1); // Finds a root in the interval [0,1] 
+double integral = function.integrate(0,1); // Integrates in the interval [0,1] 
+    </pre>
+  </body>
+</html>

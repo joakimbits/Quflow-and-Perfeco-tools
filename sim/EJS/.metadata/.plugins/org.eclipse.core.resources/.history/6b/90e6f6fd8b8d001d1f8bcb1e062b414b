@@ -1,0 +1,56 @@
+/*ObjectWriter.java
+ *CS193J
+ *Summer 2001
+ */
+
+import java.io.*;
+
+public class ObjectWriter {
+
+  ObjectOutputStream oos;
+
+  private ObjectWriter (ObjectOutputStream oos) {
+    this.oos = oos;
+  }
+
+
+  /** this method creates a file into which arbitrary objects may be
+      written.  The file is named as specified by filename. */
+  public static ObjectWriter openFileForWriting (String filename) {
+    
+    try {
+
+      ObjectOutputStream oos = new ObjectOutputStream (new
+						       FileOutputStream
+						       (filename));
+      
+      return new ObjectWriter (oos);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+
+  }
+
+  /** writes a single object to the file. */
+  public void writeObject (Object o) {
+    try {
+      oos.writeObject (o);
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /** closes the file to which objects are being written. */
+  public void close () {
+    try {
+      oos.close();
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+}

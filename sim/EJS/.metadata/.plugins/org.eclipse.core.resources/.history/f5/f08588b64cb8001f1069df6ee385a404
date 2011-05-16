@@ -1,0 +1,318 @@
+/**
+ *
+ * <p>Title: JOPAS</p>
+ *
+ * <p>Description: Java to Octave</p>
+ *
+ * <p>Copyright: (C) Copyright 2000-2005, by Object Refinery Limited and
+ * Contributors.
+ *
+ * Project Info:  	http://jopas.sourceforge.net
+ *                      http://www.eside.deusto.es/grupos/eside_pas
+ *
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation,
+ * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
+ * in the United States and other countries.]
+ * </p>
+ *
+ * <p>Company: PAS - Universidad de Deusto</p>
+ *
+ * @author Oscar Lage Serrano - Javier Vicente Sáez
+ * @version 1.01
+ */
+
+package demo.jopas;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import org.jopas.*;
+
+public class Demo extends javax.swing.JFrame {
+    JSplitPane jSplitPane1 = new JSplitPane();
+    JPanel jPanel1 = new JPanel();
+    JPanel jPanel2 = new JPanel();
+    JPanel jPanel3 = new JPanel();
+    JPanel jPanel4 = new JPanel();
+    JPanel jPanel5 = new JPanel();
+    JPanel jPanel6 = new JPanel();
+
+    /**
+     * To plot the results you can use a special kind of Label known jopasLabel
+     * Is special Label that extends the properties of standard Java Label, but
+     * it can plot Octave's variables calling to paintLabel method.
+     */
+    JopasLabel jopasLabel1 = null;
+    JopasLabel jopasLabel2 = null;
+
+
+    BorderLayout borderLayout2 = new BorderLayout();
+    JButton jButton1 = new JButton();
+    JLabel jLabel1 = new JLabel();
+    JTextField jTextField1 = new JTextField();
+    JLabel jLabel4 = new JLabel();
+    JLabel jLabel5 = new JLabel();
+    JLabel jLabel6 = new JLabel();
+    JTextField jTFFrecCorte = new JTextField();
+    JTextField jTextField3 = new JTextField();
+    JTextField jTextField4 = new JTextField();
+
+    Jopas jopas;
+    GridLayout gridLayout1 = new GridLayout();
+    GridLayout gridLayout2 = new GridLayout();
+    GridLayout gridLayout3 = new GridLayout();
+    GridLayout gridLayout4 = new GridLayout();
+    JLabel jLabel2 = new JLabel();
+    JLabel jLabel3 = new JLabel();
+    JTextField jTextField5 = new JTextField();
+    JTextField jTextField6 = new JTextField();
+    JPanel jPanel7 = new JPanel();
+    JPanel jPanel8 = new JPanel();
+    JPanel jPanel9 = new JPanel();
+    JPanel jPanel10 = new JPanel();
+    JPanel jPanel11 = new JPanel();
+    JPanel jPanel12 = new JPanel();
+    BorderLayout borderLayout1 = new BorderLayout();
+    BorderLayout borderLayout3 = new BorderLayout();
+    BorderLayout borderLayout4 = new BorderLayout();
+    BorderLayout borderLayout5 = new BorderLayout();
+    BorderLayout borderLayout6 = new BorderLayout();
+    BorderLayout borderLayout7 = new BorderLayout();
+
+    /**
+     * The constructor of the class have to start joPAS to run Octave because
+     * Octave program takes a long time to start
+     */
+    public Demo() {
+        jopas = new Jopas(); //joPAS inicialitation
+        DemoDialog demoDialog = new DemoDialog(this, ":: Info ::", true);
+        demoDialog.setVisible(true);
+        try {
+            jbInit(); //GUI inicialitation
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        this.setVisible(true);
+        this.setSize(800, 600);
+        this.jSplitPane1.setDividerLocation(600);
+        this.jPanel3.setSize(600, 300);
+        this.jPanel4.setSize(600, 300);
+        jopasLabel1.setSize(400, 200);
+        jopasLabel2.setSize(400, 200);
+        this.setEnabled(true);
+        this.setSize(800, 600);
+        this.setTitle(":: joPAS - Demo ::");
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = this.getSize();
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+        this.setLocation((screenSize.width - frameSize.width) / 2,
+                         (screenSize.height - frameSize.height) / 2);
+
+        this.show();
+    }
+
+
+    /**
+     * GUI Inicialitation
+     *
+     * @throws Exception
+     */
+    private void jbInit() throws Exception {
+        jButton1.addMouseListener(new Demo_jButton1_mouseAdapter(this));
+        gridLayout1.setColumns(1);
+        gridLayout1.setRows(2);
+        jPanel4.setLayout(gridLayout2);
+        jPanel3.setLayout(gridLayout3);
+        gridLayout4.setColumns(1);
+        gridLayout4.setHgap(100);
+        gridLayout4.setRows(6);
+        gridLayout4.setVgap(20);
+        this.addWindowListener(new Demo_this_windowAdapter(this));
+        borderLayout2.setVgap(50);
+        jSplitPane1.setEnabled(false);
+        jSplitPane1.setResizeWeight(0.75);
+        jLabel2.setText("Orden del Filtro:");
+        jLabel3.setText("Frecuencia de Corte:");
+        jTextField5.setEditable(false);
+        jTextField5.setColumns(10);
+        jTextField6.setEditable(false);
+        jTextField6.setColumns(10);
+        jPanel12.setLayout(borderLayout1);
+        jTFFrecCorte.setMinimumSize(new Dimension(50, 19));
+        jTFFrecCorte.setColumns(10);
+        jPanel11.setLayout(borderLayout3);
+        jTextField3.setColumns(10);
+        jTextField4.setColumns(10);
+        jTextField1.setColumns(10);
+        jPanel10.setLayout(borderLayout4);
+        jPanel9.setLayout(borderLayout5);
+        jPanel8.setLayout(borderLayout6);
+        jPanel7.setLayout(borderLayout7);
+        borderLayout7.setHgap(10);
+        borderLayout7.setVgap(10);
+        borderLayout6.setHgap(10);
+        borderLayout6.setVgap(10);
+        borderLayout5.setHgap(10);
+        borderLayout5.setVgap(10);
+        borderLayout4.setHgap(10);
+        borderLayout4.setVgap(10);
+        borderLayout3.setHgap(10);
+        borderLayout3.setVgap(10);
+        borderLayout1.setHgap(10);
+        borderLayout1.setVgap(10);
+        this.getContentPane().add(jSplitPane1, java.awt.BorderLayout.CENTER);
+        jPanel1.setLayout(gridLayout1);
+        jPanel2.setLayout(borderLayout2);
+        jButton1.setText("OK");
+        jPanel6.setLayout(gridLayout4);
+        jLabel1.setText("Atenuación:");
+        jLabel4.setText("Rizado:");
+        jLabel5.setText("Frecuencia de rechazo:");
+        jLabel6.setText("Frecuencia de corte:");
+        jTextField3.setText("1");
+        jTextField4.setText("20");
+        jTextField1.setText("1000");
+        jTFFrecCorte.setText("2000");
+        jSplitPane1.add(jPanel1, JSplitPane.LEFT);
+        jopasLabel2 = new JopasLabel(jopas);
+        jopasLabel1 = new JopasLabel(jopas);
+        jopasLabel1.setSize(400, 200);
+        jopasLabel2.setSize(400, 200);
+        jPanel4.add(jopasLabel2);
+        jPanel3.add(jopasLabel1);
+        jSplitPane1.add(jPanel2, JSplitPane.RIGHT);
+        jPanel2.add(jPanel5, java.awt.BorderLayout.SOUTH);
+        jPanel2.add(jPanel6, java.awt.BorderLayout.CENTER);
+        jPanel6.add(jPanel12);
+        jPanel6.add(jPanel9);
+        jPanel6.add(jPanel11);
+        jPanel6.add(jPanel10);
+        jPanel6.add(jPanel8);
+        jPanel6.add(jPanel7);
+        jPanel5.add(jButton1);
+        jPanel1.add(jPanel4, null);
+        jPanel1.add(jPanel3, null);
+        jPanel11.add(jTextField3, java.awt.BorderLayout.SOUTH);
+        jPanel8.add(jTextField6, java.awt.BorderLayout.SOUTH);
+        jPanel7.add(jTextField5, java.awt.BorderLayout.SOUTH);
+        jPanel12.add(jLabel6, java.awt.BorderLayout.CENTER);
+        jPanel10.add(jLabel1, java.awt.BorderLayout.CENTER);
+        jPanel11.add(jLabel4, java.awt.BorderLayout.CENTER);
+        jPanel9.add(jLabel5, java.awt.BorderLayout.CENTER);
+        jPanel8.add(jLabel2, java.awt.BorderLayout.CENTER);
+        jPanel7.add(jLabel3, java.awt.BorderLayout.CENTER);
+        jPanel12.add(jTextField1, java.awt.BorderLayout.SOUTH);
+        jPanel9.add(jTFFrecCorte, java.awt.BorderLayout.SOUTH);
+        jPanel10.add(jTextField4, java.awt.BorderLayout.SOUTH);
+    }
+
+    /**
+     * The Button event that Loads variables to Octave and executes
+     * Octave commands.
+     *
+     * @param mouseEvent MouseEvent
+     */
+    public void jButton1_mouseReleased(MouseEvent mouseEvent) {
+
+        //Get the variable from the TextField
+        String FC = jTextField1.getText();
+        //Creates a 1x1 Matrix called "FC"
+        Matrix FCMatrix = new Matrix(Double.parseDouble(FC), "FC");
+        //Load the previous matrix named "FC" to Octave
+        jopas.Load(FCMatrix);
+
+        //Get the variable from the TextField
+        String FR = this.jTFFrecCorte.getText();
+        //Creates a 1x1 Matrix called "FR", you can do it like the previous one.
+        jopas.Load(Double.parseDouble(FR), "FR");
+
+        //Reads the value of R and A
+        String R = this.jTextField3.getText();
+        String A = this.jTextField4.getText();
+
+        //Executes the Octave commands using local variables
+        jopas.Execute("[N,W]=cheb1ord(FC/10000,FR/10000," + R + "," + A + ")");
+        jopas.Execute("[B,A]=cheby1(N," + R + ",W)");
+        jopas.Execute("[H,F]=freqz(B,A,512,20000)");
+        jopas.Execute("modulodB=20*log10(abs(H))");
+        jopas.Execute("fase=unwrap(angle(H))");
+        jopas.Execute("Wc=W*10000");
+
+        /**
+         *XYPlots of "F" and "modulodB", the plot title is "Módulo", the
+         * X label is "Frecuencia (Hz)" and Y label is "Módulo (dB)".
+         */
+        this.jopasLabel2.paintLabel("F", "modulodB", "Módulo",
+                                    "Frecuencia (Hz)", "Módulo (dB)");
+        //The same with "F" and "fase" variables
+        this.jopasLabel1.paintLabel("F", "fase", "Fase", "Frecuencia (Hz)",
+                                    "Fase (rad)");
+
+        /**
+         * Shows the value of Octave's "N" variable in the label.
+         * jopas.Save always returns Matrix variable type.
+         * In this case the dimensions of Matrix is well known, is a 1x1 matrix
+         * So we access straight to (0,0) position of the Matrix
+         */
+        this.jTextField6.setText(Double.toString(jopas.Save("N").getRealAt(0, 0)));
+        this.jTextField5.setText(Double.toString(jopas.Save("Wc").getRealAt(0,
+                0)));
+
+    }
+
+
+    public static void main(String av[]) {
+
+        Demo javi = new Demo();
+
+    }
+
+
+    public void this_windowClosing(WindowEvent e) {
+        System.exit(0);
+    }
+
+
+}
+
+
+class Demo_this_windowAdapter extends WindowAdapter {
+    private Demo adaptee;
+    Demo_this_windowAdapter(Demo adaptee) {
+        this.adaptee = adaptee;
+    }
+
+    public void windowClosing(WindowEvent e) {
+        adaptee.this_windowClosing(e);
+    }
+}
+
+
+class Demo_jButton1_mouseAdapter extends MouseAdapter {
+    private Demo adaptee;
+    Demo_jButton1_mouseAdapter(Demo adaptee) {
+        this.adaptee = adaptee;
+    }
+
+    public void mouseReleased(MouseEvent mouseEvent) {
+        adaptee.jButton1_mouseReleased(mouseEvent);
+    }
+}

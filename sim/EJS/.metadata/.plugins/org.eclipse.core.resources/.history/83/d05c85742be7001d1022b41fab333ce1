@@ -1,0 +1,470 @@
+/**
+ * The package contains definitions for the different parts of a simulation
+ * Copyright (c) June 2002 F. Esquembre
+ * @author F. Esquembre (http://fem.um.es).
+ */
+
+package org.colos.ejs.library;
+
+import java.util.*;
+import java.awt.event.*;
+import org.colos.ejs.library.control.EjsControl;
+
+/**
+ * A base interface for a simulation
+ */
+
+public abstract class Animation implements java.lang.Runnable {
+
+  static public int MAXIMUM_FPS=25; // Not final on purpose
+  static public final int MINIMUM_FPS=1;
+  static public final int MINIMUM_DELAY = 10;
+
+  // Execution of the animation
+  private volatile java.lang.Thread animationThread = null; // The animation animationThread
+  private volatile boolean loopEnabled = true;
+  
+  private boolean autoplay = false; // Whether the animation should start automatically after a reset
+  protected boolean isPlaying = false; // Whether the simulation is playing
+  protected boolean updateView=true;   // Whether the view must be updated after each step
+  private int stepsPerDisplay=1;     // How many steps to run before updating the view
+  private long delay = MINIMUM_DELAY; // The delay between successive steps
+  
+  protected String resetFile = null; // If not null this file is read when resetting the variables
+
+  // Relation with the simulation parts
+  protected Model model=null;
+  protected View view=null;
+
+  // Variables for clones
+  protected Animation master=null;
+  protected ArrayList<Model> slaveList = new ArrayList<Model>();
+
+// -----------------------------
+// Setters and getters
+// -----------------------------
+
+  final public Model getModel () { return model; }
+
+  final public void setModel (Model _aModel) { 
+    model = _aModel; 
+    LauncherApplet applet = model._getApplet();
+    if (applet!=null) {
+      if (applet.getParameter("_initialState")!=null) resetFile = applet.getParameter("_initialState");
+    }
+  }
+
+  final public View getView () { return view; }
+
+  final public void setView (View _aView) { view = _aView; }
+
+  /**
+   * Sets the (approximate) number of frames per second for the simulation
+   * @param _fps the number of frames per second
+   */
+  final public void setFPS (int _fps)  {
+    if      (_fps<=MINIMUM_FPS) delay = 1000;
+    else if (_fps>=MAXIMUM_FPS) delay = MINIMUM_DELAY;
+    else delay = Math.max((long) (1000.0/_fps),MINIMUM_DELAY);
+  }
+
+  /**
+   * Sets the delay between two steps of the simulation
+   * @param _aDelay the number of milliseconds for the delay
+   */
+  final public void setDelay(int _aDelay) {
+    delay = Math.max((long) _aDelay,0); // Exception. The user might want to have a delay of 0! MINIMUM_DELAY);
+  }
+
+  final public int getDelay () { return (int) delay; }
+
+  /**
+   * Sets the number of model steps before refreshing the view
+   * @param _steps the number of model steps
+   */
+  final public void setStepsPerDisplay(int _steps) {
+    if (_steps>=1) stepsPerDisplay = _steps;
+  }
+
+  /**
+   * Sets whether the simulation should update the view in each step
+   * Default is true.
+   * @param _update Whether to update the view
+   */
+  final public void setUpdateView (boolean _update) { updateView = _update; }
+
+  /**
+   * Sets whether the simulation should be set to play mode when it is reset.
+   * Default is false.
+   * @param _play Whether it should play
+   */
+  final public void setAutoplay (boolean _play) { autoplay = _play; }
+
+  /**
+   * Returns whether the simulation is running or not
+   */
+  final public boolean isPlaying () { return isPlaying && animationThread!=null; }
+
+  /**
+   * Returns whether the simulation is running or not
+   */
+  final public boolean isPaused () { return !isPlaying(); }
+
+  public void disableLoop() {
+    //System.out.println ("Disabling loop ");
+    loopEnabled = false;
+    if(Thread.currentThread()==animationThread) {
+      //System.out.println ("Loop disabled");
+       return;                    // cannot join with own thread so return
+    } else {                      // another thread has called this method in order to stop the animation thread
+       try {                      // guard against an exception in applet mode
+         animationThread.interrupt(); // get out of a sleep state
+         animationThread.join(100);  // wait up to 1/10 second for animation thread to stop
+       } catch(Exception e) {
+          // System.out.println("exception in stop animation"+e);
+       }
+    }
+  }
+
+  public void enableLoop() {
+    loopEnabled = true;
+  }
+
+// -----------------------------
+// Controlling the execution
+// Based on org.opensourcephysics.display.AbstractAnimation
+// -----------------------------
+
+  /**
+   * Starts the animation.
+   *
+   * Use this method to start a timer or a thread.
+   */
+  public synchronized void play() {
+    if (master!=null) { getTopMaster().play(); return; }
+     if(animationThread!=null) {
+        return; // animation is running
+     }
+     animationThread = new Thread(this);
+     animationThread.setPriority(Thread.MIN_PRIORITY);
+     animationThread.setDaemon(true);
+     animationThread.start(); // start the animation
+     isPlaying = true;
+     for (Model slave : slaveList) slave.getSimulation().isPlaying = true;
+  }
+
+  /**
+   * Stops the animation.
+   *
+   * Sets animationThread to null and waits for a join with the animation thread.
+   */
+  public synchronized void pause() {
+    if (master!=null) { getTopMaster().pause(); return; }
+     if(animationThread==null) { // animation thread is already dead
+        return;
+     }
+     Thread tempThread = animationThread; // local reference
+     animationThread = null; // signal the animation to stop
+     isPlaying = false;
+     for (Model slave : slaveList) slave.getSimulation().isPlaying = false;
+     if(Thread.currentThread()==tempThread) {
+        return;                    // cannot join with own thread so return
+     } else {                      // another thread has called this method in order to stop the animation thread
+        try {                      // guard against an exception in applet mode
+           tempThread.interrupt(); // get out of a sleep state
+           tempThread.join(100);  // wait up to 1 second for animation thread to stop
+        } catch(Exception e) {
+           // System.out.println("excetpion in stop animation"+e);
+        }
+     }
+  }
+
+  /**
+   * Implementation of Runnable interface.  DO NOT access this method directly.
+   */
+  public void run() {
+     long sleepTime = delay;
+     while(animationThread==Thread.currentThread()) {
+        long currentTime = System.currentTimeMillis();
+        if (loopEnabled) {
+          //System.out.println ("Loop enabled");
+          step();
+          for (Model slave : slaveList) slave.getSimulation().step();
+        }
+        // adjust the sleep time to try and achieve a constant animation rate
+        // some VMs will hang if sleep time is less than 10
+        sleepTime = delay-(System.currentTimeMillis()-currentTime); // Math.max(10, delay-(System.currentTimeMillis()-currentTime));
+        if (sleepTime<10) Thread.yield();
+        else {
+          try { Thread.sleep(sleepTime); } 
+          catch(InterruptedException ie) {}
+        }
+     }
+  }
+
+  /**
+   * Stops the simulation and frees memory
+   */
+  public void onExit() {
+    animationThread = null;
+    isPlaying = false;
+  //  killed = true;
+    javax.swing.Timer timer = new javax.swing.Timer(500, new ActionListener(){
+      public void actionPerformed(ActionEvent evt) {
+        view.onExit();
+        model._freeMemory();
+        System.gc();
+      }
+    });
+    timer.setRepeats(false);
+    timer.setCoalesce(true);
+    timer.start();
+  }
+
+// ------------------------------------
+// Simulation logic based on the model
+// ------------------------------------
+
+  /**
+   * Reset to a user-defined default state 
+   */
+  abstract protected void userDefinedReset();
+
+  /**
+   * User-defined update view (such as video capture) 
+   */
+  abstract protected void userDefinedViewUpdate();
+  
+  /**
+   * Resets the simulation to a complete initial state
+   */
+  final public synchronized void reset() {
+    pause();
+    if (model!=null) {
+      model.reset();
+      //if(_init_!=null)_init_.invoke(0, model._getApplet());//FKH 20060417
+// It was here before      userDefinedReset(); //      if (resetFile!=null) readVariablesFromFile (resetFile,stateVariablesList);
+    }
+    if (view!=null) {
+     view.setUpdateSimulation(false);
+     view.reset();
+     view.initialize();
+    }
+    if (model!=null) {
+      model.initialize();
+      model.update();
+      userDefinedReset();
+    }
+    if (view!=null) {
+      //view.setUpdateSimulation(false);
+      //view.reset();
+      //view.initialize();
+      if (updateView) {
+        view.update();
+        userDefinedViewUpdate();
+      }
+      else view.collectData();
+      view.setUpdateSimulation(true);
+    }
+    System.gc();
+    synchronized (slaveList) { killAllSimulations(); }
+    if (autoplay) {
+//      System.out.println ("Trying to play "+this);
+      play();
+    }
+  }
+
+  /**
+   * Initialize model using user interface changes
+   */
+  final public void initialize() {
+    if (view!=null) view.read();
+    if (model!=null) {
+      model.initialize();
+      model.update();
+    }
+    if (view!=null) {
+//      view.reset();
+      view.initialize();
+      if (updateView) {
+        view.update();
+        userDefinedViewUpdate();
+     }
+      else view.collectData();
+    }
+  }
+
+  /**
+   * apply user interface changes
+   */
+  final public void apply() {
+    if (view!=null) view.read();
+    update();
+  }
+
+  /**
+   * apply user interface changes. Yes, exactly the same as apply() (I need it somewhere else :-)
+   */
+  final public void applyAll() {
+//    if (view!=null) Commented for optimization
+      view.read();
+    update();
+  }
+
+  /**
+   * apply a single change in the user interface
+   */
+  final public void apply (String _variable) {
+    if (view!=null) view.read(_variable);
+//    update(); // Should be called by the user
+  }
+
+  /**
+   * update
+   */
+  final public void update() {
+    if (model!=null) model.update();
+    if (view!=null) {
+       if (updateView) view.update();
+       else view.collectData();
+    }
+  }
+
+  /**
+   * step
+   */
+  public void step() { // Not final because the generated sim can change the stepsPerDisplay
+    // This is used when you want to step the model
+    // several times updating the display only once
+    if (stepsPerDisplay>1) {
+      for (int i=1; i<stepsPerDisplay; i++) {
+//      if (model!=null) Commented for optimization
+        model.step();
+        model.update();
+        view.collectData();
+      }
+    }
+    // Now the final time
+//  if (model!=null) Commented for optimization
+    model.step();
+    update();
+    if (updateView) userDefinedViewUpdate();
+  }
+
+// --------------------------------------------------------
+// Accessing model methods
+// --------------------------------------------------------
+
+  final public void updateAfterModelAction() {
+//    if (view!=null) view.initialize(); // If initialize sends all the data, this is redundant
+    if (master!=null) { getTopMaster().updateAfterModelAction(); return; }
+    update();
+    for (Model slave : slaveList) slave.getSimulation().update();
+    loopEnabled = true;
+  }
+
+  //---------------------------------------------------
+  // Utilities for clones
+  //---------------------------------------------------
+  /**
+   * Creates a simulation of the same class as this one.
+   * The simulation thus created is synchronized with (slave to) the original one.
+   * @return Model The model of the simulation created.
+   */
+  final public Model runSimulation () { return runSimulation(null); }
+
+  /**
+   * Creates a simulation of the given classname.
+   * The simulation thus created is synchronized with (slave to) the original one.
+   * @param _classname String
+   * @return Model The model of the simulation created.
+   */
+  final public Model runSimulation (String _classname) {
+    try {
+      Class theClass;
+      if (_classname==null) theClass = getModel().getClass();
+      else theClass = Class.forName(_classname);
+      Model simModel = (Model) theClass.newInstance();
+      Animation top = getTopMaster();
+      simModel.getSimulation().master = top;
+      simModel.getSimulation().isPlaying = isPlaying;
+      simModel.getSimulation().update();
+      top.slaveList.add(simModel);
+      return simModel;
+    }
+    catch (Exception _exc) {
+      _exc.printStackTrace();
+      return null;
+    }
+  }
+
+  /**
+   * Makes a slave simulation not synchronized with the original one.
+   * @param _simulation Object
+   */
+  final public void freeSimulation (Model _simulationModel) {
+    if (_simulationModel==null) return;
+    try {
+      Animation top = getTopMaster();
+      top.slaveList.remove(_simulationModel);
+      _simulationModel.getSimulation().master = null;
+      if (_simulationModel.getView() instanceof EjsControl) ((EjsControl) _simulationModel.getView()).undoReparenting();
+      if (top.isPlaying) _simulationModel.getSimulation().play();
+      else _simulationModel.getSimulation().isPlaying = false;
+      _simulationModel.getSimulation().update();
+    }
+    catch (Exception _exc) {
+      _exc.printStackTrace();
+    }
+  }
+
+  /**
+   * Kills a slave simulation created from this simulation.
+   * @param _simulation Object
+   */
+  final public void killSimulation (Model _simulationModel) {
+    if (_simulationModel==null) return;
+    freeSimulation(_simulationModel);
+    _simulationModel.getSimulation().pause();
+    if (_simulationModel.getView() instanceof EjsControl) ((EjsControl) _simulationModel.getView()).dispose();
+  }
+
+  /**
+   * Kills all slaves simulations of this one.
+   */
+  final public synchronized void killAllSimulations () {
+    List<Model> list = slaveList;
+    slaveList = new ArrayList<Model>();
+    for (Iterator<Model> it=list.iterator(); it.hasNext(); ) {
+      Model simModel = (Model) it.next();
+      simModel.getSimulation().pause();
+      simModel.getSimulation().master = null;
+      if (simModel.getView() instanceof EjsControl) {
+        ( (EjsControl) simModel.getView()).undoReparenting();
+        ( (EjsControl) simModel.getView()).dispose();
+      }
+    }
+  }
+
+  /**
+   * Returns the model of the top level simulation from which this one is
+   * a slave (or a slave of a slave, or ...)
+   * @return Model
+   */
+  final public Model getTopSimulation () { return getTopMaster().getModel(); }
+
+  /**
+   * Returns the top level simulation from which this one is
+   * a slave (or a slave of a slave, or ...)
+   * @return Simulation
+   */
+  final private Animation getTopMaster () {
+    if (master==null) return this;
+    Animation topMaster = master;
+    while (topMaster.master!=null) topMaster = topMaster.master;
+    return topMaster;
+  }
+
+ 
+} // End of class
+

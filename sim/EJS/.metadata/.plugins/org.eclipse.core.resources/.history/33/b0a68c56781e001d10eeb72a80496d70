@@ -1,0 +1,1034 @@
+/**
+ * The edition package contains generic tools to edit
+ * Copyright (c) November 2002 F. Esquembre
+ * @author F. Esquembre (http://fem.um.es).
+ */
+
+package org.colos.ejs.osejs.edition;
+
+import org.colos.ejs.library.control.*;
+import org.colos.ejs.library.control.value.*;
+import org.colos.ejs.osejs.OsejsCommon;
+import org.colos.ejs.osejs.utils.*;
+
+import java.util.*;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import org.colos.ejs.control.editors.EditorForFile;
+import org.colos.ejs.external.BrowserForExternal;
+import org.colos.ejs.osejs.view.ViewElement;
+import org.colos.ejs.osejs.view.ViewSelection;
+
+public class VariablesEditor implements Editor {
+  static private ResourceUtil res = new ResourceUtil ("Resources");
+  static protected ResourceUtil sysRes = new ResourceUtil ("SystemResources");
+  static final Color errorColor = InterfaceUtils.color(res.getString("EditorForVariables.ErrorColor"));
+
+  static private Insets insets = new Insets(0,0,0,0);
+
+  private org.colos.ejs.osejs.Osejs ejs;
+  private TabbedVariablesEditor parentEditor;
+  private int nameColumn=-1, valueColumn=-1, typeColumn=-1, dimensionColumn=-1, connectedColumn=-1;
+  protected String[] columnNames;
+  private String[] columnTypes, columnNickNames;
+  private Vector emptyRow;
+
+  private boolean changed = false, visible=true;
+  private int activeRow = -1, pageCounter=0;
+  private String name="", title, externalFile="";
+  private Vector<String> commentList=new Vector<String>();
+
+  private EjsControl control=null;
+  private ExpressionValue expressionValue=null;
+  private BrowserForExternal externalBrowser=null;
+  private String externalAdditionalInfo=null;
+
+  private JTable table;
+  private JPanel fullPanel;
+  private JPopupMenu popup;
+  private JLabel externalLabel=null;
+  private JButton externalButton = null;
+  private JTextField commentField,externalField=null,pageCommentField;
+  private JScrollPane scrollPanel;
+  private MyTableModel tableModel;
+  private TitledBorder titleBorder;
+  private String _externalVariables=""; // Gonzalo 060420
+  private JLabel[] renderLabelList;
+  private boolean[] renderCorrect;
+
+  void initColumns() {
+    if (columnNames==null) columnNames = ResourceUtil.tokenizeString(sysRes.getString("VariablesEditor.ColumnHeaders"));
+    emptyRow = new Vector();
+    columnTypes = new String[columnNames.length];
+    columnNickNames = new String[columnNames.length];
+    for (int i=0; i<columnNames.length; i++) {
+      if      (columnNames[i].toLowerCase().equals("name"))      nameColumn = i;
+      else if (columnNames[i].toLowerCase().equals("value"))     valueColumn = i;
+      else if (columnNames[i].toLowerCase().equals("dimension")) dimensionColumn = i;
+      else if (columnNames[i].toLowerCase().equals("type"))      typeColumn = i;
+      else if (columnNames[i].toLowerCase().equals("connected")) connectedColumn = i;
+      columnTypes[i] = sysRes.getString("VariablesEditor.ColumnType."+columnNames[i]);
+      columnNickNames[i] = res.getString("VariableEditor."+columnNames[i]);
+      if      (columnTypes[i].equals("BOOLEAN"))       emptyRow.addElement(new Boolean(false));
+      else if (columnTypes[i].equals("VARIABLE_TYPE")) emptyRow.addElement("double");
+      else emptyRow.addElement("");
+    }
+    renderLabelList = new JLabel[6];
+    renderCorrect = new boolean[renderLabelList.length];
+    for (int i=0; i<renderLabelList.length; i++) {
+      renderLabelList[i] = new DefaultTableCellRenderer();
+      renderCorrect[i] = true;
+    }
+  }
+
+  public VariablesEditor (org.colos.ejs.osejs.Osejs _ejs,TabbedVariablesEditor _parentEditor) {
+    ejs = _ejs;
+    parentEditor = _parentEditor;
+    initColumns();
+    title = "";
+    Icon linkIcon = org.opensourcephysics.tools.ResourceLoader.getIcon(sysRes.getString("VariablesEditor.Link.Icon"));
+    Icon fileIcon = org.opensourcephysics.tools.ResourceLoader.getIcon(sysRes.getString("VariablesEditor.File.Icon"));
+    if (linkIcon==null ) System.out.println ("Could not read icon " + sysRes.getString("VariablesEditor.Link.Icon"));
+    if (fileIcon==null ) System.out.println ("Could not read icon " + sysRes.getString("VariablesEditor.File.Icon"));
+
+    tableModel  = new MyTableModel (columnNickNames,0);
+    table = new JTable(tableModel);
+    //table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+    table.getSelectionModel().addListSelectionListener (new MLSL());
+    table.getModel().addTableModelListener(new  TableModelListener () {
+      public void tableChanged (javax.swing.event.TableModelEvent _e) { changed = true; }
+    });
+    scrollPanel = new JScrollPane (table);
+
+    int maxSize = res.getDimension("VariablesEditor.ColumnsSize").width;
+    ActionListener actionListener = new ActionListener () {
+      public void actionPerformed (ActionEvent e) { parentEditor.updateControlValues(false); }
+    };
+    FocusListener focusListener = new FocusAdapter() {
+      public void focusLost (FocusEvent e) { parentEditor.updateControlValues(false); }
+    };
+
+    for (int i=0; i<columnNames.length; i++) {
+      if (columnTypes[i].equals("VARIABLE_TYPE")) {
+        JComboBox combobox = new JComboBox();
+        combobox.setEditable(true);
+        combobox.setFont(InterfaceUtils.font(null,res.getString("Osejs.DefaultFont")));
+        combobox.addActionListener(actionListener);
+        String[] types = ResourceUtil.tokenizeString(sysRes.getString("VariablesEditor.VariableTypes"));
+        for (int j=0; j<types.length; j++) combobox.addItem(types[j]);
+        table.getColumnModel().getColumn(i).setCellEditor(new DefaultCellEditor(combobox));
+        table.getColumnModel().getColumn(i).setPreferredWidth(maxSize);
+      }
+      else if (columnTypes[i].indexOf("STRING")>=0) {
+        JTextField textField = new JTextField();
+        TableCellRenderer labelRenderer;
+        if (i==valueColumn) labelRenderer = new MyRenderer();
+        else labelRenderer = new DefaultTableCellRenderer();
+        //if (i==connectedColumn) textField.setEditable(false);
+        textField.getDocument().addDocumentListener (new MyDocumentListener(textField)); //docList);
+        textField.addFocusListener(focusListener);
+        table.getColumnModel().getColumn(i).setCellEditor(new DefaultCellEditor(textField));
+        table.getColumnModel().getColumn(i).setCellRenderer(labelRenderer);
+        if (columnTypes[i].indexOf("SMALL")>=0) table.getColumnModel().getColumn(i).setPreferredWidth(maxSize);
+//        else table.getColumnModel().getColumn(i).setPreferredWidth(2*maxSize);
+      }
+      else table.getColumnModel().getColumn(i).setPreferredWidth(maxSize);
+    }
+
+    class AL implements ActionListener {
+      public void actionPerformed (ActionEvent _evt) {
+        String cmd=_evt.getActionCommand();
+        if      (cmd.equals("Add"))    addEmptyRow(false);
+        else if (cmd.equals("Insert")) addEmptyRow(true);
+        else if (cmd.equals("Remove")) removeRow();
+        else if (cmd.equals("Cut")) copySelection(true);
+        else if (cmd.equals("Copy")) copySelection(false);
+        else if (cmd.equals("Paste")) pasteSelection();
+        else if (cmd.equals("MoveUp")) moveUp();
+        else if (cmd.equals("MoveDown")) moveDown();
+        else if (cmd.equals("Connect")) connectTo();
+        else if (cmd.equals("SelectExternalFile")) {
+          String file = EditorForFile.edit (ejs,externalField,"externalfile");
+          if (file!=null) setExternalFile(file);
+        }
+        else if (cmd.equals("ExternalFile")) {
+          String file = externalField.getText().trim();
+          if (file.length()<=0) file = null;
+          setExternalFile(file);
+        }
+      }
+    }
+    AL al = new AL();
+
+    JMenuItem connectButton=null;
+    if (connectedColumn>=0) {
+      connectButton = new JMenuItem (res.getString("VariablesEditor.Connect"),linkIcon);
+      connectButton.setActionCommand ("Connect");
+      connectButton.addActionListener (al);
+    }
+
+    JMenuItem insRowButton = new JMenuItem (res.getString("VariablesEditor.Insert"));
+    insRowButton.setActionCommand ("Insert");
+    insRowButton.addActionListener (al);
+
+    JMenuItem addRowButton = new JMenuItem (res.getString("VariablesEditor.Add"));
+    addRowButton.setActionCommand ("Add");
+    addRowButton.addActionListener (al);
+
+    JMenuItem remRowButton = new JMenuItem (res.getString("VariablesEditor.Remove"));
+    remRowButton.setActionCommand ("Remove");
+    remRowButton.addActionListener (al);
+
+    JMenuItem cutButton = new JMenuItem (res.getString("Utils.cut-to-clipboard"));
+    cutButton.setActionCommand ("Cut");
+    cutButton.addActionListener (al);
+
+    JMenuItem copyButton = new JMenuItem (res.getString("Utils.copy-to-clipboard"));
+    copyButton.setActionCommand ("Copy");
+    copyButton.addActionListener (al);
+
+    JMenuItem pasteButton = new JMenuItem (res.getString("Utils.paste-from-clipboard"));
+    pasteButton.setActionCommand ("Paste");
+    pasteButton.addActionListener (al);
+
+    JMenuItem moveUpButton = new JMenuItem (res.getString("Tree.MoveUp"));
+    moveUpButton.setActionCommand ("MoveUp");
+    moveUpButton.addActionListener (al);
+
+    JMenuItem moveDownButton = new JMenuItem (res.getString("Tree.MoveDown"));
+    moveDownButton.setActionCommand ("MoveDown");
+    moveDownButton.addActionListener (al);
+
+    
+    JPanel externalPanel=null;
+    if (connectedColumn>=0) {
+      externalField = new JTextField();
+      externalField.setEditable (true);
+      externalField.setActionCommand ("ExternalFile");
+      externalField.addActionListener (al);
+      externalField.addKeyListener(new KeyListener () {
+        public void keyPressed  (java.awt.event.KeyEvent _e) {
+          if (_e.getKeyCode()==27) ((JTextField)_e.getComponent()).setText(externalFile);
+        }
+        public void keyReleased (java.awt.event.KeyEvent _e) { }
+        public void keyTyped    (java.awt.event.KeyEvent _e) {
+          if (_e.getKeyChar()=='\n'); // _e.getComponent().setBackground (Color.white);
+          else _e.getComponent().setBackground (Color.yellow);
+        }
+      });
+
+      externalLabel = new JLabel (res.getString ("VariablesEditor.ExternalFile")+" ");
+      externalLabel.setFont (InterfaceUtils.font(null,res.getString("Editor.DefaultFont")));
+      externalButton = new JButton(res.getString ("VariablesEditor.ExternalFile"),fileIcon);
+      externalButton.setMargin(insets);
+      externalButton.setActionCommand ("SelectExternalFile");
+      externalButton.addActionListener (al);
+
+      externalPanel = new JPanel (new BorderLayout());
+      externalPanel.setBorder(new EmptyBorder(0,0,5,0));
+      externalPanel.add (externalField,BorderLayout.CENTER);
+      externalPanel.add (externalButton,BorderLayout.WEST);
+    }
+
+    commentField = new JTextField();
+    commentField.setEditable (false);
+    commentField.setFont(InterfaceUtils.font(null,res.getString("Osejs.DefaultFont")));
+    commentField.getDocument().addDocumentListener (new DocumentListener(){
+      public void changedUpdate(DocumentEvent e) { reflectChange(); }
+      public void insertUpdate(DocumentEvent e)  { reflectChange(); }
+      public void removeUpdate(DocumentEvent e)  { reflectChange(); }
+      private void reflectChange() {
+        changed = true;
+        if (activeRow!=-1) commentList.set (activeRow,commentField.getText());
+      }
+    });
+
+
+    JLabel pageCommentLabel = new JLabel (res.getString ("Editor.PageComment"));
+    pageCommentLabel.setBorder(new EmptyBorder(0,0,0,3));
+    pageCommentLabel.setFont (InterfaceUtils.font(null,res.getString("Editor.DefaultFont")));
+
+    pageCommentField = new JTextField();
+    pageCommentField.setEditable (true);
+    pageCommentField.setFont(InterfaceUtils.font(null,res.getString("Osejs.DefaultFont")));
+    pageCommentField.getDocument().addDocumentListener (new DocumentListener(){
+      public void changedUpdate(DocumentEvent e) { reflectChange(); }
+      public void insertUpdate(DocumentEvent e)  { reflectChange(); }
+      public void removeUpdate(DocumentEvent e)  { reflectChange(); }
+      private void reflectChange() {
+        changed = true;
+      }
+    });
+
+    JLabel commentLabel = new JLabel (res.getString ("Editor.Comment"));
+    commentLabel.setBorder(new EmptyBorder(0,0,0,3));
+    commentLabel.setFont (InterfaceUtils.font(null,res.getString("Editor.DefaultFont")));
+
+    JPanel varCommentPanel = new JPanel (new BorderLayout());
+    varCommentPanel.add (commentLabel,BorderLayout.WEST);
+    varCommentPanel.add (commentField,BorderLayout.CENTER);
+
+    JPanel pageCommentPanel = new JPanel (new BorderLayout());
+    pageCommentPanel.add (pageCommentLabel,BorderLayout.WEST);
+    pageCommentPanel.add (pageCommentField,BorderLayout.CENTER);
+
+    JPanel commentPanel = new JPanel (new GridLayout(0,1));
+    commentPanel.add(varCommentPanel);
+    commentPanel.add(pageCommentPanel);
+
+    fullPanel = new JPanel (new BorderLayout());
+    if (externalPanel!=null) fullPanel.add (externalPanel,BorderLayout.NORTH);
+    fullPanel.add (scrollPanel,BorderLayout.CENTER);
+    fullPanel.add (commentPanel,BorderLayout.SOUTH);
+
+    titleBorder = new TitledBorder (new EmptyBorder(10,0,0,0),title+name);
+    titleBorder.setTitleJustification (TitledBorder.LEFT);
+    titleBorder.setTitleFont (InterfaceUtils.font(null,res.getString("Editor.TitleFont")));
+    if (title.trim().length()>0) fullPanel.setBorder (titleBorder);
+    else fullPanel.setBorder (new EmptyBorder(10,0,0,0));
+
+    popup = new JPopupMenu();
+    if (connectButton!=null) popup.add (connectButton);
+    popup.add (insRowButton);
+    popup.add (addRowButton);
+    popup.addSeparator();
+    popup.add (cutButton);
+    popup.add (copyButton);
+    popup.add (pasteButton);
+    popup.addSeparator();
+    popup.add (moveUpButton);
+    popup.add (moveDownButton);
+    popup.add (remRowButton);
+    class MA extends MouseAdapter {
+      public void mousePressed (MouseEvent e) {
+        if (e.isPopupTrigger() || e.getModifiers() == InputEvent.BUTTON3_MASK) {
+          if (table.isEnabled ()) popup.show(e.getComponent(), e.getX(), e.getY());
+        }
+      }
+    }
+    table.addMouseListener (new MA());
+    scrollPanel.addMouseListener (new MA());
+  }
+
+  public void setControl (EjsControl _aControl) { control = _aControl; }
+
+  public java.util.List<SearchResult> search (String _info, String _searchString, int _mode) {
+    java.util.List<SearchResult> list = new ArrayList<SearchResult>();
+    boolean toLower = (_mode & SearchResult.CASE_INSENSITIVE) !=0;
+    if (toLower) _searchString = _searchString.toLowerCase();
+    if (_info==null) _info = "";
+    else _info=res.getString(_info);//FKH 021020
+    Vector data = tableModel.getDataVector();
+    for (int col=0; col<columnNickNames.length; col++) {
+      if (columnTypes[col].equals("VARIABLE_TYPE")) continue;
+      String addInfo = getName()+" ("+columnNickNames[col]+")";
+      for (int i=0; i<data.size(); i++) {
+        Vector row = (Vector) data.get(i);
+        SearchResult sr = searchInString(_info+"."+addInfo, _searchString,toLower,row.get(col).toString(),i,col);
+        if (sr!=null) list.add(sr);
+      }
+    }
+    return list;
+  }
+
+  private SearchResult searchInString(String _info, String _searchString, boolean toLower, String line, int row, int column)  {
+    int index;
+    if (toLower) index = line.toLowerCase().indexOf(_searchString);
+    else index = line.indexOf(_searchString);
+    if (index>=0) return new RowSearchResult(_info,line.trim(),row,column);
+    return null;
+  }
+
+  public void setName (String _name) {
+    name = _name;
+    if (title.trim().length()>0) {
+      titleBorder.setTitle (title+name);
+      fullPanel.setBorder (titleBorder);
+      fullPanel.repaint();
+    }
+  }
+
+  public String getName () { return name; }
+
+  public void clear () {
+    if (externalField!=null) setExternalFile(null);
+    tableModel.setNumRows (0);
+    commentList.removeAllElements();
+    pageCommentField.setText("");
+    activeRow = -1;
+    addEmptyRow(false);
+    table.repaint(table.getBounds(null));
+  }
+
+  public Component getComponent () { return fullPanel; }
+
+  public void setColor (Color _color) {
+    if (externalLabel!=null) externalLabel.setForeground(_color);
+    if (externalButton!=null) externalButton.setForeground(_color);
+    titleBorder.setTitleColor (_color);
+  }
+
+  public void setFont (Font _font) {
+    for (int i=0; i<columnNames.length; i++) {
+      if (i==typeColumn) continue; // Not this one
+      TableCellEditor editor = table.getColumnModel().getColumn(i).getCellEditor();
+      if (editor instanceof DefaultCellEditor) {
+        Component comp = ((DefaultCellEditor) editor).getComponent();
+        if (comp!=null) comp.setFont(_font);
+      }
+    }
+    for (int i=0; i<renderLabelList.length; i++) if (renderLabelList[i]!=null) renderLabelList[i].setFont(_font);
+    //if (externalField!=null) externalField.setFont(_font);
+    table.setFont(_font);
+    table.setRowHeight(table.getFontMetrics(_font).getHeight());
+    table.repaint();
+    //commentField.setFont (_font);
+  }
+
+  public boolean isChanged () {
+    if (externalBrowser!=null) return changed || externalBrowser.isChanged();
+    return changed;
+  }
+
+  public void setChanged (boolean _changed) {
+    if (externalBrowser!=null) externalBrowser.setChanged(_changed);
+    changed = _changed;
+  }
+
+  public void setEditable (boolean _active) { table.setEnabled (_active); }
+
+  public void setVisible (boolean _visible) { visible = _visible; }
+
+  public boolean isVisible () { return visible; }
+
+  public void refresh (boolean _hiddensToo) {
+    scrollPanel.setVisible (visible || _hiddensToo);
+  }
+
+  public void setActive (boolean _active) {
+    table.setEnabled (_active);
+    activeEditor=_active;
+  }
+  private boolean activeEditor=true;//FKH 021024
+  public boolean isActive () { return activeEditor;}
+//FKH  public boolean isActive () { return table.isEnabled (); }
+
+  public StringBuffer saveStringBuffer () {
+    StringBuffer txt = new StringBuffer();
+    txt.append("<PageComment><![CDATA["+pageCommentField.getText()+"]]></PageComment>\n");
+    if (externalField!=null) {
+      txt.append("<ExternalApp><![CDATA["+externalField.getText().trim()+"]]></ExternalApp>\n");
+      if (externalBrowser!=null)
+        txt.append("<ExternalAppInfo><![CDATA["+externalBrowser.saveString().trim()+"]]></ExternalAppInfo>\n");
+    }
+    Vector data = tableModel.getDataVector();
+    for (int i=0; i<data.size(); i++) txt.append(printOneRow((Vector) data.get(i),commentList.elementAt(i)));
+    return txt;
+  }
+
+  private StringBuffer printOneRow (Vector _row, String _comment) {
+    StringBuffer buffer = new StringBuffer();  
+    buffer.append("<Variable>\n");
+    for (int j=0; j<columnNames.length; j++) {
+      if (j==valueColumn) buffer.append("<"+columnNames[j]+"><![CDATA["+_row.get(j).toString()+"]]></"+columnNames[j]+">\n");
+      else buffer.append("<"+columnNames[j]+">"+_row.get(j).toString()+"</"+columnNames[j]+">\n");
+    }
+    buffer.append("<Comment><![CDATA["+_comment+"]]></Comment>\n");
+    buffer.append("</Variable>\n");
+    return buffer;
+  }
+
+  private void readOneRow (String _input, int _position) {
+    Vector<Object> row = new Vector<Object>();
+    for (int i=0; i<columnNames.length; i++) {
+      String txt;
+      if (i==valueColumn)txt = OsejsCommon.getPiece(_input,"<"+columnNames[i]+"><![CDATA[","]]></"+columnNames[i]+">",false);
+      else txt = OsejsCommon.getPiece(_input,"<"+columnNames[i]+">","</"+columnNames[i]+">",false);
+      if (columnTypes[i].equals("BOOLEAN")) row.addElement(new Boolean(txt));
+      else row.addElement(txt);
+    }
+    if (_position<0) {
+      tableModel.addRow(row);
+      commentList.add(OsejsCommon.getPiece(_input,"<Comment><![CDATA[","]]></Comment>",false));
+    }
+    else {
+      tableModel.insertRow(_position, row);
+      commentList.add(_position,OsejsCommon.getPiece(_input,"<Comment><![CDATA[","]]></Comment>",false));
+    }
+  }
+  
+  public void readString (String _input) {
+    tableModel.setNumRows (0);
+    String pageComment = OsejsCommon.getPiece(_input,"<PageComment><![CDATA[","]]></PageComment>",false);
+    if (pageComment==null) pageCommentField.setText("");
+    else pageCommentField.setText(pageComment);
+    if (externalField!=null) {
+      String file = OsejsCommon.getPiece(_input,"<ExternalApp><![CDATA[","]]></ExternalApp>",false);
+      externalAdditionalInfo = OsejsCommon.getPiece(_input,"<ExternalAppInfo><![CDATA[","]]></ExternalAppInfo>",false);
+      // Backwards compatibility...
+      if (file==null) file = OsejsCommon.getPiece(_input,"<MatlabFile><![CDATA[","]]></MatlabFile>",false);
+      if (file==null) file = "";
+      setExternalFile(file);
+    }
+    int begin = _input.indexOf("<Variable>");
+    while (begin>=0) {
+      int end = _input.indexOf("</Variable>");
+      readOneRow (_input.substring(begin+10,end),-1);
+      _input = _input.substring(end+11);
+      begin = _input.indexOf("<Variable>\n");
+    }
+    activeRow = -1;
+    table.repaint(table.getBounds(null));
+  }
+
+  public void updateControlValues () {
+    for (int i=0,n=tableModel.getRowCount(); i<n; i++) checkValue(i);
+  }
+
+  public boolean updateTableValues (String _variable, String _value) {
+    if (control==null) return false;
+    Vector data = tableModel.getDataVector();
+    for (int i=0; i<data.size(); i++) {
+      Vector row = (Vector) data.get(i);
+      String name = row.get(nameColumn).toString().trim();
+      if (_variable.equals(name)) {
+        //if (ViewElement.isAnExpression (null,null,value) || control.isVariableRegistered (value)) {
+        if (!parentEditor.isAConstant (null,null,(String) row.get(valueColumn))) {
+          Object[] options =  { res.getString("EditorFor.Ok"), res.getString("EditorFor.Cancel")};
+          int option = JOptionPane.showOptionDialog(fullPanel,
+              res.getString("VariablesEditor.ValueIsExpression")+" "+_variable,
+              res.getString("Warning"),
+              JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+          if (option==1) return true;
+        }
+        tableModel.setValueAt (_value,i,valueColumn);
+        return true;
+      }
+    }
+    return false;
+  }
+
+ /**
+  * Sets the name for code generation
+  */
+  public void setPageCounter (int _n) { pageCounter = _n; }
+
+  public StringBuffer generateCode (int _type, String _info) {
+    if (!isActive()) return new StringBuffer();
+    //if (_type==Editor.GENERATE_JARS_NEEDED || _type==Editor.GENERATE_RESOURCES_NEEDED) {
+    if (_type==Editor.GENERATE_RESOURCES_NEEDED) {
+      if (externalBrowser!=null) return externalBrowser.generateCode (_type);
+      else return new StringBuffer();
+    }
+    StringBuffer code = new StringBuffer();
+    if (externalBrowser!=null) { // External code
+      if (_type==Editor.GENERATE_DECLARATION) {
+        String txt = externalField.getText().trim();
+        code.append("  private org.colos.ejs.external.ExternalApp _externalApp"+pageCounter+" = _external.add(");
+        code.append(externalBrowser.generateCode (_type));
+        code.append(",\""+txt+"\");\n");
+      }
+      else if (_type==Editor.GENERATE_EXTERNAL_INITIALIZATION) {
+        code.append("    if (_applicationFile.equals(\""+externalField.getText().trim()+"\")) {\n");
+        for (Enumeration e=externalBrowser.prepareInitCode().elements(); e.hasMoreElements();) {
+          code.append("      _external_initCommand.append(\""+((String)e.nextElement())+"\");\n");
+        }
+      }
+      else if (_type==Editor.GENERATE_EXTERNAL_IN || _type==Editor.GENERATE_EXTERNAL_OUT) {
+        code.append("    if (_any || _application==_externalApp"+pageCounter+") try {\n");
+        if (externalBrowser!=null) code.append(externalBrowser.addPreviousCode("_externalApp"+pageCounter,_type));
+      }
+    }
+    if (_info==null) _info = "";
+    else _info=res.getString(_info);//FKH 011020
+    Vector data = tableModel.getDataVector();
+
+    _externalVariables=""; //// Gonzalo 060420
+
+    for (int i=0; i<data.size(); i++) {
+      Vector row = (Vector) data.get(i);
+      String name      = row.get(nameColumn).toString();
+      if (name.trim().length()<=0) continue;
+      String type      = row.get(typeColumn).toString();
+      String dimension = row.get(dimensionColumn).toString();
+      String value     = row.get(valueColumn).toString().trim();
+      java.util.StringTokenizer tkn = new java.util.StringTokenizer(dimension,"[] ");
+      int dim = tkn.countTokens();
+      java.util.StringTokenizer tknIndexes = new java.util.StringTokenizer(name,"[] ");
+      int dimIndex = tknIndexes.countTokens();
+      String lineOfIndexes = null;
+      if (dimIndex>1) {
+        name = tknIndexes.nextToken();
+        lineOfIndexes = tknIndexes.nextToken();
+        while (tknIndexes.hasMoreTokens()) lineOfIndexes += ","+tknIndexes.nextToken();
+        if ((dimIndex-1)!=dim) System.out.println ("Syntax error in variable name "+row.get(nameColumn).toString());
+      }
+      String connected="";
+      if (externalBrowser!=null) connected = row.get(connectedColumn).toString().trim();
+      if (connected.length()>0)  _externalVariables=_externalVariables+","+connected; //// Gonzalo 060420
+      String line = "";
+      if (_type==Editor.GENERATE_INFO) {
+        line += "    if (_name.equals(\""+name+"\")) return \""+commentList.elementAt(i)+"\";";
+      }
+      else if (_type==Editor.GENERATE_LIST_VARIABLES) {
+        line += type;
+        for (int k=0; k<dim; k++) line += "[]";
+        line += ":"+name+" : "+type+dimension+" : "+commentList.elementAt(i)+"\n";
+      }
+      else if (_type==Editor.GENERATE_DECLARATION) {
+        line += "  public " + type +" "+name+" ";
+        if (dim>0) {
+          for (int k = 0; k < dim; k++) line += "[]";
+        }
+        else {
+          if (value.length()>0) line += " = "+value;
+          else if (type.equals("String")) line += " = \"\"";
+          else if (type.equals("Object")) line += " = null";
+        }
+        line += "; // "+ _info + "." + getName() + ":" + (i+1);
+      }
+      else if (_type==Editor.GENERATE_VIEW_INITIALIZE) {
+        line += "    setValue(\""+name+"\",_model."+name+")";
+        line += "; // "+ _info + "." + getName() + ":" + (i+1);
+      }
+      else if (_type==Editor.GENERATE_VIEW_UPDATE) {
+        line += "    setValue(\""+name+"\",_model."+name+")";
+        line += "; // "+ _info + "." + getName() + ":" + (i+1);
+      }
+      else if (_type==Editor.GENERATE_VIEW_LISTENERS) {
+        line += "    addListener(\""+name+"\",\"apply(\\\""+name+"\\\")\")";
+        line += "; // "+ _info + "." + getName() + ":" + (i+1);
+      }
+      else if (_type==Editor.GENERATE_VIEW_READ || _type==Editor.GENERATE_VIEW_READ_ONE) {
+        if (_type==Editor.GENERATE_VIEW_READ_ONE) line += "    if (\""+name+"\".equals(_variable)) ";
+        else line += "    ";
+        if (dim>0) {  // This is necessary to make sure that model and view
+                      // keep separate, independent data (specially arrays)
+          String dimTxt = ""; for (int k=0; k<dim; k++) dimTxt += "[]";
+          String space = "      ";
+          line += "{\n"
+               +  space+type+dimTxt+" _data = (" + type+dimTxt+") getValue(\"" + name + "\").getObject();\n";
+          dimTxt = "";
+          for (int c=0; c<dim; c++, dimTxt += "[_i"+(c-1)+"]" ) {
+            line += space+ "int _n"+c+" = _data"+dimTxt+".length;\n";
+            line += space+ "if (_n"+c+">_model."+name+dimTxt+".length) _n"+c+" = _model."+name+dimTxt+".length;\n";
+            line += space+ "for (int _i"+c+"=0; _i"+c+"<_n"+c+"; _i"+c+"++) {\n";
+            space += "  ";
+          }
+          line += space+"_model."+name+dimTxt+" = _data"+dimTxt+";\n";
+          for (int k=0; k<dim; k++) {
+            if (space.length()>2) space = space.substring(2);
+            line += space+"}\n";
+          }
+          if (space.length()>2) space = space.substring(2);
+          line += space+"}";
+        }
+        else {
+          line += "_model."+name+" = ";
+          if      (type.equals("boolean")) line += "getBoolean";
+          else if (type.equals("char"))    line += "(char) getInt";
+          else if (type.equals("byte"))    line += "(byte) getInt";
+          else if (type.equals("short"))   line += "(short) getInt";
+          else if (type.equals("int"))     line += "getInt";
+          else if (type.equals("long"))    line += "(long) getDouble";
+          else if (type.equals("float"))   line += "(float) getDouble";
+          else if (type.equals("double"))  line += "getDouble";
+          else if (type.equals("String"))  line += "getString";
+          else if (type.equals("Object"))  line += "getObject";
+          else line += "("+type+") getObject";
+          line += "(\""+name+"\"); // "+ _info + "." + getName() + ":" + (i+1);
+        }
+      }
+      else if (_type==Editor.GENERATE_CODE) {
+        if (dim>0) {
+          line += "    "+name+" = new "+type+" ";
+          if (value.startsWith("{")) {
+            while (tkn.hasMoreTokens()) { line += "[]"; tkn.nextToken(); }
+          }
+          else {
+            while (tkn.hasMoreTokens()) line += "[" + tkn.nextToken() + "]";
+            line += "; // " + _info + "." + getName() + ":" + (i + 1);
+          }
+        }
+        if (value.length()>0) {
+          if (dim==0) line += "    "+name +" = "+value;
+          else if (value.startsWith("{")) {
+            line += " " + value;
+          }
+          else {
+            int c = 0;
+            tkn = new java.util.StringTokenizer(dimension,"[] ");
+            if (lineOfIndexes!=null) tknIndexes = new java.util.StringTokenizer(lineOfIndexes,",");
+            String indexStr;
+            while (tkn.hasMoreTokens()) {
+              if (dimIndex>1) indexStr = tknIndexes.nextToken();
+              else indexStr = "_i"+c;
+              line += "\n    for (int "+indexStr+"=0; "+indexStr+"<"+tkn.nextToken()+"; "+indexStr+"++) ";
+              c++;
+            }
+            line += name+" ";
+            c = 0;
+            if (lineOfIndexes!=null) tknIndexes = new java.util.StringTokenizer(lineOfIndexes,",");
+            for (int k=0; k<dim; k++, c++) {
+              if (dimIndex>1) indexStr = tknIndexes.nextToken();
+              else indexStr = "_i"+c;
+              line += "["+indexStr+"]";
+            }
+            line += " = "+value;
+          }
+          line += "; // "+ _info + "." + getName() + ":" + (i+1);
+        }
+      }
+      else if (_type==Editor.GENERATE_DESTRUCTION) {
+        if (dim>0) line += "    " + name + " = null;  // "+ _info + "." + getName() + ":" + (i+1);
+      }
+      else if (_type==Editor.GENERATE_SAVE_STATE) {
+        if      (type.equals("boolean")) line += "    _output.writeBoolean("+name+"); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("char"))    line += "    _output.writeChar("   +name+"); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("byte"))    line += "    _output.writeByte("   +name+"); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("short"))   line += "    _output.writeShort("  +name+"); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("int"))     line += "    _output.writeInt("    +name+"); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("long"))    line += "    _output.writeLong("   +name+"); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("float"))   line += "    _output.writeFloat("  +name+"); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("double"))  line += "    _output.writeDouble(" +name+"); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("String"))  line += "    _output.writeUTF("    +name+"); // "+ _info + "." + getName() + ":" + (i+1);
+// Objects are NOT saved
+//        else if (type.equals("Object"))  line += "    _output.writeUTF("+name+".toString())";
+//        else                             line += "    _output.writeUTF("+name+".toString())";
+//        line += "; // "+ _info + "." + getName() + ":" + (i+1);
+      }
+      else if (_type==Editor.GENERATE_READ_STATE) {
+        if      (type.equals("boolean")) line += "    " + name + " = _input.readBoolean(); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("char"))    line += "    " + name + " = _input.readChar(); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("byte"))    line += "    " + name + " = _input.readByte(); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("short"))   line += "    " + name + " = _input.readShort(); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("int"))     line += "    " + name + " = _input.readInt(); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("long"))    line += "    " + name + " = _input.readLong(); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("float"))   line += "    " + name + " = _input.readFloat(); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("double"))  line += "    " + name + " = _input.readDouble(); // "+ _info + "." + getName() + ":" + (i+1);
+        else if (type.equals("String"))  line += "    " + name + " = _input.readUTF(); // "+ _info + "." + getName() + ":" + (i+1);
+// Objects are NOT read
+//        else if (type.equals("Object"))  line += "    " + name + " = _input.readUTF()";
+//        else                             line += "    " + name + " = _input.readUTF()";
+//        line += "; // "+ _info + "." + getName() + ":" + (i+1);
+      }
+      else if (_type==Editor.GENERATE_EXTERNAL_INITIALIZATION) {
+        if (externalBrowser!=null) {
+          double doubleValue=Double.NaN;
+          if (expressionValue==null) expressionValue = new ExpressionValue ("0.0",control);
+          expressionValue.setExpression(value);
+          try { doubleValue = expressionValue.getDouble(); }
+          catch (Exception _exc) { System.out.println ("Error produced by value = "+value); doubleValue = Double.NaN; }
+          Vector buffer = externalBrowser.addToInitCode(name,connected,doubleValue);
+          if (buffer!=null) for (Enumeration e=buffer.elements(); e.hasMoreElements();) {
+            line += "      _external_initCommand.append(\""+((String)e.nextElement())+"\");\n";
+          }
+        }
+      }
+      else if (_type==Editor.GENERATE_EXTERNAL_IN) {
+        if (externalBrowser!=null) line += externalBrowser.addToInputCode(name,type,dim,connected,
+                                                  "_externalApp"+pageCounter,_info + "." + getName() + ":" + (i+1));
+      }
+      else if (_type==Editor.GENERATE_EXTERNAL_OUT) {
+        if (externalBrowser!=null) line += externalBrowser.addToOutputCode(name,type,dim,connected,
+                                                  "_externalApp" + pageCounter,_info + "." + getName() + ":" + (i+1));
+      }
+      if (line.trim().length()>0) code.append(line +"\n");
+    }
+
+    if (externalBrowser!=null) { // External code
+      if (_type==Editor.GENERATE_EXTERNAL_OUT) {
+        if (externalBrowser!=null) code.append(externalBrowser.addPostCode("_externalApp"+pageCounter,_type));
+        code.append("    }\n"
+                   +"    catch (Exception _exc) {\n"
+                   +"      System.err.println (\"Error while reading external variables!\");\n"
+                   +"      _exc.printStackTrace(System.err);\n"
+                   +"    }\n");
+      }
+      else if (_type==Editor.GENERATE_EXTERNAL_IN)  {
+        if (externalBrowser!=null) code.append(externalBrowser.addPostCode("_externalApp"+pageCounter,_type));
+        code.append("    }\n"
+                   +"    catch (Exception _exc) {\n"
+                   +"      System.err.println (\"Error while writing external variables!\");\n"
+                   +"      _exc.printStackTrace(System.err);\n"
+                   +"    }\n");
+      }
+      else if (_type==Editor.GENERATE_EXTERNAL_INITIALIZATION)  {
+        if (_externalVariables.length()>0)// Gonzalo 060420
+          code.append(" _external_initCommand.append(\""+_externalVariables.substring(1)+"\");");
+        code.append("    }\n");
+      }
+    }
+    return code;
+  }
+
+  // -----------------------------------
+  // Private methods
+  // -----------------------------------
+
+  private  void addEmptyRow (boolean before) {
+    Vector newRow = new Vector(emptyRow);
+    if (activeRow!=-1) {
+      Vector data = tableModel.getDataVector();
+      if (activeRow<data.size()) newRow = new Vector ((Vector) data.get(activeRow));
+    }
+    newRow.remove (nameColumn);  newRow.insertElementAt ("",nameColumn);
+    newRow.remove (valueColumn); newRow.insertElementAt ("",valueColumn);
+    if (connectedColumn>=0) {
+      newRow.remove(connectedColumn);
+      newRow.insertElementAt("", connectedColumn);
+    }
+    synchronized(tableModel) {
+      if (before) {
+        if (activeRow<1) { commentList.add(0,""); tableModel.insertRow (0,newRow); }
+        else { commentList.add(activeRow,""); tableModel.insertRow (activeRow,newRow); }
+      }
+      else {
+        if (activeRow<0) { tableModel.addRow (newRow); commentList.add(""); }
+        else { tableModel.insertRow (activeRow+1,newRow); commentList.add(activeRow+1,""); }
+      }
+    }
+  }
+
+  private void removeRow () {
+    if (activeRow==-1) return;
+    int row = activeRow;
+    tableModel.setValueAt("",row,valueColumn);
+    tableModel.removeRow (row);
+    commentList.remove (row);
+    commentField.setText ("");
+    commentField.setEditable (false);
+    // if (activeRow==(tableModel.getRowCount()-1)) addEmptyRow();
+    activeRow = -1;
+  }
+  
+  private void moveRowTo (int origin, int dest) {
+    tableModel.moveRow(origin,origin,dest);
+    String comment = commentList.get(origin);
+    commentList.remove(origin);
+    commentList.add(dest,comment);
+    table.getSelectionModel().setSelectionInterval(dest,dest);
+  }
+
+  private void moveUp () {
+    if (activeRow<1) return;
+    moveRowTo(activeRow,--activeRow);
+  }
+
+  private void moveDown () {
+    if (activeRow>=tableModel.getColumnCount()-1) return;
+    moveRowTo(activeRow,++activeRow);
+  }
+
+  private void copySelection (boolean _remove) {
+    ListSelectionModel lsm = table.getSelectionModel();
+    int min = lsm.getMinSelectionIndex(), max = lsm.getMaxSelectionIndex();
+    if (min<0 || max>tableModel.getRowCount()) return; // No rows selected
+    Vector data = tableModel.getDataVector();
+    StringBuffer fragment = new StringBuffer();
+    fragment.append("<VariablesFragment>\n");
+    for (int i=min; i<=max; i++) {
+      fragment.append(printOneRow((Vector) data.get(i),commentList.elementAt(i)));
+      if (_remove) tableModel.removeRow(i);
+    }
+    fragment.append("</VariablesFragment>\n");
+    Clipboard theClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+    VariablesSelection selection = new VariablesSelection(fragment.toString());
+    theClipboard.setContents(selection,null);
+    if (_remove) {
+      activeRow = -1;
+      table.repaint(table.getBounds(null));
+    }
+  }
+
+  private void pasteSelection () {
+    Clipboard theClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+    Transferable contents = theClipboard.getContents(null);
+    DataFlavor flavor = VariablesSelection.variablesFlavor;
+    if (contents.isDataFlavorSupported(flavor)) {
+      try {
+        String input = (String) contents.getTransferData(flavor); 
+        int position = activeRow;
+        int min = position==-1 ? activeRow : tableModel.getRowCount();
+        int max = min;
+        int begin = input.indexOf("<Variable>");
+        while (begin>=0) {
+          int end = input.indexOf("</Variable>");
+          readOneRow (input.substring(begin+10,end),position);
+          input = input.substring(end+11);
+          begin = input.indexOf("<Variable>\n");
+          if (position!=-1) position++;
+          max++;
+        }
+        activeRow = -1;
+        table.getSelectionModel().setSelectionInterval(min, max);
+        table.repaint(table.getBounds(null));
+      }
+      catch (Exception exc) { exc.printStackTrace(); };
+    }
+  }
+
+  private void connectTo () {
+    if (activeRow==-1) return;
+    String option = externalBrowser.edit("External",(String) table.getValueAt(activeRow,nameColumn),
+                                         table, (String) table.getValueAt(activeRow,connectedColumn));
+    if (option!=null) {
+      table.setValueAt(option,activeRow,connectedColumn);
+      changed = true;
+    }
+  }
+
+  private void setExternalFile (String _file) {
+    if (_file==null) {
+      externalBrowser=BrowserForExternal.readFile("",control.getUserCodebase());
+      externalField.setText(externalFile = "");
+      externalField.setBackground (Color.white);
+    }
+    else {
+      _file = _file.trim();
+      //Avoid to eliminate previous reference. Gonzalo 060520
+      String externalFileBefore=externalField.getText().trim();
+      if (_file.compareTo(externalFileBefore)==0) externalFileBefore="";
+      if (externalFileBefore.indexOf('>')>=0) externalFileBefore=externalFileBefore.substring (0,externalFileBefore.indexOf('>')+1);
+      else externalFileBefore="";
+      externalField.setText(externalFile = externalFileBefore + _file);
+      externalBrowser = BrowserForExternal.readFile (externalFile,control.getUserCodebase());
+
+      if (externalAdditionalInfo!=null) {
+        externalBrowser.readString(externalAdditionalInfo);
+        externalAdditionalInfo=null;
+      }
+      if (externalBrowser.fileExists()) externalField.setBackground (Color.white);
+      else {
+        externalField.setBackground (Color.red);
+        JOptionPane.showMessageDialog(externalField, res.getString("VariablesEditor.ErrorReadingExternalFile")+" "+_file,
+          res.getString("Osejs.File.ReadingError"), JOptionPane.INFORMATION_MESSAGE);
+      }
+    }
+    changed = true;
+  }
+
+  private JLabel rendererAt (int row) {
+    int size = renderLabelList.length;
+    if (row>=size) {
+      JLabel[] newList = new JLabel[size+10];
+      System.arraycopy(renderLabelList,0,newList,0,size);
+      renderLabelList = newList;
+      boolean[] newCorrect = new boolean[size+10];
+      System.arraycopy(renderCorrect,0,newCorrect,0,size);
+      renderCorrect = newCorrect;
+    }
+    JLabel label = renderLabelList[row];
+    if (label==null) {
+      renderLabelList[row] = label = new DefaultTableCellRenderer();
+      renderCorrect[row] = true;
+      label.setFont(table.getFont());
+    }
+    return label;
+  }
+
+  /**
+   * Checks whether the value at the given psition is of the right type
+   */
+  private void checkValue (int row) {
+    String name = ((String) tableModel.getValueAt(row,nameColumn)).trim();
+    String type = ((String) tableModel.getValueAt (row,typeColumn)).trim();
+    String valueStr = ((String) tableModel.getValueAt (row,valueColumn)).trim();
+    Value value = parentEditor.checkJavaExpression(valueStr,type);
+    boolean isCorrect = TabbedVariablesEditor.isValidType(value,type);
+    rendererAt(row); // make sure the label is created
+    renderCorrect[row] = isCorrect;
+    if (isCorrect) control.setValue(name,value,true); // true = is a model variable
+    //else control.setValue(name,control.checkJavaExpression("",type),true);
+    tableModel.setValueAt(valueStr,row,valueColumn); // refresh color
+  }
+
+  // -----------------------------------
+  // Private classes
+  // -----------------------------------
+
+  private class MyRenderer implements TableCellRenderer {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+      JLabel label = rendererAt(row);
+      label.setText(value.toString());
+      if (renderCorrect[row]) {
+        if (isSelected) label.setBackground(table.getSelectionBackground());
+        else label.setBackground(table.getBackground());
+      }
+      else label.setBackground(errorColor);
+      return label;
+    }
+  }
+
+  private class MyTableModel extends DefaultTableModel {
+    public MyTableModel (String[] columnNickNames,int i) { 	super (columnNickNames,i); }
+    public Class getColumnClass (int c) { return emptyRow.get(c).getClass();}
+    public void setValueAt(Object value, int row, int col) {
+      super.setValueAt (value,row,col);
+      if (col==nameColumn && row==(tableModel.getRowCount()-1)) addEmptyRow(false);
+
+//      if (col==typeColumn) setValueAt(getValueAt(row,valueColumn),row,valueColumn);
+    }
+
+  } // end of class MyDefaultTableModel
+
+  private class MLSL implements ListSelectionListener {
+    public void valueChanged(ListSelectionEvent lse) {
+      ListSelectionModel lsm = (ListSelectionModel) lse.getSource();
+      /*
+      if (activeRow!=-1) {
+        System.out.println ("Here for row "+activeRow);
+        commentList.set (activeRow,commentField.getText());
+        commentField.setBackground(Color.white);
+      }
+      */
+      int min = lsm.getMinSelectionIndex(), max = lsm.getMaxSelectionIndex();
+      if (min<0 || max>tableModel.getRowCount() || min!=max) { // No selection or multiple selection
+        activeRow = -1;
+        commentField.setText ("");
+        commentField.setEditable (false);
+      }
+      else { // single selection
+        activeRow = min;
+        if (activeRow!=-1) {
+          commentField.setText ((String) commentList.elementAt (activeRow));
+          commentField.setEditable (true);
+        }
+      }
+    }
+  } // end of class MLSL
+  private class MyDocumentListener implements DocumentListener {
+    JComponent component;
+    
+    MyDocumentListener(JComponent comp) { component = comp; }
+    public void changedUpdate(DocumentEvent e) { changed = true; component.requestFocus(); }
+    public void insertUpdate(DocumentEvent e)  { changed = true; component.requestFocus(); }
+    public void removeUpdate(DocumentEvent e)  { changed = true; component.requestFocus(); }
+  };
+
+  class RowSearchResult extends SearchResult {
+    // lineNumber is the row number
+    // caretPosition is the column
+    public RowSearchResult (String anInformation, String aText, int aLineNumber, int aCaretPosition) {
+      super (anInformation,aText,null,aLineNumber,aCaretPosition);
+    }
+
+    public void show () {
+      parentEditor.showPage(VariablesEditor.this);
+      table.requestFocusInWindow();
+      table.setRowSelectionInterval(lineNumber,lineNumber);
+      table.setColumnSelectionInterval(caretPosition,caretPosition);
+    }
+  }
+
+} // end of class

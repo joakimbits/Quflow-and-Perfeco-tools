@@ -1,0 +1,45 @@
+/*Rectangle.java
+ *CS193J
+ *Summer 2001
+ */
+
+import java.awt.*;
+import java.awt.event.*;
+
+/** Constructs a rectangle object*/
+
+public class Rectangle extends Shape {
+
+  public Rectangle (int x1, int y1, int x2, int y2) {
+    super (x1,y1,x2,y2);
+  }
+
+    /** Creates a copy of Rectangle object*/
+
+  public Object clone () {
+      Rectangle r = new Rectangle(x1, y1, x2, y2);
+      r.setLocation (getLocation());
+      r.setSelectState (getSelectState());
+      return r;
+      //    return null;
+  }
+
+
+  public void paint (Graphics g) {
+   
+      super.paint(g);
+      
+      if (GlobalDebug.isOn) 
+	  System.out.println ("Rectangle.paint()");
+    
+      g.setColor (Color.black);
+      
+      //   if (y1 <= y2) {
+      g.drawRect (0,0,Math.abs(x2-x1)-1,Math.abs(y2-y1)-1);
+	  //}
+	  //else {
+	  //g.drawRect (0,y1-y2-1,x2-x1-1,0);
+	  // }
+  }
+    
+}

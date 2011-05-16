@@ -1,0 +1,29 @@
+package org.colos.ejs.osejs.edition.variables;
+
+import org.colos.ejs.model_elements.ModelElement;
+
+/**
+ * Stores information about a model element
+ * @author Paco
+ *
+ */
+public class ModelElementInformation {
+
+  private ModelElement element;
+  private int position=-1; // the position in the list of added elements (-1 if is an addition)
+  private String jarPath; // The path of the jar file where this model element is defined (can be null if the jar file is in the default classpath)
+
+  public ModelElementInformation (ModelElement _element, String _path) { 
+    element = _element;
+    jarPath = _path;
+  }
+  
+  public ModelElement getElement() { return element; }
+
+  public void setPosition(int _pos) { position = _pos; }
+
+  public int getPreviousPosition() { return position; }
+  
+  public String getJarPath() { return jarPath; }
+  
+}

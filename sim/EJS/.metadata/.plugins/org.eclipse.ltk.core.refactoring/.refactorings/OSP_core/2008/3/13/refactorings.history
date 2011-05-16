@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;checkBox&apos; in &apos;org.opensourcephysics.tools.EjsTool.doRunEjs(...)&apos; to &apos;quitCheckBox&apos;&#x0D;&#x0A;- Original project: &apos;OSP_core&apos;&#x0D;&#x0A;- Original element: &apos;org.opensourcephysics.tools.EjsTool.doRunEjs(String, List&lt;String&gt;, Class&lt;?&gt;).checkBox&apos;&#x0D;&#x0A;- Renamed element: &apos;org.opensourcephysics.tools.EjsTool.doRunEjs(String, List&lt;String&gt;, Class&lt;?&gt;).quitCheckBox&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;checkBox&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;org.opensourcephysics.tools{EjsTool.java" name="quitCheckBox" references="true" selection="10047 8" stamp="1206810464144" version="1.0"/>
+</session>

@@ -1,0 +1,818 @@
+/**
+ * Copyright (c) February 2006 F. Esquembre
+ * Last updated: April 2008
+ * @author F. Esquembre (http://fem.um.es).
+ */
+
+package org.colos.ejs.osejs.edition;
+
+import java.util.*;
+import java.awt.*;
+import java.awt.event.*;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.*;
+import javax.swing.text.JTextComponent;
+
+import org.colos.ejs.control.editors.EditorForFile;
+import org.colos.ejs.osejs.*;
+import org.colos.ejs.osejs.edition.html.HtmlEditor;
+import org.colos.ejs.osejs.utils.*;
+import org.opensourcephysics.tools.*;
+import org.opensourcephysics.tools.minijar.PathAndFile;
+import org.colos.ejs.control.editors.EditorForString;
+
+public class SimInfoEditor {
+  static private ResourceUtil res = new ResourceUtil ("Resources");
+  static private ResourceUtil sysRes = new ResourceUtil ("SystemResources");
+  static private final String TITLE = res.getString("SimInfoEditor.InfoFor").trim()+" ";
+  static private final int COLUMNS = res.getInteger("SimInfoEditor.FieldWidth");
+
+  private boolean changed=false, editable=true;
+  private JTextComponent titleField, levelField, authorField, keyField, passwordField, abstractField, languageField, execPasswordField;
+  private JComboBox auxFilesCB, detectedAuxFilesCB;
+  private JDialog editorDialog = null;
+  private Osejs ejs;
+  
+  private JButton jarsAddButton, jarsEditButton, jarsRemoveButton;
+  private JButton importsAddButton, importsEditButton, importsRemoveButton;
+  private JButton removeAuxFilesB;
+  private JComboBox jarsCombo, importsCombo;
+  private JCheckBox translatorToolCB, dataToolCB, captureToolCB,interpreterCB, emersionCB;
+  private JTabbedPane tabbedPanel;
+  private String[] importStatements = new String[] { "java.lang.*" };
+
+  public String getAuthor() { return authorField.getText().trim(); }
+
+  // ----------------------------------------------
+  // Static method required to build the interface
+  // ----------------------------------------------
+  
+  static final javax.swing.border.EmptyBorder BORDER_BOTTOM = new javax.swing.border.EmptyBorder(4,2,0,2);
+  static final javax.swing.border.EmptyBorder BORDER_STD = new javax.swing.border.EmptyBorder(0,0,0,0);
+  
+  static JPanel makeLabel (String _label, Set<JComponent> _labelSet) {
+    JLabel label = new JLabel(res.getString(_label), SwingConstants.RIGHT);
+    //label.setPreferredSize(LABEL_SIZE);
+    if (_labelSet!=null) _labelSet.add(label);
+    label.setBorder(BORDER_BOTTOM);
+    JPanel toppanel = new JPanel(new BorderLayout());
+    toppanel.add(label, BorderLayout.NORTH);
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.setBorder(BORDER_STD);
+    panel.add(toppanel, BorderLayout.WEST);
+    return panel;
+  }
+
+  static JTextComponent makeField (Container _parent, DocumentListener _dl, int _lines, int _cols) {
+    if (_lines<2) {
+      JTextField field = new JTextField(_cols);
+      field.getDocument().addDocumentListener(_dl);
+      _parent.add(field, BorderLayout.CENTER);
+      return field;
+    }
+    JTextArea area = new JTextArea(_lines, _cols);
+    area.getDocument().addDocumentListener(_dl);
+    area.setLineWrap(true);
+    area.setWrapStyleWord(true);
+    JScrollPane scroll = new JScrollPane (area);
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.setBorder(new javax.swing.border.EmptyBorder(0,0,0,0));
+    panel.add(scroll, BorderLayout.CENTER);
+    //scroll.setBorder(BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+    _parent.add(panel, BorderLayout.CENTER);
+    return area;
+  }
+
+  /**
+   * Constructor
+   * @param _ejs
+   * @param _button
+   */
+  public SimInfoEditor (Osejs _ejs) {
+    ejs = _ejs;
+
+    DocumentListener dl = new DocumentListener() {
+      public void changedUpdate (DocumentEvent evt) { changed = true; }
+      public void insertUpdate (DocumentEvent evt)  { changed = true; }
+      public void removeUpdate (DocumentEvent evt)  { changed = true; }
+    };
+
+    Set<JComponent> labelSet = new HashSet<JComponent>();
+    Set<JComponent> labelSet2 = new HashSet<JComponent>();
+    Set<JComponent> labelSet3 = new HashSet<JComponent>();
+    
+    JPanel titlePanel = makeLabel ("SimInfoEditor.Title",labelSet);
+    titleField = makeField (titlePanel,dl,1,COLUMNS);
+
+    JPanel authorPanel = makeLabel ("SimInfoEditor.Author",labelSet);
+    authorField = makeField (authorPanel,dl,1,COLUMNS);
+
+    JPanel keyPanel = makeLabel ("SimInfoEditor.Keywords",labelSet);
+    keyField = makeField (keyPanel,dl,1,COLUMNS);
+
+    JPanel passwordPanel = makeLabel ("SimInfoEditor.Password",null);
+    passwordField = makeField (passwordPanel,dl,1,COLUMNS);
+
+    JPanel execPasswordPanel = makeLabel ("SimInfoEditor.ExecutionPassword",null);
+    execPasswordField = makeField (execPasswordPanel,dl,1,COLUMNS);
+
+    JPanel levelPanel = makeLabel ("SimInfoEditor.Level",labelSet);
+    levelField = makeField (levelPanel,dl,1,COLUMNS);
+
+    JPanel languagePanel = makeLabel ("SimInfoEditor.Language",labelSet);
+    languageField = makeField (languagePanel,dl,1,COLUMNS);
+
+    JPanel abstractPanel = makeLabel ("SimInfoEditor.Abstract",labelSet);
+    abstractField = makeField (abstractPanel,dl,7,COLUMNS);
+
+    Insets nullInset = new Insets(0,0,0,0);
+
+    detectedAuxFilesCB = new JComboBox();
+    detectedAuxFilesCB.setEditable(false);
+
+    JButton detectedRefreshB = new JButton (ResourceLoader.getIcon(sysRes.getString("SimInfoEditor.Refresh.Icon")));
+    detectedRefreshB.setToolTipText(res.getString("SimInfoEditor.FindAuxiliaryFiles"));
+    detectedRefreshB.setRequestFocusEnabled(false);
+    detectedRefreshB.setMargin(nullInset);
+    detectedRefreshB.addActionListener(new ActionListener(){
+      public void actionPerformed(ActionEvent _evt) { detectAuxiliaryFiles(); }
+    });
+    
+    JPanel detectedPanel = makeLabel ("SimInfoEditor.AuxiliaryFiles",labelSet2);
+    detectedPanel.add(detectedAuxFilesCB,BorderLayout.CENTER);
+    detectedPanel.add(detectedRefreshB,BorderLayout.EAST);
+
+    auxFilesCB = new JComboBox();
+    auxFilesCB.setEditable(false);
+    
+    JButton addAuxFilesB = new JButton (ResourceLoader.getIcon(sysRes.getString("EjsOptions.Add.Icon")));
+    addAuxFilesB.setToolTipText(res.getString("SimInfoEditor.AddAuxiliaryFile"));
+    addAuxFilesB.setRequestFocusEnabled(false);
+    addAuxFilesB.setMargin(nullInset);
+    addAuxFilesB.addActionListener(new ActionListener () {
+      public void actionPerformed(ActionEvent _evt) {
+        String[] files =  org.colos.ejs.control.editors.EditorForFile.edit (ejs,auxFilesCB,null,true,true); // true = multipleFiles + allowDirs
+        if (files==null) return;
+        for (int i=0; i<files.length; i++) {
+          auxFilesCB.removeItem(files[i]); // So that not to repeat
+          auxFilesCB.addItem(files[i]);
+        }
+        if (files.length>0) auxFilesCB.setSelectedItem(files[0]); // Make the last one visible
+        removeAuxFilesB.setEnabled(editable);
+        changed = true;
+      }
+    });
+
+    removeAuxFilesB = new JButton (ResourceLoader.getIcon(sysRes.getString("EjsOptions.Remove.Icon")));
+    removeAuxFilesB.setToolTipText(res.getString("SimInfoEditor.RemoveAuxiliaryFile"));
+    removeAuxFilesB.setRequestFocusEnabled(false);
+    removeAuxFilesB.setMargin(nullInset);
+    removeAuxFilesB.addActionListener(new ActionListener () {
+      public void actionPerformed(ActionEvent _evt) {
+        auxFilesCB.removeItemAt(auxFilesCB.getSelectedIndex());
+        removeAuxFilesB.setEnabled(editable && auxFilesCB.getItemCount()>0);
+        changed = true;
+      }
+    });
+    removeAuxFilesB.setEnabled(false);
+
+    JPanel auxFilesButtonsPanel = new JPanel (new GridLayout(1,0));
+    auxFilesButtonsPanel.add(addAuxFilesB);
+    auxFilesButtonsPanel.add(removeAuxFilesB);
+    
+    JPanel auxPanel = makeLabel ("SimInfoEditor.UserAdded",labelSet2);
+    auxPanel.add(auxFilesCB,BorderLayout.CENTER);
+    auxPanel.add(auxFilesButtonsPanel,BorderLayout.EAST);
+
+    // ----------------------------------
+    // The bottom line at the 'Custom' panel that allows to add libraries to the class path
+    
+    jarsCombo = new JComboBox();
+    jarsCombo.setEditable(false);
+
+    ActionListener jarsListener = new ActionListener() {
+      public void actionPerformed (java.awt.event.ActionEvent evt) {
+        String cmd = evt.getActionCommand();
+        if (cmd.equals("deleteJar") && jarsCombo.getItemCount()>0) {
+          jarsCombo.removeItemAt(jarsCombo.getSelectedIndex());
+          jarsEditButton.setEnabled(jarsCombo.getItemCount()>0);
+          jarsRemoveButton.setEnabled(jarsCombo.getItemCount()>0);
+          changed = true;
+        }
+        else if (cmd.equals("addJar") || cmd.equals("editJar")) {
+          String[] files =  EditorForFile.edit (ejs,jarsAddButton,"library",true,false);
+          if (files!=null) {
+            if (cmd.equals("editJar")) jarsCombo.removeItem(jarsCombo.getSelectedItem());
+            for (int i=0; i<files.length;i++) {
+              jarsCombo.removeItem(files[i]); // So that not to repeat
+              jarsCombo.addItem(files[i]);
+            }
+            if (files.length>0) jarsCombo.setSelectedItem(files[0]); // Make the first one visible
+            jarsEditButton.setEnabled(true);
+            jarsRemoveButton.setEnabled(true);
+            changed = true;
+          }
+        }
+        else if (cmd.equals("deleteImport") && importsCombo.getItemCount()>0) {
+          importsCombo.removeItemAt(importsCombo.getSelectedIndex());
+          importsEditButton.setEnabled(importsCombo.getItemCount()>0);
+          importsRemoveButton.setEnabled(importsCombo.getItemCount()>0);
+          updateImportStatements();
+          ejs.getModelEditor().getVariablesEditor().updateControlValues(false);
+          changed = true;
+        }
+        else if (cmd.equals("addImport") || cmd.equals("editImport")) {
+          String newImport="";
+//          if (cmd.equals("editImport")) newImport = JOptionPane.showInputDialog(importsAddButton,res.getString("Model.Library.ImportsEdit"),importsCombo.getSelectedItem());
+//          else newImport = JOptionPane.showInputDialog(importsAddButton,res.getString("Model.Library.NewImport"));
+
+          if (cmd.equals("editImport")) 
+            newImport = EditorForString.edit(res.getString("Model.Library.ImportsEdit"),importsCombo,importsCombo.getSelectedItem().toString());
+          else newImport = EditorForString.edit(res.getString("Model.Library.NewImport"),importsCombo,"");
+          
+          if (newImport!=null) {
+            if (cmd.equals("editImport")) importsCombo.removeItem(importsCombo.getSelectedItem());
+            importsCombo.addItem(newImport);
+            importsCombo.setSelectedItem(newImport);
+            importsEditButton.setEnabled(true);
+            importsRemoveButton.setEnabled(true);
+            updateImportStatements();
+            ejs.getModelEditor().getVariablesEditor().updateControlValues(false);
+            changed = true;
+          }
+        }
+      }
+    };
+
+    jarsAddButton = new JButton (ResourceLoader.getIcon(sysRes.getString("EjsOptions.Add.Icon"))); // " + ");
+    jarsAddButton.setToolTipText(res.getString("Model.Library.JarsAdd"));
+    jarsAddButton.setActionCommand("addJar");
+    jarsAddButton.addActionListener(jarsListener);
+    jarsAddButton.setMargin(nullInset);
+
+    jarsEditButton = new JButton (ResourceLoader.getIcon(sysRes.getString("EjsOptions.Edit.Icon"))); // " + ");
+    jarsEditButton.setToolTipText(res.getString("Model.Library.JarsEdit"));
+    jarsEditButton.setActionCommand("editJar");
+    jarsEditButton.addActionListener(jarsListener);
+    jarsEditButton.setMargin(nullInset);
+    jarsEditButton.setEnabled(false);
+
+    jarsRemoveButton = new JButton (ResourceLoader.getIcon(sysRes.getString("EjsOptions.Remove.Icon"))); // " + ");
+    jarsRemoveButton.setToolTipText(res.getString("Model.Library.JarsRemove"));
+    jarsRemoveButton.setActionCommand("deleteJar");
+    jarsRemoveButton.addActionListener(jarsListener);
+    jarsRemoveButton.setMargin(nullInset);
+    jarsRemoveButton.setEnabled(false);
+ 
+    JPanel jarsButtonsPanel = new JPanel (new GridLayout(1,0));
+    jarsButtonsPanel.add(jarsAddButton);
+    jarsButtonsPanel.add(jarsEditButton);
+    jarsButtonsPanel.add(jarsRemoveButton);
+    
+    JPanel jarsPanel = makeLabel ("Model.Library.JarsLabel",labelSet2);
+    jarsPanel.add(jarsCombo,BorderLayout.CENTER);
+    jarsPanel.add(jarsButtonsPanel,BorderLayout.EAST);
+
+    // -----------------------------------
+    // The bottom line at the 'Custom' panel that allows to add imports to the code
+
+    importsCombo = new JComboBox();
+    importsCombo.setEditable(false);
+
+    importsAddButton = new JButton (ResourceLoader.getIcon(sysRes.getString("EjsOptions.Add.Icon"))); // " + ");
+    importsAddButton.setToolTipText(res.getString("Model.Library.ImportsAdd"));
+    importsAddButton.setActionCommand("addImport");
+    importsAddButton.addActionListener(jarsListener);
+    importsAddButton.setMargin(nullInset);
+
+    importsEditButton = new JButton (ResourceLoader.getIcon(sysRes.getString("EjsOptions.Edit.Icon"))); // " + ");
+    importsEditButton.setToolTipText(res.getString("Model.Library.ImportsEdit"));
+    importsEditButton.setActionCommand("editImport");
+    importsEditButton.addActionListener(jarsListener);
+    importsEditButton.setMargin(nullInset);
+    importsEditButton.setEnabled(false);
+
+    importsRemoveButton = new JButton (ResourceLoader.getIcon(sysRes.getString("EjsOptions.Remove.Icon"))); // " + ");
+    importsRemoveButton.setToolTipText(res.getString("Model.Library.ImportsRemove"));
+    importsRemoveButton.setActionCommand("deleteImport");
+    importsRemoveButton.addActionListener(jarsListener);
+    importsRemoveButton.setMargin(nullInset);
+    importsRemoveButton.setEnabled(false);
+
+    JPanel importsButtonsPanel = new JPanel (new GridLayout(1,0));
+    importsButtonsPanel.add(importsAddButton);
+    importsButtonsPanel.add(importsEditButton);
+    importsButtonsPanel.add(importsRemoveButton);
+    
+    JPanel importsPanel = makeLabel ("Model.Library.ImportsLabel",labelSet2);
+    importsPanel.add(importsCombo,BorderLayout.CENTER);
+    importsPanel.add(importsButtonsPanel,BorderLayout.EAST);
+    
+    // ---------------------------
+    // Tools
+    // ---------------------------
+
+    java.awt.event.ItemListener itemListener = new java.awt.event.ItemListener() {
+      public void itemStateChanged (java.awt.event.ItemEvent _e) { changed = true; }
+    };
+
+    dataToolCB  = new JCheckBox(res.getString("EjsOptions.AddDataTools"), false);
+    dataToolCB.setRequestFocusEnabled(false);
+    dataToolCB.addItemListener(itemListener);
+
+    translatorToolCB  = new JCheckBox(res.getString("EjsOptions.AddTranslatorTool"), false);
+    translatorToolCB.setRequestFocusEnabled(false);
+    translatorToolCB.addItemListener(new java.awt.event.ItemListener() {
+      public void itemStateChanged (java.awt.event.ItemEvent _e) {
+        if (!translatorToolCB.isSelected()) ejs.getTranslationEditor().setVisible(false);
+        Vector<Editor> pageList = ejs.getDescriptionEditor().getPages();
+        for (java.util.Enumeration<Editor> e = pageList.elements(); e.hasMoreElements(); ) {
+          HtmlEditor htmlEditor = (HtmlEditor) e.nextElement();
+          htmlEditor.setAllowChangeLocale(translatorToolCB.isSelected());
+        }
+        changed = true; 
+      }
+    });
+
+    captureToolCB  = new JCheckBox(res.getString("EjsOptions.AddCaptureTools"), false);
+    captureToolCB.setRequestFocusEnabled(false);
+    captureToolCB.addItemListener(itemListener);
+    
+    emersionCB  = new JCheckBox(res.getString("EjsOptions.eMersionEnabled"), false);
+    emersionCB.setRequestFocusEnabled(false);
+    emersionCB.addItemListener(itemListener);
+
+    interpreterCB  = new JCheckBox(res.getString("EjsOptions.UseInterpreter"), true);
+    interpreterCB.setRequestFocusEnabled(false);
+    interpreterCB.addItemListener(itemListener);
+
+    // ---------------------------------
+    // Final adjustments
+    // ---------------------------------
+    
+   // Make all labels in teh first set the same dimension
+    int maxWidth = 0, maxHeight=0;
+    for (JComponent label : labelSet) {
+      maxWidth  = Math.max(maxWidth,  label.getPreferredSize().width);
+      maxHeight = Math.max(maxHeight, label.getPreferredSize().height);
+    }
+    Dimension dim = new Dimension (maxWidth,maxHeight);
+    for (JComponent label : labelSet) label.setPreferredSize(dim);
+
+    // Make all labels in teh second set the same dimension
+    maxWidth = 0;
+    maxHeight=0;
+    for (JComponent label : labelSet2) {
+      maxWidth  = Math.max(maxWidth,  label.getPreferredSize().width);
+      maxHeight = Math.max(maxHeight, label.getPreferredSize().height);
+    }
+    dim = new Dimension (maxWidth,maxHeight);
+    for (JComponent label : labelSet2) label.setPreferredSize(dim);
+
+    // Make all labels in teh second set the same dimension
+    maxWidth = 0;
+    maxHeight=0;
+    for (JComponent label : labelSet3) {
+      maxWidth  = Math.max(maxWidth,  label.getPreferredSize().width);
+      maxHeight = Math.max(maxHeight, label.getPreferredSize().height);
+    }
+    dim = new Dimension (maxWidth,maxHeight);
+    for (JComponent label : labelSet3) label.setPreferredSize(dim);
+
+    Box infoPanel = Box.createVerticalBox();
+    infoPanel.setBorder(BorderFactory.createEmptyBorder(1,0,1,0));
+    infoPanel.add(titlePanel);
+    infoPanel.add(authorPanel);
+    infoPanel.add(keyPanel);
+    infoPanel.add(levelPanel);
+    infoPanel.add(languagePanel);
+        
+//    infoPanel.add(abstractPanel);
+
+    JPanel metadataTopPanel = new JPanel (new BorderLayout());
+    metadataTopPanel.add(infoPanel,BorderLayout.NORTH);
+    metadataTopPanel.add(abstractPanel,BorderLayout.CENTER);
+
+    JPanel toolsPanel=new JPanel (new java.awt.GridLayout(0,1));
+    toolsPanel.setBorder(new EmptyBorder(5,5,10,0));
+    toolsPanel.add(captureToolCB);
+    toolsPanel.add(dataToolCB);
+    toolsPanel.add(translatorToolCB);
+    toolsPanel.add(emersionCB);
+
+    Box filesPanel = Box.createVerticalBox();
+    filesPanel.setBorder(BorderFactory.createEmptyBorder(1,0,1,0));
+    filesPanel.add(execPasswordPanel);
+    filesPanel.add(toolsPanel);
+    filesPanel.add(importsPanel);
+    filesPanel.add(jarsPanel);
+    filesPanel.add(auxPanel);
+    filesPanel.add(detectedPanel);
+
+    JPanel filesTopPanel = new JPanel (new BorderLayout());
+    filesTopPanel.add(filesPanel,BorderLayout.NORTH);
+
+    JPanel editionOptionsPanel=new JPanel (new java.awt.GridLayout(0,1));
+    editionOptionsPanel.setBorder(new EmptyBorder(5,5,10,0));
+    editionOptionsPanel.add(interpreterCB);
+
+    Box editionPanel = Box.createVerticalBox();
+    editionPanel.setBorder(BorderFactory.createEmptyBorder(1,0,1,0));
+    editionPanel.add(passwordPanel);
+    editionPanel.add(editionOptionsPanel);
+
+    JPanel editionTopPanel = new JPanel (new BorderLayout());
+    editionTopPanel.add(editionPanel,BorderLayout.NORTH);
+
+    JButton okButton = new JButton (res.getString("EditorFor.Ok"));
+    okButton.setActionCommand ("ok");
+    okButton.addMouseListener (new java.awt.event.MouseAdapter () {
+      public void mousePressed (java.awt.event.MouseEvent evt) { editorDialog.setVisible (false); }
+    });
+
+    tabbedPanel = new JTabbedPane(SwingConstants.TOP);
+    tabbedPanel.add(res.getString("SimInfoEditor.Metadata"),metadataTopPanel);
+    tabbedPanel.add(res.getString("SimInfoEditor.RunOptions"),filesTopPanel); // If you change this order, change tabbedPanel.setSelectedIndex(1); below
+    tabbedPanel.add(res.getString("SimInfoEditor.EditionOptions"),editionTopPanel);
+    
+    editorDialog = new JDialog();
+    editorDialog.getContentPane().setLayout(new BorderLayout());
+    editorDialog.getContentPane().add(tabbedPanel,BorderLayout.CENTER);
+    editorDialog.getContentPane().add(okButton,BorderLayout.SOUTH);
+    editorDialog.setModal(false);
+    editorDialog.setResizable(true);
+    editorDialog.pack();
+    //editorDialog.setSize(editorDialog.getPreferredSize()); //res.getDimension("Osejs.CodeDialog.Size"));
+    editorDialog.setLocationRelativeTo(ejs.getMainPanel());
+    clear();
+  }
+
+  // ----------------------------------------------
+  // Getters
+  // ----------------------------------------------
+
+  /**
+   * Whether the generated simulation will offer DataTool and FourierTool
+   */
+  public boolean addToolsForData() { return dataToolCB.isSelected(); }
+  /**
+   * Whether the generated simulation will offer a TranslatorTool
+   */
+  public boolean addTranslatorTool() { return translatorToolCB.isSelected(); }
+  
+  public void showRunningTab() {
+    tabbedPanel.setSelectedIndex(1);
+    editorDialog.setLocationRelativeTo(ejs.getMainPanel());
+    editorDialog.setVisible(true);
+    
+  }
+
+  /**
+   * Whether the generated simulation will offer support for eMersion
+   */
+  public boolean addEmersionSupport() { return emersionCB.isSelected(); }
+  /**
+   * Whether the generated simulation will offer capture tools
+   */
+  public boolean addCaptureTools() { return captureToolCB.isSelected(); }
+  /**
+   * Whether to use the interpreter with this model (what limitations exactly depend on TabbedVariablesEditor.java)
+   */
+  public boolean useInterpreter() { return interpreterCB.isSelected(); }
+
+  public String getPassword() { return passwordField.getText().trim(); }
+  
+  public String getExecPassword() { return execPasswordField.getText().trim(); }
+  
+  // ----------------------------------------------
+  // Simple customization
+  // ----------------------------------------------
+
+  public void makeVisible () {
+    editorDialog.setLocationRelativeTo(ejs.getMainPanel());
+    editorDialog.setVisible(true);
+  }
+  
+  public void hideEditor () { editorDialog.setVisible (false); }
+
+  public void setTitle (String _title) {
+    if (_title==null) _title = "Unnamed";
+    editorDialog.setTitle(TITLE + _title);
+  }
+
+  public void clear () {
+    titleField.setText("");
+    authorField.setText("");
+    keyField.setText("");
+    passwordField.setText("");
+    execPasswordField.setText("");
+    levelField.setText("");
+    languageField.setText("");
+    abstractField.setText("");
+    auxFilesCB.removeAllItems();
+    removeAuxFilesB.setEnabled(false);
+    detectedAuxFilesCB.removeAllItems();
+    
+    jarsCombo.removeAllItems();
+    jarsRemoveButton.setEnabled(false);
+    importsCombo.removeAllItems();
+    importsRemoveButton.setEnabled(false);
+    updateImportStatements();
+    dataToolCB.setSelected(false);
+    translatorToolCB.setSelected(false);
+    emersionCB.setSelected(false);
+    captureToolCB.setSelected(false);
+    interpreterCB.setSelected(true);
+  }
+
+  public boolean isChanged () { return changed; }
+
+  public void setChanged (boolean _ch) { changed = _ch; }
+
+  public void setFont (Font _font) { }
+
+  public JComboBox getJarsCombo() { return jarsCombo; }
+  
+  public StringBuffer getJarsStringBuffer () {
+    StringBuffer code = new StringBuffer();
+    for (int i=0, n=jarsCombo.getItemCount(); i<n; i++) code.append(jarsCombo.getItemAt(i)+";");
+    return code;
+  }
+  
+  public void addToJarsCombo(String oneLib) {
+    jarsCombo.removeItem(oneLib); // So that not to repeat
+    jarsCombo.addItem(oneLib);
+    if (jarsAddButton.isEnabled()) {
+      jarsEditButton.setEnabled(true);
+      jarsRemoveButton.setEnabled(true);
+    }
+  }
+
+  public JComboBox getImportsCombo() { return importsCombo; }
+  
+  public StringBuffer getImportsStringBuffer () {
+    StringBuffer code = new StringBuffer();
+    for (int i=0, n=importsCombo.getItemCount(); i<n; i++) {
+      String oneImport = importsCombo.getItemAt(i).toString().trim();
+      if (!oneImport.endsWith(";")) oneImport += ";";
+      code.append("import "+oneImport+"\n");
+    }
+    return code;
+  }
+
+  public java.util.List<String> getImportsList () {
+    java.util.List<String> list = new ArrayList<String>();
+    for (int i=0, n=importsCombo.getItemCount(); i<n; i++) {
+      String oneImport = importsCombo.getItemAt(i).toString().trim();
+      if (!oneImport.endsWith(";")) oneImport += ";";
+      list.add(oneImport);
+    }
+    return list;
+  }
+
+  public void addToImportsCombo(String oneImport) {
+    importsCombo.removeItem(oneImport); // So that not to repeat
+    importsCombo.addItem(oneImport);
+    if (importsAddButton.isEnabled()) {
+      importsEditButton.setEnabled(true);
+      importsRemoveButton.setEnabled(true);
+    }
+  }
+  
+  public String saveString () {
+    detectAuxiliaryFiles(); // Update the list of auxiliary files
+    StringBuffer info = new StringBuffer();
+    info.append("<Title><![CDATA["+titleField.getText()+"]]></Title>\n");
+    info.append("<Author><![CDATA["+authorField.getText()+"]]></Author>\n");
+    info.append("<Keywords><![CDATA["+keyField.getText()+"]]></Keywords>\n");
+    info.append("<Password><![CDATA["+passwordField.getText()+"]]></Password>\n");
+    info.append("<Level><![CDATA["+levelField.getText()+"]]></Level>\n");
+    info.append("<Language><![CDATA["+languageField.getText()+"]]></Language>\n");
+    info.append("<Abstract><![CDATA["+abstractField.getText()+"]]></Abstract>\n");
+
+    info.append("<ExecPassword><![CDATA["+execPasswordField.getText()+"]]></ExecPassword>\n");
+    info.append("<CaptureTools>"+captureToolCB.isSelected()+"</CaptureTools>\n");
+    info.append("<DataTools>"+dataToolCB.isSelected()+"</DataTools>\n");
+    info.append("<LanguageTools>"+translatorToolCB.isSelected()+"</LanguageTools>\n");
+    info.append("<EmersionSupport>"+emersionCB.isSelected()+"</EmersionSupport>\n");
+    info.append("<UseInterpreter>"+interpreterCB.isSelected()+"</UseInterpreter>\n");
+
+
+    info.append("<AdditionalLibraries>\n");
+    for (int i=0, n=jarsCombo.getItemCount(); i<n; i++) info.append("<Library><![CDATA["+jarsCombo.getItemAt(i)+"]]></Library>\n");
+    info.append("</AdditionalLibraries>\n");
+    info.append("<ImportStatements>\n");
+    for (int i=0, n=importsCombo.getItemCount(); i<n; i++) info.append("<Import><![CDATA["+importsCombo.getItemAt(i)+"]]></Import>\n");
+    info.append("</ImportStatements>\n");
+
+    info.append("<DetectedFiles><![CDATA[");
+    for (int i=0,n=detectedAuxFilesCB.getItemCount(); i<n; i++) info.append(detectedAuxFilesCB.getItemAt(i).toString()+";");
+    info.append("]]></DetectedFiles>\n");
+    info.append("<AuxiliaryFiles><![CDATA[");
+    for (int i=0,n=auxFilesCB.getItemCount(); i<n; i++) info.append(auxFilesCB.getItemAt(i).toString()+";");
+    info.append("]]></AuxiliaryFiles>\n");
+    
+    
+    return info.toString();
+  }
+
+  public void readString (String _input, boolean _merging) {
+    if (!_merging) {
+      readEntry (_input,titleField,"Title");
+      readEntry (_input,authorField,"Author");
+      readEntry (_input,keyField,"Keywords");
+      readEntry (_input,passwordField,"Password");
+      readEntry (_input,levelField,"Level");
+      readEntry (_input,languageField,"Language");
+      readEntry (_input,abstractField,"Abstract");
+
+      readEntry (_input,execPasswordField,"ExecPassword");
+      readBoolean (_input,captureToolCB,"CaptureTools",false);
+      readBoolean (_input,dataToolCB,"DataTools",false);
+      readBoolean (_input,translatorToolCB,"LanguageTools",false);
+      readBoolean (_input,emersionCB,"EmersionSupport",false);
+      readBoolean (_input,interpreterCB,"UseInterpreter",true);
+    }
+    
+    StringTokenizer tkn;
+    String files = OsejsCommon.getPiece(_input,"<DetectedFiles><![CDATA[","]]></DetectedFiles>",false);
+    if (files!=null) {
+      tkn = new StringTokenizer(files,";\n");
+      while (tkn.hasMoreTokens()) detectedAuxFilesCB.addItem(tkn.nextToken());
+    }
+
+    files = OsejsCommon.getPiece(_input,"<AuxiliaryFiles><![CDATA[","]]></AuxiliaryFiles>",false);
+    if (files!=null) {
+      tkn = new StringTokenizer(files,";\n");
+      while (tkn.hasMoreTokens()) auxFilesCB.addItem(tkn.nextToken());
+    }
+    removeAuxFilesB.setEnabled(auxFilesCB.getItemCount()>0);
+
+    String jarsFound = "";
+    String libs = OsejsCommon.getPiece(_input,"<AdditionalLibraries>","</AdditionalLibraries>",false);
+    if (libs!=null) {
+      int begin = libs.indexOf("<Library><![CDATA[");
+      while (begin>=0) {
+        int end = libs.indexOf("]]></Library>\n");
+        String jarFile = libs.substring(begin+18,end).trim();
+        jarsFound += ";"+jarFile;
+        addToJarsCombo(jarFile);
+        libs = libs.substring(end+14);
+        begin = libs.indexOf("<Library>");
+      }
+    }
+    
+    // Check for possible ModelElements in the jar files added
+    ejs.getModelEditor().getElementsEditor().checkForUserElements(jarsFound);
+    
+    // Extract the import statements, if any
+    String imports = OsejsCommon.getPiece(_input,"<ImportStatements>","</ImportStatements>",false);
+    if (imports!=null) {
+      int begin = imports.indexOf("<Import><![CDATA[");
+      while (begin>=0) {
+        int end = imports.indexOf("]]></Import>\n");
+        addToImportsCombo(imports.substring(begin+17,end));
+        imports = imports.substring(end+13);
+        begin = imports.indexOf("<Import>");
+      }
+      updateImportStatements();
+    }
+  }
+
+  static private void readEntry (String _input, JTextComponent _field, String _key) {
+    _field.setText(OsejsCommon.getPiece(_input,"<"+_key+"><![CDATA[","]]></"+_key+">",false));
+    _field.setCaretPosition(0);
+  }
+
+  static private void  readBoolean (String _input, JCheckBox _box, String _key, boolean _defaultValue) {
+    String txt = OsejsCommon.getPiece(_input,"<"+_key+">","</"+_key+">",false);
+    if (txt==null) _box.setSelected(_defaultValue); // True is the default
+    else _box.setSelected(!txt.equals("false"));
+  }
+
+//  /**
+//   * Reads the set of files required by the simulation as prescribed on the given file.
+//   * This is used when importing a file from another directory.
+//   */
+//  static public Set<PathAndFile> readAuxiliaryFiles (Osejs _ejs, File _parentDir, String _input) {
+//    Set<PathAndFile> set = new HashSet<PathAndFile>();
+//    String auxFiles = OsejsCommon.getPiece(_input,"<AuxiliaryFiles><![CDATA[","]]></AuxiliaryFiles>",false);
+//    String detectedFiles = OsejsCommon.getPiece(_input,"<DetectedFiles><![CDATA[","]]></DetectedFiles>",false);
+//    if (detectedFiles!=null) auxFiles = detectedFiles + auxFiles;
+//    String missingFiles = "";
+//    StringTokenizer tkn = new StringTokenizer(auxFiles,";\n");
+//    while (tkn.hasMoreTokens()) {
+//      String filename = tkn.nextToken().trim();
+//      if (filename.length()<=0) continue;
+//      File file;
+//      if (filename.startsWith("./")) file = new File (_parentDir,filename.substring(2));
+//      else file = new File (_ejs.getSourceDirectory(),filename);
+//      if (file.exists()) {
+//        if (file.isDirectory()) {
+//          String dirpath = FileUtils.getPath(_parentDir);
+//          for (File subfile : JarTool.getContents(file)) set.add(new PathAndFile(FileUtils.getRelativePath(subfile,dirpath,true),subfile));
+//        }
+//        else set.add(new PathAndFile(filename,file));
+//      }
+//      else missingFiles += "  " + filename + "\n";
+//    }
+//    if (missingFiles.length()>0) JOptionPane.showMessageDialog(_ejs.getMainPanel(), 
+//        res.getString("SimInfoEditor.RequiredFileNotFound")+"\n"+missingFiles, 
+//        res.getString("Warning"), JOptionPane.ERROR_MESSAGE);
+//    return set;
+//  }
+
+  /**
+   * Returns the set of the auxiliary files indicated by the user or detected by EJS
+   * @return
+   */
+  public Set<PathAndFile> getAuxiliaryPathAndFiles () {
+    Set<PathAndFile> set = new HashSet<PathAndFile>();
+    for (String filename : getAuxiliaryFilenames()) set.add (new PathAndFile(filename,ejs.getRelativeFile(filename)));
+    return set;
+  }
+  
+  /**
+   * Returns the set of auxiliary file names indicated by the user or detected by EJS
+   * @return
+   */
+  public Set<String> getAuxiliaryFilenames () {
+    detectAuxiliaryFiles ();
+    Set<String> set = new HashSet<String>();
+    for (int i=0,n=auxFilesCB.getItemCount(); i<n; i++) set.add(auxFilesCB.getItemAt(i).toString());
+    for (int i=0,n=detectedAuxFilesCB.getItemCount(); i<n; i++) set.add(detectedAuxFilesCB.getItemAt(i).toString());
+    return set;
+  }
+
+  /**
+   * Compiles the list of auxiliary files as indicated by the different EJS editors
+   */
+  public void detectAuxiliaryFiles () { 
+    // Collect the information from the EJS editors
+    StringBuffer buffer = new StringBuffer();
+    buffer.append(ejs.getDescriptionEditor().generateCode(Editor.GENERATE_RESOURCES_NEEDED,""));  // required by the description
+    buffer.append(ejs.getModelEditor().generateCode(Editor.GENERATE_RESOURCES_NEEDED,"")); // required by the model
+    buffer.append(ejs.getViewEditor().generateCode(Editor.GENERATE_RESOURCES_NEEDED,""));  // required by the view
+
+    // Now make the list simplifying repeated entries
+    ArrayList<String> list = new ArrayList<String>();
+    String relativePath = FileUtils.getRelativePath(ejs.getCurrentDirectory(), ejs.getSourceDirectory(), false);
+    int length = relativePath.length();
+    String missingText = "";
+    StringTokenizer tkn = new StringTokenizer(buffer.toString(),";");
+    while (tkn.hasMoreTokens()) {
+      String token = tkn.nextToken().trim();
+      if (token.length()<=0) continue;
+      String resFile = FileUtils.uncorrectUrlString(token.replace('\\','/')); // Change separator char to '/'
+      if (resFile.startsWith("/org/opensourcephysics/resources/")) continue;
+      if (length>0 && resFile.startsWith(relativePath)) resFile = "./" + resFile.substring(length);
+      else resFile = ejs.getRelativePath(resFile);
+      if (!list.contains(resFile)) {
+        list.add(resFile);
+        if (!ejs.getRelativeFile(resFile).exists()) missingText += "  "+resFile +"\n";
+      }
+    }
+    Collections.sort(list);
+    
+    // Fill the ComboBox
+    detectedAuxFilesCB.removeAllItems();
+    for (String resource : list) detectedAuxFilesCB.addItem(resource);
+    if (detectedAuxFilesCB.getItemCount()>0) detectedAuxFilesCB.setSelectedIndex(0);
+    
+    // Issue a warning if there were missing files
+    if (missingText.length()>0) JOptionPane.showMessageDialog(auxFilesCB, 
+        res.getString("SimInfoEditor.RequiredFileNotFound")+"\n"+missingText, 
+        res.getString("Warning"), JOptionPane.ERROR_MESSAGE);
+  }
+
+  public Set<String> getUserJars () {
+    Set<String> set = new HashSet<String>();
+    for (int i=0, n=jarsCombo.getItemCount(); i<n; i++) set.add(jarsCombo.getItemAt(i).toString());
+    return set;
+  }
+
+  public void updateImportStatements() {
+    int n = importsCombo.getItemCount();
+    importStatements = new String[n+1];
+    importStatements[0] = "java.lang.*";
+    for (int i=1; i<=n; i++) importStatements[i] = (String) importsCombo.getItemAt(i-1);
+  }
+
+  public String[] getImportStatements () { return importStatements; }
+
+  public void fillAuthor(EjsOptions _options) {
+    String author = _options.getAuthor();
+    if (author.length()<=0) return;
+    makeVisible();
+    int option = JOptionPane.showConfirmDialog(editorDialog, res.getString("EjsOptions.UseDefaultAuthor"), res.getString("Warning"), JOptionPane.YES_NO_OPTION);
+    if (option==JOptionPane.YES_OPTION) {
+      String affiliation = _options.getAffiliation();
+      if (affiliation.length()>0) authorField.setText(author+" - "+affiliation);
+      else authorField.setText(author);
+      abstractField.setText(abstractField.getText()+_options.getContact());
+    }
+  }
+  
+} // end of class

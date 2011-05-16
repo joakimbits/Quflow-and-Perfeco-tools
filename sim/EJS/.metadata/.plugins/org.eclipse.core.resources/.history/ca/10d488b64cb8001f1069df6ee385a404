@@ -1,0 +1,149 @@
+package demo.jopas;
+
+import java.awt.BorderLayout;
+import java.awt.Frame;
+
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JEditorPane;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import javax.swing.JScrollPane;
+import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.Toolkit;
+
+/**
+ *
+ * <p>Title: JOPAS</p>
+ *
+ * <p>Description: Java to Octave</p>
+ *
+ * <p>Copyright: (C) Copyright 2000-2005, by Object Refinery Limited and
+ * Contributors.
+ *
+ * Project Info:  	http://jopas.sourceforge.net
+ *                      http://www.eside.deusto.es/grupos/eside_pas
+ *
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation,
+ * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * [Java is a trademark or registered trademark of Sun Microsystems, Inc.
+ * in the United States and other countries.]
+ * </p>
+ *
+ * <p>Company: PAS - Universidad de Deusto</p>
+ *
+ * @author Oscar Lage Serrano - Javier Vicente Sáez
+ * @version 1.01
+ */
+public class DemoDialog extends JDialog {
+    JPanel panel1 = new JPanel();
+    BorderLayout borderLayout1 = new BorderLayout();
+    JLabel jLabel1 = new JLabel();
+    JEditorPane jEditorPane1 = new JEditorPane();
+    JButton jButton1 = new JButton();
+    JScrollPane jScrollPane1 = new JScrollPane();
+
+    public DemoDialog(Frame owner, String title, boolean modal) {
+        super(owner, title, modal);
+        try {
+            setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            jbInit();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public DemoDialog() {
+        this(new Frame(), "::Info::", false);
+    }
+
+    private void jbInit() throws Exception {
+        panel1.setLayout(borderLayout1);
+        ImageIcon image = new ImageIcon("joPAS (blanco).png");
+        jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
+        jLabel1.setIcon(image);
+        jEditorPane1.setContentType(javax.swing.JEditorPane.TOOL_TIP_TEXT_KEY);
+        jEditorPane1.setText("\nJOPAS\n\nDescription: Java to Octave\n\nCopyright: (C) Copyright 2000-2005, by Object Refinery Limited and \nContributors.\n\n"+
+
+                             "Company: PAS - Universidad de Deusto\n\n"+
+
+"authors: Oscar Lage Serrano - Javier Vicente Sáez\n\n"+
+
+"Project Info:  	http://jopas.sourceforge.net\n"+
+"                             http://www.eside.deusto.es/grupos/eside_pas\n\n"+
+
+"This library is free software; you can redistribute it and/or modify it under\n"+
+"the terms of the GNU Lesser General Public License as published by\n"+
+"the Free Software Foundation; either version 2.1 of the License, or\n"+
+"(at your option) any later version.\n\n"+
+
+"This library is distributed in the hope that it will be useful, but\n"+
+"WITHOUT ANY WARRANTY; without even the implied warranty of \n"+
+"MERCHANTABILITYor FITNESS FOR A PARTICULAR PURPOSE.\n"+
+"See the GNU Lesser General Public License for more details.\n\n"+
+
+"You should have received a copy of the GNU Lesser General Public\n"+
+"License along with this library; if not, write to the Free Software\n"+
+"Foundation, Inc., 59 Temple Place, Suite 330, Boston,\n MA 02111-1307, USA.\n\n"+
+
+"[Java is a trademark or registered trademark of Sun Microsystems, Inc.\n"+
+"in the United States and other countries.]\n\n"+
+
+"version 1.01\n\n");
+        jButton1.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        jButton1.setText("OK");
+        jButton1.addMouseListener(new DemoDialog_jButton1_mouseAdapter(this));
+        jScrollPane1.setPreferredSize(new Dimension(402, 200));
+        getContentPane().add(panel1);
+        panel1.add(jButton1, java.awt.BorderLayout.SOUTH);
+        panel1.add(jLabel1, java.awt.BorderLayout.NORTH);
+        panel1.add(jScrollPane1, java.awt.BorderLayout.EAST);
+        jScrollPane1.getViewport().add(jEditorPane1);
+        pack();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+      Dimension frameSize = this.getSize();
+      if (frameSize.height > screenSize.height) {
+        frameSize.height = screenSize.height;
+      }
+      if (frameSize.width > screenSize.width) {
+        frameSize.width = screenSize.width;
+      }
+      this.setLocation( (screenSize.width - frameSize.width) / 2,
+                       (screenSize.height - frameSize.height) / 2);
+
+    }
+
+    public void jButton1_mouseReleased(MouseEvent e) {
+        this.dispose();
+    }
+}
+
+
+class DemoDialog_jButton1_mouseAdapter extends MouseAdapter {
+    private DemoDialog adaptee;
+    DemoDialog_jButton1_mouseAdapter(DemoDialog adaptee) {
+        this.adaptee = adaptee;
+    }
+
+    public void mouseReleased(MouseEvent e) {
+        adaptee.jButton1_mouseReleased(e);
+    }
+}

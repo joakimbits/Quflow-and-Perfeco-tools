@@ -1,0 +1,38 @@
+/*SelectBox.java
+ *CS193J
+ *Summer 2001
+ */
+
+import java.awt.*;
+import java.awt.event.*;
+
+ /** constructs a SelectBox object */
+public class SelectBox extends Shape {
+    
+    private static final int dSelectedBoxSize = 4;
+  public SelectBox (int x1, int y1, int x2, int y2) {
+    super (x1,y1,x2,y2);
+  }
+
+  public void setBoxSize (int boxSize) {
+  }
+  
+  public int getBoxSize () {
+    return 0;
+  }
+
+  public void paint (Graphics g) {
+      super.paint(g);
+      
+      if (GlobalDebug.isOn) 
+	  System.out.println ("SelectBox.paint()");
+      
+    g.setColor (Color.black);
+
+    g.fillRect (0,0,dSelectedBoxSize,dSelectedBoxSize);
+    g.fillRect (x2-x1-dSelectedBoxSize, 0, x2-x1-dSelectedBoxSize, dSelectedBoxSize);
+    g.fillRect (0, Math.abs(y2-y1)-dSelectedBoxSize, dSelectedBoxSize, Math.abs(y2-y1));
+    g.fillRect (x2-x1-dSelectedBoxSize, Math.abs(y2-y1)-dSelectedBoxSize, x2-x1, Math.abs(y2-y1));  
+  }
+    
+}

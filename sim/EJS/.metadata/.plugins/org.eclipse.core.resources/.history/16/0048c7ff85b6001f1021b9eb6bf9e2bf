@@ -1,0 +1,12 @@
+package ejsTesting;
+
+public class EJSTesterWithIcon implements EJSTester {
+  static ImageIcon ELEMENT_ICON = ResourceLoader.getIcon("/ejsTesting/Statistics.gif"); // This icon is included in this jar
+
+  public void test() {
+    System.out.println ("Image icon = "+ELEMENT_ICON);
+    // TODO Auto-generated method stub
+    
+  }
+
+}

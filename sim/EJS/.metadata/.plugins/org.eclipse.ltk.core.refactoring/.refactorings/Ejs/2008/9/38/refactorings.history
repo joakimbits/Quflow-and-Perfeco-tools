@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;prelimCodeCB&apos; in &apos;org.colos.ejs.osejs.edition.EquationEditor&apos; to &apos;prelimButton&apos;&#x0D;&#x0A;- Original project: &apos;Ejs&apos;&#x0D;&#x0A;- Original element: &apos;org.colos.ejs.osejs.edition.EquationEditor.prelimCodeCB&apos;&#x0D;&#x0A;- Renamed element: &apos;org.colos.ejs.osejs.edition.EquationEditor.prelimButton&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;prelimCodeCB&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;org.colos.ejs.osejs.edition{EquationEditor.java[EquationEditor^prelimCodeCB" name="prelimButton" references="true" setter="false" stamp="1221934260584" textual="true" version="1.0"/>
+</session>

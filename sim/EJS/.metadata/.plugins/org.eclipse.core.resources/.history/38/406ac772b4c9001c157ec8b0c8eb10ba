@@ -1,0 +1,242 @@
+package org;
+
+/* This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *
+ * monoped@users.sourceforge.net
+ */
+
+import java.io.*;
+import java.util.*;
+import java.util.jar.*;
+import java.util.zip.*;
+
+import org.apache.bcel.*;
+import org.apache.bcel.classfile.*;
+import org.apache.bcel.util.*;
+import org.apache.bcel.generic.*;
+
+public class SelfJar {
+  static private final String     JAVA_HOME = System.getProperty("java.home");
+
+  private List classpathList=new ArrayList(); // List of files to copy
+  private List desiredPatterns=new ArrayList(); // List of files to copy
+  private List excludedPatterns=new ArrayList(); // List of files to exclude
+
+  private ClassPath bcelPath;
+  
+  static public void main (String args) {
+  }
+  
+  public SelfJar (List aClasspathList, List aFileList, List anExcludeList) {
+        classpathList.addAll(aClasspathList);
+
+        // Process excludes
+        
+        // Process includes
+        
+        // Build classpath, starting with boot path
+        String classpath = System.getProperty("sun.boot.class.path");
+        if (classpathList.size()<=0) classpath += File.pathSeparator + ".";
+        for (Iterator it = classpathList.iterator(); it.hasNext(); ) classpath += File.pathSeparator + (String)it.next();
+
+        //  create BCEL ClassPath
+        bcelPath = new ClassPath(classpath);
+
+    }
+
+    //----------------------------------------------------------------------
+ 
+  List getFileMatches () {
+	for (Iterator it=classpathList.iterator(); it.hasNext(); ) {
+    File file = new File(base);
+  }
+ 
+  private boolean isDesired (String filename) {
+	filename = filename.replace(File.separatorChar, '/');
+	for (Iterator it=desiredPatterns.iterator(); it.hasNext(); ) {
+	  if (((Pattern) it.next()).matches(filename)) return true;
+	}
+	return false;
+  }
+
+  private boolean isExcluded (String filename) {
+	filename = filename.replace(File.separatorChar, '/');
+	for (Iterator it=excludedPatterns.iterator(); it.hasNext(); ) {
+	  if (((Pattern) it.next()).matches(filename)) return true;
+	}
+	return false;
+  }
+
+  
+  
+/*
+   public void addJarExcludes(File baseDir, String jarFilename)
+   {
+   	System.out.println ("Adding exclude for "+jarFilename);
+   	File jarFile = new File (baseDir,jarFilename);
+   	if (!jarFile.exists()) {
+   	   	System.out.println ("Jar file not found: "+jarFilename);
+        return;   	
+   	}
+   	try {
+      ZipInputStream input = new ZipInputStream(new FileInputStream(jarFile));
+      ZipEntry zipEntry = null;
+      while ( (zipEntry =input.getNextEntry()) != null) {
+        if (zipEntry.isDirectory()) continue; // don't include directories
+        String zipEntryName = zipEntry.getName().replace('\\', '/');
+        if (!fileExcludes.contains(zipEntryName)) addFileExcludes(zipEntryName);
+      }
+      input.close();
+   	}
+   	catch (Exception exc) {
+   	   	System.out.println ("Error when reading jar file: "+jarFilename);
+   	}
+   }
+
+    public boolean willSaveAnything(File base, String name) throws IOException {  // Added by Paco
+      File file = new File(base, name);
+      boolean verbose = name.indexOf("external")>0;
+      if (verbose) System.out.println ("Checking "+name);
+      if (file.isDirectory()) {
+        String[]  files = file.list();
+        for (int i = 0; i < files.length; ++i) if (willSaveAnything(base, new File(name, files[i]).getPath())) return true;
+        return false;
+      }
+      // Regular file
+      boolean found = FileUtils.patternMatches(fileExcludes, name);
+      if (verbose) System.out.println ("Accepted "+found+" : "+name);
+      return !found;
+   }
+
+    //----------------------------------------------------------------------
+
+    /** Scan class file for class references 
+     *  
+     *  @param in       Stream reading from class file
+     *  @param bcelName BCEL class name in the form pack1/pack2/name
+     */
+/*
+    private void handleReferences(InputStream in, String bcelName)
+        throws IOException
+    {
+        JavaClass       klass = new ClassParser(in, bcelName).parse();
+        Avisitor        visitor = new Avisitor(this, klass);
+        ConstantPoolGen pool = new ConstantPoolGen(klass.getConstantPool());
+
+        new DescendingVisitor(klass, visitor).visit();
+        in.close();
+
+        if (dynamic == DYN_OFF)          // no -d option
+            return;
+
+        // look for dynamically loaded classes
+        
+        int indexForName = visitor.getIndexForName();
+
+        if (indexForName < 0)   // no Class.forName()
+            return;
+
+        // Scan all methods for invocations of Class.forName("string").
+        
+        Method[] methods = klass.getMethods();
+        
+        for (int i = 0; i < methods.length; ++i)
+        {
+            Method  method = methods[i];
+            Code    code = method.getCode();
+
+            if (code == null 
+                    || method.getName().endsWith("$")           // javac
+                    || method.getName().equals("class")         // jikes
+                )
+                continue;
+
+            // Wrap code into InstructionList
+            
+            InstructionList instructions = null;
+
+            try
+            {
+                instructions = new InstructionList(code.getCode());
+            }
+            catch (ClassGenException ex)
+            {
+                logger.fatal(code.toString(), ex);
+                System.exit(1);
+            }
+
+            // Iterate through instructions
+
+            for (Iterator it = instructions.iterator(); it.hasNext(); )
+            {
+                InstructionHandle   handle = (InstructionHandle)it.next();
+                Instruction         instruction = handle.getInstruction();
+
+                if (instruction instanceof InvokeInstruction)
+                {
+                    // get Instruction from Pool
+                    
+                    ConstantCP constant  = (ConstantCP)pool.getConstant(((InvokeInstruction)instruction).getIndex());        
+                    
+                    if (constant.getNameAndTypeIndex() == indexForName)
+                    {
+                        // found Invocation...
+                        
+                        Instruction pre = handle.getPrev().getInstruction();
+
+                        if (pre.getOpcode() == Constants.LDC)       // pre-instruction loads constant
+                        {
+                            // ... with constant (String) operand
+
+                            LDC ldc = (LDC)pre;
+
+                            String  operand = (String)ldc.getValue(pool);   // operand is constant string
+                            boolean found = false; 
+                            String  bcelop = operand.replace('.', '/') + ".class";
+
+                            found = dynamic == DYN_AUTO && lookupClassInternal(bcelop);
+
+                            String message = "* Dynamic loading: class " + klass.getClassName() 
+                                    + ", method " + method.getName() 
+                                    + ", name=\"" + operand + "\"";
+
+                            if (found)
+                                message += " (RESOLVED)";
+
+                            logger.info(message);
+                        }
+                        else
+                        {
+                            // ... with computed operand
+
+                            forname.add("class " + klass.getClassName() + ", method " + method.getName());
+                        }
+                    }
+                }
+            }
+        }
+    }
+*/
+
+
+}
+
+class NameAndFile {
+	String name;
+	File file;
+}
+
+
+

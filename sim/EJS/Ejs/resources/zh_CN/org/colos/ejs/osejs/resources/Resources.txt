@@ -1,0 +1,504 @@
+Osejs.StartDialogTitle=Easy Java Simulations 正在启动...
+Osejs.StartDialogSize=350 150
+Osejs.TitleFont=Dialog,BOLD,20
+Osejs.DefaultFont=Dialog,PLAIN,14
+Osejs.Title=Easy Java Simulations(简体中文汉化:汤铭)
+Osejs.Init.Toolbars=正在创建工具栏...
+Osejs.Init.Editors=正在创建编辑器...
+Osejs.Main.Description=简介/说明
+Osejs.Main.Description.ToolTip=动画的相关介绍信息
+Osejs.Main.Model=模型
+Osejs.Main.Model.ToolTip=动画模型
+Osejs.Main.View=显示界面
+Osejs.Main.View.ToolTip=动画的用户图形接口
+Osejs.Icon.New=创建一个新动画
+Osejs.Icon.Open=打开一个文件
+Osejs.Icon.Merge=合并一个文件
+Osejs.Icon.Save=保存文件
+Osejs.Icon.SaveAs=另存为
+Osejs.Icon.Generate=生成动画
+Osejs.Icon.GenerateAs=以新名称生成
+Osejs.Icon.Run=运行动画
+Osejs.Icon.Font=改变字体
+Osejs.Icon.Info=关于Ejs
+Osejs.Icon.Options=编辑选项
+Osejs.Init.FinalStartUp=最终启动
+
+Osejs.File.Description=动画文件
+Osejs.File.JavaDescription=Java文件
+Osejs.File.Open=打开
+Osejs.File.Merge=合并
+Osejs.File.Save=保存
+Osejs.File.SaveChanges= 是, 确定保存
+Osejs.File.IgnoreChanges= 否, 不保存
+Osejs.File.CancelSave= 取消保存
+Osejs.File.SimulationChanged=动画已改变
+Osejs.File.WantToSave=你希望保存文件吗?
+Osejs.File.FileExists=此文件已存在!
+Osejs.File.Overwrite=覆盖现存文件吗?
+Osejs.File.DoSave=是的!
+Osejs.File.InvalidFile=对不起!这是一个非法文件!
+Osejs.File.ReadOK=成功读取文件:
+Osejs.File.NotReadOK=文件读取失败:
+Osejs.File.MergedOK=文件合并成功 :
+Osejs.File.NotMergedOK=文件合并失败 :
+Osejs.File.SavedOK=成功保存文件 :
+Osejs.File.ReadError=输入文件出现错误
+Osejs.File.ReadingError=输入出错
+Osejs.File.ErrorReadingFile=读取文件出错
+Osejs.File.InputURL=读取URL
+Osejs.File.ReadURL=请输入动画的URL
+Osejs.File.CantCreateFile=对不起,不能创建该文件!
+Osejs.File.SaveAsAppletSize=300 500
+Osejs.File.Generate=生成
+
+Osejs.ReadOnly.Suffix=(只读)
+Osejs.ReadOnly.Title=对不起,...
+Osejs.ReadOnly.Message=只读状态时该选项不能用.
+Osejs.ReadOnly.RunMessage=只读状态时不能运行此文件!
+Osejs.CodeDialog.Title=命令输出
+Osejs.CodeDialog.Size=400 500
+
+Output.Title=以下窗口显示执行结果
+Output.TitleFont=Dialog,Bold,14
+
+Generate.NoWhiteSpacesAllowed=对不起,类名不能包含空格.忽略.
+Generate.GenerationOk=祝贺!动画已成功生成.
+Generate.GenerationError=对不起!生成动画时出现错误!
+Generate.Compiling=请稍等,正在编译...
+Generate.CompilationSuccessful= Ok!
+Generate.CompilationError=编译时出现错误!
+Generate.CreatingJarFile=\n 正在生成jar文件
+Generate.JarFileCreated= Ok!
+Generate.JarFileNotCreated=\n Jar文件不能生成!
+Generate.Compiling=正在生成动画文件
+Generate.HtmlFor=网页-
+Generate.HtmlUserCode=<!--- 这里是html代码 --->
+Generate.HtmlHereComesTheApplet=<!--- 这里是applet --->
+Generate.HtmlHereComesTheJavaScript=<!--- 这里是 JavaScript 按钮 --->
+Generate.HtmlHereItIs=动画将显示在下面.
+Generate.HtmlHereItIsNot=动画将显示在一个独立的窗口内.
+Generate.HtmlJSControl=你可以使用JavaScript脚本控制动画. 例如使用按钮:
+Generate.HtmlPlay=运行
+Generate.HtmlPause=暂停
+Generate.HtmlStep=单步
+Generate.HtmlReset=重置
+Generate.HtmlSlow=慢
+Generate.HtmlFast=快
+Generate.HtmlFaster=更快
+Generate.HtmlThankYou=感谢使用
+Generate.RunningSimulation=正在尝试运行动画
+Generate.SimulationRunsOK=祝贺你!动画运行正常.
+Generate.SimulationDoesNotRun=对不起!动画产生运行时错误.
+Generate.HTMLIsReady=你可以从产生的网页文件运行该动画.
+Generate.HtmlContents=<b>内容</b>
+Generate.HtmlSource=源文件
+Generate.HtmlSimulation=动画
+Generate.HtmlEjsGenerated=创建于
+
+Description.Color=100,100,100
+Description.Page=简介页面
+
+Model.Color=180,0,0
+Model.TitleFont=Dialog,BOLD,16
+Model.Variables=变量/参数
+Model.Initialization=初始化
+Model.Evolution=参数演化关系
+Model.Constraints=参数关系
+Model.Library=自定义函数
+Model.Variables.Page=参数变量页面
+Model.Initialization.Page=初始化页面
+Model.Evolution.Page=演化关系页面
+Model.Constraints.Page=参数关系页面
+Model.Library.Page=自定义函数页面
+Model.Evolution.FpsLabel1=帧
+Model.Evolution.FpsLabel2=
+Model.Evolution.FpsLabel3=每秒
+Model.Evolution.FpsLabel=FPS
+Model.Evolution.MaximumFPS=最大
+Model.Evolution.MinimumFPS=最小
+Model.Evolution.Autostart=自动运行
+
+VariablesEditor.TitleFont=Dialog,BOLD,12
+VariablesEditor.Insert=在此变量之前插入
+VariablesEditor.Add=在此变量之后插入
+VariablesEditor.Remove=删除此变量
+VariableEditor.Name=名称
+VariableEditor.Dimension=维度
+VariableEditor.Type=类型
+VariableEditor.Value=数值
+VariableEditor.Private=私有
+VariableEditor.Dynamic=动态
+VariableEditor.Active=Active
+VariableEditor.Permanent=未初始化
+
+EquationEditor.Size=320 30
+EquationEditor.ColumnSize=150
+EquationEditor.FieldWidth=10
+EquationEditor.Create=添加一个方程式
+EquationEditor.Select=选择一个状态变量
+EquationEditor.Insert=在此方程式之前插入
+EquationEditor.Add=在此方程式之后插入
+EquationEditor.Remove=删除此方程式
+EquationEditor.State=State
+EquationEditor.Rate=Rate
+EquationEditor.IndependentVariable=独立变量.
+EquationEditor.Increment=增量
+EquationEditor.ModelVariables=匹配变量
+EquationEditor.Method=Solver
+
+View.Color=0,125,0
+View.TitleFont=Dialog,BOLD,16
+View.Creation=创建
+View.Reset=重置
+View.Update=更新
+View.ViewLibrary=自定义
+View.EjsWindow=(Ejs 编辑窗口)
+
+View.Positions.north=上
+View.Positions.south=下
+View.Positions.east=右
+View.Positions.west=左
+View.Positions.center=中央
+
+Reset.Page=重置页
+Update.Page=更新页
+ViewLibrary.Page=显示界面页
+
+Tree.TreeOfElements=元件树状结构
+Tree.Main=动画显示界面
+Tree.Selected.Icon=动画显示界面
+Tree.ErrorMessage=对不起!
+Tree.Warning=警告!
+Tree.MainDoesNotAcceptThis=不能在元件树状结构根部执行此操作
+Tree.CantAddWindow=在元件树状结构根部添加窗体
+Tree.CantAddNotWindow=只有窗体/窗口才能添加到元件树状结构根部
+Tree.NotAContainer=父元件必须为一个容器
+Tree.CantCreateElement=元件不能被创建
+Tree.NameModified=名称已修改
+Tree.MenuFor=菜单-
+Tree.Edit=属性
+Tree.Rename=重命名
+Tree.Reparent=更改父元件
+Tree.MainWindow=主窗口
+Tree.IsWindow=元件是一个窗口
+Tree.HasPosition=位置是
+Tree.PositionImposed=位置被改变
+Tree.ChangePosition=改变位置
+Tree.NoPosition=未指定位置
+Tree.MoveUp=上移一层
+Tree.MoveDown=下移一层
+Tree.Utils=Utils
+Tree.Clone=复制
+Tree.Remove=删除
+Tree.ProvideAName=命名
+Tree.NameTitle=创建一个新元件
+Tree.RenameTo=新名称
+Tree.RenameTitle=元件重命名
+Tree.ReparentTo=新父元件
+Tree.ReparentTitle=改变元件的父元件
+Tree.PositionTo=位置
+Tree.PositionTitle=选择位置
+Tree.CloneTo=复制父元件
+Tree.CloneTitle=复制元件
+Tree.ProvideAParent=请指定父元件
+Tree.ParentDoesNotExist=指定的父元件不存在
+Tree.ParentDoesNotAcceptThis=该元件不能添加到指定的父元件
+
+View.Elements=显示界面元件
+View.Elements.Drawables=Drawables
+View.Elements.Basic=参数元件
+View.Elements.Containers=容器元件
+
+View.Properties.Title=元件属性
+View.Properties.PreferredSize=480 300
+View.Properties.FieldWidth=10
+View.Properties.LabelColor=0,0,210
+
+Utils.cut-to-clipboard=剪切
+Utils.copy-to-clipboard=复制
+Utils.paste-from-clipboard=粘贴
+Utils.select-all=全选
+Utils.undo=撤消
+Utils.redo=重做
+
+Editor.TitleFont=Dialog,BOLD,12
+Editor.DefaultFont=Dialog,PLAIN,12
+Editor.Comment= 注释
+
+TabbedEditor.PreferredSize=350 300
+TabbedEditor.ShowTitles=否
+TabbedEditor.MenuTooltip=右击这里弹出菜单
+TabbedEditor.NewName=命名
+TabbedEditor.Rename=输入新名字
+TabbedEditor.ClickHere=点击鼠标创建新页面
+TabbedEditor.ClickHereODE=点击鼠标创建新ODEs页面
+TabbedEditor.ClickHereLatex=点击鼠标创建新Latex页面
+TabbedEditor.editPage=编辑/查看该页面
+TabbedEditor.addPage=增加新的页面
+TabbedEditor.addPageODE=增加新的ODEs页面
+TabbedEditor.addPageLatex=增加新的Latex页面
+TabbedEditor.copyPage=复制这个页面
+TabbedEditor.renamePage=重命名这个页面
+TabbedEditor.upPage=将该页面移到左边
+TabbedEditor.dnPage=将该页面移到右边
+TabbedEditor.togglePage=启用/停用该页面
+TabbedEditor.visiblePage=显示/隐藏该页面
+TabbedEditor.removePage=删除此页面
+
+CodeEditor.CodeFor=代码-
+
+HtmlEditor.HtmlFor=网页 -
+HtmlEditor.SourceFor=网页代码 -
+HtmlEditor.Dialog.Title=网页编辑器窗口
+HtmlEditor.Dialog.Size=500 400
+
+LatexEditor.LatexFor=Latex for
+LatexEditor.SourceFor=Latex代码for
+LatexEditor.Dialog.Title=Latex 编辑器窗口
+LatexEditor.Dialog.Size=500 400
+
+EditorFor.ChooseOne=请选择
+EditorFor.Ok=  Ok
+EditorFor.Apply=应用
+EditorFor.Cancel=取消
+EditorFor.Default=默认
+
+EditorForVariables.Size=370 350
+EditorForVariables.TitleVariables=匹配模型变量列表
+EditorForVariables.TitleActions=动作行为列表
+EditorForVariables.ActionList=动作行为列表
+EditorForVariables.Color=0,0,255
+EditorForVariables.ConstantEntry= : 常量 :
+EditorForVariables.ConstantValue=一个常量
+EditorForVariables.isPlaying=不管动画是否运行
+EditorForVariables.isPaused=不管动画是否暂停
+EditorForVariables.booleanConstant=一个逻辑常量
+EditorForVariables.intConstant=任何整型常量
+EditorForVariables.doubleConstant=任何双精度常量
+EditorForVariables.double[2]Constant=两个双精度常量
+EditorForVariables.double[3]Constant=三个双精度常量
+EditorForVariables.applyAll=Read all view variables into model
+EditorForVariables.apply=Read a given view variable into model
+EditorForVariables.initialize=Read view values and initialize
+EditorForVariables.pause=暂停动画
+EditorForVariables.play=播放动画
+EditorForVariables.reset=重新设置动画所有参数
+EditorForVariables.clearView=初始化显示界面
+EditorForVariables.readState=读取先前的模型状态
+EditorForVariables.saveState=保存目前的模型状态
+EditorForVariables.setDelay=设置动画的延迟时间(单位:毫秒)
+EditorForVariables.setFPS=设置每秒帧数
+EditorForVariables.step=Run one step of the evolution
+
+EditorForFont.Size=250 250
+EditorForFont.Plain=普通
+EditorForFont.Bold=粗体
+EditorForFont.Italic=斜体
+EditorForFont.BoldItalic=粗体+斜体
+EditorForFont.FontName= 名称
+EditorForFont.FontStyle= 风格
+EditorForFont.FontSize= 大小
+EditorForFont.ChooseAFont=请选择一种字体
+
+EditorForColor.Size=200 360
+EditorForColor.BasicColors=基本颜色
+EditorForColor.Recent=最近使用的颜色
+EditorForColor.Selection=选择
+EditorForColor.Red=红
+EditorForColor.Green=绿
+EditorForColor.Blue=蓝
+EditorForColor.Alpha=透明
+EditorForColor.More=显示更多颜色...
+EditorForColor.MoreColors=更多颜色
+
+EditorForLayout.Size=200 385
+EditorForLayout.Border=边界布局
+EditorForLayout.HBox=水平格布局
+EditorForLayout.VBox=垂直格布局
+EditorForLayout.Grid=网格布局
+EditorForLayout.Flow=流式布局
+EditorForLayout.HGap=水平间隙
+EditorForLayout.VGap=垂直间隙
+EditorForLayout.Rows=行
+EditorForLayout.Columns=列
+EditorForLayout.Left=左
+EditorForLayout.Center=中间
+EditorForLayout.Right=右
+
+EditorForPoint.Size=250 110
+EditorForPoint.Width=  宽度
+EditorForPoint.Height= 高度
+EditorForPoint.X=  X
+EditorForPoint.Y=  Y
+
+EditorForRectangle.Size=250 125
+EditorForRectangle.Width=  宽
+EditorForRectangle.Height= 高
+EditorForRectangle.X=    X
+EditorForRectangle.Y=    Y
+EditorForRectangle.Top=   上
+EditorForRectangle.Left=  左
+EditorForRectangle.Bottom= 下
+EditorForRectangle.Right= 右
+
+EditorForAlignment.LEFT=左
+EditorForAlignment.CENTER=中间
+EditorForAlignment.RIGHT=右
+
+EditorForArrowStyle.SEGMENT=Segment
+EditorForArrowStyle.ARROW=箭头
+EditorForArrowStyle.BOX=Box
+
+EditorForBoolean.true=True
+EditorForBoolean.false=False
+
+EditorForOrientation.HORIZONTAL=水平
+EditorForOrientation.VERTICAL=垂直
+
+EditorForPlacement.TOP=上
+EditorForPlacement.BOTTOM=下
+EditorForPlacement.LEFT=左
+EditorForPlacement.RIGHT=右
+
+View.FileDescription.image=Gif images
+View.FileDescription.audiofile=Audio files
+View.FileDescription.selectedimage=Gif images
+
+Tree.Main.Icon=data/icons/root.gif
+Tree.Capture.Icon=data/icons/capture.gif
+Tree.Create.Icon=data/icons/create.gif
+
+View.Action.Icon=data/icons/action.gif
+View.Link.Icon=data/icons/link.gif
+View.Edit.Icon=data/icons/edit.gif
+View.Write.Icon=data/icons/write.gif
+
+#EjsOptions.Size=400 370
+EjsOptions.Title=Ejs启动选项
+EjsOptions.generateHtml=创建运行动画的网页文件:
+EjsOptions.generateLeftFrameHtml=左框架
+EjsOptions.generateTopFrameHtml=顶框架
+EjsOptions.generateOneHtml=单个页面
+EjsOptions.generateNoHtml=不产生网页
+EjsOptions.removeJavaFile=编译之后删除java文件
+EjsOptions.showHiddenPages=显示隐藏的页面
+EjsOptions.ChooseFont=默认页面
+EjsOptions.Position=Ejs显示在:
+EjsOptions.center=中间
+EjsOptions.topLeft=左上角
+EjsOptions.custom=当前位置
+EjsOptions.htmlBody=网页 <body
+
+#------------ Added later than October 2002
+
+EditorForCartesianAxisType.LINEAR=Linear
+EditorForCartesianAxisType.LOG10=Log 10
+
+#---------- added by Fu-Kwun Hwang 021031
+Model.Variables.ToolTip=给你的模型定义变量
+Model.Initialization.ToolTip=给变量设置初始值
+Model.Evolution.ToolTip=定义变量如何随时间/空间演变(独立变量)
+Model.Constraints.ToolTip=给你的模型定义约束关系或变量间的约束关系
+Model.Library.ToolTip=定义你自己的函数
+View.Creation.ToolTip=创建
+
+# --------- Added later than Nov 2002
+
+VariableEditor.Connected=Connected to
+VariablesEditor.Connect=Connect to external
+VariablesEditor.ExternalFile=External File
+View.FileDescription.externalfile=External files
+TabbedEditor.addPageExternal=Add a new external page
+TabbedEditor.ClickHereExternal=Click to create a new external page
+EditorForVariables.TitleExternal=List of external variables
+VariablesEditor.ErrorReadingExternalFile=Error reading external file
+
+Utils.wizard=Open Code Wizard
+CodeWizard.Size=450 300
+CodeWizard.Title=Code Wizard
+
+External.Input=Input
+External.Output=Output
+
+Osejs.File.Error=错误
+Osejs.File.SavingError=保存文件出错
+Warning=警告
+
+View.FileDescription.xmlfile=Simulation files
+EjsOptions.loadFile=Default File
+
+# Added later than June 2003
+
+EquationEditor.Tolerance=Tolerance
+EquationEditor.Euler=Euler
+EquationEditor.MidPoint=Midpoint (a.k.a. Euler-Richardson)
+EquationEditor.RungeKutta=Runge-Kutta (4th order)
+EquationEditor.RungeKuttaFehlberg=Runge-Kutta-Fehlberg (4-5)
+EquationEditor.Verlet=Verlet
+EquationEditor.VelocityVerlet=Velocity Verlet
+
+# Added later than Oct 2003
+
+CodeWizard.ConstructionLabel=Select a construction
+CodeWizard.DescriptionLabel=Description
+CodeWizard.WriteConditionHere=Write the condition here
+CodeWizard.WriteCodeHere=Write the code here
+CodeWizard.WriteAltCodeHere=Write the alternative code here
+CodeWizard.SetIterationsHere=Iterations
+CodeWizard.ReturnTypeHere=Change the return type (if not void)
+CodeWizard.ArgumentsHere=Write arguments (if any) here
+CodeWizard.MethodName=methodName
+
+CodeWizard.If='if' conditional
+CodeWizardDescription.If=Code that will only be executed if a condition holds
+CodeWizard.IfElse='if else' conditional
+CodeWizardDescription.IfElse=Alternative code to be executed depending on a condition
+CodeWizard.For='for' loop
+CodeWizardDescription.For=Code that repeats a number of times
+CodeWizard.While='while' loop
+CodeWizardDescription.While=Code that repeats while a condition holds
+CodeWizard.DoWhile='do while' loop
+CodeWizardDescription.DoWhile=A while that is executed at least once
+CodeWizard.Method=A method
+CodeWizardDescription.Method=A routine or function
+
+EditorForVariables.resetView=Reset the view
+
+# Added later than Jan 2004
+
+  # This is for the groups in data/elementsOrdered.txt
+View.Elements.Groups.Windows=Windows
+View.Elements.Groups.Panels=Panels
+View.Elements.Groups.Drawing=Drawing
+View.Elements.Groups.Display=Display
+View.Elements.Groups.Buttons=Buttons
+View.Elements.Groups.Input=Input
+View.Elements.Groups.Basic=Basic
+View.Elements.Groups.Graphs&Bodies=Graphs & Bodies
+View.Elements.Groups.Fields=Fields
+
+# Added Later than March 2004
+
+  # Events
+EquationEditor.Events.Defined=Events
+EquationEditor.Events.EditEvents=Edit events
+
+EquationEditor.Events.DialogSize=500 500
+EquationEditor.Events.EventsFor=Events for ODE
+EquationEditor.Events.Page=Event
+EquationEditor.Events.LocalVariables=Local Variables
+EquationEditor.Events.ZeroCondition=Zero Condition
+EquationEditor.Events.Action=Action
+EquationEditor.Events.StopAtEvent=Stop at event
+
+EquationEditor.Events.Solver=Find using
+EquationEditor.Events.Bisection=Bisection
+
+  # New entry in popupmenu for CodeEditor
+Utils.PredefinedMethods=Predefined Methods
+
+
+# Added Later than October 2004
+
+View.FileDescription.videofile=Video files

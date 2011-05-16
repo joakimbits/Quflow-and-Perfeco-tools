@@ -1,0 +1,6 @@
+1203025250146	Rename method 'correctDirectory'
+1203025513085	Rename type 'FileAndName'
+1203027890243	Rename local variable 'jarFile'
+1203067500752	Rename local variable 'resFile'
+1203076160412	Rename local variable 'prefix'
+1203080525278	Rename field 'currentClassPath'

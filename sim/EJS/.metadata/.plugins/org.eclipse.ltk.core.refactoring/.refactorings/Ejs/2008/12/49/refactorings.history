@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;generatedFile&apos; in &apos;org.colos.ejs.osejs.Generate.generate(...)&apos; to &apos;generatedFiles&apos;&#x0D;&#x0A;- Original project: &apos;Ejs&apos;&#x0D;&#x0A;- Original element: &apos;org.colos.ejs.osejs.Generate.generate(Osejs).generatedFile&apos;&#x0D;&#x0A;- Renamed element: &apos;generatedFile&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;generatedFile&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;org.colos.ejs.osejs{Generate.java[Generate~generate~QOsejs;@generatedFile!4878!4912!4885!4897![" name="generatedFiles" references="true" stamp="1228571514081" version="1.0"/>
+</session>

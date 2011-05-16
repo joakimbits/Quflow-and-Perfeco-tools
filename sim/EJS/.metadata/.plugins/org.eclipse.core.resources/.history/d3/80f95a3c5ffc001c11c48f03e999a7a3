@@ -1,0 +1,1520 @@
+/**
+ * The package contains the main functionality of Osejs
+ * Copyright (c) November 2001 F. Esquembre
+ * @author F. Esquembre (http://fem.um.es).
+ */
+
+package org.colos.ejs.osejs;
+
+import org.colos.ejs.library._EjsConstants;
+import org.colos.ejs.osejs.utils.*;
+import org.colos.ejs.osejs.edition.*;
+import org.opensourcephysics.tools.*;
+import org.opensourcephysics.tools.minijar.MiniJar;
+import org.opensourcephysics.tools.minijar.PathAndFile;
+import org.opensourcephysics.display.OSPRuntime;
+
+import java.awt.Component;
+import java.io.*;
+import java.util.*;
+import java.util.jar.*;
+import javax.swing.filechooser.*;
+import javax.swing.*;
+
+import org.opensourcephysics.tools.JarTool;
+import org.opensourcephysics.display.*;
+import org.opensourcephysics.tools.ToolsRes;
+
+//--------------------
+
+public class Generate {
+  static private final ResourceUtil res    = new ResourceUtil("Resources");
+
+  /**
+   * Generates a simulation and all its auxiliary files
+   * @param _ejs Osejs
+   * @param _filename String The Java file for the simulation
+   * @param _relativePath String The full path of the XML file
+   * @return File the main class file generated
+   */
+  static public File generate (Osejs _ejs) {
+    String binDirPath = FileUtils.getPath(_ejs.getBinDirectory());
+    String srcDirPath = FileUtils.getPath(_ejs.getSourceDirectory());
+    //String outDirPath = FileUtils.getPath(_ejs.getOutputDirectory());
+
+    File xmlFile = _ejs.getCurrentXMLFile();
+    String filename = FileUtils.getPlainName(xmlFile);
+    String relativePath = FileUtils.getRelativePath(FileUtils.getPath(xmlFile),srcDirPath,false);
+    String parentPath;
+    int index = relativePath.lastIndexOf('/');
+    if (index>=0) parentPath = relativePath.substring(0,index+1); // including the '/'
+    else parentPath = "";
+    char[] pathChars = relativePath.toCharArray();
+    String pathToLib = ""; // Levels up to get to the _ejs_library
+    for (int i=0; i<pathChars.length; i++) if (pathChars[i]=='/') pathToLib += "../";
+    if (_ejs.isVerbose()) {
+      System.out.println("Generating:\n");
+      System.out.println("  name "+filename);
+      System.out.println("  relative path "+relativePath);
+      System.out.println("  parent path "+parentPath);
+      System.out.println("  path to lib "+pathToLib);
+    }
+    if (_ejs.isJustCompiling()) System.out.println(relativePath+": "+res.getString("Generate.Compiling"));
+
+    // Prepare to start
+    String generatedDirPath = parentPath;
+    File generatedDirectory = new File(_ejs.getOutputDirectory(),generatedDirPath);
+    generatedDirectory.mkdirs(); // and rebuild it
+    
+    String classname = getValidIdentifier(filename);  // a legal name for the Java class to create
+    String packageName = getPackageName (classname,parentPath+filename); // a legal name for the package of the class to create
+    List<PathAndFile> jarList = getPathAndFile(_ejs, xmlFile, parentPath, _ejs.getModelEditor().getUserJars()); // user JAR files
+    List<PathAndFile> resList = getPathAndFile(_ejs, xmlFile, parentPath, getResourcesList(_ejs,true)); // auxiliary files
+    
+    Metadata metadata = new Metadata(_ejs.getSimInfoEditor().saveString(), 
+        packageName +"."+classname, jarList,
+        _ejs.getViewEditor().generateCode(Editor.GENERATE_RESOURCES_NEEDED_BY_PACKAGE,"").toString());
+
+    // Here we go
+    _ejs.getOutputArea().println(res.getString("Generate.Compiling")+ " "+ filename + "...");
+    File classesDir = null;
+    try {
+      // Create and save the Java files
+      File[] generatedFile = new File[4];
+      generatedFile[0] = FileUtils.saveToFile(new File(generatedDirectory, classname + ".java"), // the model file
+        generateModel (_ejs,classname,packageName,generatedDirPath,relativePath,parentPath,generatedDirectory,binDirPath,resList));
+      generatedFile[1] = FileUtils.saveToFile(new File(generatedDirectory, classname + "Simulation.java"), // the simulation file
+        generateSimulation(_ejs,classname,packageName, filename));
+      generatedFile[2] = FileUtils.saveToFile(new File(generatedDirectory, classname + "View.java"), // the view file
+        generateView(_ejs,classname,packageName));
+      String mainFrame = _ejs.getViewEditor().generateCode(Editor.GENERATE_MAIN_WINDOW, "").toString().trim();
+      if (mainFrame.length()<=0) mainFrame = "\"EmptyFrame\"";
+      generatedFile[3] = FileUtils.saveToFile(new File(generatedDirectory, classname + "Applet.java"), // the Applet file
+        generateApplet(classname, packageName, parentPath, mainFrame));
+            
+      // Compilation
+      classesDir = File.createTempFile(classname, ".tmp", _ejs.getOutputDirectory()); // Get a unique temporary directory
+      classesDir.delete(); // remove the created file
+      if (classesDir==null || !classesDir.mkdirs()) {
+        _ejs.getOutputArea().println (res.getString("Package.NotTempDirError")+" "+FileUtils.getPath(classesDir));
+        if (_ejs.isJustCompiling()) {
+          String message = res.getString("Package.NotTempDirError")+" "+FileUtils.getPath(classesDir);
+          System.out.println(message);
+          FileUtils.saveToFile(new File (generatedDirectory,"error.txt"),message+"\n");
+        }
+        return null;
+      }
+      boolean ok = compile(_ejs,FileUtils.getPath(classesDir),generatedFile,getClasspath(binDirPath,srcDirPath,jarList));
+
+      // Remove Java files, if configured to do so
+      if (_ejs.getOptions().removeJavaFile()) for (int i=0; i<generatedFile.length; i++) generatedFile[i].delete();
+      else for (int i=0; i<generatedFile.length; i++) metadata.addFileCreated(generatedFile[i]);
+
+      if (ok) _ejs.getOutputArea().println (res.getString("Generate.CompilationSuccessful"));
+      else { // Compilation failed
+        String message = res.getString("Generate.CompilationError");
+        _ejs.getOutputArea().println (message);
+        if (_ejs.isJustCompiling()) {
+          System.out.println(relativePath+": "+message);
+          FileUtils.saveToFile(new File (generatedDirectory,"error.txt"),message+FileUtils.getPath(xmlFile)+"\n");
+        }
+        JarTool.remove(classesDir);
+        return null;
+      }
+
+      // Generate HTML files
+      StringBuffer buffer = new StringBuffer ();
+      buffer.append("common.jar,"+parentPath+filename+".jar");
+      for (PathAndFile paf : jarList) buffer.append(paf.getPath()+",");
+      String archiveStr = buffer.toString();
+      switch (_ejs.getOptions().generateHtml()) {
+        case org.colos.ejs.osejs.EjsOptions.GENERATE_ONE_PAGE :
+          FileUtils.saveToFile(metadata.addFileCreated(new File(generatedDirectory,filename+".html")),
+            generateHtmlNoFrames(_ejs,filename,classname,packageName,pathToLib,archiveStr));
+          break;
+        case org.colos.ejs.osejs.EjsOptions.GENERATE_TOP_FRAME :
+        case org.colos.ejs.osejs.EjsOptions.GENERATE_LEFT_FRAME :
+          Hashtable<String,StringBuffer> htmlTable = generateHtml(_ejs,filename,classname,packageName,pathToLib,archiveStr);
+          for (String key : htmlTable.keySet()) 
+            FileUtils.saveToFile (metadata.addFileCreated(new File (generatedDirectory,filename+key+".html")),
+                htmlTable.get(key).toString());
+          break;
+        default : break; // Do nothing
+      }
+
+      // compress the classes and the introduction pages (required by the description) into a JAR file
+      File jarFile = new File (generatedDirectory,filename+".jar");
+      Set<PathAndFile> jarSet = new HashSet<PathAndFile>();
+      for (Iterator<?> it = JarTool.getContents(classesDir).iterator(); it.hasNext(); ) {
+        File classFile = (File) it.next();
+        jarSet.add(new PathAndFile(FileUtils.getRelativePath(classFile,classesDir,false),classFile));
+      }
+      String prefix = filename + "_Intro ";
+      for (String createdFilename : metadata.getFilesCreated()) 
+        if (createdFilename.startsWith(prefix) && createdFilename.endsWith(".html")) 
+          jarSet.add(new PathAndFile(parentPath+createdFilename, new File(generatedDirectory,createdFilename)));
+      // Use MiniJar to compress it
+      MiniJar minijar= new MiniJar();
+      minijar.setOutputFile(jarFile);
+      minijar.compress(jarSet);
+      metadata.addFileCreated(jarFile);
+      // Clean it
+      JarTool.remove(classesDir);
+      
+      // Include the XML model
+      if (_ejs.getOptions().includeModel()) 
+        JarTool.copy(xmlFile, metadata.addFileCreated(new File (generatedDirectory,filename+".xml")));
+      
+      // Save the meta data
+      File metadataFile = new File (generatedDirectory,filename+Metadata.EXTENSION);
+      metadata.saveToFile(metadata.addFileCreated(metadataFile));
+
+      // Prepare execution
+      buffer = new StringBuffer();
+      buffer.append(binDirPath+"osp.jar"+File.pathSeparator);
+      buffer.append(binDirPath+"ejs_lib.jar"+File.pathSeparator);
+      buffer.append(FileUtils.getPath(jarFile)+File.pathSeparator);
+      for (PathAndFile paf : jarList) buffer.append(srcDirPath+paf.getPath()+File.pathSeparator);
+      String executionPath = buffer.toString(); // getExecPath(jarFile,binDirPath,srcDirPath,outDirPath,jarList,false);
+      _ejs.setExecutionParameters (metadata.getClassname(),executionPath);
+
+      // Report generation done correctly
+      _ejs.getOutputArea().println(res.getString("Generate.GenerationOk"));
+      if (_ejs.isJustCompiling()) System.out.println(relativePath+": "+res.getString("Generate.GenerationOk"));
+      
+      return metadataFile;
+    }
+    catch (IOException ex) {
+      _ejs.getOutputArea().println(res.getString("Generate.GenerationError"));
+      _ejs.getOutputArea().println("System says :\n  " + ex.getMessage());
+      if (_ejs.isJustCompiling()) {
+        String message = res.getString("Generate.GenerationError");
+        System.out.println(relativePath+": "+message);
+        try {  FileUtils.saveToFile(new File (generatedDirectory,"error.txt"),message+FileUtils.getPath(xmlFile)+"\n"); }
+        catch (Exception exc2) { exc2.printStackTrace(); }
+      }
+      if (classesDir!=null) JarTool.remove(classesDir);
+      return null;
+    }
+  }
+
+  /**
+   * Compiles the generated Java files
+   * @param _ejs Osejs The calling EJS
+   * @param _javaFiles File[] The Java files for the simulation's code
+   * @param _classpath String The class path to use
+   * @return boolean true if successful, false otherwise.
+   */
+  static private boolean compile (Osejs _ejs, String _classesDirPath, File[] _javaFiles, String _classpath) {
+    int offset = _javaFiles.length;
+    String args[] = new String[7+offset];
+    for (int i=0; i<_javaFiles.length; i++) args[i] = _javaFiles[i].getPath();
+    args[offset] = "-classpath";
+    args[offset+1] = _classpath;
+    args[offset+2] = "-d";
+    args[offset+3] = _classesDirPath;
+    args[offset+4] = "-source";
+    args[offset+5] = _ejs.getOptions().targetVM();
+    args[offset+6] = "-Xlint:unchecked";
+    // for (int i=0; i<args.length; i++) System.out.println ("Args["+i+"] = "+args[i]);
+    boolean ok = com.sun.tools.javac.Main.compile(args,new PrintWriter(_ejs.getOutputArea()))==0;
+    // if (!ok) JarTool.remove(_classesDir);
+    return ok;
+  }
+
+  /**
+   * Run a generated simulation locally.
+   * @param _ejs Osejs The calling EJS
+   * @param _filename String The name of the file to run
+   * @return boolean true if successful, false otherwise.
+   */
+  static public boolean run (Osejs _ejs) {
+    /*
+    if (_ejs.getOptions().runAsApplet()) {
+      try {
+        File htmlFile = _ejs.getCurrentHTMLFile();
+        _ejs.getOutputArea().println(res.getString("Generate.RunningSimulation") + " "+htmlFile.getName() + "...");
+        String runFile = FileUtils.correctUrlString("file:///"+FileUtils.getPath(htmlFile)); 
+        com.Ostermiller.util.Browser.init();
+        com.Ostermiller.util.Browser.displayURL(runFile);
+        _ejs.getOutputArea().println(res.getString("Generate.SimulationRunsOK"));
+      }
+      catch (Exception exc) {
+        exc.printStackTrace();
+        _ejs.getOutputArea().println(res.getString("Generate.SimulationDoesNotRun"));
+        return false;
+      }
+    }
+    else {
+     */
+    GeneratedUtil runable = new GeneratedUtil(_ejs);
+    java.lang.Thread thread = new Thread(runable);
+    thread.setPriority(Thread.MIN_PRIORITY);
+    thread.start();
+    //}
+    return true;
+  }
+
+  // ----------------------------
+  // Options of the package button
+  // ----------------------------
+
+  static public void packageCurrentSimulation(Osejs _ejs) {
+    _ejs.getExportDirectory().mkdirs(); // In case it doesn't exist
+    String binDirPath = FileUtils.getPath(_ejs.getBinDirectory());
+
+    // Prepare directory names
+    File metadataFile = _ejs.getCurrentMetadataFile();
+    String plainName = FileUtils.getPlainName(metadataFile);
+    File generatedDir = metadataFile.getParentFile();
+    String relativePath = FileUtils.getRelativePath(generatedDir, _ejs.getOutputDirectory(), false); 
+
+    // Read the meta data
+    Metadata metadata = Metadata.readFile(metadataFile, relativePath);
+    if (metadata==null) {
+      String[] message=new String[]{res.getString("Package.JarFileNotCreated"),res.getString("Package.IncorrectMetadata")};
+      JOptionPane.showMessageDialog(_ejs.getPackageButton(),message,res.getString("Package.Error"),JOptionPane.WARNING_MESSAGE);
+      return;
+    }
+
+    // Select the target
+    File targetFile = new File(_ejs.getExportDirectory(),OsejsCommon.firstToLower(plainName)+".jar");
+    JFileChooser chooser = OSPRuntime.createChooser("JAR",new String[]{"jar"});
+    chooser.setCurrentDirectory(_ejs.getExportDirectory());
+    chooser.setSelectedFile(targetFile);
+    String targetName = OSPRuntime.chooseFilename(chooser,_ejs.getPackageButton(), true);
+    if (targetName==null) {
+      _ejs.getOutputArea().println(res.getString("Package.JarFileNotCreated"));
+      return;
+    }
+    boolean warnBeforeOverwritting = true;
+    if (! targetName.toLowerCase().endsWith(".jar")) targetName = targetName + ".jar";
+    else warnBeforeOverwritting = false; // the chooser already checked if the target file exists
+    targetFile = new File(targetName);
+    if (warnBeforeOverwritting && targetFile.exists()) {
+      int selected = JOptionPane.showConfirmDialog(_ejs.getPackageButton(),DisplayRes.getString("DrawingFrame.ReplaceExisting_message") + " " +
+          targetFile.getName() +DisplayRes.getString("DrawingFrame.QuestionMark"),
+          DisplayRes.getString("DrawingFrame.ReplaceFile_option_title"), JOptionPane.YES_NO_CANCEL_OPTION);
+      if (selected != JOptionPane.YES_OPTION) {
+        _ejs.getOutputArea().println(res.getString("Package.JarFileNotCreated"));
+        return;
+      }
+    }
+
+    // Create an instance of MiniJar and prepare it
+    MiniJar minijar= new MiniJar();
+    minijar.setOutputFile(targetFile);
+    minijar.setManifestFile(MiniJar.createManifest(".",metadata.getClassname()));
+    minijar.addExclude ("++Thumbs.db");
+    minijar.addDesired("org/opensourcephysics/resources/++");
+    minijar.addDesired("org/opensourcephysics/numerics/++.class");
+    minijar.addDesired("org/opensourcephysics/ode/++.class");
+    
+    // Add resources needed by the view elements when packaging. For example, CamImage adds  "com/charliemouse/++.gif"
+    for (String resource : metadata.getResourcePatterns()) minijar.addDesired(resource);
+
+    // Add source paths according to the execution path
+    StringTokenizer tkn = new StringTokenizer (_ejs.getExecutionPath(),File.pathSeparator);
+    while (tkn.hasMoreTokens()) minijar.addSourcePath(tkn.nextToken());
+
+    // Now add the main class and the Applet class as well
+    String classname = metadata.getClassname().replace('.', '/');
+    minijar.addDesired(classname+".class");
+    minijar.addDesired(classname+"Applet.class");
+    
+    // Get matches
+    Set<PathAndFile> matches = minijar.getMatches();
+
+    // Add the XML file
+    File xmlFile = new File (generatedDir, plainName+".xml");
+    if (xmlFile.exists()) matches.add(new PathAndFile (relativePath+xmlFile.getName(),xmlFile));
+
+    // Add the _Intro HTML files (adapting them)
+    String prefix = plainName+"_Intro ";
+    for (String filename : metadata.getFilesCreated())
+      if (filename.startsWith(prefix) && filename.endsWith(".html"))
+        matches.add(new PathAndFile(relativePath+filename, new File (generatedDir, filename)));
+    
+    // Add auxiliary files
+    for (String auxPath : metadata.getAuxiliaryFiles()) 
+      matches.add(new PathAndFile(auxPath,new File(_ejs.getSourceDirectory(),auxPath)));
+
+    // Add user jars files. These won't get as jars inside the target jar, but their contents will
+    // We need them as proper jar files in order to extract them later on
+    for (String jarPath : metadata.getJarFiles()) 
+      matches.add(new PathAndFile(jarPath,new File(_ejs.getSourceDirectory(),jarPath)));
+
+    // Add (directly) all the files in the library directory 
+    for (Iterator<?> it = JarTool.getContents(new File(_ejs.getBinDirectory(),"_ejs_library")).iterator(); it.hasNext(); ) {
+      File file = (File) it.next();
+      matches.add(new PathAndFile(FileUtils.getRelativePath(file, binDirPath, false),file));
+    }
+
+    // Create the jar file
+    Set<String> missing = minijar.compress(matches);
+    
+    // Print missing files
+    if (_ejs.isVerbose()) {
+      for (Iterator<String> it=missing.iterator(); it.hasNext(); ) System.out.println ("Missing file: "+it.next()); 
+    }
+/*    
+    if (_ejs.getOptions().eMersionEnabled()) {
+      String pathToHTML = name+GEN_DIR_EXTENSION;
+      if (useFullPath) {
+        index = _fullName.lastIndexOf('/');
+        if (index >=0) pathToHTML = _ejs.getOutputDirPath()+"/"+_xmlFile.getAbsolutePath().substring(0, index + 1) + pathToHTML;
+        else pathToHTML = _ejs.getOutputDirPath()+"/"+pathToHTML;
+      }
+      else pathToHTML = _ejs.getOutputDirPath()+"/"+pathToHTML;
+      FileUtils.saveToFile (new File (outputDirectory,filename+"_Emersion.html"),generateEmersionHtml(_ejs,filename,classname,packageName,pathToHTML,pathToLibs,archiveStr) );
+    }
+*/
+    _ejs.getOutputArea().message("Package.JarFileCreated",targetFile.getName());
+  }
+
+  /**
+   * This compresses the simulation XML file and its auxiliary files
+   * @param _ejs Osejs
+   * @param _filename String
+   * @return String
+   */
+  static public void zipCurrentSimulation(Osejs _ejs) {
+    File xmlFile = _ejs.getCurrentXMLFile();
+    _ejs.getExportDirectory().mkdirs(); // In case it doesn't exist
+
+    // Select the target
+    File targetFile = new File(_ejs.getExportDirectory(),FileUtils.getPlainName(xmlFile)+".zip");
+    JFileChooser chooser = OSPRuntime.createChooser("ZIP",new String[]{"zip"});
+    chooser.setCurrentDirectory(targetFile.getParentFile());
+    chooser.setSelectedFile(targetFile);
+    String targetName = OSPRuntime.chooseFilename(chooser,_ejs.getPackageButton(), true);
+    if (targetName==null) {
+      _ejs.getOutputArea().println(res.getString("Package.JarFileNotCreated"));
+      return;
+    }
+    targetFile = new File(targetName);
+    boolean warnBeforeOverwritting = true;
+    if (! targetName.toLowerCase().endsWith(".zip")) targetName = targetName + ".zip";
+    else warnBeforeOverwritting = false; // the chooser already checked if the target file exists
+    if (warnBeforeOverwritting && targetFile.exists()) {
+      int selected = JOptionPane.showConfirmDialog(_ejs.getPackageButton(),DisplayRes.getString("DrawingFrame.ReplaceExisting_message") + " " +
+          targetFile.getName() +DisplayRes.getString("DrawingFrame.QuestionMark"),
+          DisplayRes.getString("DrawingFrame.ReplaceFile_option_title"), JOptionPane.YES_NO_CANCEL_OPTION);
+      if (selected != JOptionPane.YES_OPTION) {
+        _ejs.getOutputArea().println(res.getString("Package.JarFileNotCreated"));
+        return;
+      }
+    }
+
+    Set<PathAndFile> list = new HashSet<PathAndFile>();
+    list.add(new PathAndFile(xmlFile.getName(),xmlFile));
+    list.addAll(_ejs.getAuxiliaryFiles(xmlFile));
+
+    if (org.opensourcephysics.tools.minijar.MiniJar.compress(list, targetFile, null)) {
+      _ejs.getOutputArea().println(res.getString("Package.JarFileCreated")+" "+targetFile.getName());
+    }
+    else _ejs.getOutputArea().println(res.getString("Package.JarFileNotCreated"));
+  }
+
+  static public void cleanSimulations(Osejs _ejs) {
+    List<File> list = OsejsCommon.getSimulationsMetadataFiles(_ejs.getPackageButton(),_ejs.getOutputDirectory(),
+        res.getDimension("Package.ConfirmList.Size"), res.getString("Package.CleanSimulationsMessage"),
+        res.getString("Package.CleanSimulations"),true);
+    if (list==null || list.size()<=0) return;
+    boolean result = true;
+    for (File metadataFile : list) {
+      Metadata metadata = Metadata.readFile(metadataFile, null);
+      // Clean all files created during the compilation process
+      for (String filename : metadata.getFilesCreated()) {
+        File file = new File (metadataFile.getParentFile(),filename);
+        if (!file.delete()) {
+          JOptionPane.showMessageDialog(_ejs.getPackageButton(), 
+            res.getString("Package.CouldNotDeleteDir")+" "+FileUtils.getPath(file),
+            res.getString("Package.Error"), JOptionPane.INFORMATION_MESSAGE);
+          result = false;
+        }
+      }
+    }
+    if (result) {
+      if (_ejs.getOutputDirectory().exists())
+        org.colos.ejs.library.Simulation.removeEmptyDirs(_ejs.getOutputDirectory(),false); // false = Do not remove the "output" directory itself.
+      _ejs.getOutputArea().println(res.getString("Package.SimulationsDeleted"));
+    }
+    else _ejs.getOutputArea().println(res.getString("Package.SimulationsNotDeleted"));
+  }
+
+  static public void packageAllSimulations(Osejs _ejs) {
+    File target = new File ( _ejs.getExportDirectory(),"ejs_launcher.jar");
+    List<File> list = OsejsCommon.getSimulationsMetadataFiles (_ejs.getPackageButton(),_ejs.getOutputDirectory(),
+        res.getDimension("Package.ConfirmList.Size"), res.getString("Package.PackageAllSimulationsMessage"),
+        res.getString("Package.PackageAllSimulations"),true);
+    if (list!=null && list.size()>0) {
+      PackagerBuilder.create(list, _ejs.getBinDirectory(), _ejs.getOutputDirectory(), _ejs.getSourceDirectory(), 
+          target, _ejs.getOutputArea().textArea(), _ejs.getPackageButton());
+    }
+  }
+
+  static public void editLauncherPackage(Osejs _ejs) {
+    boolean defaultLaF = JFrame.isDefaultLookAndFeelDecorated();
+
+    JFileChooser chooser=OSPRuntime.createChooser("JAR",new String[]{"jar"});
+    chooser.setCurrentDirectory(_ejs.getExportDirectory());
+    String sourceName = OSPRuntime.chooseFilename(chooser,_ejs.getPackageButton(),false); // false = to read
+    JFrame.setDefaultLookAndFeelDecorated(defaultLaF);
+    JDialog.setDefaultLookAndFeelDecorated(defaultLaF);
+    
+    if (sourceName==null) return;
+    if (!sourceName.toLowerCase().endsWith(".jar")) sourceName = sourceName + ".jar";
+    File source = new File(sourceName);
+    if (!PackagerBuilder.canBeRebuilt(source)){
+      JOptionPane.showMessageDialog(_ejs.getPackageButton(),res.getString("Package.FileNotExistingError") + ": " +
+          source.getName(),DisplayRes.getString("Package.Error"),JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    // Add already compiled simulations to the list
+    List<File> existingList = OsejsCommon.getSimulationsMetadataFiles (_ejs.getPackageButton(),_ejs.getOutputDirectory(),
+        res.getDimension("Package.ConfirmList.Size"), res.getString("EjsConsole.RebuildPackage"),
+        res.getString("Package.PackageExtraSimulationsMessage"),false);
+    if (existingList==null) {
+      _ejs.getOutputArea().println (res.getString("ProcessCanceled"));
+      return;
+    }
+
+    //_ejs.getOutputArea().clear();
+    _ejs.getOutputArea().println(res.getString("EjsConsole.UncompressingJAR")+" "+source.getName());
+    File rebuildTmpDir = PackagerBuilder.uncompressToTemp(source);
+    if (rebuildTmpDir==null){
+      String[] message=new String[]{res.getString("Package.JarFileNotCreated"),res.getString("Package.NotTempDirError")};
+      JOptionPane.showMessageDialog(_ejs.getPackageButton(),message,res.getString("Package.Error"),JOptionPane.WARNING_MESSAGE);
+      return;
+    }
+    PackagerBuilder.rebuild (new ArrayList<File>(existingList), existingList, 
+        _ejs.getBinDirectory(), _ejs.getOutputDirectory(), _ejs.getSourceDirectory(), 
+        rebuildTmpDir, source, _ejs.getOutputArea().textArea(),_ejs.getPackageButton());
+  }
+
+  static public void createGroupHTML(Osejs _ejs) {
+    // _ejs.getOutputArea().clear();
+    List<File> list = OsejsCommon.getSimulationsMetadataFiles (_ejs.getPackageButton(),_ejs.getOutputDirectory(),
+        res.getDimension("Package.ConfirmList.Size"), res.getString("Package.CreateGroupHTMLMessage"),
+        res.getString("Package.CreateGroupHTML"),true);
+    if (list==null || list.size()<=0) return;
+
+    // Choose the target HTML file
+    boolean defaultLaF = JFrame.isDefaultLookAndFeelDecorated();
+    File targetFile = new File (_ejs.getExportDirectory(),"ejs_group.html");
+    JFileChooser chooser=OSPRuntime.createChooser("HTML",new String[]{"html", "htm"});
+    chooser.setCurrentDirectory(targetFile.getParentFile());
+    chooser.setSelectedFile(targetFile);
+    String targetFilename = OSPRuntime.chooseFilename(chooser,_ejs.getPackageButton(),true);
+    JFrame.setDefaultLookAndFeelDecorated(defaultLaF);
+    JDialog.setDefaultLookAndFeelDecorated(defaultLaF);
+    if (targetFilename==null) return;
+
+    // Checking for existence of the target HTML file and associated directory
+    boolean warnBeforeOverwritting = true;
+    if (! (targetFilename.toLowerCase().endsWith(".html") || targetFilename.toLowerCase().endsWith(".htm")) ) 
+      targetFilename = targetFilename + ".html";
+    else warnBeforeOverwritting = false; // the chooser already checked if the target file exists
+    targetFile = new File(targetFilename);
+    File groupDirectory = new File (targetFile.getParent(),FileUtils.getPlainName(targetFile)+".files");
+    if (warnBeforeOverwritting && targetFile.exists()) {
+      int selected = JOptionPane.showConfirmDialog(_ejs.getPackageButton(),DisplayRes.getString("DrawingFrame.ReplaceExisting_message") + " " +
+        targetFile.getName() + DisplayRes.getString("DrawingFrame.QuestionMark"),
+        DisplayRes.getString("DrawingFrame.ReplaceFile_option_title"),JOptionPane.YES_NO_CANCEL_OPTION);
+      if (selected != JOptionPane.YES_OPTION) {
+        _ejs.getOutputArea().println(res.getString("Package.JarFileNotCreated"));
+        return;
+      }
+    }
+
+    // Ready to do it
+    if (groupDirectory.exists()) JarTool.remove(groupDirectory);
+    groupDirectory.mkdirs();
+
+    try { 
+      FileUtils.saveToFile(targetFile, generateGroupHtml(_ejs, list, groupDirectory, FileUtils.getPlainName(targetFile))); 
+    }
+    catch (Exception exc) {
+      JOptionPane.showMessageDialog(_ejs.getPackageButton(), res.getString("Osejs.File.CantCreateFile"),
+        res.getString("Package.CantCreateError"), JOptionPane.INFORMATION_MESSAGE);
+      //_ejs.getOutputArea().message("Osejs.File.CantCreateFile",targetFile.getAbsolutePath());
+      exc.printStackTrace();
+      return;
+    }
+
+    // Copy all files in the library directory 
+    String binDirPath = FileUtils.getPath(_ejs.getBinDirectory());
+    // for (File file : JarTool.getContents(new File(_ejs.getBinDirectory(),"_ejs_library")))
+    for (Iterator it = JarTool.getContents(new File(_ejs.getBinDirectory(),"_ejs_library")).iterator(); it.hasNext(); ) {
+      File file = (File) it.next();
+      File destFile = new File(groupDirectory,FileUtils.getRelativePath(FileUtils.getPath(file), binDirPath, false));
+      if (!JarTool.copy(file,destFile)) {
+        JOptionPane.showMessageDialog(_ejs.getPackageButton(), res.getString("Osejs.File.CantCreateFile")+" "+destFile.getAbsolutePath(),
+            res.getString("Package.CantCreateError"), JOptionPane.INFORMATION_MESSAGE);
+        _ejs.getOutputArea().message("Osejs.File.CantCreateFile",destFile.getAbsolutePath());
+        return;
+      }
+    }
+  
+    // Done
+    _ejs.getOutputArea().message("Package.GroupHTMLOk",FileUtils.getRelativePath(targetFile,_ejs.getExportDirectory(),false));
+  }
+
+  // ----------------------------
+  // Utilities
+  // ----------------------------
+
+
+  /**
+   * Gets the list of all additional files (images, sound, external,...) needed.
+   * The format for the files uses always the "/" as separator.
+   * @param _ejs Osejs
+   * @param _includeInfo boolean whether to include the resources prescribed by the information panel
+   * @return List<String>
+   */
+  static public List<String> getResourcesList (Osejs _ejs, boolean _includeInfo) {
+    StringBuffer buffer = new StringBuffer();
+    if (_includeInfo) buffer.append(_ejs.getSimInfoEditor().getAllAuxiliaryFiles());               // Those specified by the user
+    buffer.append(_ejs.getDescriptionEditor().generateCode(Editor.GENERATE_RESOURCES_NEEDED,""));  // Those required by the Intro
+    buffer.append(_ejs.getModelEditor().generateCode(Editor.GENERATE_RESOURCES_NEEDED,"")); // Those required by the model
+    buffer.append(_ejs.getViewEditor().generateCode(Editor.GENERATE_RESOURCES_NEEDED,""));  // Those required by the view
+    // Now make the real list simplifying repeated entries
+    List<String> list = new ArrayList<String>();
+    String relativePath = FileUtils.getRelativePath(_ejs.getCurrentXMLFile().getParentFile(), _ejs.getSourceDirectory(), false);
+    int length = relativePath.length();
+    StringTokenizer tkn = new StringTokenizer(buffer.toString(),";");
+    while (tkn.hasMoreTokens()) {
+      String resFile = tkn.nextToken().replace('\\','/'); // Change separator char to '/'
+      // System.out.println ("Checking path of "+resFile);
+      resFile = FileUtils.uncorrectUrlString(resFile);
+      if (resFile.startsWith(relativePath)) resFile = "./" + resFile.substring(length);
+      else resFile = _ejs.getRelativePath(resFile);
+      if (!list.contains(resFile)) list.add(resFile);
+    }
+    Collections.sort(list);
+    return list;
+  }
+
+  /**
+   * Get the class path for compilation
+   * @param _list List The list of all user required jar files
+   * @param _generationDir File The base directory for generated files
+   * @return String
+   */
+  static private String getClasspath (String _binDirPath, String _srcDirPath, List<PathAndFile> _list) {
+    StringBuffer textList = new StringBuffer();
+    textList.append(_binDirPath+"osp.jar"+ File.pathSeparatorChar);
+    textList.append(_binDirPath+"ejs_lib.jar"+ File.pathSeparatorChar);
+    for (PathAndFile paf : _list) textList.append(_srcDirPath+paf.getPath()+File.pathSeparatorChar);
+    return textList.toString().replace('/',File.separatorChar);
+  }
+
+  /**
+   * Gets the package for the java file
+   * @param _className String The valid plain name, i.e. Whatever_sim
+   * @param _fullName String The relative full path, i.e. _users/murcia/fem/Whatever sim.xml
+   * @return String
+   */
+  static private String getPackageName (String _className, String _relativePath) {
+    int index = _relativePath.lastIndexOf('/');
+    if (index<0) return OsejsCommon.firstToLower(_className);
+    String packageName = new String();
+    StringTokenizer tkn = new StringTokenizer(_relativePath.substring(0,index+1).replace('.','_'),"/");
+    while (tkn.hasMoreTokens()) packageName += getValidIdentifier(tkn.nextToken()) + ".";
+    return packageName + OsejsCommon.firstToLower(_className);
+  }
+
+  /**
+   * Returns a name which can be used as a valid identifier (for a variable, method, etc.).
+   * It replaces illegal characters with '_'
+   * @param _name String
+   * @return String
+   */
+  static public String getValidIdentifier (String _name) {
+    char[] chars = _name.toCharArray();
+    if (!Character.isJavaIdentifierStart(chars[0])) chars[0] = '_';
+    for (int i=1; i<chars.length; i++) {
+      if (!Character.isJavaIdentifierPart(chars[i])) chars[i] = '_';
+    }
+    return new String(chars);
+  }
+  
+  // ----------------------------------------------------
+  // compiling, packing an running a simulation
+  // ----------------------------------------------------
+
+  /**
+   * Converts an absolute path to the relative path with which it should be copied to the generated output directory
+   */
+  static public String getResourceCopyPath (Osejs _ejs, String _path, String _relativeParent) { 
+    if (_path.startsWith("./")) return _relativeParent + _path.substring(2);
+    File file = new File (_ejs.getSourceDirectory(),_path);
+    if (file.exists()) return _path; // as is
+    return null; // Not under EJS's user directory: should not be copied
+  }
+  
+  /**
+   * Converts a list of filenames into a list of MyPathAndFile
+   * @param _ejs
+   * @param _xmlFile
+   * @param _relativeParent
+   * @param _pathList
+   * @return
+   */
+  static private List<PathAndFile> getPathAndFile (Osejs _ejs, File _xmlFile, String _relativeParent, List<String> _pathList) {
+    List<PathAndFile> list = new ArrayList<PathAndFile>();
+    for (String path : _pathList) {
+      File file;
+      if (path.startsWith("./")) {
+        file = new File (_xmlFile.getParent(),path); // Search relatively to the xmlFile location
+        path = _relativeParent + path.substring(2); // complete the relative path 
+      }
+      else file = new File (_ejs.getSourceDirectory(),path); // Search absolutely in EJS user directory
+      if (file.exists()) {
+        PathAndFile paf = new PathAndFile(path,file);
+        if (!list.contains(paf)) list.add(paf); 
+      }
+      else _ejs.getOutputArea().println(res.getString("Generate.JarFileResourceNotFound")+": "+path);
+    }
+    return list;
+  }
+
+
+  // ----------------------------------------------------
+  // Generation of HTML code
+  // ----------------------------------------------------
+
+  static private class SimInfo {
+    String name, fullPath, path, pathToLib, classpath;  
+  }
+  
+  static private String generateGroupHtml (Osejs _ejs, List<File> _metadataFilesList, File _groupDirectory, String _targetName) {
+    String ret = System.getProperty("line.separator");
+    File binDir = _ejs.getBinDirectory();
+    String binDirPath = FileUtils.getPath(binDir);
+    String outputDirPath = FileUtils.getPath(_ejs.getOutputDirectory());
+    String ospjarPath = "file:///"+FileUtils.correctUrlString(binDirPath+"osp.jar");
+    String ejsjarPath = "file:///"+FileUtils.correctUrlString(binDirPath+"ejs_lib.jar");
+    
+    // Create the empty list of common files and a dictionary with information
+    Set<PathAndFile> commonList = null;
+    Set<SimInfo> infoList = new HashSet<SimInfo>();
+        
+    // --- Begin of the HTML page for the table of contents
+    StringBuffer code = new StringBuffer();
+    code.append("<html>"+ret);
+    code.append("  <head>"+ret);
+    code.append("    <title>Group page</title>"+ret);
+    code.append("    <base target=\"_self\">" + ret);
+    code.append("    <link rel=\"stylesheet\" type=\"text/css\" href=\""+_groupDirectory.getName()+"/_ejs_library/css/ejsGroupPage.css\"></link>" + ret);
+    code.append("  </head>"+ret);
+    code.append("  <body "+_ejs.getOptions().getHtmlBody()+"> "+ret);
+    code.append("    <h1>" + _targetName + "</h1>"+ret);
+    code.append("    <div class=\"contents\">"+ret);
+    
+    for (File metadataFile : _metadataFilesList) {
+      SimInfo info = new SimInfo();
+      File generatedDir = metadataFile.getParentFile();
+      info.fullPath = FileUtils.getPath(generatedDir);
+      info.name = FileUtils.getPlainName(metadataFile);
+      info.path = FileUtils.getRelativePath(info.fullPath,outputDirPath,false);
+      // See if there are HTML files for this simulation
+      File simHTMLFile = new File (_ejs.getOutputDirectory(),info.path+info.name+".html");
+      if (!simHTMLFile.exists()) {
+        _ejs.getOutputArea().message("Package.IgnoringSimulation",info.path);
+        continue;
+      }
+      _ejs.getOutputArea().message("Package.ProcessingSimulation",info.path+info.name);
+
+      // read the meta data
+      Metadata metadata = Metadata.readFile(metadataFile, info.path);
+
+      // Process the class path
+      info.classpath = metadata.getClassname().replace('.','/');
+      char[] pathChars = info.path.toCharArray();
+      info.pathToLib = ""; // Levels up to get to the _ejs_library
+      for (int i=0; i<pathChars.length; i++) if (pathChars[i]=='/') info.pathToLib += "../";
+      
+      // Save the information
+      infoList.add(info);
+
+      // Create the entry for this simulation in the common HTML file
+      code.append("      <div class=\"simulation\"><b>"+res.getString("Generate.HtmlSimulation") +":</b> <a href=\""+ 
+          _groupDirectory.getName()+ "/" + info.path + info.name+".html\" target=\"blank\">" + info.name+"</a></div>"+ret);
+      
+      String abstractText = metadata.getAbstract();
+      if (abstractText.length()>0) code.append("      <div class=\"abstract\"><b>"+res.getString("SimInfoEditor.Abstract")+"</b> " + abstractText+"</div>"+ret);
+
+      // Add the HTML files (adapting them)
+      for (String filename : metadata.getFilesCreated()) {
+        if (filename.endsWith(".html")) {
+          File file = new File (generatedDir,filename);
+          String modified = FileUtils.replaceString(FileUtils.readTextFile(file), binDirPath, info.pathToLib);
+          if (!filename.equals(info.name+".html")) { // This one has two 'src='entries that need to be left unmodified
+            modified = FileUtils.replaceString(modified, "src=\"", "src=\""+info.pathToLib);
+            //modified = FileUtils.replaceString(modified, "<base href=\".\" />", "<base href=\""+info.pathToLib+"\" />");
+            if (filename.equals(info.name+"_Simulation.html")) { // Modify the archive entry in the applet tag too
+              modified = FileUtils.replaceString(modified, "codebase=\".\"", "codebase=\""+info.pathToLib+"\"");
+              modified = FileUtils.replaceString(modified, ospjarPath, "common.jar");
+              modified = FileUtils.replaceString(modified, ejsjarPath, info.path+info.name+".jar");
+            }
+          }
+          try { FileUtils.saveToFile(new File(_groupDirectory,info.path+filename),modified); }
+          catch (Exception exc) { 
+            exc.printStackTrace();
+            _ejs.getOutputArea().println(res.getString("Package.CopyError") + " " + info.path+filename);
+            return null;
+          }
+        }
+      }
+
+      // Copy auxiliary files
+      for (String auxPath : metadata.getAuxiliaryFiles()) {
+        File auxFile = new File(_ejs.getSourceDirectory(),auxPath);
+        if (!JarTool.copy(auxFile, new File(_groupDirectory,auxPath))) {
+          _ejs.getOutputArea().println(res.getString("Package.CopyError") + " " + FileUtils.getPath(auxFile));
+          return null;
+        }
+      }
+
+      // Create an instance of MiniJar for this simulation
+      MiniJar minijarParticular= new MiniJar();
+      minijarParticular.addExclude ("++Thumbs.db");
+      minijarParticular.addDesired("org/opensourcephysics/resources/++");
+      minijarParticular.addDesired("org/opensourcephysics/numerics/++.class");
+      minijarParticular.addDesired("org/opensourcephysics/ode/++.class");
+      minijarParticular.addDesired("org/opensourcephysics/tools/Launcher.class");
+      minijarParticular.addForced("org/colos/ejs/library/_EjsConstants.class");
+      minijarParticular.addSourcePath(binDirPath+"osp.jar");
+      minijarParticular.addSourcePath(binDirPath+"ejs_lib.jar");
+      minijarParticular.addSourcePath(outputDirPath);
+      
+      // Add the applet class for this simulation
+      minijarParticular.addDesired(info.classpath+"Applet.class");
+      
+      // get the matches
+      Set<PathAndFile> matches = minijarParticular.getMatches();
+
+      // Check against the common MiniJar
+      Set<PathAndFile> newList = new HashSet<PathAndFile>();
+      String packagePath = info.classpath;
+
+      if (commonList==null) { // Exclude the files particular to this simulation
+        for (PathAndFile paf : matches) if (!paf.getPath().startsWith(packagePath)) newList.add(paf);  
+      }
+      else { // Exclude the files particular to this simulation
+        for (PathAndFile paf : matches) {
+          if (paf.getPath().startsWith(packagePath)) continue; // exclude those of this simulation
+          if (commonList.contains(paf)) newList.add(paf);  
+        }
+      }
+      commonList = newList;
+
+    } // end of first 'for' for simulations
+    
+    // Create the common jar using MiniJar
+    File commonJarFile = new File(_groupDirectory,"common.jar");
+    MiniJar.compress(commonList, commonJarFile, MiniJar.createManifest(".","org.colos.ejs.library._EjsConstants"));
+
+    // Now do a second for to create the individual jar files
+    for (SimInfo info : infoList) {
+      // Create an instance of MiniJar for this simulation
+      MiniJar minijarParticular= new MiniJar();
+      minijarParticular.setOutputFile(new File (_groupDirectory,info.path+info.name+".jar"));
+      minijarParticular.setManifestFile(MiniJar.createManifest(".;"+info.pathToLib+"common.jar","org.colos.ejs.library._EjsConstants"));
+      minijarParticular.addExclude ("++Thumbs.db");
+      minijarParticular.addDesired("org/opensourcephysics/resources/++");
+      minijarParticular.addDesired("org/opensourcephysics/numerics/++.class");
+      minijarParticular.addDesired("org/opensourcephysics/ode/++.class");
+      minijarParticular.addDesired("org/opensourcephysics/tools/Launcher.class");
+      minijarParticular.addSourcePath(binDirPath+"osp.jar");
+      minijarParticular.addSourcePath(binDirPath+"ejs_lib.jar");
+      minijarParticular.addSourcePath(outputDirPath);
+      minijarParticular.addExclude (commonJarFile);
+
+      // Add the applet class for this simulation
+      minijarParticular.addDesired(info.classpath+"Applet.class");
+      
+      // get the matches and compress
+      minijarParticular.compress();
+    }
+    
+    code.append("    </div>"+ret); // End of contents
+    code.append("  </body>"+ret);
+    code.append("</html>"+ret);
+    return code.toString();
+  }
+
+  /**
+   * Generates a Hashtable of StringBuffers, each with the code of a generated HTML page.
+   * The key in the table is the name of the HTML file. The calling method must process these files.
+   * @param _ejs Osejs The calling Ejs
+   * @param _simulationName String The name of the simulation
+   * @param _filename String The base name for the HTML files (different from _simulationName if generating in a server)
+   * @param _classpath String The classpath required to run the simulation.
+   * @return Hashtable<String,String>
+   * @throws IOException
+   */
+  static private Hashtable<String,StringBuffer> generateHtml (Osejs _ejs, 
+                                         String _simulationName, String _javaName, String _packageName,
+                                         String _pathToLib, String _archiveStr) {
+    Hashtable<String,StringBuffer> htmlTable = new Hashtable<String,StringBuffer>();
+    String ret = System.getProperty("line.separator");
+    boolean left = true;  // Whether to place the content frame at the left frame (true) or at the top frame (false)
+    if (_ejs.getOptions().generateHtml()==EjsOptions.GENERATE_TOP_FRAME) left = false;
+
+    // --- BEGIN OF the HTML page for the table of contents
+    StringBuffer code = new StringBuffer();
+    code.append("<html>"+ret);
+    code.append("  <head>"+ret);
+    code.append("    <title>Contents</title>"+ret);
+    code.append("    <base target=\"_self\">" + ret);
+    if (left) code.append("    <link rel=\"stylesheet\" type=\"text/css\" href=\""+_pathToLib+"_ejs_library/css/ejsContentsLeft.css\"></link>" + ret);
+    else      code.append("    <link rel=\"stylesheet\" type=\"text/css\" href=\""+_pathToLib+"_ejs_library/css/ejsContentsTop.css\"></link>" + ret);
+    code.append("  </head>"+ret);
+    code.append("  <body "+_ejs.getOptions().getHtmlBody()+"> "+ret);
+    code.append("    <h1>" + _simulationName + "</h1>"+ret);
+    code.append("    <h2>" + res.getString("Generate.HtmlContents") + "</h2>"+ret);
+    code.append("    <div class=\"contents\">"+ret);
+    // Add an entry for each Introduction page created by the user
+    String firstOne = null;
+    Vector<Editor> pageList = _ejs.getDescriptionEditor().getPages();
+    int counter = 0;
+    for (java.util.Enumeration<Editor> e = pageList.elements(); e.hasMoreElements(); ) {
+      Editor editor = e.nextElement();
+      if (editor.isActive()) {
+        counter++;
+        String link = _simulationName+"_Intro "+counter+".html";
+        if (editor instanceof HtmlExternalEditor) link = ((HtmlExternalEditor) editor).getLink();
+        if (firstOne==null) firstOne = editor.getName().replace(' ','_');
+        code.append("      <div class=\"intro\"><a href=\""+ link+"\" target=\"central\">" + editor.getName()+"</a></div>"+ret);
+      }
+    }
+    // And an extra page for the simulation itself!
+    code.append("      <div class=\"simulation\"><a href=\""+ _simulationName+"_Simulation.html\" target=\"central\">" + res.getString("Generate.HtmlSimulation")+"</a></div>"+ret);
+    code.append("    </div>"+ret); // End of contents
+    // ---- Now the logo
+    code.append("    <div class=\"signature\">"+ res.getString("Generate.HtmlEjsGenerated") + " "
+               + "<a href=\"http://fem.um.es/Ejs\" target=\"_blank\">Easy Java Simulations</a></div>"+ret);
+    code.append("  </body>"+ret);
+    code.append("</html>"+ret);
+    htmlTable.put ("_Contents",code);
+    // --- END OF the HTML page for the table of contents
+
+    // --- The main HTML page
+    code = new StringBuffer();
+    code.append("<html>"+ret);
+    code.append("  <head>"+ret);
+    code.append("    <title> " + res.getString("Generate.HtmlFor") + " " + _simulationName + "</title>"+ret);
+    code.append("  </head>"+ret);
+    if (left) code.append("  <frameset cols=\"25%,*\">"+ret);
+    else      code.append("  <frameset rows=\"90,*\">"+ret);
+    code.append("    <frame src=\""+_simulationName+"_Contents.html\" name=\"contents\" scrolling=\"auto\" target=\"_self\">"+ret);
+//    if (firstOne!=null) code.append("    <frame src=\""+_filename+"_"+firstOne+".html\"");
+    if (firstOne!=null) code.append("    <frame src=\""+_simulationName+"_Intro 1.html\"");
+    else                code.append("    <frame src=\""+_simulationName+"_Simulation.html\"");
+    code.append(" name=\"central\" scrolling=\"auto\" target=\"_self\">"+ret);
+    code.append("    <noframes>"+ret);
+    code.append("      Gee! Your browser is really old and doesn't support frames. You better update!!!"+ret);
+    code.append("    </noframes>"+ret);
+    code.append("  </frameset> "+ret);
+    code.append("</html>"+ret);
+    htmlTable.put ("",code);
+
+    // --- An HTML page for each introduction page
+    counter = 0;
+    //String baseStr = "."; //FileUtils.getPath(_ejs.getSourceDirectory());
+    for (java.util.Enumeration<Editor> e = pageList.elements(); e.hasMoreElements();) {
+      Editor editor = e.nextElement();
+      if (editor.isActive()) {
+        counter++;
+        if (editor instanceof HtmlExternalEditor) continue;
+        code = new StringBuffer();
+        code.append("<html>"+ret);
+        code.append("  <head>"+ret);
+        code.append("    <base href=\""+_pathToLib+"\" />"+ret);
+        code.append("    <title> " + editor.getName() + "</title>"+ret);
+        code.append("    <link rel=\"stylesheet\" type=\"text/css\" href=\"_ejs_library/css/ejsPage.css\"></link>" + ret);
+        code.append("  </head>"+ret);
+        code.append("  <body "+_ejs.getOptions().getHtmlBody()+"> "+ret);
+        code.append(editor.generateCode (Editor.GENERATE_CODE,null));
+        code.append("  </body>"+ret);
+        code.append("</html>"+ret);
+        htmlTable.put ("_Intro "+ counter,code);
+      }
+    }
+
+    // --- An HTML page for the simulation itself
+    code = new StringBuffer();
+    code.append("<html>"+ret);
+    code.append("  <head>"+ret);
+    //code.append("    <base href=\".\" />"+ret);
+    code.append("    <title> " + res.getString("Generate.HtmlFor") + " " + _simulationName + "</title>"+ret);
+    code.append("    <link rel=\"stylesheet\" type=\"text/css\" href=\""+_pathToLib+"_ejs_library/css/ejsSimulation.css\"></link>" + ret);
+    code.append("  </head>"+ret);
+    code.append("  <body "+_ejs.getOptions().getHtmlBody()+"> "+ret);
+    code.append(generateHtmlForSimulation (_ejs, _simulationName, _javaName, _packageName, _archiveStr, null)); // false for no Emersion
+    code.append("  </body>"+ret);
+    code.append("</html>"+ret);
+    htmlTable.put ("_Simulation",code);
+
+    // And that's it.
+    return htmlTable;
+  }
+
+  /**
+   * Generates the code for the HTML page for eMersion
+   * @param _ejs Osejs The calling EJS
+   * @param _simulationName String The name of the simulation
+   * @param _filename String The base name for the HTML files (different from _name if generating in a server)
+   * @param _classpath String The class path required to run the simulation.
+   * @param _url String The URL for the simulation in the eMersion server
+   * @return StringBuffer A StringBuffer with the code
+   * @throws IOException
+   *
+  static private StringBuffer generateEmersionHtml (Osejs _ejs, String _simulationName, String _javaName, String _packageName,
+                                                    String _pathToHTML, String _pathToLib, String _archiveStr) throws IOException {
+    String ret = System.getProperty("line.separator");
+    StringBuffer code = new StringBuffer();
+    code.append("<html>"+ret);
+    code.append("  <head>"+ret);
+    code.append("    <title> " + res.getString("Generate.HtmlFor") + " " + _simulationName + "</title>"+ret);
+    code.append("    <link rel=\"stylesheet\" type=\"text/css\" href=\""+_pathToLib+"_ejs_library/css/ejsSimulation.css\"></link>" + ret);
+    code.append("  </head>"+ret);
+    code.append("  <body "+_ejs.getOptions().getHtmlBody()+"> "+ret);
+    code.append(generateHtmlForSimulation (_ejs, _simulationName, _javaName, _packageName, _archiveStr, _pathToHTML));
+    code.append("  </body>"+ret);
+    code.append("</html>"+ret);
+    return code;
+  }
+*/
+  
+  /**
+   * Generates the code for a single HTML page with everything
+   * @param _ejs Osejs The calling Ejs
+   * @param _simulationName String The name of the simulation
+   * @param _filename String The base name for the HTML files (different from _name if generating in a server)
+   * @param _classpath String The classpath required to run the simulation.
+   * @return StringBuffer A StringBuffer with the code
+   * @throws IOException
+   */
+  static private String generateHtmlNoFrames (Osejs _ejs, String _simulationName, String _javaName, String _packageName,
+                                              String _pathToLib, String _archiveStr) {
+    String ret = System.getProperty("line.separator");
+    StringBuffer code = new StringBuffer();
+    code.append("<html>"+ret);
+    code.append("  <head>"+ret);
+    code.append("    <base href=\""+_pathToLib+"\" />"+ret);
+    code.append("    <title> " + res.getString("Generate.HtmlFor") + " " + _simulationName + "</title>"+ret);
+    code.append("    <link rel=\"stylesheet\" type=\"text/css\" href=\""+_pathToLib+"_ejs_library/css/ejsPage.css\"></link>" + ret);
+    code.append("  </head>"+ret);
+    code.append("  <body "+_ejs.getOptions().getHtmlBody()+"> "+ret);
+    code.append(res.getString("Generate.HtmlUserCode")+ret);
+    code.append(_ejs.getDescriptionEditor().generateCode(Editor.GENERATE_CODE,res.getString("Osejs.Main.Description")));
+    code.append(res.getString("Generate.HtmlHereComesTheApplet")+ret);
+    code.append(generateHtmlForSimulation (_ejs,_simulationName, _javaName, _packageName,_archiveStr, null)); // null for no Emersion
+    code.append("  </body>"+ret);
+    code.append("</html>"+ret);
+    return  code.toString();
+  }
+
+  /**
+   * Generates the code for the applet tag which includes the simulation in an HTML page
+   * @param _ejs Osejs The calling EJS
+   * @param _simulationName String The name of the simulation
+   * @param _packageName String The package of the class
+   * @param _classpath String The class path required to run the simulation as an applet
+   * @param _eMersionCodebase String The URL for the codebase in case the applet is run from eMersion (null otherwise)
+   * @return StringBuffer A StringBuffer with the code
+   */
+  static private String generateHtmlForSimulation (Osejs _ejs, String _simulationName, String _javaName, String _packageName,
+                                                   String _archiveStr, String _pathForEmersion) {
+    String ret = System.getProperty("line.separator");
+    String captureTxt = _ejs.getViewEditor().generateCode(Editor.GENERATE_CAPTURE_WINDOW,"").toString();
+    StringBuffer code = new StringBuffer();
+    code.append("    <div class=\"appletSection\">"+ret);
+    if (_pathForEmersion==null) { // not for Emersion
+      if (captureTxt.trim().length()<=0) code.append("      <h3>"+res.getString("Generate.HtmlHereItIsNot")+"</h3>"+ret);
+      else code.append("      <h3>"+res.getString("Generate.HtmlHereItIs")+"</h3>"+ret);
+    }
+    code.append("      <applet code=\""+ _packageName + "." + _javaName+"Applet.class\"" +ret);
+
+    if (_pathForEmersion!=null) { // Whenever there is a codebase, the full classpath is required
+      String eMersionCodebase = _ejs.getOptions().eMersionGetURL();
+      if (eMersionCodebase.length()<=0) eMersionCodebase = "http://localhost:8080";
+      code.append("              codebase=\""+eMersionCodebase+"/"+_pathForEmersion+"\" ");
+      code.append("archive=\""+_archiveStr +FileUtils.correctUrlString(OsejsCommon.firstToLower(_simulationName)) + ".jar\""+ret);
+    }
+    else {
+      //code.append("              codebase=\"file:///"+FileUtils.correctUrlString(_ejs.getSourceDirectory())+"\" ");
+      code.append("              codebase=\".\" archive=\""+_archiveStr +"\"" +ret);
+    }
+    code.append("              name=\"" + _javaName + "\"  id=\"" + _javaName + "\""+ret);
+    if (captureTxt.trim().length()<=0) code.append("              width=\"0\" height=\"0\"");
+    else code.append("      "+captureTxt);
+
+    code.append(">"+ret);
+    code.append("      </applet>"+ret);
+    code.append("    </div>"+ret);
+    if (_pathForEmersion!=null) return code.toString();
+
+    if (_ejs.getOptions().experimentsEnabled() && _ejs.getExperimentEditor().getActivePageCount()>0) {
+      code.append("    <div class=\"experimentsSection\">"+ret);
+      code.append("      <h3>" + res.getString("Generate.TheExperiments")+"</h3>"+ret);
+      code.append(_ejs.getExperimentEditor().generateCode(Editor.GENERATE_DECLARATION,_javaName));
+//      code.append("<input type=\"BUTTON\" value=\"" + ToolsRes.getString("MenuItem.KillExperiment") + "\"" +
+//                  " onclick=\"document."+_javaName+"._simulation.killExperiment();\";>");
+      code.append("      <div class=\"killExperiment\"><a href=\"javascript:document."+_javaName+"._simulation.killExperiment();\">"+
+                      ToolsRes.getString("MenuItem.KillExperiment") + "</a></div>"+ret);
+      code.append("    </div>"+ret);
+    }
+
+    code.append("      "+res.getString("Generate.HtmlHereComesTheJavaScript")+ret);
+    code.append("    <div class=\"jsSection\">"+ret);
+    code.append("      <h3>" + res.getString("Generate.HtmlJSControl")+"</h3>"+ret);
+    code.append(jsCommand(_javaName,"Generate.HtmlPlay","_play()")+ret);
+    code.append(jsCommand(_javaName,"Generate.HtmlPause","_pause()")+ret);
+    code.append(jsCommand(_javaName,"Generate.HtmlReset","_reset()")+ret);
+    code.append(jsCommand(_javaName,"Generate.HtmlStep","_step()")+ret);
+    code.append(jsCommand(_javaName,"Generate.HtmlSlow","_setDelay(1000)")+ret);
+    code.append(jsCommand(_javaName,"Generate.HtmlFast","_setDelay(100)")+ret);
+    code.append(jsCommand(_javaName,"Generate.HtmlFaster","_setDelay(10)")+ret);
+    code.append("    </div>"+ret);
+/*20060903
+    if(_ejs.ejsCommand){ //FKH20060402
+      code.append("<script>"+ret);
+      code.append("function ejsCommand(cmd){"+ret);
+      code.append(" eval(cmd);"+ret);
+      code.append("}"+ret);
+      code.append("</script>"+ret);
+    }
+*/
+    return code.toString();
+  }
+
+  static private String jsCommand (String _javaName, String _label, String _method) {
+//    return "<input type=\"BUTTON\" value=\"" + res.getString(_label)  +
+//      "\" onclick=\"document." + _javaName + "."+_method+";document." + _javaName + "._simulation.update();\";>";
+    return "      <a href=\"javascript:document."+_javaName+"."+_method+";document."+_javaName+"._simulation.update();\">"+
+              res.getString(_label)  + "</a> ";
+  }
+
+  /**
+   * Generates the JNLP file required to run the simulation using Java Web Start
+   * @param _simulationName String The name of the simulation
+   * @param _filename String The base name for the HTML files (different from _name if generating in a server)
+   * @param _jarList AbstractList The list of jar files required to run the simulation
+   * @param _jnlpURL String The URL for the Java Web Start server
+   * @return StringBuffer A StringBuffer with the code
+   *
+  static private String generateJNLP (Osejs _ejs, String _path, 
+                                            String _simulationName, String _classname, String _packageName,
+                                            List<PathAndFile> _jarList) {
+    String jnlpURL = FileUtils.correctUrlString(_ejs.getOptions().jnlpURL());
+    StringBuffer code = new StringBuffer();
+    String pathCorrected = FileUtils.correctUrlString(_path);
+    String ret = System.getProperty("line.separator");
+    if (jnlpURL.length()<=0) jnlpURL = "http://localhost/jaws";
+    code.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>"+ret);
+    code.append("<jnlp spec=\"1.0\" codebase=\""+jnlpURL+"/"+pathCorrected+
+      "\" href=\"" + FileUtils.correctUrlString(_simulationName)+".jnlp\">"+ret);
+    code.append("  <information>"+ret);
+    code.append("    <title>"+_simulationName+"</title>"+ret);
+    code.append("    <vendor>"+res.getString("Generate.HtmlEjsGenerated")+ " Ejs</vendor>"+ret);
+    code.append("    <homepage href=\"http://fem.um.es/Ejs\"/>"+ret);
+    code.append("    <description>"+res.getString("Generate.HtmlEjsGenerated")+ " Ejs</description>"+ret);
+    code.append("    <icon href=\"_library/EjsIcon.gif\"/>"+ret);
+    code.append("    <offline-allowed/>"+ret);
+    code.append("  </information>"+ret);
+    code.append("  <resources>"+ret);
+    code.append("    <j2se version=\"1.4.2+\" href=\"http://java.sun.com/products/autodl/j2se\"/>"+ret);
+    code.append("    <jar href=\""+FileUtils.correctUrlString(OsejsCommon.firstToLower(_simulationName))+".jar\"/>"+ret);
+    for (Iterator it = _jarList.iterator(); it.hasNext(); ) {
+      code.append("    <jar href=\"" + FileUtils.correctUrlString((String) it.next()) + "\"/>" + ret);
+    }
+    code.append("    <!-- Simulations use the following codebase to find resources -->"+ret);
+    code.append("    <property name=\"jnlp.codebase\" value=\""+jnlpURL+"/"+pathCorrected+"\"/>"+ret);
+    code.append("  </resources>"+ret);
+    code.append("  <application-desc main-class=\""+ _packageName+"."+_classname+"\"/>"+ret);
+    code.append("</jnlp>"+ret);
+    return  code.toString();
+  }
+*/
+  // ----------------------------------------------------
+  // Generation of Java code
+  // ----------------------------------------------------
+
+  /**
+   * Generates the header for the Java classes
+   * @param _filename String The name of the simulation file
+   * @param _suffix String Either "" for the simulation or "Applet" for the applet
+   * @return StringBuffer
+   */
+  static private String generateHeader (String _classname, String _packageName, String _whichClass) {
+    StringBuffer txt = new StringBuffer();
+    txt.append("/*\n");
+    txt.append(" * Class : "+_classname+_whichClass+".java\n");
+    txt.append(" *  Generated using ");
+    txt.append(" *  Easy Java Simulations Version "+_EjsConstants.VERSION+", "+_EjsConstants.VERSION_DATE+". Visit "+_EjsConstants.WEB_SITE+"\n");
+    txt.append(" */ \n\n");
+    txt.append("package " + _packageName + ";\n\n");
+    txt.append("import org.colos.ejs.library._EjsConstants;\n\n");
+    return txt.toString();
+  }
+
+  /**
+   * Generates the Java code for the applet
+   * @param _filename String The name of the simulation file
+   * @param _mainFrame String The name of the main frame in Ejs' view
+   * @return StringBuffer
+   */
+  static private String generateApplet (String _classname, String _packageName, String _parentPath, String _mainFrame) {
+    StringBuffer code = new StringBuffer();
+    code.append(generateHeader(_classname, _packageName, "Applet"));
+    code.append("public class " + _classname + "Applet extends org.colos.ejs.library.LauncherApplet {\n\n");
+    code.append("  static {\n");
+    code.append("    org.opensourcephysics.display.OSPRuntime.appletMode = true;\n");
+    code.append("  }\n\n");
+    code.append("  private java.awt.Component mainComponent=null;\n\n");
+    code.append("  public void init () {\n");
+    code.append("    super.init();\n");
+    code.append("    org.opensourcephysics.tools.ResourceLoader.addSearchPath(getCodeBase()+\""+_parentPath+"\"); // This is for relative files\n");
+    code.append("    org.colos.ejs.library.Simulation.setPathToLibrary(getCodeBase()+\"_library\"); // This is for classes (such as EjsMatlab) which needs to know where the library is\n");
+    code.append("    if (getParentFrame()!=null && getParentFrame() instanceof java.awt.Frame) {\n");
+    code.append("      _model = new "+_classname+" ("+_mainFrame+",getParentFrame(),getCodeBase(),this,(String[])null,true);\n");
+    code.append("      _simulation = _model.getSimulation();\n");
+    code.append("      _view = _model.getView();\n");
+    code.append("      mainComponent = captureWindow (_model.getView(),"+_mainFrame+");\n");
+    code.append("    }\n");
+    code.append("    else {\n");
+    code.append("      _model = new "+_classname+" (null,null,getCodeBase(),this,(String[])null,true);\n");
+    code.append("      _simulation = _model.getSimulation();\n");
+    code.append("      _view = _model.getView();\n");
+    code.append("    }\n");
+//    code.append("    try {\n");
+//    code.append("      String param = getParameter (\"init\");\n");
+//    code.append("      if (param!=null) {\n");
+//    code.append("         (("+_name+")_model).__initMethod = new org.colos.ejs.library.control.MethodWithOneParameter (0,_model,param,null,null,this);\n");
+//    code.append("         (("+_name+")_model).__initMethod.invoke(0,this);\n");
+//    code.append("      }\n");
+//    code.append("    }\n");
+//    code.append("    catch (Exception e) { e.printStackTrace (); }\n");
+    code.append("    _simulation.setParentComponent(mainComponent);\n");
+    code.append("    _simulation.initEmersion();\n");
+    code.append("  }\n");
+    code.append("  public java.awt.Component _getMainComponent() { return mainComponent; }\n");
+    code.append("  public void _reset() { (("+_classname+")_model)._reset(); }\n");
+    code.append("  public void _initialize() { (("+_classname+")_model)._initialize(); }\n");
+    code.append("  public void stop() { (("+_classname+")_model)._onExit(); }\n");
+    code.append("} // End of class " + _classname + "Applet\n\n");
+    return code.toString();
+  }
+
+  /**
+   * Generates the Java code for the model of the simulation
+   */
+  static private String generateModel (Osejs _ejs, String _classname, String _packageName, String _generatedDirPath, 
+                                       String _sourceXML, String _parentPath, 
+                                       File _generatedDirectory, String _binDirPath, List<PathAndFile> _resList) {
+
+    StringBuffer code = new StringBuffer();
+    code.append(generateHeader(_classname,_packageName,"")); 
+
+    Editor variablesEditor = _ejs.getModelEditor().variablesEditor, evolutionEditor = _ejs.getModelEditor().evolutionEditor;
+    code.append(_ejs.getModelEditor().generateCode(Editor.GENERATE_IMPORT_STATEMENTS,"")+"\n");
+    code.append("public class " + _classname + " extends org.colos.ejs.library.AbstractModel {\n\n");
+    code.append("  public " + _classname + "Simulation _simulation=null;\n");
+    code.append("  public " + _classname + "View _view=null;\n");
+    code.append("  public " + _classname + " _model=this;\n\n");
+    
+    if (_ejs.getOptions().includeModel()) {
+      if (_sourceXML!=null) code.append("  static public String _getEjsModel() { return \""+_sourceXML+"\"; }\n\n");
+      if (_resList!=null) {
+        code.append("  static public java.util.List<String> _getEjsResources() {\n");
+        code.append("    java.util.List<String> list = new java.util.ArrayList<String>();\n");
+        for (Iterator<PathAndFile> it = _resList.iterator(); it.hasNext(); ) {
+          String resource = it.next().getPath();
+          code.append("    list.add(\"" + resource + "\");\n");
+        }
+        code.append("    return list;\n");
+        code.append("  };\n\n");
+      }
+    }
+    
+    code.append("  static public void main (String[] args) {\n");
+    if (JFrame.isDefaultLookAndFeelDecorated()) {
+      code.append("    org.opensourcephysics.display.OSPRuntime.javaLookAndFeel = true;\n");
+      code.append("    javax.swing.JFrame.setDefaultLookAndFeelDecorated(true);\n");
+      code.append("    javax.swing.JDialog.setDefaultLookAndFeelDecorated(true);\n");
+    }
+    String searchPath = _parentPath.length()>0 ? _parentPath : ".";
+    code.append("    org.opensourcephysics.tools.ResourceLoader.addSearchPath(\""+searchPath+"\"); // This is for relative resources\n");
+//    code.append("    org.opensourcephysics.tools.ResourceLoader.addSearchPath(\""+_outputDirectoryPath+"\"); // This is for absolute resources in Launcher packages\n");
+//    code.append("    org.opensourcephysics.tools.ResourceLoader.addSearchPath(\""+_outputDirectoryPath+"/"+searchPath+"\"); // This is for relative resources in Launcher packages\n");
+
+    code.append("    boolean pathsSet = false;\n");
+    code.append("    try { // in case of security problems\n");
+    code.append("      if (System.getProperty(\"osp_ejs\")!=null) { // Running under EJS\n"); // TODO Can I remove this check
+    code.append("        org.colos.ejs.library.Simulation.setPathToLibrary(\""+_binDirPath+"\"); // This is for classes (such as EjsMatlab) which needs to know where the library is\n");
+    code.append("        pathsSet = true;\n");
+    code.append("      }\n");
+    code.append("    }\n");
+    code.append("    catch (Exception _exception) { pathsSet = false; } // maybe an unsigned Web start?\n");
+    code.append("    if (!pathsSet) {\n");
+    code.append("      org.colos.ejs.library.Simulation.setPathToLibrary(\""+_binDirPath+"\"); // This is for classes (such as EjsMatlab) which needs to know where the library is\n");
+    code.append("    }\n");
+    code.append("    "+_classname+ " __theModel = new " + _classname + " (args);\n");
+    code.append("  }\n\n");
+
+    code.append("  public " + _classname + " () { this (null, null, null,null,null,false); } // slave application\n\n");
+    code.append("  public " + _classname + " (String[] _args) { this (null, null, null,null,_args,true); }\n\n");
+    code.append("  public " + _classname + " (String _replaceName, java.awt.Frame _replaceOwnerFrame, java.net.URL _codebase,"
+                                    +  " org.colos.ejs.library.LauncherApplet _anApplet, String[] _args, boolean _allowAutoplay) {\n");
+    code.append("    __theArguments = _args;\n");
+    code.append("    __theApplet = _anApplet;\n");
+    code.append("    java.text.NumberFormat _Ejs_format = java.text.NumberFormat.getInstance();\n");
+    code.append("    if (_Ejs_format instanceof java.text.DecimalFormat) {\n");
+    code.append("      ((java.text.DecimalFormat) _Ejs_format).getDecimalFormatSymbols().setDecimalSeparator('.');\n");
+    code.append("    }\n");
+    code.append("    _simulation = new " + _classname + "Simulation (this,_replaceName,_replaceOwnerFrame,_codebase,_allowAutoplay);\n");
+    code.append("    _view = (" + _classname + "View) _simulation.getView();\n");
+    code.append("    _simulation.processArguments(_args);\n");
+    code.append("  }\n\n");
+
+    code.append("  public org.colos.ejs.library.View getView() { return _view; }\n\n");
+    code.append("  public org.colos.ejs.library.Simulation getSimulation() { return _simulation; }\n\n");
+
+    code.append("  public void _resetSolvers() { \n");
+    code.append(     evolutionEditor.generateCode(Editor.GENERATE_RESET_SOLVER,""));
+    code.append("    _external.resetIC();\n");
+    code.append("  }\n");
+
+    code.append("  // --- Implementation of ExternalClient ---\n\n");
+    code.append("  public String _externalInitCommand(String _applicationFile) { \n");
+    code.append("    StringBuffer _external_initCommand=new StringBuffer();\n");
+    code.append(     variablesEditor.generateCode(Editor.GENERATE_EXTERNAL_INITIALIZATION,""));
+    code.append("    return _external_initCommand.toString();\n");
+    code.append("  }\n\n");
+
+    code.append("  public synchronized void _externalSetValues(boolean _any, org.colos.ejs.library.external.ExternalApp _application) { \n");
+    code.append(     variablesEditor.generateCode(Editor.GENERATE_EXTERNAL_IN,"")); // Includes conversion
+    code.append("  }\n\n");
+    code.append("  public synchronized void _externalGetValues(boolean _any, org.colos.ejs.library.external.ExternalApp _application) { \n");
+    code.append(    variablesEditor.generateCode(Editor.GENERATE_EXTERNAL_OUT,""));
+    code.append("  }\n\n");
+    code.append("  // --- End of implementation of ExternalClient ---\n\n");
+
+    code.append(" // -------------------------------------------\n");
+    code.append(" // Variables defined by the user\n");
+    code.append(" // -------------------------------------------\n\n");
+    code.append(  variablesEditor.generateCode(Editor.GENERATE_DECLARATION,""));
+    code.append("\n");
+    // This generates a public method that returns a description string for each variable
+    /* Suppressed because it is not generally used
+    code.append("  static public String getInfo (String _name) {\n");
+    code.append(     _model.getEditor("Variables").generateCode(Editor.GENERATE_INFO,""));
+    code.append(     _model.getEditor("Library").generateCode(Editor.GENERATE_INFO,""));
+    code.append("    return \"\";\n");
+    code.append("  }\n\n");
+    */
+    code.append(" // -------------------------------------------\n");
+    code.append(" // Methods defined by the user \n");
+    code.append(" // -------------------------------------------\n\n");
+
+    code.append(" // --- Initialization\n\n");
+    code.append(  _ejs.getModelEditor().initializationEditor.generateCode(Editor.GENERATE_CODE,""));
+    code.append(" // --- Evolution\n\n");
+    code.append(  evolutionEditor.generateCode(Editor.GENERATE_CODE,""));
+    code.append(" // --- Constraints\n\n");
+    code.append(  _ejs.getModelEditor().constraintsEditor.generateCode(Editor.GENERATE_CODE,""));
+    code.append(" // --- Custom\n\n");
+    code.append(  _ejs.getModelEditor().libraryEditor.generateCode(Editor.GENERATE_CODE,""));
+    code.append(" // --- Methods for view elements\n\n");
+    code.append(  _ejs.getViewEditor().generateCode(Editor.GENERATE_VIEW_EXPRESSIONS,""));
+
+    if (_ejs.getOptions().experimentsEnabled()) {
+      code.append("\n  // -----------------------------\n");
+      code.append("  //     Code for Experiments     \n");
+      code.append("  // -----------------------------\n\n");
+      code.append(_ejs.getExperimentEditor().generateCode(Editor.GENERATE_CODE,""));
+
+      code.append("  public java.util.AbstractList _getExperiments () { // Creates a list of experiments\n");
+      code.append("    java.util.ArrayList actions = new java.util.ArrayList();\n");
+      code.append(_ejs.getExperimentEditor().generateCode(Editor.GENERATE_LIST_ACTIONS,_classname));
+      code.append("    return actions;\n");
+      code.append("  }\n\n");
+      code.append("  public org.colos.ejs.library.Experiment _createExperiment (String _experimentName) { // gets an experiment by name\n");
+      code.append(_ejs.getExperimentEditor().generateCode(Editor.GENERATE_LIST_VARIABLES,_classname));
+      code.append("    return null;");
+      code.append("  }\n\n");
+      code.append("  // ------------------------------------\n");
+      code.append("  //     End of Code for Experiments     \n");
+      code.append("  // ------------------------------------\n\n");
+    }
+
+    code.append(" // -------------------------------------------\n");
+    code.append(" // Implementation of interface Model \n");
+    code.append(" // -------------------------------------------\n\n");
+
+//    code.append("  public void setSimulation (org.colos.ejs.library.Simulation _sim) {\n");
+//    code.append("    _simulation = (" + _name + "Simulation) _sim;\n");
+//    code.append("    _view = (" + _name + "View) _sim.getView();\n");
+//    code.append("  }\n\n");
+    code.append("  public synchronized void reset () {\n");
+    code.append(     _ejs.getModelEditor().variablesEditor.generateCode(Editor.GENERATE_CODE,""));
+    code.append(     evolutionEditor.generateCode(Editor.GENERATE_SOURCECODE,""));
+//    code.append("    System.gc(); // Free memory from unused old arrays\n"
+    code.append("  }\n\n");
+    code.append("  public synchronized void initialize () {\n");
+    code.append(     _ejs.getModelEditor().initializationEditor.generateCode(Editor.GENERATE_DECLARATION,""));
+    code.append("    _resetSolvers();\n"); // 051112
+    code.append("  }\n\n");
+    code.append("  public synchronized void step () {\n");
+    code.append(     evolutionEditor.generateCode(Editor.GENERATE_DECLARATION,""));
+    code.append("  }\n\n");
+    code.append("  public synchronized void update () {\n");
+    code.append(     _ejs.getModelEditor().constraintsEditor.generateCode(Editor.GENERATE_DECLARATION,""));
+    if (_ejs.getOptions().experimentsEnabled() && _ejs.getExperimentEditor().getActivePageCount()>0) {
+      code.append("    java.util.ArrayList<_ScheduledConditionClass> _toExecute = new java.util.ArrayList<_ScheduledConditionClass>();\n");
+      code.append("    for (java.util.Iterator it=_scheduledConditionsList.iterator(); it.hasNext();) {\n");
+      code.append("      _ScheduledConditionClass _scheduledCondition = (_ScheduledConditionClass) it.next();\n");
+      code.append("      if (_scheduledCondition.condition()) _toExecute.add(_scheduledCondition);\n");
+      code.append("    }\n");
+      code.append("    for (java.util.Iterator<_ScheduledConditionClass> it=_toExecute.iterator(); it.hasNext();) {\n");
+      code.append("      _ScheduledConditionClass _scheduledCondition = it.next();\n");
+      code.append("      _scheduledConditionsList.remove(_scheduledCondition);\n");
+      code.append("      _scheduledCondition.action();\n");
+      code.append("    }\n");
+    }
+    code.append("  }\n\n");
+
+    code.append("  public void _freeMemory () {\n");
+    code.append(     _ejs.getModelEditor().variablesEditor.generateCode(Editor.GENERATE_DESTRUCTION,""));
+    code.append(     evolutionEditor.generateCode(Editor.GENERATE_DESTRUCTION,""));
+    code.append("    System.gc(); // Free memory from unused old arrays\n");
+    code.append("  }\n\n");
+
+    code.append("} // End of class " + _classname + "Model\n\n");
+    return code.toString();
+  }
+
+  /**
+   * Generates the Java code for the simulation part itself
+   * @param _ejs Osejs The calling Ejs
+   * @param _filename String The name of the simulation file
+   * @return StringBuffer
+   */
+  static private String generateSimulation (Osejs _ejs, String _classname, String _packageName, String _xmlName) {
+    StringBuffer code = new StringBuffer ();
+    code.append(generateHeader(_classname,_packageName,"Simulation"));
+
+    code.append("class " + _classname + "Simulation extends org.colos.ejs.library.Simulation { \n\n");
+    code.append("  public " + _classname + "Simulation (" + _classname + " _model, String _replaceName, java.awt.Frame _replaceOwnerFrame, java.net.URL _codebase, boolean _allowAutoplay) {\n");
+    code.append("    setUnderEjs(\"true\".equals(System.getProperty(\"osp_ejs\")));\n");      
+    code.append("    setCodebase (_codebase);\n");
+    code.append("    setModel (_model);\n");
+    code.append("    _model._simulation = this;\n");
+    code.append("    setView (_model._view = new "+_classname+"View(this,_replaceName, _replaceOwnerFrame));\n");
+    code.append(     _ejs.getModelEditor().generateCode(Editor.GENERATE_SIMULATION_STATE,""));
+    int htmlOption = _ejs.getOptions().generateHtml();
+    if (htmlOption==org.colos.ejs.osejs.EjsOptions.GENERATE_TOP_FRAME  || htmlOption==org.colos.ejs.osejs.EjsOptions.GENERATE_LEFT_FRAME) {
+      int counter = 0;
+      for (Editor editor : _ejs.getDescriptionEditor().getPages()) {
+        HtmlEditor htmlEditor = (HtmlEditor) editor;
+        if (htmlEditor.isActive()) {
+          counter++;
+          String link = _xmlName+"_Intro "+counter+".html";
+          if (htmlEditor instanceof HtmlExternalEditor) link = ((HtmlExternalEditor) htmlEditor).getLink();
+          code.append("      addDescriptionPage(\""+htmlEditor.getName()+"\",\""+link+"\");\n");
+        }
+      }
+    }
+    code.append("  }\n\n");
+    code.append("  public java.util.ArrayList getWindowsList() {\n");
+    code.append( "    java.util.ArrayList<String> windowList = new java.util.ArrayList<String>();\n");
+    code.append(     _ejs.getViewEditor().generateCode(Editor.GENERATE_WINDOW_LIST,""));
+    code.append( "    return windowList;\n");
+    code.append("  }\n\n");
+    code.append("  protected void setViewLocale() { // Overwrite its parent's dummy method with real actions \n");
+    code.append(     _ejs.getViewEditor().generateCode(Editor.GENERATE_CHANGE_LOCALE,""));
+    code.append("    super.setViewLocale();\n");
+    code.append("  }\n\n");
+    if (_ejs.getOptions().experimentsEnabled() && _ejs.getExperimentEditor().getActivePageCount()>0) {
+      code.append("  public java.util.AbstractList getExperiments () { // Add the experiments to the menu\n");
+      code.append("    return (("+_classname+") getModel())._getExperiments();\n");
+      code.append("  }\n\n");
+      code.append("  public org.colos.ejs.library.Experiment createExperiment (String _experimentName) { // creates an experiment\n");
+      code.append("    return (("+_classname+") getModel())._createExperiment(_experimentName);\n");
+      code.append("  }\n\n");
+    }
+    code.append("} // End of class "+_classname+"Simulation\n\n");
+    return code.toString();
+  }
+
+  /**
+   * Generates the Java code for the view of the simulation
+   * @param _ejs Osejs The calling Ejs
+   * @param _filename String The name of the simulation file
+   * @return StringBuffer
+   */
+  static private String generateView (Osejs _ejs, String _classname, String _packageName) {
+    Editor variablesEditor = _ejs.getModelEditor().variablesEditor;
+    StringBuffer code = new StringBuffer();
+    code.append(generateHeader(_classname,_packageName, "View"));
+
+    code.append("class " + _classname + "View extends org.colos.ejs.library.control.EjsControl implements org.colos.ejs.library.View {\n");
+    code.append("  private "+_classname+"Simulation _simulation=null;\n");
+    code.append("  private "+_classname+" _model=null;\n\n");
+    code.append("  // Public variables for wrapped view elements:\n");
+    code.append(_ejs.getViewEditor().generateCode(Editor.GENERATE_DECLARATION,""));
+    code.append("\n");
+
+    code.append("// ---------- Class constructor -------------------\n\n");
+    code.append("  public "+_classname+"View ("+_classname+"Simulation _sim, String _replaceName, java.awt.Frame _replaceOwnerFrame) {\n");
+    code.append("    super(_sim,_replaceName,_replaceOwnerFrame);\n");
+    code.append("    _simulation = _sim;\n");
+    code.append("    _model = ("+_classname+") _sim.getModel();\n");
+    code.append("    addTarget(\"_simulation\",_simulation);\n");
+    code.append("    addTarget(\"_model\",_model);\n");
+    code.append("    _model.reset();\n");
+    code.append("    initialize();\n");
+    code.append("    setUpdateSimulation(false);\n");
+    code.append("    // The following is used by the JNLP file for the simulation to help find resources\n");
+    code.append("    try { setUserCodebase(new java.net.URL(System.getProperty(\"jnlp.codebase\"))); }\n");
+    code.append("    catch (Exception exc) { } // Do nothing and keep quiet if it fails\n");
+    code.append("    update();\n");
+    code.append("    createControl();\n");
+    code.append("    addElementsMenuEntries();\n");
+    code.append("    update();\n");
+    code.append("    setUpdateSimulation(true);\n");
+    code.append(     variablesEditor.generateCode(Editor.GENERATE_VIEW_LISTENERS,""));
+    code.append("  }\n\n");
+    code.append("// ---------- Implementation of View -------------------\n\n");
+    code.append("  public void read() {\n");
+    code.append("    // Ejs requires no read(). Actually, having it might cause problems!\n");
+    code.append("  }\n\n");
+    code.append("  public void read(String _variable) {\n");
+    code.append(     variablesEditor.generateCode(Editor.GENERATE_VIEW_READ_ONE,""));
+    code.append("  }\n\n");
+    code.append("  public void propagateValues () {\n"); // Do NOT synchronize!!!
+    code.append("    setValue (\"_isPlaying\",_simulation.isPlaying());\n");
+    code.append("    setValue (\"_isPaused\", _simulation.isPaused());\n");
+    code.append(     variablesEditor.generateCode(Editor.GENERATE_VIEW_UPDATE,""));
+//    code.append("    super.update();\n");
+    code.append("  }\n\n");
+    code.append("// ---------- Creation of the interface  -------------------\n\n");
+    code.append("  private void createControl() {\n");
+    code.append(     _ejs.getViewEditor().generateCode(Editor.GENERATE_CODE,""));
+    code.append("  }\n\n");
+    code.append("// ---------- Resetting the interface  -------------------\n\n");
+    code.append("  public void reset() {\n");
+    code.append(     _ejs.getViewEditor().generateCode(Editor.GENERATE_VIEW_RESET,""));
+    code.append("    super.reset();\n");
+    code.append("  }\n\n");
+    code.append("} // End of class " + _classname + "View\n\n");
+    return code.toString();
+  }
+
+} // end of class

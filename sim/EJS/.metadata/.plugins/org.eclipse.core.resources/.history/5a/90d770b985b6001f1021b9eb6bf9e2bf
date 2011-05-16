@@ -1,0 +1,5 @@
+package org.colos.ejs.model_elements.apache_numerics;
+
+public class EJSTesterWithIcon {
+
+}

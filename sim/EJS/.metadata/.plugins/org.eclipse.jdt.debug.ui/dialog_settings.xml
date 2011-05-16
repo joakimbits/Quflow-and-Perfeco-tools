@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="80" key="org.eclipse.jdt.debug.ui.jre_preference_page_context.columnWidth0"/>
+	<item value="198" key="org.eclipse.jdt.debug.ui.jre_preference_page_context.columnWidth1"/>
+	<item value="1" key="org.eclipse.jdt.debug.ui.jre_preference_page_context.sortColumn"/>
+	<item value="82" key="org.eclipse.jdt.debug.ui.jre_preference_page_context.columnWidth2"/>
+	<section name="org.eclipse.jdt.debug.ui.MAIN_METHOD_SELECTION_DIALOG">
+		<item value="true" key="ShowStatusLine"/>
+		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0A;&lt;History&gt;&#x0A;&lt;historyRootNode&gt;&#x0A;&lt;infoNode&gt;=Autojar/\/Autojar\/D:\/Mis documentos\/EjsEclipse\/Autojar\/libraries\/autojar.jar&amp;lt;org.sourceforge.autojar(Autojar.class[Autojar&lt;/infoNode&gt;&#x0A;&lt;infoNode&gt;=Ejs/src&amp;lt;org.colos.ejs.osejs.utils{SelfJar.java[SelfJar&lt;/infoNode&gt;&#x0A;&lt;infoNode&gt;=Ejs/src&amp;lt;org.colos.ejs{PackageEjs.java[PackageEjs&lt;/infoNode&gt;&#x0A;&lt;infoNode&gt;=Ejs/src&amp;lt;org.colos.ejs.osejs.model_elements.data_reader{DataReaderElement.java[DataReaderElement&lt;/infoNode&gt;&#x0A;&lt;infoNode&gt;=Ejs/src&amp;lt;org.colos.ejs.osejs{EjsConsole.java[EjsConsole&lt;/infoNode&gt;&#x0A;&lt;/historyRootNode&gt;&#x0A;&lt;/History&gt;" key="History"/>
+		<section name="DialogBoundsSettings">
+			<item value="388" key="DIALOG_WIDTH"/>
+			<item value="252" key="DIALOG_Y_ORIGIN"/>
+			<item value="434" key="DIALOG_HEIGHT"/>
+			<item value="444" key="DIALOG_X_ORIGIN"/>
+			<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
+		</section>
+	</section>
+	<section name="org.eclipse.jdt.internal.debug.ui.ExpressionInformationControlCreator$ExpressionInformationControl">
+		<item value="500" key="SashWeightDetails"/>
+		<item value="500" key="SashWeightTree"/>
+		<item value="156" key="HEIGHT"/>
+		<item value="600" key="WIDTH"/>
+	</section>
+</section>

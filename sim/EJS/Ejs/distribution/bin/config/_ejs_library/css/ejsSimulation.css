@@ -1,0 +1,27 @@
+body {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  color: purple;
+  background-color: #C8DFD0 
+}
+
+h3 {
+  text-align: left;
+  margin-bottom: 3px;
+  border-bottom: thin solid;
+}
+
+a { text-decoration: none }
+a:link    { color: blue }
+a:visited { color: purple }
+a:hover   { text-decoration: underline; }
+
+div.appletSection {
+}
+div.experimentsSection {
+}
+div.experiment, div.killExperiment {
+
+}
+div.experiment p {
+  display: inline;
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;Ejs/src/org/opensourcephysics/drawing3d/java3d/MessagesPanel.java&apos;" deleteContents="false" description="Delete resource &apos;Ejs/src/org/opensourcephysics/drawing3d/java3d/MessagesPanel.java&apos;" element1="/Ejs/src/org/opensourcephysics/drawing3d/java3d/MessagesPanel.java" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1241716671117"/>
+</session>

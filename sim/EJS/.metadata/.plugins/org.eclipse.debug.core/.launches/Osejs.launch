@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/Ejs/src/org/colos/ejs/osejs/Osejs.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.colos.ejs.osejs.Osejs"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-Xdock:name=Easy Java Simulations -Xdock:icon=bin/icons/EjsIcon.gif org.colos.ejs.osejs.Osejs -lastFile"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Ejs"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dhome=/Users/Paco/Documents/MyEjsWorkspace"/>
+</launchConfiguration>

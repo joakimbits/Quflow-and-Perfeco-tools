@@ -1,0 +1,44 @@
+
+import java.util.*;
+
+public class SelectedVector implements Cloneable {
+
+    private Vector vSelected;    
+
+  public SelectedVector () {
+      vSelected = new Vector();
+  }
+
+  public synchronized void add (Shape s) {
+      vSelected.add(s); 
+  }
+
+  public int size () {
+      return vSelected.size();
+  }
+
+  public synchronized void remove (Shape s) {
+      vSelected.remove(s);
+  }
+
+  public Object clone () {
+      SelectedVector sv = new SelectedVector();
+      Enumeration e = this.elements();
+      while (e.hasMoreElements())
+	  sv.add((Shape)((Shape)e.nextElement()).clone());
+      return sv;      
+  }
+
+    public boolean contains (Shape s) {
+      return vSelected.contains(s);
+  }
+  
+  public Enumeration elements () {
+      return vSelected.elements();
+  }
+
+  public synchronized void removeAllElements () {
+      vSelected.removeAllElements();
+  }
+
+}

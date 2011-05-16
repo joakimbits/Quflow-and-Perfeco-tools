@@ -1,0 +1,6 @@
+1222290785508	Rename field 'frame'
+1222369226422	Rename type 'NetUtils'
+1222548821669	Rename local variable 'clearButton'
+1222549584085	Rename local variable 'set'
+1222551236633	Rename method 'getXMLChunks'
+1222551247256	Rename local variable '_xml'

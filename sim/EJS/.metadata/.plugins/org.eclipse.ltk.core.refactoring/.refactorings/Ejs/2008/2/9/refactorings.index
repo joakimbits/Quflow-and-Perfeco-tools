@@ -1,0 +1,4 @@
+1204050470824	Rename local variable 'cssList'
+1204050496080	Rename local variable 'cssDir'
+1204284321504	Rename method 'setLocalDirectory'
+1204303713374	Rename field 'lastXMLFile'

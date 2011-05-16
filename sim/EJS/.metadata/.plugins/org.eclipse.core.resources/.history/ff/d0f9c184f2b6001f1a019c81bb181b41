@@ -1,0 +1,110 @@
+package org.colos.ejs.model_elements.apache_numerics;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+
+import org.colos.ejs.library.control.EjsControl;
+import org.colos.ejs.model_elements.ModelElement;
+import org.colos.ejs.model_elements.ModelElementsCollection;
+import org.opensourcephysics.desktop.OSPDesktop;
+import org.opensourcephysics.tools.ResourceLoader;
+
+public class StatisticsElement implements ModelElement {
+  static ImageIcon ELEMENT_ICON = ResourceLoader.getIcon("org/colos/ejs/model_elements/apache_numerics/Statistics.gif"); // This icon is included in this jar
+  
+  private JDialog helpDialog; // The dialog for help
+  
+  // -------------------------------
+  // Implementation of ModelElement
+  // -------------------------------
+  
+  public ImageIcon getImageIcon() { return ELEMENT_ICON; }
+  
+  public String getGenericName() { return "Statistics"; }
+  
+  public String getConstructorName() { return "org.apache.commons.math.stat.descriptive.DescriptiveStatistics"; }
+  
+  public String getInitializationCode(String _name) {
+    return _name + " = new " + getConstructorName() + "();";
+  }
+  
+  public String getDestructionCode(String _name) { return ""; } // This element requires no destruction code
+
+  public String getResourcesRequired() { return ""; }
+
+  public String getDisplayInfo() { return null; } // Nothing to add
+
+  public String savetoXML() { return ""; } // Nothing to save
+
+  public void readfromXML(String _inputXML) { } // Nothing to read
+
+  // -------------------------------
+  // Help and edition
+  // -------------------------------
+
+  public void showHelp(Component _parentComponent) {
+    if (helpDialog==null) { // create the dialog
+      helpDialog = new JDialog((JFrame) null,"Statistics: "+ getGenericName());
+      helpDialog.getContentPane().setLayout(new BorderLayout());
+      helpDialog.getContentPane().add(createHelpComponent(),BorderLayout.CENTER);
+      helpDialog.setModal(false);
+      helpDialog.pack();
+    }
+    java.awt.Rectangle bounds = EjsControl.getDefaultScreenBounds();
+    if (_parentComponent==null) helpDialog.setLocation(bounds.x + (bounds.width - helpDialog.getWidth())/2, bounds.y + (bounds.height - helpDialog.getHeight())/2);
+    else helpDialog.setLocationRelativeTo(_parentComponent);
+    helpDialog.setVisible(true);
+  }
+
+  /**
+   * This editor chooses to include the help for the element (because it is just so small). 
+   * But this is not compulsory.
+   */
+  public void showEditor(String _name,Component _parentComponent, ModelElementsCollection _collection) {
+    showHelp(_parentComponent); 
+  }
+  
+  public void refreshEditor() { } // This element does not need to refresh the editor
+  
+  // -------------------------------
+  // Utilities
+  // -------------------------------
+
+  /**
+   * Creates an HTML viewer with information about the class
+   */
+  static private Component createHelpComponent() {
+    JEditorPane htmlArea = new JEditorPane ();
+    htmlArea.setContentType ("text/html");
+    htmlArea.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, Boolean.TRUE);
+    htmlArea.setEditable(false);
+    htmlArea.addHyperlinkListener(new HyperlinkListener() { // Make hyperlinks work
+      public void hyperlinkUpdate(HyperlinkEvent e) {
+        if (e.getEventType()==HyperlinkEvent.EventType.ACTIVATED)
+          OSPDesktop.displayURL(e.getURL().toString());
+      }
+    });
+    JScrollPane helpComponent = new JScrollPane(htmlArea);
+    helpComponent.setPreferredSize(new Dimension(600,500));
+    
+    try { // read the help for this element
+      java.net.URL htmlURL = ResourceLoader.getResource("/org/colos/ejs/model_elements/apache_numerics/Statistics.html").getURL();
+      htmlArea.setPage(htmlURL);
+    } catch(Exception exc) { exc.printStackTrace(); }
+    return helpComponent;
+  }
+
+  static public void main(String[] args) {
+    StatisticsElement modelElement = new StatisticsElement();
+    modelElement.showEditor(null, null);
+    javax.swing.JOptionPane.showMessageDialog(null, "Model Element JAR library for Easy Java Simulations\n");
+    System.exit(0);
+  }
+
+  
+}

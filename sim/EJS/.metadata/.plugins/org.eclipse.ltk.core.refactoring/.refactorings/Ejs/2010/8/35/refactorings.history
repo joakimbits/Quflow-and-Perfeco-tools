@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Ejs/src/org/colos/ejs/osejs/edition/variables/TabbedVariablesEditor.java&apos; to &apos;VariablesEditor.java&apos;" description="Rename resource &apos;TabbedVariablesEditor.java&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/org/colos/ejs/osejs/edition/variables/TabbedVariablesEditor.java" name="VariablesEditor.java" stamp="1282590025052" updateReferences="true"/>
+</session>

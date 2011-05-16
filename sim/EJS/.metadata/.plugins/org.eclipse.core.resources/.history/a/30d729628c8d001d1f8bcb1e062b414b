@@ -1,0 +1,133 @@
+/*WhiteboardFrame.java
+ *CS193J Summer 20001
+ */
+package org.whiteboard;
+import java.awt.*;
+
+
+/**Represents the structure of the whiteboard; with MenuBar, Palette and
+ * ShapeContainer as Components
+ *
+ * @see MenuBar
+ * @see Palette
+ * @see Container
+ * @see ShapeContainer
+ *
+ * @author Jatinder Pal Singh
+ */
+
+public class WhiteboardFrame extends Frame {
+
+    private MenuBar dMenuBar;
+    private Palette dPalette;
+    private Container dShapeContainer;
+    private MenuItem [] dMenuItems = new MenuItem[WhiteboardConstants.NO_OF_MENU_ITEMS];
+    private MenuItem aMenuItem;    
+
+
+    private void createMenuBar () {    
+	int i = 0;  
+	dMenuBar = new MenuBar ();
+	setMenuBar (dMenuBar);
+	
+	/**Adding file menu items*/   
+	Menu fileMenu = new Menu("File");
+	aMenuItem = new MenuItem(WhiteboardConstants.NEW_MENU_ITEM);
+	dMenuItems[i] = aMenuItem; i++;
+	fileMenu.add(aMenuItem);
+	aMenuItem = new MenuItem(WhiteboardConstants.IMPORT_MENU_ITEM);
+	dMenuItems[i] = aMenuItem; i++;
+	fileMenu.add(aMenuItem);
+	aMenuItem = new MenuItem(WhiteboardConstants.SAVE_AS_MENU_ITEM); 
+	dMenuItems[i] = aMenuItem; i++;
+	fileMenu.add(aMenuItem);
+	aMenuItem = new MenuItem(WhiteboardConstants.PRINT_MENU_ITEM); 
+	dMenuItems[i] = aMenuItem; i++;
+	fileMenu.add(aMenuItem);
+	aMenuItem = new MenuItem(WhiteboardConstants.EXIT_MENU_ITEM); 
+	dMenuItems[i] = aMenuItem; i++;
+	fileMenu.add(aMenuItem);	
+	dMenuBar.add(fileMenu);	
+	
+	/**Adding edit menu items*/   
+	Menu editMenu = new Menu("Edit"); 
+	aMenuItem = new MenuItem(WhiteboardConstants.CUT_MENU_ITEM); 
+	aMenuItem.setEnabled(false);
+	dMenuItems[i] = aMenuItem; i++;
+	editMenu.add(aMenuItem);
+	aMenuItem = new MenuItem(WhiteboardConstants.COPY_MENU_ITEM);
+	aMenuItem.setEnabled(false);
+	dMenuItems[i] = aMenuItem; i++;
+	editMenu.add(aMenuItem); 
+	aMenuItem = new MenuItem(WhiteboardConstants.PASTE_MENU_ITEM);
+	aMenuItem.setEnabled(false);
+	dMenuItems[i] = aMenuItem; i++; 
+	editMenu.add(aMenuItem);
+	aMenuItem = new MenuItem(WhiteboardConstants.CLEAR_MENU_ITEM); 
+	aMenuItem.setEnabled(false);
+	dMenuItems[i] = aMenuItem; i++;
+	editMenu.add(aMenuItem);
+	aMenuItem = new MenuItem(WhiteboardConstants.FRONT_MENU_ITEM); 
+	aMenuItem.setEnabled(false);
+	dMenuItems[i] = aMenuItem; i++;
+	editMenu.add(aMenuItem);
+	aMenuItem = new MenuItem(WhiteboardConstants.BACK_MENU_ITEM); 
+	aMenuItem.setEnabled(false);
+	dMenuItems[i] = aMenuItem; i++;
+	editMenu.add(aMenuItem);	
+	dMenuBar.add(editMenu);
+		
+	/**Adding help menu items*/   
+	Menu helpMenu = new Menu("Help");
+	aMenuItem = new MenuItem(WhiteboardConstants.ABOUT_MENU_ITEM);
+	dMenuItems[i] = aMenuItem; i++;
+	helpMenu.add(aMenuItem);	
+	dMenuBar.add(helpMenu);
+
+	WhiteboardWindowAdapter adapter = new WhiteboardWindowAdapter (this);
+	addWindowListener (adapter);
+    }
+
+    /**Returns Array of all MenuItems*/
+    public MenuItem [] getAllMenuItems () {
+	return dMenuItems;
+    }
+    
+
+    private void createPalette () {
+	dPalette = new Palette ();
+    }
+    
+    
+    public Palette getPalette () {
+	return dPalette;
+    }
+    
+    private void createShapeContainer () {
+	dShapeContainer = new ShapeContainer ();
+    }
+    
+    public Container getShapeContainer () {
+	return dShapeContainer;
+    }
+    
+    /**Construcs a resizeable WhiteBoard with BorderLayout
+     * @args title of the Whiteboard
+     */
+    public WhiteboardFrame (String title) {
+	super (title);
+	
+	createMenuBar();
+	createPalette();
+	createShapeContainer();
+	
+	setLayout (new BorderLayout());
+	add (dPalette, BorderLayout.SOUTH);
+	add (dShapeContainer, BorderLayout.CENTER);
+	
+	setResizable (true);
+	setBackground (Color.lightGray);
+    }
+    
+    
+}

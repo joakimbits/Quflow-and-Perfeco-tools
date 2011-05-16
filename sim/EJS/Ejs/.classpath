@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="libraries/unpackaged/classes"/>
+	<classpathentry kind="lib" path="libraries/apache"/>
+	<classpathentry kind="lib" path="libraries/eJournalCommClasses.jar"/>
+	<classpathentry kind="lib" path="libraries/HotEqn.jar"/>
+	<classpathentry kind="lib" path="libraries/QTJava.zip"/>
+	<classpathentry kind="lib" path="libraries/java3d/j3dcore.jar"/>
+	<classpathentry kind="lib" path="libraries/java3d/j3dutils.jar"/>
+	<classpathentry kind="lib" path="libraries/java3d/vecmath.jar"/>
+	<classpathentry kind="lib" path="libraries/jogl/jogl.jar"/>
+	<classpathentry kind="lib" path="libraries/jogl/jogl-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="distribution/bin/comSun.jar"/>
+	<classpathentry kind="lib" path="distribution/bin/osp.jar" sourcepath="/OSP_core/src"/>
+	<classpathentry kind="lib" path="distribution/bin/bsh.jar"/>
+	<classpathentry kind="lib" path="distribution/bin/locales.jar"/>
+	<classpathentry kind="lib" path="distribution/bin/extensions/djep.jar"/>
+	<classpathentry kind="lib" path="distribution/bin/extensions/Loader3DS.jar"/>
+	<classpathentry kind="lib" path="distribution/bin/extensions/LoaderAC3D.jar"/>
+	<classpathentry kind="lib" path="distribution/bin/extensions/LoaderVRML.jar"/>
+	<classpathentry kind="lib" path="distribution/bin/extensions/commons-math-2.1.jar"/>
+	<classpathentry kind="lib" path="distribution/bin/extensions/model_elements/Apache/apache_numerics.jar"/>
+	<classpathentry kind="lib" path="libraries/commons-cli.jar"/>
+	<classpathentry kind="lib" path="libraries/logback-classic.jar"/>
+	<classpathentry kind="lib" path="libraries/logback-core.jar"/>
+	<classpathentry kind="lib" path="libraries/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="libraries/xuggle-xuggler-test.jar"/>
+	<classpathentry kind="lib" path="libraries/xuggle-xuggler.jar"/>
+	<classpathentry kind="lib" path="distribution/bin/extensions/model_elements/InputOutput/input_output.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

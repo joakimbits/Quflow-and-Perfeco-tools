@@ -1,0 +1,54 @@
+package org.colos.ejs.model_elements.apache_numerics;
+
+import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
+import org.colos.ejs.library.Model;
+
+/**
+ * Encapsulates access to org.apache.commons.math.stat.StatUtils
+ * @author Francisco Esquembre
+ * @version 1.0, August 2010
+ *
+ */
+public class Statistics {
+  Model model;
+  DescriptiveStatistics stats = new DescriptiveStatistics();
+  
+  /**
+   * Standard constructor to be called by the simulation
+   */
+  public Statistics(Model _model) {
+    this.model = _model;
+  }
+
+  /**
+   * Removes all values
+   */
+  public void clear() { stats.clear(); }
+  
+  /**
+   * Adds a value to the dataset
+   * @param v
+   */
+  public void addValue(double v) { stats.addValue(v); }
+  
+  /**
+   * Returns the mean of the dataset
+   */
+  public double getMean() { return stats.getMean(); }
+
+  /**
+   * Returns the variance of the dataset
+   */
+  public double getVariance() { return stats.getVariance(); }
+
+  /**
+   * Returns the mean of the array
+   */
+  public double getMean(double[] values) { return org.apache.commons.math.stat.StatUtils.mean(values); }
+
+  /**
+   * Returns the variance of the array
+   */
+  public double getVariance(double[] values) { return org.apache.commons.math.stat.StatUtils.variance(values); }
+  
+}

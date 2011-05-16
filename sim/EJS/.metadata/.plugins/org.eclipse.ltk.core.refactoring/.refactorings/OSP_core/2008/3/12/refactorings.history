@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;binDirPath&apos; in &apos;org.opensourcephysics.tools.EjsTool.doRunEjs(...)&apos; to &apos;ejsRootDirPath&apos;&#x0D;&#x0A;- Original project: &apos;OSP_core&apos;&#x0D;&#x0A;- Original element: &apos;org.opensourcephysics.tools.EjsTool.doRunEjs(String, List&lt;String&gt;, Class&lt;?&gt;).binDirPath&apos;&#x0D;&#x0A;- Renamed element: &apos;org.opensourcephysics.tools.EjsTool.doRunEjs(String, List&lt;String&gt;, Class&lt;?&gt;).ejsRootDirPath&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;binDirPath&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;org.opensourcephysics.tools{EjsTool.java" name="ejsRootDirPath" references="true" selection="6174 10" stamp="1205971901391" version="1.0"/>
+</session>

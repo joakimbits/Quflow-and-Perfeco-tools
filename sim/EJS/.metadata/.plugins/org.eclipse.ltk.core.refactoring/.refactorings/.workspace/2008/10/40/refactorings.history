@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;Ejs/src/org/colos/ejs/osejs/utils/DigitalLibraryComPADRE.java&apos;" deleteContents="false" description="Delete resource &apos;Ejs/src/org/colos/ejs/osejs/utils/DigitalLibraryComPADRE.java&apos;" element1="/Ejs/src/org/colos/ejs/osejs/utils/DigitalLibraryComPADRE.java" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1222971646709"/>&#x0A;<refactoring comment="Delete 2 resources" deleteContents="false" description="Delete 2 resources" element1="/Ejs/EJS_4.0_081004.zip" element2="/Ejs/EJS_4.1_081004_2.zip" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="2" stamp="1223189643198"/>
+</session>

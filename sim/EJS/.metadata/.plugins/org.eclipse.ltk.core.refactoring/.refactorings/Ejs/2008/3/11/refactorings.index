@@ -1,0 +1,7 @@
+1205263316927	Rename local variable '_outputDir'
+1205263330426	Rename local variable '_outputDir'
+1205263338448	Rename local variable '_outputDir'
+1205263350846	Rename field 'outputDir'
+1205264282766	Rename local variable '_target'
+1205264922015	Rename local variable '_rootDir'
+1205401164625	Rename method 'isEjsPackage'

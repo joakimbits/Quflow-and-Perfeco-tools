@@ -1,0 +1,37 @@
+package ejsTesting;
+
+import java.util.Set;
+
+import javax.swing.ImageIcon;
+
+import org.opensourcephysics.tools.ResourceLoader;
+import org.opensourcephysics.tools.minijar.MiniJar;
+
+public class EJSTesterWithIcon implements EJSTester {
+  static ImageIcon ELEMENT_ICON = ResourceLoader.getIcon("/ejsTesting/Statistics.gif"); // This icon is included in this jar
+
+  public void test() {
+    System.out.println ("Image icon = "+ELEMENT_ICON);
+    // TODO Auto-generated method stub
+    
+  }
+
+  
+  static public void main(String[] args) {
+    new EJSTesterWithIcon().test();
+    
+    String commandLine = 
+      " -o ../OSP_core/test_ejs.jar " + // The output JAR file, to be located under in bin/extensions/model_elements
+      " -s bin " + // the location of the compiled classes
+      " -s ../OSP_core/bin " + // the location of the compiled classes
+      " -c ../Ejs/distribution/bin/osp.jar " +  // Because this class uses standard OSP classes
+      " -c ../Ejs/distribution/bin/ejs.jar " +  // Because this class uses EJS classes
+      " -x ../Ejs/distribution/bin/osp.jar -x ../Ejs/distribution/bin/ejs.jar -x ++Thumbs.db"+ // do not include these classes, nor MAC OS X's _Thumbs.db files
+      " ejsTesting/++ "; // get ALL files under this directory and its dependencies (for class files)
+    System.out.println ("Processing "+commandLine);
+    MiniJar sj = new MiniJar(commandLine.split(" "));
+    Set<String> missingSet = sj.compress();
+    for (String missing : missingSet) System.out.println ("Missing file: "+missing); 
+    System.out.println ("  ... Done processing "+commandLine+"\n");
+  }
+}

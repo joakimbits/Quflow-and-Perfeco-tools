@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="RefactoringWizard.Externalize strings in &apos;QTVideoType.java&apos;">
+		<item value="470" key="height"/>
+		<item value="600" key="width"/>
+	</section>
+	<section name="RefactoringWizard.preview">
+		<item value="420" key="height"/>
+		<item value="620" key="width"/>
+	</section>
+	<section name="org.eclipse.ltk.ui.refactoring.settings">
+	</section>
+	<section name="InferTypeArguments">
+		<item value="true" key="leaveUnconstrainedRaw"/>
+		<item value="true" key="assumeCloneReturnsSameType"/>
+	</section>
+</section>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;OSP_core/src/org/opensourcephysics/display/OSPRuntimeNew.java&apos; to &apos;OSPRuntime.java&apos;" description="Rename resource &apos;OSPRuntimeNew.java&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/org/opensourcephysics/display/OSPRuntimeNew.java" name="OSPRuntime.java" stamp="1295815501978" updateReferences="true"/>
+</session>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="263" key="DIALOG_WIDTH"/>
+		<item value="664" key="DIALOG_Y_ORIGIN"/>
+		<item value="395" key="DIALOG_HEIGHT"/>
+		<item value="1342" key="DIALOG_X_ORIGIN"/>
+		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="true" key="wrap"/>
+		<item value="false" key="casesensitive"/>
+		<item value="true" key="isRegEx"/>
+		<item value="true" key="incremental"/>
+		<item value="false" key="wholeword"/>
+		<item value="pasteString" key="selection"/>
+		<list key="findhistory">
+			<item value="pasteString"/>
+			<item value="readString"/>
+			<item value="JMenuBar"/>
+			<item value="zenoCounter"/>
+			<item value="zenoList"/>
+			<item value="zenoListener"/>
+			<item value="__mustReinitialize"/>
+			<item value="resetSolver"/>
+		</list>
+		<list key="replacehistory">
+			<item value="&quot;+_toState+&quot;"/>
+			<item value="mRate"/>
+			<item value="mState"/>
+			<item value="_delayPastStates"/>
+			<item value="[index]"/>
+			<item value="desiredStep"/>
+			<item value="mDimension"/>
+			<item value="Fehlberg78.B7"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item value="481" key="DIALOG_Y_ORIGIN"/>
+		<item value="579" key="DIALOG_X_ORIGIN"/>
+	</section>
+</section>

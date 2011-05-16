@@ -1,0 +1,13 @@
+what,kind,bundleId,bundleVersion,description,time
+stopped,bundle,org.eclipse.jdt.apt.ui,3.3.100.v20080407-1345,org.eclipse.jdt.apt.ui,1214433216745
+stopped,bundle,org.eclipse.jdt.ui,3.4.0.v20080603-2000,org.eclipse.jdt.ui,1214433216761
+stopped,bundle,org.eclipse.mylyn.bugzilla.ui,3.0.0.v20080619-1900,org.eclipse.mylyn.bugzilla.ui,1214433216761
+stopped,bundle,org.eclipse.mylyn.ide.ui,3.0.0.v20080619-1900,org.eclipse.mylyn.ide.ui,1214433216777
+stopped,bundle,org.eclipse.mylyn.team.ui,3.0.0.v20080619-1900,org.eclipse.mylyn.team.ui,1214433216777
+stopped,bundle,org.eclipse.mylyn.resources.ui,3.0.0.v20080619-1900,org.eclipse.mylyn.resources.ui,1214433216777
+stopped,bundle,org.eclipse.mylyn.context.ui,3.0.0.v20080619-1900,org.eclipse.mylyn.context.ui,1214433216777
+stopped,bundle,org.eclipse.mylyn.help.ui,3.0.0.v20080619-1900,org.eclipse.mylyn.help.ui,1214433216777
+stopped,bundle,org.eclipse.mylyn.tasks.bugs,3.0.0.v20080619-1900,org.eclipse.mylyn.tasks.bugs,1214433216777
+stopped,bundle,org.eclipse.mylyn.tasks.ui,3.0.0.v20080619-1900,org.eclipse.mylyn.tasks.ui,1214433216777
+stopped,bundle,org.eclipse.wst.dtd.ui,1.0.300.v200805152207,org.eclipse.wst.dtd.ui,1214433216792
+stopped,bundle,org.eclipse.wst.xsd.ui,1.2.101.v200806051910,org.eclipse.wst.xsd.ui,1214433216792

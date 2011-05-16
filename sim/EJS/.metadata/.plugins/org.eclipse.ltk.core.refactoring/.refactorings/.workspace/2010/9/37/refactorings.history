@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;ExternalApps&apos;" deleteContents="true" description="Delete resource &apos;ExternalApps&apos;" element1="/ExternalApps" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1283807508794"/>&#x0A;<refactoring comment="Delete 2 resources" deleteContents="false" description="Delete 2 resources" element1="/Ejs/src/org/colos/ejs/osejs/edition/translation/LocaleListener.java" element2="/Ejs/src/org/colos/ejs/osejs/edition/translation/LocaleSelector.java" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="2" stamp="1283813638311"/>
+</session>

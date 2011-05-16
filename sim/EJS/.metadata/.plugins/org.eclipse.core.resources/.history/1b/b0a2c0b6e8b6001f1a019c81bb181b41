@@ -1,0 +1,110 @@
+package org.colos.ejs.model_elements;
+
+/**
+ * This interface declares the API for a clas that can be used by EJS to:
+ * 1.- Instantiate an object of a class
+ * 2.- Edit the properties of that class
+ * 3.- Include the code required to use this object in a simpler way in a generated simulation
+ * 
+ * An implementing object should separate the implementation of this interface from the library 
+ * object that will go into the simulation, in order not to add unnecessary weight to it.
+ * @author Francisco Esquembre
+ * @version 1.0 August 2010
+ *
+ */
+public interface ModelElement {
+
+  /**
+   * Returns the icon used by EJS as logo for the element
+   * @return
+   */
+  public javax.swing.ImageIcon getImageIcon();
+  
+  /**
+   * Returns the generic name for all objects of this class. Will be displayed by EJS.
+   * @return
+   */
+  public String getGenericName();
+  
+  /**
+   * Returns the fully qualified constructor name. Used to declare the variable
+   * @return
+   */
+  public String getConstructorName();
+  
+  /**
+   * Returns the code required to construct and initialize the element. May span more than one line.
+   * This code will be called when resetting the simulation, after all basic variables have been reset 
+   * to their initial values (as specified in the table of variables), and before the code of the 
+   * initialization pages of EJS.
+   * Sample minimal code is : _name + " = new " + getConstructorName() + "();"
+   * @param _name the name of the element
+   * @return
+   */
+  public String getInitializationCode(String _name);
+  
+  /**
+   * Returns the code required (if any) to quit the element in an orderly way, 
+   * when the simulation frees resources before quitting. 
+   * May be empty "" and may span more than one line.
+   * @return
+   */
+  public String getDestructionCode();
+  
+  /**
+   * Returns a semicolon ';' separated list of resources (files) required by the element at run-time
+   * May be empty "" or null if the element requires no resources
+   * @return
+   */
+  public String getResourcesRequired();
+
+  /**
+   * Used by EJS to set the name of the model element
+   * @param name
+   */
+  public void setName(String name);
+  
+  /**
+   * Returns the given name
+   * @return
+   */
+  public String getName();
+
+  /**
+   * Returns a more descriptive display name of the element.
+   * EJS uses it on the list of model elements
+   * @return
+   */
+  public String getDisplayName();
+  
+  /**
+   * Returns the configuration of the element in XML form. Will be used by EJS to save the element to file
+   * @return
+   */
+  public String savetoXML();
+  
+  /**
+   * Reads the configuration of the element from XML form (as created by saveToXML())
+   * @return
+   */
+  public void readfromXML(String _inputXML);
+  
+  /**
+   * Used by EJS to display the help for the element
+   * @param parentComponent the parent component to locate the editor relative to
+   */
+  public void showHelp(java.awt.Component parentComponent);
+
+  /**
+   * Used by EJS to display the editor of the element
+   * @param parentComponent the parent component to locate the editor relative to
+   * @param ejsObject an optional EJS object (in case the editor wants it)
+   */
+  public void showEditor(java.awt.Component parentComponent, ModelElementsCollection list);
+  
+  /**
+   * Used by EJS whenever the model variables change
+   */
+  public void refreshEditor();
+  
+}

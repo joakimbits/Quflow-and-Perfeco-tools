@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete 6 resources" deleteContents="false" description="Delete 6 resources" element1="/Ejs/src/ejs_MolecularDynamicsDemo/MolecularDynamicsDemo_Contents.html" element2="/Ejs/src/ejs_MolecularDynamicsDemo/MolecularDynamicsDemo_Simulation.html" element3="/Ejs/src/ejs_MolecularDynamicsDemo/MolecularDynamicsDemo.html" element4="/Ejs/src/ejs_MolecularDynamicsDemo/MolecularDynamicsDemo.jar" element5="/Ejs/src/ejs_MolecularDynamicsDemo/MolecularDynamicsDemo.metadata" element6="/Ejs/src/ejs_MolecularDynamicsDemo/MolecularDynamicsDemo.xml" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="6" stamp="1217345634221"/>
+</session>

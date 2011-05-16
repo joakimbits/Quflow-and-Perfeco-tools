@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="727" key="org.eclipse.debug.ui.InspectPopupDialogDIALOG_WIDTH"/>
+	<item value="603" key="org.eclipse.debug.ui.InspectPopupDialogDIALOG_Y_ORIGIN"/>
+	<item value="false" key="EXT_FOLDER_SOURCE_LAST_SUBDIR_SETTING"/>
+	<item value="41" key="org.eclipse.debug.ui.InspectPopupDialogDIALOG_X_ORIGIN"/>
+	<item value="200" key="org.eclipse.debug.ui.InspectPopupDialogDIALOG_HEIGHT"/>
+	<section name="org.eclipse.debug.ui.sourcelookup.SourceLookupDialog">
+		<item value="525" key="DIALOG_WIDTH"/>
+		<item value="396" key="DIALOG_Y_ORIGIN"/>
+		<item value="637" key="DIALOG_X_ORIGIN"/>
+		<item value="412" key="DIALOG_HEIGHT"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="org.eclipse.debug.ui.SCOPED_SAVE_SELECTION_DIALOG">
+		<item value="347" key="DIALOG_WIDTH"/>
+		<item value="282" key="DIALOG_Y_ORIGIN"/>
+		<item value="571" key="DIALOG_X_ORIGIN"/>
+		<item value="455" key="DIALOG_HEIGHT"/>
+		<item value="1|Tahoma|8.25|0|WINDOWS|1|-11|0|0|0|400|0|0|0|1|0|0|0|0|Tahoma" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="org.eclipse.debug.ui.LAUNCH_CONFIGURATION_PROPERTIES_DIALOG_SECTION">
+		<item value="800" key="DIALOG_WIDTH"/>
+		<item value="253" key="DIALOG_Y_ORIGIN"/>
+		<item value="-496" key="DIALOG_X_ORIGIN"/>
+		<item value="640" key="DIALOG_HEIGHT"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="org.eclipse.debug.ui.LAUNCH_CONFIGURATIONS_DIALOG_SECTION">
+		<item value="937" key="DIALOG_WIDTH"/>
+		<item value="0" key="DIALOG_Y_ORIGIN"/>
+		<item value=", org.eclipse.jdt.launching.localJavaApplication, " key="org.eclipse.debug.ui.EXPANDED_NODES"/>
+		<item value="522" key="DIALOG_X_ORIGIN"/>
+		<item value="780" key="DIALOG_HEIGHT"/>
+		<item value="237" key="org.eclipse.debug.ui.DIALOG_SASH_WEIGHTS_1"/>
+		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
+		<item value="762" key="org.eclipse.debug.ui.DIALOG_SASH_WEIGHTS_2"/>
+	</section>
+	<section name="org.eclipse.debug.ui.SELECT_LAUNCH_SHORTCUT_DIALOG">
+		<item value="450" key="DIALOG_WIDTH"/>
+		<item value="218" key="DIALOG_Y_ORIGIN"/>
+		<item value="623" key="DIALOG_X_ORIGIN"/>
+		<item value="450" key="DIALOG_HEIGHT"/>
+		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
+	</section>
+	<section name="org.eclipse.debug.ui.SELECT_CONFIGURATION_TYPE_DIALOG">
+		<item value="300" key="DIALOG_WIDTH"/>
+		<item value="39" key="DIALOG_Y_ORIGIN"/>
+		<item value="170" key="DIALOG_X_ORIGIN"/>
+		<item value="350" key="DIALOG_HEIGHT"/>
+		<item value="1|Tahoma|8.25|0|WINDOWS|1|-11|0|0|0|400|0|0|0|1|0|0|0|0|Tahoma" key="DIALOG_FONT_NAME"/>
+	</section>
+</section>

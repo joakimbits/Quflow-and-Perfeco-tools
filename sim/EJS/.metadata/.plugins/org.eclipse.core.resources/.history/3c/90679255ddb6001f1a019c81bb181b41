@@ -1,0 +1,7 @@
+package ejsTesting;
+
+public interface EJSTester {
+	
+	public void test();
+
+}

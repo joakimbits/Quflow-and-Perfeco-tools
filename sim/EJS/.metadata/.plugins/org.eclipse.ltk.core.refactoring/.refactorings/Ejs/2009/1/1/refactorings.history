@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;mainPanel&apos; in &apos;org.colos.ejs.osejs.edition.SimInfoEditor.SimInfoEditor(...)&apos; to &apos;infoPanel&apos;&#x0D;&#x0A;- Original project: &apos;Ejs&apos;&#x0D;&#x0A;- Original element: &apos;org.colos.ejs.osejs.edition.SimInfoEditor.SimInfoEditor(Osejs).mainPanel&apos;&#x0D;&#x0A;- Renamed element: &apos;mainPanel&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;mainPanel&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;org.colos.ejs.osejs.edition{SimInfoEditor.java[SimInfoEditor~SimInfoEditor~QOsejs;@mainPanel!14388!14427!14392!14400!QBox;" name="infoPanel" references="true" stamp="1231008406592" version="1.0"/>
+</session>

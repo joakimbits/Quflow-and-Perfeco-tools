@@ -1,0 +1,28 @@
+/*Clipboard.java
+ *CS193J
+ *Summer 2001
+ */
+
+import java.awt.*;
+
+public class SelectionIcon extends DrawingIcon {
+
+    public SelectionIcon () {
+	super();
+	if (GlobalDebug.isOn)
+	    System.out.println("SelectionDrawingIcon.RectangleDrawingIcon()");
+    }
+
+    public Shape createShape (int x1, int y1, int x2, int y2) {
+	if (GlobalDebug.isOn)
+	    System.out.println("SelectionDrawingIcon.createShape()");
+	return new SelectBox(x1, y1, x2, y2);
+  }
+
+  public String getCommand () {
+      if (GlobalDebug.isOn) 
+	  System.out.println ("SelectionDrawingIcon.getCommand()");
+      return "SelectBox";
+  }
+
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;OSP_core/src/org/opensourcephysics/test&apos;" deleteContents="false" description="Delete resource &apos;OSP_core/src/org/opensourcephysics/test&apos;" element1="/OSP_core/src/org/opensourcephysics/test" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1229936677827"/>
+</session>

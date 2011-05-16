@@ -1,0 +1,24 @@
+package org.colos.ejs.osejs.edition.variables;
+
+import org.colos.ejs.model_elements.ModelElement;
+
+public class ModelElementTransferData {
+
+  private ModelElement element;
+  private int position; // the position in the list of added elements (-1 if is an addition)
+  private String jarPath; // The path of the jar file where this model element is defined (can be null if the jar file is in the default classpath)
+
+  public ModelElementTransferData (ModelElement _element, int _position) { 
+    element = _element;
+    position = _position;
+  }
+  
+  public ModelElement getElement() { return this.element; }
+
+  public void setPosition(int _pos) { position = _pos; }
+
+  public int getPreviousPosition() { return position; }
+  
+  public String getJarPath() { return jarPath; }
+  
+}

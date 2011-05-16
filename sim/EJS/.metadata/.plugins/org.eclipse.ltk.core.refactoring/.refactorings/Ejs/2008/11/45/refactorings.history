@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Ejs/src/org/colos/ejs/library/control/drawables/ControlComplexScalarField.java&apos; to &apos;ControlComplexScalarFieldOld.java&apos;" description="Rename resource &apos;ControlComplexScalarField.java&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/org/colos/ejs/library/control/drawables/ControlComplexScalarField.java" name="ControlComplexScalarFieldOld.java" stamp="1226094096218" updateReferences="true"/>
+</session>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;Ejs/src_ejs_100921.zip&apos;" deleteContents="false" description="Delete resource &apos;Ejs/src_ejs_100921.zip&apos;" element1="/Ejs/src_ejs_100921.zip" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1285448400321"/>
+</session>

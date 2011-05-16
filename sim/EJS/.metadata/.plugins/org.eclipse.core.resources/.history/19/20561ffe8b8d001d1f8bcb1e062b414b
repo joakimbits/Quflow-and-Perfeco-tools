@@ -1,0 +1,77 @@
+/*Whiteboard.java
+ *CS193J Summer 20001
+ */
+
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+
+
+/** The Whiteboard class implements the main() method for the Whiteboard
+ *  application. 
+ *
+ * @see WhiteboardFrame
+ * @see PaletteController
+ * @see ShapeController
+ * @see DrawingIcon
+ *
+ * @author      Jatinder Pal Singh
+ */
+
+
+public class Whiteboard {
+
+  private static WhiteboardFrame dWhiteboardFrame;
+  private static PaletteController dPaletteController;
+  private static ShapeController dShapeController;
+
+  public Whiteboard (WhiteboardFrame aWhiteboardFrame) {
+  }
+
+
+    /**Instantiates and displays WhiteboardFrame. Creates instances of event listeners PaletteController
+     * and ShapeController.
+     *
+     * @param args Unused
+     * @return Nothing 
+     */
+  public static void main (String argv[]) {
+      
+      GlobalDebug.isOn = false;
+      dWhiteboardFrame = new WhiteboardFrame ("MyWhiteboard");
+      Whiteboard wb = new Whiteboard(dWhiteboardFrame);  
+      dWhiteboardFrame.setSize (640,480);
+      dWhiteboardFrame.setLocation (0,0);
+      dWhiteboardFrame.setVisible (true);
+      dWhiteboardFrame.pack();
+      dPaletteController = new
+	  PaletteController(dWhiteboardFrame.getPalette());
+      setInitialPaletteState();
+     
+      dShapeController = new ShapeController(dWhiteboardFrame,
+					     dWhiteboardFrame.getShapeContainer(), dPaletteController);
+      dWhiteboardFrame.show();
+  }
+
+
+
+    /*Sets the initial display state of the Whiteboard palette. The
+     * initially selected drawing icon is set pressed and others are popped
+     * up
+     */
+    private static void setInitialPaletteState()
+    {
+	DrawingIcon diInitiallySelected =
+	    dPaletteController.getInitiallySelectedDrawingIcon();
+	Enumeration e = dWhiteboardFrame.getPalette().getAllDrawingIcons();
+	DrawingIcon dI;
+	while (e.hasMoreElements())
+	    {
+		dI = (DrawingIcon)e.nextElement();
+	      if (dI == diInitiallySelected)
+		  dI.setState(true);
+	      else 
+		  dI.setState(false);
+	    }
+    }   
+}

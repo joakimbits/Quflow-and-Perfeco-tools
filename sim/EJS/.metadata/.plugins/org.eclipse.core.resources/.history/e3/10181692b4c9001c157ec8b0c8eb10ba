@@ -1,0 +1,79 @@
+package org;
+
+import java.io.File;
+
+/**
+ * Creates and uses a file matching pattern to locate files in a directory
+ * @author Francisco Esquembre
+ *
+ */
+public class Pattern {
+  String base, extension;
+  int baseLength, extensionLength;
+  boolean isPattern, isRecursive;
+  
+  /**
+   * Constructs a given pattern of any of the following forms:
+   * <ul>
+   *   <li> <tt>dir1/dir2/filename.ext</tt> : Files in the dir1/dir2 directory with the given name and extension.
+   *   <li> <tt>dir1/dir2/*.ext</tt> : Any file in the dir1/dir2 directory with the given extension.
+   *   <li> <tt>dir1/dir2/whatever*.ext</tt> : Any file in the dir1/dir2 directory, with a name 
+   *                                  that starts with 'whatever', and with the given extension.  
+   *   <li> <tt>dir1/dir2/**.ext</tt> : Any file at any level under the dir1/dir2 directory with the given extension.
+   * </ul>
+   * In all cases, lower and upper case letters are considered different.
+   * @param pattern
+   */
+  public Pattern (String pattern) {
+	base = pattern.replace(File.separatorChar, '/');
+    int index1 = base.indexOf("*");
+    if (index1<0) isPattern = false; // and that's it
+    else {
+      isPattern = true;
+      extension = "";
+      int index2 = base.indexOf("**");
+      if (index2<0) {
+        isRecursive = false;
+        if (index1+2<=base.length()) extension = base.substring(index1+1);
+        if (index1>0) base = base.substring(0,index1-1);
+        else base = "";
+      }
+      else {
+        isRecursive = true;
+        if (index2+3<=base.length()) extension = base.substring(index2+2);
+        if (index2>0) base = base.substring(0,index2-1);
+        else base = "";
+      }
+      baseLength = base.length();
+      extensionLength = extension.length();
+    }
+    System.out.println ("Pattern <"+pattern+" is : "+toString());
+  }
+
+  /**
+   * Prints a verbose description of the pattern
+   */
+  public String toString() {
+	 return "isPattern = "+isPattern+", isRecursive = "+isRecursive+"\n"+
+	        "base = "+base+", extension = "+extension;
+  }
+  
+  /**
+   * Whether the given file name matches the pattern
+   * @param filename
+   * @return
+   */
+  public boolean matches (String filename) {
+    filename = filename.replace(File.separatorChar, '/');
+    if (isPattern) {
+      if (baseLength>0 && !filename.startsWith(base)) return false;
+      if (extensionLength>0 && !filename.endsWith(extension)) return false;
+      if (isRecursive) return true;
+      filename = filename.substring(baseLength,filename.length()-extensionLength);
+      return filename.indexOf('/')<0;
+    }
+    else return filename.equals(base);
+  }
+  
+}
+

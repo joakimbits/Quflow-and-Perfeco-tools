@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Ejs/src/org/colos/ejs/osejs/utils/DigitalLibraryTreeComPADRE.java&apos; to &apos;DigitalLibraryComPADRE.java&apos;" description="Rename resource &apos;DigitalLibraryTreeComPADRE.java&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/org/colos/ejs/osejs/utils/DigitalLibraryTreeComPADRE.java" name="DigitalLibraryComPADRE.java" stamp="1222971652761" updateReferences="true"/>
+</session>

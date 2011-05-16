@@ -1,0 +1,29 @@
+/*RectangleDrawingIcon.java
+ *CS193J
+ *Summer 2001
+ */
+
+import java.awt.*;
+
+public class RectangleDrawingIcon extends DrawingIcon {
+
+    public RectangleDrawingIcon () {
+	super();
+	if (GlobalDebug.isOn)
+	    System.out.println("RectangleDrawingIcon.RectangleDrawingIcon()");
+    }
+
+  public Shape createShape (int x1, int y1, int x2, int y2) {
+      if (GlobalDebug.isOn)
+	  System.out.println("RectangleDrawingIcon.createShape()");
+      return new Rectangle(x1, y1, x2, y2);
+      //return null;
+  }
+
+  public String getCommand () {
+      if (GlobalDebug.isOn) 
+	  System.out.println ("RectangleDrawingIcon.getCommand()");
+      return "Rectangle";
+    //    return null;
+  }
+}

@@ -1,0 +1,1288 @@
+/**
+ * The package contains the main functionality of Osejs
+ * Copyright (c) November 2001 F. Esquembre
+ * @author F. Esquembre (http://fem.um.es).
+ * Revised February 2006 F. Esquembre
+ */
+
+package org.colos.ejs.osejs;
+
+import java.io.*;
+import java.util.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.net.URL;
+import javax.swing.*;
+import org.colos.ejs.osejs.utils.*;
+import org.colos.ejs.osejs.edition.*;
+import org.colos.ejs.control.editors.*;
+import org.colos.ejs.library.utils.HardcopyWriter;
+import org.opensourcephysics.display.DisplayRes;
+import org.opensourcephysics.display.OSPRuntime;
+import org.opensourcephysics.tools.*;
+import org.opensourcephysics.tools.minijar.PathAndFile;
+
+
+public class Osejs {
+  static private final String OSEJS_NAME = "Osejs";
+  static private final ResourceUtil sysRes = new ResourceUtil("SystemResources");
+  static private final String[] mainOptions = ResourceUtil.tokenizeString(sysRes.getString("Osejs.MainToolBar"));
+  static private final Icon runningIcon    = ResourceLoader.getIcon(sysRes.getString("Osejs.Icon.Running"));
+  static private final Icon runningNotIcon = ResourceLoader.getIcon(sysRes.getString("Osejs.Icon.Run"));
+  static private ResourceUtil res = null; // to be initialized after the Locale is set
+  static private Font defaultFont = null; // to be initialized after the Locale is set
+  static private Font titleFont = null;   // to be initialized after the Locale is set
+
+  private Editor[] editors=null;
+  private SimInfoEditor simInfoEditor=null;
+  private DescriptionEditor descriptionEditor=null;
+  private ModelEditor modelEditor = null;
+  private ViewEditor viewEditor = null;
+  private ExperimentEditor experimentEditor=null;
+  private OutputArea outputArea=null;
+  private EjsOptions myEjsOptions=null;
+  private ProcessListDialog processDialog = null;
+  private Process lastProcess = null;
+  private SearchDialog searchDialog=null;
+  private JFileChooser fileDialog = null;
+  private JFileChooser importDirectoryChooser = null; // Used to choose import directories
+  
+  private boolean externalAppsOn=false;
+  private boolean verbose=false;
+  private boolean firstTimeNetworkError=true; // Used when trying to access the help site on the Internet
+  private boolean justToCompile=false; // Whether EJS was started just to compile a simulation
+  private File binDirectory=null;  // The EJS bin directory
+  private File docDirectory=null;  // The documentation directory
+  private File configDirectory=null; // The user/config directory for the configuration files
+  private File exportDirectory=null; // The user/export directory for the exported (JAR and HTML) files
+  private File outputDirectory=null; // The user/output directory for the generated files
+  private File sourceDirectory=null; // The user/source directory for the XML files
+
+  private Font currentFont=null;
+  private CardLayout cardLayout=null;
+  private JFrame mainFrame=null;
+  private JPanel topPanel=null, mainPanel=null;
+  private JSplitPane splitPanel=null;
+  private JButton runButton=null, openButton=null, packageButton=null, infoButton=null, searchButton=null;
+  private JRadioButton[] mainButtons=null;
+  private JRadioButton experimentButton=null;
+  private JCheckBox simInfoButton=null;
+  private JPopupMenu packagePopup=null, runPopup=null, infoPopup=null, searchPopup=null;
+  private Set<Frame> framesList = new HashSet<Frame>(); // The set of frames that will be minimized if EJS is minimized
+  
+  // Variables that change according to user actions
+  private File unnamedXMLFile = null; // Default file when nothing has been written
+  private File currentXMLFile = null; // The current XML file that was loaded 
+  private File currentMetadataFile=null; // The current meta data file that was generated
+  private String addedResourcePath=null; // Used to add paths to ResourceLoader
+  private String executionClassname=null; // The complete class to be executed
+  private String executionPath=null; // The execution path required by the current class to run
+  private java.util.List<String> previousOpenedFilePaths = new ArrayList<String>(); // The list of file paths previously opened
+  
+  // --- Setter and getter methods
+  
+  public boolean isOfferingExternalPages()  { return this.externalAppsOn; }
+  public boolean isJustCompiling()          { return this.justToCompile; }
+  public boolean isVerbose()                { return this.verbose; }
+  
+  public File    getCurrentXMLFile()        { return this.currentXMLFile; }
+  public Font    getCurrentFont ()          { return this.currentFont; }
+  public File    getBinDirectory()          { return this.binDirectory; }
+  public File    getExportDirectory()       { return this.exportDirectory; }
+  public File    getConfigDirectory()       { return this.configDirectory; }
+  public File    getOutputDirectory()       { return this.outputDirectory; }
+  public File    getSourceDirectory()       { return this.sourceDirectory; }
+
+  public JFrame    getMainFrame()           { return this.mainFrame; }
+  public JPanel    getMainPanel()           { return this.mainPanel; }
+  public JButton   getPackageButton()       { return this.packageButton; }
+  public JCheckBox getSimInfoButton()       { return this.simInfoButton; }
+  
+  public DescriptionEditor getDescriptionEditor() { return this.descriptionEditor; }
+  public ModelEditor       getModelEditor()       { return this.modelEditor; }
+  public ViewEditor        getViewEditor()        { return this.viewEditor; }
+  public ExperimentEditor  getExperimentEditor()  { return this.experimentEditor; }
+  public SimInfoEditor     getSimInfoEditor()     { return this.simInfoEditor; }
+  public OutputArea        getOutputArea()        { return outputArea; }
+  public EjsOptions        getOptions()           { return myEjsOptions; }
+  
+  /**
+   * The current directory (parent of the current XML file)
+   */
+  public File    getCurrentDirectory() {
+    if (currentXMLFile!=null) return currentXMLFile.getParentFile();
+    else return sourceDirectory;
+  }
+  
+  /**
+   * The last class (i.e. ".class") file that has been generated 
+   */
+  public File getCurrentMetadataFile () { return currentMetadataFile; }
+
+  /**
+   * The list of recently opened files
+   * @return
+   */
+  public java.util.List<String> getOpenedFilePathList() { return previousOpenedFilePaths; }
+
+  /**
+   * Set the parameters needed for a later run of the current simulation 
+   */
+  void setExecutionParameters (String classname, String path) {
+    executionClassname = classname;
+    executionPath = path; 
+  }
+
+  /**
+   * The qualified name of the class to run
+   */
+  public String getExecutionClassname () { return executionClassname; }
+  
+  /**
+   * The class path required to run the class
+   */
+  public String getExecutionPath () { return executionPath; }
+
+  // The file dialog to read and save files
+  private JFileChooser getFileDialog(File _firstDirectory) {
+    if (fileDialog==null) {
+      fileDialog = OSPRuntime.createChooser(res.getString("Osejs.File.Description"), new String[] {sysRes.getString("Osejs.File.Extension")});
+      fileDialog.setFileSelectionMode(javax.swing.JFileChooser.FILES_ONLY);
+      fileDialog.setMultiSelectionEnabled(false);
+      fileDialog.setCurrentDirectory(_firstDirectory);
+    }
+    fileDialog.rescanCurrentDirectory();
+    return fileDialog;
+  }
+  
+  // -- The dialog that shows the processes currently running
+  private ProcessListDialog getProcessDialog() {
+    if (processDialog==null) processDialog = new ProcessListDialog();
+    return processDialog;
+  }
+  
+  // ----------- main method  ------------
+
+  static public void main (java.lang.String[] args) {
+    // A very early scan to set the local language
+    for (int i=0; i<args.length; i++) {
+      if (args[i].equals("-locale")) {
+        String language = args[++i], country = args[++i];
+        Locale locale;
+        if (country.equals("XX")) locale = new Locale(language);
+        else locale = new Locale(language,country);
+        ResourceUtil.setLocale(locale);
+        Locale.setDefault(locale);
+      }
+    }
+    // We can now initialize the static, but language-dependent objects
+    res = new ResourceUtil("Resources");
+    defaultFont = InterfaceUtils.font(null,res.getString("Osejs.DefaultFont"));
+    titleFont = InterfaceUtils.font(null,res.getString("Osejs.TitleFont"));
+
+    // Create EJS
+    final Osejs ejs = new Osejs();
+    
+    // Scan the options
+    String elementsPath=null, iconsAt="east", outputPath = OsejsCommon.OUTPUT_DIR_PATH;
+    boolean progressFlag=true, defaultLF=false;
+    for (int i=0; i<args.length; i++) {
+      if      (args[i].equals("-elements"))     elementsPath = args[++i];
+      else if (args[i].equals("-iconsAt"))      iconsAt = args[++i];
+      else if (args[i].equals("-compile"))      progressFlag = false;
+      else if (args[i].equals("-defaultLookAndFeel")) defaultLF = true;
+      else if (args[i].equals("-maximumfps"))   org.colos.ejs.library.Simulation.MAXIMUM_FPS=Integer.parseInt(args[++i]) ;//fkh20050214
+      else if (args[i].equals("-externalApps")) ejs.externalAppsOn = true;
+      else if (args[i].equals("-outputDir"))    { outputPath = args[++i];  System.out.println ("Outputdir is now "+outputPath); }
+      else if (args[i].equals("-verbose"))      ejs.verbose = true;
+    }
+    
+    // Set the default look and feel
+    org.opensourcephysics.display.OSPRuntime.javaLookAndFeel = defaultLF;
+    JFrame.setDefaultLookAndFeelDecorated(defaultLF);
+    JDialog.setDefaultLookAndFeelDecorated(defaultLF);
+
+    // Initialize EJS
+    ejs.initializeDirectories(outputPath);
+    ProgressDialog pD = ejs.initializeInterface(elementsPath,iconsAt,progressFlag);
+
+    // Put EJS' interface inside a JFrame. 
+    // This code is here -and not in initializeInterface()- for historical reasons (when EJS could be run as an applet)
+    JFrame frame = ejs.mainFrame = new JFrame(res.getString("Osejs.Title"));
+    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    frame.setIconImage(ResourceLoader.getImage(sysRes.getString("Osejs.Icon.EjsIcon")));
+    frame.addWindowListener(new WindowAdapter() {
+      public void windowClosing (WindowEvent e) {
+        if (!ejs.checkChangesAndContinue(true)) return; // True = onExit
+        ejs.getOptions().save();
+        org.colos.ejs.external.BrowserForSimulink.exitMatlab();
+        System.exit(0);
+      }
+      public void windowIconified (WindowEvent e) {
+        ejs.framesList.clear();
+        Frame[] frames = Frame.getFrames();
+        for (int i=0,n=frames.length; i<n; i++) {
+          if (frames[i]!=e.getWindow() && frames[i].isVisible()) { 
+            frames[i].setVisible(false); 
+            ejs.framesList.add(frames[i]); 
+          }
+        }
+      }
+      public void windowDeiconified (WindowEvent e) {
+        for (Frame frame : ejs.framesList) frame.setVisible(true);
+        ejs.framesList.clear();
+      }
+    });
+    frame.getContentPane().setLayout(new java.awt.BorderLayout());
+    frame.getContentPane().add (ejs.topPanel,BorderLayout.CENTER);
+    frame.pack();
+    Dimension d = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    frame.setLocation((d.width - frame.getSize().width)/2, (d.height - frame.getSize().height)/2);
+  
+    // Final scan of run-time options
+    for (int i=0; i<args.length; i++) {
+      if      (args[i].equals("-file")) ejs.readFilename (args[i+1]);
+      else if (args[i].equals("-lastFile")) {
+        String lastFilename = ejs.myEjsOptions.lastXMLFilePath();
+        if (lastFilename!=null) {
+          File file = new File (lastFilename);
+          if (file.exists()) {
+            if (pD!=null) pD.reportProgress(res.getString("Osejs.Init.ReadingFile")+" "+ejs.getPathRelativeToSourceDirectory(lastFilename));
+            ejs.readFile(file);
+            ejs.getFileDialog(file.getParentFile()); // Just to set the chooser's current directory
+          }
+        }
+      }
+      else if (args[i].equals("-compile")) { // java -jar EjsConsole.jar -outputDir _apps2 -compile _users/murcia/fem/Demo/EarthAndMoon.xml
+        ejs.justToCompile = true;
+        ejs.readFilename (args[++i]);
+        Generate.generate(ejs);
+        System.exit(0);
+      }
+    }
+    frame.setVisible(true);
+    if (pD!=null) pD.dispose();
+    ejs.getOptions().sizeFrame(frame);
+    ejs.getOptions().placeFrame(frame);
+    ejs.splitPanel.setResizeWeight(0.65);
+    ejs.splitPanel.validate();
+    ejs.outputArea.getComponent().requestFocus();
+  }
+
+// -----------------------------------------------
+// start-up methods
+// -----------------------------------------------
+  
+  /**
+   * Set EJS' bin and user directories
+   */
+  private void initializeDirectories (String outputPath) {
+    if (verbose) {
+      System.out.println ("User home  "+System.getProperty("user.home"));
+      System.out.println ("User dir   "+System.getProperty("user.dir"));
+    }
+
+    String home = System.getProperty("home");
+    if (home==null) home = OsejsCommon.USER_DIR_PATH;
+    home = home.replace('\\','/');
+    
+    // user directories
+    File userDirectory = new File(home);
+    configDirectory = new File (userDirectory,OsejsCommon.CONFIG_DIR_PATH);
+    exportDirectory = new File (userDirectory,OsejsCommon.EXPORT_DIR_PATH);
+    outputDirectory = new File (userDirectory,outputPath);
+    sourceDirectory = new File (userDirectory,OsejsCommon.SOURCE_DIR_PATH);
+    // Create the workspace directories
+    configDirectory.mkdirs();
+    exportDirectory.mkdirs();
+    outputDirectory.mkdirs();
+    sourceDirectory.mkdirs();
+    
+    // binary (EJS installation) directory
+    String binPath = System.getProperty("user.dir");
+    binDirectory = new File (binPath,OsejsCommon.BIN_DIR_PATH);
+    docDirectory = new File (binPath,OsejsCommon.DOC_DIR_PATH);
+    
+    // Additional routines    
+    unnamedXMLFile = new File (sourceDirectory,"Unnamed.xml"); // Default unnamed XML file
+    ResourceLoader.addSearchPath(FileUtils.getPath(sourceDirectory));
+    String optionsFilePath = System.getProperty("ejs.console_options");
+    if (optionsFilePath==null) optionsFilePath = FileUtils.getPath(new File(binDirectory,"ConsoleOptions.txt"));
+
+    // Store the information about last time EJS was run
+    EjsTool.saveInformation(FileUtils.getPath(binDirectory.getParentFile()),optionsFilePath,
+                            FileUtils.getPath(sourceDirectory),org.colos.ejs.library._EjsConstants.VERSION);
+    
+    // TODO : remove the need for setting "user.home"
+    //System.setProperty("user.home",FileUtils.getPath(sourceDirectory));
+  }
+
+  /**
+   * Initializes EJS' interface. This creates all the panels but does not open any window (if _showProgress is false).
+   * @param _elementsFilename String The name of the file with the elements of the view to display. Default is null.
+   * @param _iconsAt String Where to place the icons bar. One of "center", "north", "south", "east", or "west". Default is "east".
+   * @param _showProgress boolean Whether to display a progress bar while loading.
+   */
+  private ProgressDialog initializeInterface (String _elementsFilename, String _iconsAt, boolean _showProgress) {
+    ProgressDialog pD = null;
+    if (_showProgress) pD = new ProgressDialog(3,res.getString("Osejs.StartDialogTitle"),
+                                                 res.getDimension("Osejs.StartDialogSize"));
+
+    // --- Create the icons bar
+    if (pD!=null) pD.reportProgress(res.getString("Osejs.Init.Toolbars"));
+    MyActionListener al = new MyActionListener();
+    JToolBar iconbar = new JToolBar();
+    iconbar.setRollover (false);
+    iconbar.setBorderPainted(false);
+    iconbar.setFloatable(false);
+    iconbar.setBorder (new javax.swing.border.EmptyBorder(1,2,0,0));
+    if (_iconsAt==null) _iconsAt = "east";
+    else _iconsAt = _iconsAt.toLowerCase();
+    if (_iconsAt.equals("north") || _iconsAt.equals("center") || _iconsAt.equals("south")) iconbar.setOrientation(JToolBar.HORIZONTAL);
+    else iconbar.setOrientation(JToolBar.VERTICAL);
+    JButton[] iconButtons = MenuUtils.createIconGroup (ResourceUtil.tokenizeString(sysRes.getString("Osejs.IconToolBar")), "Osejs.Icon.", al);
+    for (int i=0; i<iconButtons.length; i++) {
+      if (iconButtons[i]==null) {
+        if (_iconsAt.equals("north") || _iconsAt.equals("center") || _iconsAt.equals("south")) iconbar.add(Box.createHorizontalStrut(8));
+        else iconbar.add(Box.createVerticalStrut(8));
+      }
+      else {
+        iconbar.add(iconButtons[i]);
+        String cmd = iconButtons[i].getActionCommand();
+        if      ("Run".equals(cmd))     runButton = iconButtons[i];
+        else if ("Open".equals(cmd))    openButton = iconButtons[i];
+        else if ("Package".equals(cmd)) packageButton = iconButtons[i];
+        else if ("Info".equals(cmd))    infoButton = iconButtons[i];
+        else if ("Search".equals(cmd))  searchButton = iconButtons[i];
+      }
+    }
+    
+    runButton.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent _evt) {
+        if (InterfaceUtils.isRightClick(_evt)) {
+          if (runPopup==null) {
+            runPopup = new JPopupMenu();
+            runPopup.add(new AbstractAction(res.getString("RunMenu.RunAgain")){
+              public void actionPerformed(java.awt.event.ActionEvent e) { runSimulation(false); }
+            });
+            runPopup.add(new AbstractAction(res.getString("RunMenu.KillCurrentSimulation")){
+              public void actionPerformed(java.awt.event.ActionEvent e) {
+                if (lastProcess!=null) getProcessDialog().killLastProcess();
+                lastProcess = null;
+              }
+            });
+            runPopup.add(new AbstractAction(res.getString("RunMenu.KillSimulations")){
+              public void actionPerformed(java.awt.event.ActionEvent e) { getProcessDialog().show(runButton); }
+            });
+            //runPopup.add(new AbstractAction(res.getString("RunMenu.ShowWindows")){
+            //  public void actionPerformed(java.awt.event.ActionEvent e) { viewEditor.showWindows(true); }
+            //});
+          }
+          runPopup.show(runButton,0,0);
+        }
+      }
+    });
+
+    openButton.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent _evt) {
+        if (InterfaceUtils.isRightClick(_evt)) {
+          JPopupMenu openPopup = new JPopupMenu();
+          openPopup.add(new JLabel (" "+res.getString("OpenMenu.PreviousFiles")));
+          openPopup.add(new JSeparator());
+          for (int i=previousOpenedFilePaths.size()-1; i>=0; i--) {
+            final String filename = previousOpenedFilePaths.get(i);
+            openPopup.add(new AbstractAction(filename){
+              public void actionPerformed(java.awt.event.ActionEvent e) { readFilename(filename); }
+            });
+          }
+          openPopup.add(new JSeparator());
+          openPopup.add(new AbstractAction(res.getString("OpenMenu.CleanList")){
+            public void actionPerformed(java.awt.event.ActionEvent e) { previousOpenedFilePaths.clear(); }
+          });
+          openPopup.show(openButton,0,0);
+        }
+      }
+    });
+
+    packageButton.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent _evt) {
+        if (InterfaceUtils.isRightClick(_evt)) {
+          if (packagePopup==null) {
+            packagePopup = new JPopupMenu();
+            packagePopup.add(new AbstractAction(res.getString("Package.PackageCurrentSimulation")){
+              public void actionPerformed(java.awt.event.ActionEvent e) { packageSimulation(); }
+            });
+            packagePopup.add(new AbstractAction(res.getString("Package.PackageAllSimulations")){
+              public void actionPerformed(java.awt.event.ActionEvent e) { Generate.packageAllSimulations(Osejs.this); }
+            });
+            packagePopup.add(new AbstractAction(res.getString("Package.EditPackage")){
+              public void actionPerformed(java.awt.event.ActionEvent e) { Generate.editLauncherPackage(Osejs.this); }
+            });
+            packagePopup.add(new AbstractAction(res.getString("Package.CreateGroupHTML")){
+              public void actionPerformed(java.awt.event.ActionEvent e) { 
+                java.lang.Thread thread = new Thread(new Runnable () {
+                  public void run() { Generate.createGroupHTML(Osejs.this); }
+                });
+                thread.setPriority(Thread.NORM_PRIORITY);
+                thread.start();
+              }
+            });
+            packagePopup.add(new AbstractAction(res.getString("Package.ZIPCurrentSimulation")){
+              public void actionPerformed(java.awt.event.ActionEvent e) { 
+                java.lang.Thread thread = new Thread(new Runnable () {
+                  public void run() { Generate.zipCurrentSimulation(Osejs.this); }
+                });
+                thread.setPriority(Thread.NORM_PRIORITY);
+                thread.start();
+              }
+            });
+            packagePopup.addSeparator();
+            packagePopup.add(new AbstractAction(res.getString("Package.CleanSimulations")){
+              public void actionPerformed(java.awt.event.ActionEvent e) { 
+                java.lang.Thread thread = new Thread(new Runnable () {
+                  public void run() { Generate.cleanSimulations(Osejs.this); }
+                });
+                thread.setPriority(Thread.NORM_PRIORITY);
+                thread.start();
+              }
+            });
+          }
+          packagePopup.show(packageButton,0,0);
+        }
+      }
+    });
+
+    infoButton.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent _evt) {
+        if (InterfaceUtils.isRightClick(_evt)) {
+          if (infoPopup==null) {
+            infoPopup = new JPopupMenu();
+            infoPopup.add(new AbstractAction(res.getString("InfoMenu.ShowWiki")){
+              public void actionPerformed(java.awt.event.ActionEvent e) { openWikiPage(""); }
+            });
+            infoPopup.add(new AbstractAction(res.getString("Print.PrintCode")){
+              public void actionPerformed(java.awt.event.ActionEvent e) { printCode(); }
+            });
+            infoPopup.add(new AbstractAction(res.getString("InfoMenu.TakeSnapshot")){
+              public void actionPerformed(java.awt.event.ActionEvent e) {
+                try { org.opensourcephysics.display.PrintUtils.saveComponentAsEPS(mainFrame); }
+                catch (Exception exc) { exc.printStackTrace(); }
+              }
+            });
+            infoPopup.add(new AbstractAction(res.getString("InfoMenu.TakeSnapshotWindow")){
+              AWTEventListener focusListener;
+              public void actionPerformed(java.awt.event.ActionEvent e) {
+                focusListener = new AWTEventListener () {
+                  public void eventDispatched(AWTEvent _event) {
+                    WindowEvent windowEvent = (WindowEvent) _event;
+                    if (windowEvent.getID()==WindowEvent.WINDOW_GAINED_FOCUS ) {
+                      java.awt.Toolkit.getDefaultToolkit().removeAWTEventListener(focusListener);
+                      try { org.opensourcephysics.display.PrintUtils.saveComponentAsEPS(windowEvent.getWindow()); }
+                      catch (Exception exc) { exc.printStackTrace(); }
+                    }
+                  }
+                };
+                System.out.println ("Put the focus on the window you want to capture");
+                java.awt.Toolkit.getDefaultToolkit().addAWTEventListener(focusListener,AWTEvent.WINDOW_EVENT_MASK);
+              }
+            });
+          }
+          infoPopup.show(infoButton,0,0);
+        }
+      }
+    });
+
+    searchButton.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent _evt) {
+        if (InterfaceUtils.isRightClick(_evt)) {
+          if (searchPopup==null) {
+            searchPopup = new JPopupMenu();
+            searchPopup.add(new AbstractAction(res.getString("SearchMenu.SearchString")){
+              public void actionPerformed(java.awt.event.ActionEvent e) {
+                if (searchDialog==null) searchDialog = new SearchDialog(Osejs.this,searchButton);
+                searchDialog.show();
+              }
+            });
+            searchPopup.add(new AbstractAction(res.getString("SearchMenu.ShowInspectorsWithErrors")){
+              public void actionPerformed(java.awt.event.ActionEvent e) { viewEditor.getTree().updateProperties(true); }
+            });
+            JCheckBoxMenuItem smi = new JCheckBoxMenuItem(res.getString("EjsOptions.ShowPropertyErrors"));
+            smi.setSelected(myEjsOptions.showPropertyErrors());
+            smi.addActionListener( new ActionListener () {
+              public void actionPerformed(java.awt.event.ActionEvent e) {
+                myEjsOptions.setShowPropertyErrors(((JCheckBoxMenuItem)e.getSource()).isSelected());
+              }
+            });
+            searchPopup.add(smi);
+          }
+          searchPopup.show(runButton,0,0);
+        }
+      }
+    });
+
+    if (_iconsAt.equals("north") || _iconsAt.equals("center") || _iconsAt.equals("south")) iconbar.add(Box.createHorizontalGlue());
+    else iconbar.add(Box.createVerticalGlue());
+   
+    // --- Create the main bar
+    Box mainbar = Box.createHorizontalBox();
+    simInfoButton = new JCheckBox (ResourceLoader.getIcon(sysRes.getString("Osejs.Icon.SimInfo")));
+    simInfoButton.setRequestFocusEnabled(false);
+    simInfoButton.addItemListener(new ItemListener() {
+      public void itemStateChanged (ItemEvent _evt) { simInfoEditor.toggleVisibility(); }
+    });
+    simInfoButton.setToolTipText(res.getString("Osejs.Icon.SimInfo.Tooltip"));
+
+    mainButtons = MenuUtils.createRadioGroup(mainOptions,"Osejs.Main.", new ActionListener() {
+      public void actionPerformed (java.awt.event.ActionEvent _evt) { cardLayout.show (mainPanel,_evt.getActionCommand()); }
+    });
+    for (int i=0; i<mainButtons.length; i++) {
+      if (mainButtons[i]==null) continue;
+      mainButtons[i].setFont(titleFont);
+      mainButtons[i].setForeground(InterfaceUtils.color(res.getString(mainOptions[i]+".Color")));
+      mainButtons[i].setToolTipText(res.getString("Osejs.Main."+mainOptions[i]+".ToolTip"));
+      mainButtons[i].setBorder(BorderFactory.createEmptyBorder(2,8,2,8));
+      mainbar.add (mainButtons[i]);
+      if (mainOptions[i].startsWith("Experiment")) experimentButton = mainButtons[i];
+    }
+    mainbar.add(Box.createHorizontalGlue());
+    mainbar.add(simInfoButton);
+
+    // --- Put both bars together
+    JPanel toolPanel = new JPanel (new BorderLayout());
+    if (_iconsAt.equals("center")) toolPanel.add (BorderLayout.EAST,iconbar);
+    toolPanel.add (BorderLayout.CENTER,mainbar);
+
+    // ---------- Creation of the main editors
+    if (pD!=null) pD.reportProgress(res.getString("Osejs.Init.Editors"));
+
+    myEjsOptions = new EjsOptions(this);
+
+    File elementsFile;
+    if (_elementsFilename==null) elementsFile = new File (binDirectory,OsejsCommon.CONFIG_DIR_PATH+"/ElementsOrdered.txt");
+    else elementsFile = new File (_elementsFilename);
+    
+    simInfoEditor = new SimInfoEditor (this);
+    editors = new Editor[mainButtons.length];
+    cardLayout = new CardLayout();
+    mainPanel = new JPanel(cardLayout);
+    for (int i=0; i<mainButtons.length; i++) {
+      String classname = sysRes.getString("Osejs.Main."+mainOptions[i]);
+      if      (classname.endsWith("ViewEditor"))        editors[i] = viewEditor  = new ViewEditor(this,elementsFile);
+      else if (classname.endsWith("ModelEditor"))       editors[i] = modelEditor = new ModelEditor(this);
+      else if (classname.endsWith("DescriptionEditor")) editors[i] = descriptionEditor = new DescriptionEditor(this);
+      else if (classname.endsWith("ExperimentEditor"))  editors[i] = experimentEditor = new ExperimentEditor(this);
+      if (editors[i]!=null) {
+        editors[i].setColor(InterfaceUtils.color(res.getString(mainOptions[i]+".Color")));
+        mainPanel.add(editors[i].getComponent(),mainOptions[i]);
+      }
+    }
+    
+    // Interconnect model and view for editing purposes
+    viewEditor.setModelEditor(modelEditor);
+
+    // Select the first (Introduction) panel
+    mainButtons[0].setSelected (true);
+    cardLayout.show(mainPanel,mainOptions[0]);
+
+    // ----- Create the output area
+    outputArea = new OutputArea();
+    outputArea.setFont(defaultFont);
+    
+    // ---------- update labels and titles
+    updateCurrentFile(unnamedXMLFile); // Despite default changes in editors, no program has been loaded
+
+    // ---------- Put everything together
+    if (pD!=null) pD.reportProgress(res.getString("Osejs.Init.FinalStartUp"));
+
+    JPanel superMainPanel = new JPanel(new BorderLayout());
+    superMainPanel.add(BorderLayout.CENTER,mainPanel);
+    if      (_iconsAt.equals("west"))    superMainPanel.add(BorderLayout.WEST ,iconbar);
+    else if (_iconsAt.equals("east"))    superMainPanel.add(BorderLayout.EAST, iconbar);
+    else if (_iconsAt.equals("south"))   superMainPanel.add(BorderLayout.SOUTH,iconbar);
+    else if (!_iconsAt.equals("center")) superMainPanel.add(BorderLayout.EAST, iconbar);
+    
+    splitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+    splitPanel.setTopComponent(superMainPanel);
+    if (outputArea.getComponent()!=null) splitPanel.setBottomComponent(outputArea.getComponent());
+    splitPanel.setResizeWeight(0.65);
+    splitPanel.validate();
+    splitPanel.setOneTouchExpandable(true);
+
+    topPanel = new JPanel(new BorderLayout());
+    topPanel.add(BorderLayout.NORTH, toolPanel);
+    topPanel.add(BorderLayout.CENTER, splitPanel);
+    if      (_iconsAt.equals("center")) toolPanel.add(BorderLayout.EAST, iconbar);
+    else if (_iconsAt.equals("north"))  toolPanel.add(BorderLayout.NORTH,iconbar);
+    topPanel.validate();
+    
+    for (int i=0; i<editors.length; i++) editors[i].setName(OSEJS_NAME+"."+mainOptions[i]);
+    setFont(defaultFont);
+
+    topPanel.setPreferredSize(res.getDimension("Osejs.Size"));
+    myEjsOptions.read();
+    if (outputArea.getComponent()!=null) outputArea.getComponent().requestFocusInWindow();
+    return pD;
+  }
+
+// ---------------------------------
+// Utilities 
+// ---------------------------------
+
+  /**
+   * Forces to choose a file under the source directory.
+   * Returns null if the user cancels the process
+   */
+  public File chooseFileUnderSource (JFileChooser _fileChooser, JComponent _parentComponent) {
+    File target=null;
+    while (target==null) {
+      if (_fileChooser.showOpenDialog(_parentComponent)==JFileChooser.APPROVE_OPTION) target = _fileChooser.getSelectedFile();
+      else return (File)null;
+      if (target==null || !FileUtils.isRelative(target,sourceDirectory)) {
+        JOptionPane.showMessageDialog(_parentComponent,res.getString("Osejs.Read.MustBeUnderSource"),
+            res.getString("Osejs.File.Error"),JOptionPane.ERROR_MESSAGE);
+        target=null;
+      }
+    }
+    return target;
+  }
+  
+  /**
+   * Converts a relative filename to a File
+   */
+  public File getRelativeFile (String filename) {
+    if (filename.startsWith("./")) return new File (getCurrentDirectory(),filename.substring(2));
+    else return new File (getSourceDirectory(),filename);
+  }
+
+  /**
+   * Return the relative path of a file 
+   */
+  public String getRelativePath (File _file) {
+    return getRelativePath(FileUtils.getPath(_file));
+  }
+
+  /**
+   * Return the relative path of a file 
+   */
+  public String getRelativePath (String path) {
+    String relPath = FileUtils.getRelativePath (path,getCurrentDirectory(),true);
+    if (relPath.startsWith("./")) return relPath;
+    else return getPathRelativeToSourceDirectory(path);
+  }
+
+  /**
+   * Return the path of a user file relative to EJS' user directory
+   */
+  public String getPathRelativeToSourceDirectory (String path) { 
+    return FileUtils.getRelativePath(path,sourceDirectory,false); 
+  }
+
+  
+  /**
+   * Return the absolute path of a file under EJS's user source directory
+   */
+  public String makeAbsolutePath (String path) { 
+    return FileUtils.getAbsolutePath(path, sourceDirectory); 
+  }  
+
+  /**
+   * Show/Hide the experiments panel
+   * @param show boolean
+   */
+  public void showExperimentsPanel (boolean show) {
+    if (experimentButton!=null) experimentButton.setVisible(show);
+    if (experimentButton.isSelected()) {
+      mainButtons[0].setSelected(true);
+      cardLayout.show(mainPanel, mainOptions[0]);
+    }
+  }
+
+  /**
+   * Make sure a given panel is visible
+   * @param header
+   */
+  public void showPanel (String header) {
+    String panel, subpanel=null;
+    int index = header.indexOf('.');
+    if (index>0) {
+      panel = header.substring(0,index);
+      subpanel = header.substring(index+1);
+    }
+    else panel = header;
+    if (mainFrame!=null) mainFrame.requestFocus();
+    for (int i=0; i<mainOptions.length; i++) {
+      if (mainOptions[i].equals(panel)) {
+        cardLayout.show(mainPanel, mainOptions[i]);
+        mainButtons[i].setSelected(true);
+        if ("Model".equals(mainOptions[i])) modelEditor.showPanel(subpanel);
+        return;
+      }
+    }
+  }
+
+  /**
+   * Search for a given String
+   * @param _searchString
+   * @param _mode
+   * @param _searchIn
+   * @return
+   */
+  public java.util.List<SearchResult> search (String _searchString, int _mode, int _searchIn) {
+    java.util.List<SearchResult> list = new java.util.ArrayList<SearchResult>();
+    if ((_searchIn & SearchResult.SEARCH_DESCRIPTION)!=0) list.addAll(descriptionEditor.search("",_searchString,_mode));
+    if ((_searchIn & SearchResult.SEARCH_MODEL      )!=0) list.addAll(modelEditor.search      ("",_searchString,_mode));
+    if ((_searchIn & SearchResult.SEARCH_VIEW       )!=0) list.addAll(viewEditor.search       ("",_searchString,_mode));
+    if ((_searchIn & SearchResult.SEARCH_EXPERIMENTS)!=0) list.addAll(experimentEditor.search ("",_searchString,_mode));
+    return list;
+  }
+
+  /**
+   * Open a given help page, either in the Web server or in its local copy
+   * @param page
+   */
+  public void openWikiPage (String page) {
+    //System.out.println ("Requesting page "+page);
+    try {
+      URL url = new URL("http://www.um.es/fem/EjsWiki");
+      url.openStream();
+      com.Ostermiller.util.Browser.init();
+      com.Ostermiller.util.Browser.displayURL("http://www.um.es/fem/EjsWiki"+page);
+    }
+    catch (Exception exc) { // Try local file
+      if (firstTimeNetworkError) {
+        outputArea.println(res.getString("InfoMenu.LocalWikiError"));
+        firstTimeNetworkError = false;
+      }
+      try {
+        if (page.trim().length()==0) page = "/index.html";
+        String wikiFile = "file:///"+FileUtils.correctUrlString(FileUtils.getPath(docDirectory)+"EjsWiki"+page);
+        if (!wikiFile.endsWith(".html")) wikiFile += ".html";
+        //System.out.println ("Trying local page : "+wikiFile); 
+        com.Ostermiller.util.Browser.init();
+        com.Ostermiller.util.Browser.displayURL(wikiFile);
+      }
+      catch (Exception exc2) {
+        exc2.printStackTrace();
+      }
+    }
+  }
+
+  /**
+   * Set the running condition
+   * @param process Process
+   * @param running boolean
+   */
+  public void setRunning (String name, Process process, boolean running) {
+    ProcessListDialog dialog = getProcessDialog();
+    if (running) {
+      dialog.addProcess(process, name);
+      lastProcess = process;
+    }
+    else {
+      dialog.removeProcess(process);
+      if (process==lastProcess) viewEditor.showWindows(true);
+      lastProcess = null;
+    }
+    if (runButton==null) return;
+    if (dialog.processesRunning()>0) runButton.setIcon(runningIcon);
+    else runButton.setIcon(runningNotIcon);
+  }
+
+  /**
+   * Change the font of (most of) the panels of EJS.
+   * @param _font Font
+   */
+  public void setFont  (Font _font) {
+    currentFont = _font;
+    for (int i=0; i<editors.length; i++) editors[i].setFont(_font);
+    outputArea.setFont(_font);
+    if (searchDialog!=null) searchDialog.setFont(_font);
+    // menuBar.setFont (smallFont.deriveFont (Font.BOLD));
+  }
+
+  /**
+   * Used to mark whenever anything in the code changes
+   * @param _ch boolean
+   */
+  public void setChanged (boolean _ch) {
+    for (int i=0; i<editors.length; i++) editors[i].setChanged(_ch);
+    forceCompilation();
+  }
+
+  /**
+   * Whether anything in the code has changed
+   * @return boolean
+   */
+  public boolean isChanged () {
+    for (int i=0; i<editors.length; i++) if (editors[i].isChanged()) return true;
+    return false;
+  }
+
+  /**
+   * Clears all the panels and labels of EJS
+   */
+  private void clear () {
+    simInfoEditor.clear();
+    for (int i=0; i<editors.length; i++) editors[i].clear();
+    outputArea.clear();
+    currentXMLFile = null;
+    updateCurrentFile(unnamedXMLFile);
+    lastProcess = null;
+    forceCompilation();
+//    mainButtons[0].setSelected (true);
+//    cardLayout.show(mainPanel,mainOptions[0]);
+  }
+
+  // --------------------------------------
+  // Input
+  // --------------------------------------
+
+  /**
+   * Copies relative auxiliary files to the destination directory
+   */
+  private void copyAuxiliaryFiles (java.util.List<PathAndFile> _list, File _destDir) {
+    boolean checkAll = true;
+    ResourceUtil jarRes = null;
+    Object[] ynOptions = null;
+
+    for (PathAndFile paf : _list) {
+      File target;
+      if (paf.getPath().startsWith("./")) target = new File (_destDir,paf.getPath().substring(2));
+      else target = new File (_destDir,paf.getPath());
+      boolean doIt = true;
+      if (checkAll && target.exists()) {
+        if (jarRes==null) {
+          jarRes = new ResourceUtil("org.opensourcephysics.resources.tools.tools");
+          ynOptions = new Object[]{ jarRes.getString("JarTool.Yes"), jarRes.getString("JarTool.YesToAll"), jarRes.getString("JarTool.No")};
+        }
+        int option = JOptionPane.showOptionDialog(openButton,  
+            getPathRelativeToSourceDirectory(FileUtils.getPath(target)) + " : "+ res.getString("Osejs.File.Overwrite"), 
+            res.getString("Osejs.File.FileExists"), JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, ynOptions, ynOptions[0]);
+        switch (option) {
+          case 0 : break; // Do nothing
+          case 1 : checkAll = false; break; 
+          case 2 : doIt = false; break; // Do not copy it
+        }
+      }
+      if (doIt) {
+        if (FileUtils.copy (paf.getInputStream(), target)) 
+          outputArea.message("Osejs.File.SavedOK",getPathRelativeToSourceDirectory(FileUtils.getPath(target)));
+        else 
+          JOptionPane.showMessageDialog(openButton, res.getString("Osejs.File.Error")+" "+getPathRelativeToSourceDirectory(FileUtils.getPath(target)),
+              res.getString("Osejs.File.SavingError"), JOptionPane.INFORMATION_MESSAGE);
+      }
+    }
+  }
+
+  private void addToPreviouslyOpened (File _xmlFile) {
+    // Update the list of previously opened files
+    String relative = getPathRelativeToSourceDirectory(FileUtils.getPath(_xmlFile));
+    if (previousOpenedFilePaths.contains(relative)) previousOpenedFilePaths.remove(relative);
+    previousOpenedFilePaths.add(relative);
+    if (previousOpenedFilePaths.size()>10) previousOpenedFilePaths.remove(0);
+  }
+  
+  private void readFilename (String filename) {
+    File file = new File (sourceDirectory,filename); // Try it relative to EJS's source directory first
+    if (file.exists()) readFile (file); 
+    else readFile (new File (filename)); // Try absolutely
+  }
+  
+  private void readFile (File _xmlFile) {
+    if (!_xmlFile.exists()) {
+      outputArea.message("Osejs.File.NotReadOK",FileUtils.getPath(_xmlFile));
+      return;
+    }
+    outputArea.clear();
+    if (verbose) System.out.println ("Reading from "+FileUtils.getPath(_xmlFile));
+    
+    // Check if it is an imported file and actually import it   
+    if (!FileUtils.isRelative(_xmlFile, sourceDirectory)) { // Must be imported
+      // Choose the destination directory
+      if (importDirectoryChooser==null) {
+        importDirectoryChooser = OSPRuntime.createChooser("", new String[]{});
+        importDirectoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        importDirectoryChooser.setMultiSelectionEnabled(false);
+        importDirectoryChooser.setCurrentDirectory(sourceDirectory);
+        importDirectoryChooser.setDialogTitle(res.getString("Osejs.Read.ChooseImportDirectory"));
+      }
+      importDirectoryChooser.rescanCurrentDirectory();
+      File destDir=chooseFileUnderSource (importDirectoryChooser, openButton);
+      if (destDir==null) return; // The user canceled it
+
+      // Do the import
+      AbstractList<PathAndFile> list = new ArrayList<PathAndFile>();
+      list.add(new PathAndFile(_xmlFile.getName(),_xmlFile));
+      list.addAll(getAuxiliaryFiles(_xmlFile));
+      copyAuxiliaryFiles (list,destDir);
+      _xmlFile = new File (destDir,_xmlFile.getName());
+    }
+    
+    // Read a file from under the source directory
+    boolean merging = false;
+    // OLD: names which start with '_' are for merging files
+    // if (_file.getName().startsWith("_")) merging = true;
+    modelEditor.setMerging(merging);
+    setResourceLoaderPath(_xmlFile);
+    boolean ok = false;
+    String input = FileUtils.readTextFile(_xmlFile);
+    if (input==null) JOptionPane.showMessageDialog(topPanel, res.getString("Osejs.File.ReadError"),res.getString("Osejs.File.ReadingError"), JOptionPane.INFORMATION_MESSAGE);
+    else {
+      int begin = input.indexOf("<Osejs");
+      int end = input.indexOf("</Osejs>");
+      if (begin<0 || begin>=end) JOptionPane.showMessageDialog(topPanel, res.getString("Osejs.File.InvalidFile"),
+                                                               res.getString("Osejs.File.ReadingError"), JOptionPane.INFORMATION_MESSAGE);
+      else ok = readString (_xmlFile,input.substring(begin,end+8),merging);
+    } 
+    if (ok) {
+      if (merging) outputArea.message("Osejs.File.MergedOK",_xmlFile.getName());
+      else {
+        updateCurrentFile(_xmlFile);
+        simInfoEditor.detectAuxiliaryFiles(); // Update the list of auxiliary files
+        outputArea.message("Osejs.File.ReadOK",_xmlFile.getName());
+        addToPreviouslyOpened (_xmlFile);
+      }
+    }
+    else {
+      if (merging) outputArea.message("Osejs.File.NotMergedOK",FileUtils.getPath(_xmlFile));
+      else outputArea.message("Osejs.File.NotReadOK",FileUtils.getPath(_xmlFile));
+    }
+  }
+
+   /**
+    * Read an XML string with the code
+    * @param _input String
+    */
+   public boolean readString (File _file, String _input, boolean _merging) {
+     if (!_merging) {
+       clear();
+       if (_file!=null) currentXMLFile = _file; // Needed for relative resources to get the right path
+       // Read the information about this simulation
+       String infoText = null;
+       int begin = _input.indexOf("<"+OSEJS_NAME+".Information>\n");
+       if (begin>=0) infoText = _input.substring(begin+OSEJS_NAME.length()+15,_input.indexOf("</"+OSEJS_NAME+".Information>\n"));
+       if (infoText!=null) simInfoEditor.readString(infoText);
+     }
+     // Read the code in each of the main editors
+     for (int i=0; i<editors.length; i++) {
+       int begin = _input.indexOf("<"+OSEJS_NAME+"."+mainOptions[i]+">\n");
+       if (begin<0) continue;
+       int end = _input.indexOf("</"+OSEJS_NAME+"."+mainOptions[i]+">\n");
+       editors[i].readString(_input.substring(begin+mainOptions[i].length()+OSEJS_NAME.length()+4,end));
+     }
+     modelEditor.variablesEditor.updateControlValues(false); // Update the view with the value of the variables
+     setChanged(false);
+     return true;
+  }
+
+   /**
+    * Read an XML string with the code
+    * @param _input String
+    */
+   private Set<PathAndFile> getAuxiliaryFiles (File _file) {
+     String input = FileUtils.readTextFile(_file);
+     // Read the information about this simulation
+     String infoText = null;
+     int begin = input.indexOf("<"+OSEJS_NAME+".Information>\n");
+     if (begin>=0) infoText = input.substring(begin+OSEJS_NAME.length()+15,input.indexOf("</"+OSEJS_NAME+".Information>\n"));
+     if (infoText!=null) return SimInfoEditor.readAuxiliaryFiles(this,_file.getParentFile(),infoText);
+     else return new HashSet<PathAndFile>();
+  }
+
+  // --------------------------------------
+  // Output
+  // --------------------------------------
+
+  /**
+   * Create a String with all the code
+   * @return String
+   */
+  public String saveString () {
+    StringBuffer code = new StringBuffer();
+    code.append ("<!-- This XML file has been created by Easy Java Simulations (Ejs). Visit http://www.um.es/fem/Ejs. -->\n");
+    code.append ("<!-- Please, save the file to your hard disk on your Ejs' user directory and open it with Ejs. -->\n");
+    code.append ("<Osejs version=\""+org.colos.ejs.library._EjsConstants.VERSION+"\">\n");
+
+    code.append("<" + OSEJS_NAME + ".Information>\n");
+    code.append(simInfoEditor.saveString());
+    code.append("</" + OSEJS_NAME + ".Information>\n");
+    
+    for (int i=0; i<editors.length; i++) {
+      code.append("<" + OSEJS_NAME + "." + mainOptions[i] + ">\n");
+      code.append(editors[i].saveStringBuffer());
+      code.append("</" + OSEJS_NAME + "." + mainOptions[i] + ">\n");
+    }
+    
+    code.append("</" + OSEJS_NAME + ">\n");
+    return code.toString();
+  }
+
+  private void saveFile (File _xmlFile) {
+    JFileChooser dialog = getFileDialog(sourceDirectory);
+    if (_xmlFile==unnamedXMLFile) { // Save under a new name
+      dialog.setDialogTitle(res.getString("Osejs.File.Save"));
+      dialog.setApproveButtonText(res.getString("Osejs.File.Save"));
+      do {
+        _xmlFile = chooseFileUnderSource(dialog, openButton);
+        if (_xmlFile==null) return; // The user canceled it
+        if (!_xmlFile.getName().toLowerCase().endsWith(".xml")) _xmlFile = new File (_xmlFile.getParentFile(),_xmlFile.getName()+".xml");
+      } while (!checkExistence(_xmlFile,openButton));
+    }
+    // do it
+    String filename = getPathRelativeToSourceDirectory(FileUtils.getPath(_xmlFile));
+    if (verbose) System.out.println("You chose to save this file: " + filename);
+    try {
+      FileWriter fout = new FileWriter(_xmlFile);
+      fout.write(saveString());
+      fout.close();   
+      outputArea.message("Osejs.File.SavedOK",filename);
+      
+      // Copy auxiliary files together with the new file
+      if (!currentXMLFile.getParentFile().equals(_xmlFile.getParentFile())) {
+        AbstractList<PathAndFile> list = new ArrayList<PathAndFile>();
+        for (PathAndFile paf : getSimInfoEditor().getAuxiliaryPathAndFiles()) { // true : include the simulation panel
+          if (paf.getPath().startsWith("./")) {
+            if (paf.getFile().exists()) list.add(paf);
+            else outputArea.message("Osejs.File.NotReadOK", paf.getPath());
+          }
+        }
+        copyAuxiliaryFiles (list,_xmlFile.getParentFile());
+      }
+      
+      // Adjust the EJS environment
+      addToPreviouslyOpened (_xmlFile);
+      updateCurrentFile(_xmlFile);
+      setResourceLoaderPath(_xmlFile);
+      dialog.rescanCurrentDirectory();
+    } 
+    catch (IOException ex) {
+      ex.printStackTrace();
+      outputArea.message("Warning",ex.getMessage());
+      JOptionPane.showMessageDialog(topPanel, res.getString("Osejs.File.Error"),res.getString("Osejs.File.SavingError"), JOptionPane.INFORMATION_MESSAGE);
+    }
+  }
+  
+  // --------------------------------------------------
+  // Printing
+  // --------------------------------------------------
+
+  public void printCode () { print (saveString()); }
+
+  public void print (String output) {
+    HardcopyWriter hw;
+    try { hw = new HardcopyWriter(this.mainFrame,this.currentXMLFile.getName(), 8, .5, .5, .5, .5); }
+    catch (HardcopyWriter.PrintCanceledException e) { return; }
+    PrintWriter out = new PrintWriter(hw);
+    out.println (output);
+    out.close();
+  }
+
+  // --------------------------------------
+  // File operation methods
+  // --------------------------------------
+
+  /**
+   * Set the ResourceLoader path so that files relative to the XML file can be found by it
+   */
+  private void setResourceLoaderPath(File _xmlFile) {
+    // Remove the previous one ...
+    if (addedResourcePath!=null) ResourceLoader.removeSearchPath(addedResourcePath);
+    // ... and add the new one
+    addedResourcePath=FileUtils.getPath(_xmlFile.getParentFile());
+    if (verbose) System.out.println ("Directory added to RLoader is "+addedResourcePath);
+    ResourceLoader.addSearchPath(addedResourcePath);
+  }
+
+  /**
+   * Updates the name of the different files to use which depend on the file loaded
+   * @param _filename String
+   */
+  private void updateCurrentFile (File _xmlFile) {
+    if (_xmlFile!=currentXMLFile) forceCompilation();
+    currentXMLFile = _xmlFile;
+    lastProcess = null;
+    setChanged(false);
+    String title = res.getString("Osejs.Title");
+    if (currentXMLFile!=unnamedXMLFile) {
+      String plainName = FileUtils.getRelativePath(currentXMLFile,this.getSourceDirectory(),false);
+      if (plainName.length()>70) plainName = "... "+currentXMLFile.getName();
+      String relativeName = getPathRelativeToSourceDirectory(FileUtils.getPath(currentXMLFile));
+      simInfoEditor.setTitle(plainName);
+      simInfoButton.setToolTipText(res.getString("SimInfoEditor.InfoFor")+" "+relativeName);
+      title += " - " + plainName;
+    }
+    else {
+      simInfoEditor.setTitle(null);
+      simInfoButton.setToolTipText(res.getString("Osejs.Icon.SimInfo.Tooltip"));
+    }
+    if (mainFrame!=null) mainFrame.setTitle(title);
+  }
+
+  /**
+   * Checks of the file to be written exists and, if so, asks for confirmation
+   * @param _filename
+   * @return
+   */
+  private boolean checkExistence (File _file, JComponent _parentComponent) {
+    if (!_file.exists()) return true;
+    Object[] options =  { res.getString("Osejs.File.DoSave"), res.getString("Osejs.File.CancelSave")};
+    int option = JOptionPane.showOptionDialog(_parentComponent, getPathRelativeToSourceDirectory(FileUtils.getPath(_file))+" : "+
+        res.getString("Osejs.File.Overwrite"), res.getString("Osejs.File.FileExists"),
+        JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+    return option==0;
+  }
+
+  private boolean checkChangesAndContinue (boolean onExit) {
+    if (isChanged()) {
+      Object[] options = new Object[] {res.getString("Osejs.File.SaveChanges"),
+                                       res.getString("Osejs.File.IgnoreChanges"),
+                                       res.getString("Osejs.File.CancelSave")};
+      String message = onExit? res.getString("Osejs.WantToSaveBeforeExit") : res.getString("Osejs.File.WantToSave");
+      message = getPathRelativeToSourceDirectory(FileUtils.getPath(currentXMLFile))+"\n"+message;
+      int option = JOptionPane.showOptionDialog(mainPanel, message, res.getString("Osejs.File.SimulationChanged"), 
+          JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+      if (option==2) return  false;
+      if (option==0) saveFile(currentXMLFile);
+      setChanged(false);
+    }
+    else if (onExit) {
+      Object[] options = new Object[] { res.getString("Osejs.File.SaveChanges"),res.getString("Osejs.File.CancelSave")};
+      int option = JOptionPane.showOptionDialog(mainPanel, res.getString("Osejs.WantToExit"),
+        "Easy Java Simulations", JOptionPane.DEFAULT_OPTION,JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+      if (option!= 0) return false;
+    }
+    return  true;
+  }
+
+  //-------------------------------------
+  // Compiling and running
+  //-------------------------------------
+
+  /**
+   * Clears the class file path so that trying to run forces a recompilation
+   */
+  public void forceCompilation()  { currentMetadataFile = null; executionPath = null; }
+
+  private boolean firstCompile () {
+    if (isChanged()) forceCompilation();
+    if (currentMetadataFile==null) currentMetadataFile = Generate.generate(this);
+    return currentMetadataFile!=null;
+  }
+
+  private void runSimulation (boolean _checkPrevious) {
+    if (_checkPrevious && getProcessDialog().processesRunning()>0) {
+     JOptionPane.showMessageDialog(runButton, res.getString("Generate.IsRunningAlready"),
+       res.getString("Warning"), JOptionPane.WARNING_MESSAGE);
+     return;
+    }
+    if (firstCompile()) {
+      viewEditor.showWindows(false);
+      Generate.run(Osejs.this);
+    }
+  }
+
+  private void packageSimulation () {
+    getExportDirectory().mkdirs(); // In case it doesn't exist
+    String plainName = FileUtils.getPlainName(getCurrentXMLFile());
+
+    // Select the target
+    File targetFile = new File(getExportDirectory(),plainName+".jar");
+    JFileChooser chooser = OSPRuntime.createChooser("JAR",new String[]{"jar"});
+    chooser.setCurrentDirectory(getExportDirectory());
+    chooser.setSelectedFile(targetFile);
+    String targetName = OSPRuntime.chooseFilename(chooser,getPackageButton(), true);
+    if (targetName==null) {
+      getOutputArea().println(res.getString("Package.JarFileNotCreated"));
+      return;
+    }
+    boolean warnBeforeOverwritting = true;
+    if (! targetName.toLowerCase().endsWith(".jar")) targetName = targetName + ".jar";
+    else warnBeforeOverwritting = false; // the chooser already checked if the target file exists
+    targetFile = new File(targetName);
+    if (warnBeforeOverwritting && targetFile.exists()) {
+      int selected = JOptionPane.showConfirmDialog(getPackageButton(),DisplayRes.getString("DrawingFrame.ReplaceExisting_message") + " " +
+          targetFile.getName() +DisplayRes.getString("DrawingFrame.QuestionMark"),
+          DisplayRes.getString("DrawingFrame.ReplaceFile_option_title"), JOptionPane.YES_NO_CANCEL_OPTION);
+      if (selected != JOptionPane.YES_OPTION) {
+        getOutputArea().println(res.getString("Package.JarFileNotCreated"));
+        return;
+      }
+    }
+    
+    if (firstCompile()) {
+      final File file = targetFile;
+      java.lang.Thread thread = new Thread(new Runnable () {
+        public void run() { Generate.packageCurrentSimulation(Osejs.this, file); }
+      });
+      thread.setPriority(Thread.NORM_PRIORITY);
+      thread.start();
+    }
+    else JOptionPane.showMessageDialog(packageButton, res.getString("Package.CantCompileError"),
+                                       res.getString("Package.CantCreateError"), JOptionPane.INFORMATION_MESSAGE);
+  }
+  
+  // --------------------------------------------------
+  // Main action listener for all buttons and actions
+  // --------------------------------------------------
+
+  private class MyActionListener implements ActionListener {
+
+    public void actionPerformed (java.awt.event.ActionEvent _evt) {
+      String cmd = _evt.getActionCommand();
+      
+      if (cmd.equals("New")) {
+        if (checkChangesAndContinue(false)) { // Check for possible changes and save them
+          clear();
+          //String loadFilename = myEjsOptions.loadFilename();
+          //if (loadFilename.length()>0) readFilename (loadFilename);
+        }
+      }
+
+      else if (cmd.equals("Open")) {
+        if (getProcessDialog().processesRunning()>0) {
+          JOptionPane.showMessageDialog(openButton, res.getString("Osejs.File.SimulationRunning"),
+              res.getString("Warning"), JOptionPane.WARNING_MESSAGE);
+        }
+        if (checkChangesAndContinue(false) == false) return; // The user canceled the action
+        JFileChooser dialog = getFileDialog(sourceDirectory);
+        dialog.setDialogTitle(res.getString("Osejs.File.Open"));
+        int returnVal = dialog.showDialog(openButton, res.getString("Osejs.File.Open"));
+        if (returnVal!=JFileChooser.APPROVE_OPTION) return;
+        File file = dialog.getSelectedFile();
+        if (!file.getName().toLowerCase().endsWith(".xml")) file = new File (file.getParentFile(),file.getName()+".xml");
+        readFile (file);
+      }
+
+      else if (cmd.equals("Save")) saveFile(currentXMLFile);
+      
+      else if (cmd.equals("SaveAs")) saveFile(unnamedXMLFile);
+
+      else if (cmd.equals("Search")) {
+        if (searchDialog==null) searchDialog = new SearchDialog(Osejs.this,searchButton);
+        searchDialog.show();
+      }
+      
+      else if (cmd.equals("Run")) {
+        //outputArea.clear();
+        if (myEjsOptions.saveWhenRunning() && isChanged()) saveFile(currentXMLFile);
+        runSimulation(true);
+      }
+
+      else if (cmd.equals("Package")) packageSimulation();
+
+      else if (cmd.equals("Font")) {
+        EditorForFont.edit(topPanel);
+        Font font = EditorForFont.getFont();
+        if (font!=null) setFont (font);
+      }
+
+      else if (cmd.equals("Options")) myEjsOptions.edit(infoButton);
+
+      else if (cmd.equals("Info")) openWikiPage("");
+
+      else if (cmd.equals("Print")) printCode ();
+    }
+
+  } // end of private class
+
+} // End of class Osejs

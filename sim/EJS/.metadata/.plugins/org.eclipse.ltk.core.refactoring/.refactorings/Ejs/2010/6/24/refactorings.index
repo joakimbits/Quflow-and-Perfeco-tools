@@ -1,0 +1,4 @@
+1275821825107	Rename local variable 'lastTime'
+1275854930229	Rename local variable 'currentRelease'
+1276024788830	Rename field 'implementationNotSupportedWarning'
+1276024813867	Rename field 'warnedOfNotJava3D'

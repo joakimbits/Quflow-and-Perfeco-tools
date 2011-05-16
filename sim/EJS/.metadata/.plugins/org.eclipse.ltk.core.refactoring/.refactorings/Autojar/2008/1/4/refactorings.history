@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;name&apos; in &apos;org.Pattern.matches(...)&apos; to &apos;filename&apos;&#x0D;&#x0A;- Original project: &apos;Autojar&apos;&#x0D;&#x0A;- Original element: &apos;org.Pattern.matches(String).name&apos;&#x0D;&#x0A;- Renamed element: &apos;org.Pattern.matches(String).filename&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;name&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;org{Pattern.java" name="filename" references="true" selection="2188 4" stamp="1201089616722" version="1.0"/>
+</session>

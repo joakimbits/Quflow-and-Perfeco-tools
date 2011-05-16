@@ -1,0 +1,631 @@
+/*ShapeController.java
+ *CS193J Summer 2001
+ */
+
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+
+
+/**ShapeController class implements event listener interfaces for the
+ * menu, PaletteController and the ShapeContainer
+ * 
+ * @see DrawingIconSelectionEventListener
+ * @see MouseListener
+ * @see MouseMotionListener
+ * @see ActionListener
+ * @see Container
+ * @see Clipboard
+ * @see WhiteboardFrame
+ * @see DrawingIcon
+ *
+ * @author Jatinder Pal Singh
+ */
+
+public class ShapeController 
+    implements DrawingIconSelectionEventListener,
+    MouseListener,
+    MouseMotionListener,
+    ActionListener
+    
+{
+    
+  private Container dShapeContainer;
+
+  private Clipboard dClipboard = Clipboard.getInstance();
+
+  private static final short DRAW_MODE = 0;
+
+  private static final short SELECT_MODE = 1;
+
+  private short dMode = DRAW_MODE;
+
+  private DrawingIcon dCurrentSelectedIcon;
+
+  private SelectedVector dSelectedShapes;
+
+  private WhiteboardFrame dWhiteboardFrame;
+
+  private MenuItem[] dMenuItems;
+
+  private boolean bMove = false;     /** is set if Move Drawing Icon
+				      * is selected and mouse is pressed
+				      * on a selected shape in
+				      * ShapeContainer 
+				      */
+    
+  private boolean bMoveSelected = false; /** is set if Move Drawing Icon
+					  * is Selected*/
+
+
+    /**Represent indices of respective items in the dMenuItems array*/				     
+    private int iCut = -1, iCopy = -1, iPaste = -1, iClear = -1, iBack = -1, iFront = -1;
+
+
+
+  public ShapeController (WhiteboardFrame aWhiteboardFrame,
+			  Container aShapeContainer,
+			  PaletteController aPaletteController) {
+      aPaletteController.addDrawingIconSelectionListener(this);
+      aShapeContainer.addMouseListener(this);
+      dShapeContainer = aShapeContainer;
+      dCurrentSelectedIcon = aPaletteController.getInitiallySelectedDrawingIcon();
+      aShapeContainer.addMouseMotionListener(this);   
+      dWhiteboardFrame = aWhiteboardFrame;
+      dSelectedShapes = new SelectedVector();
+      dMenuItems = aWhiteboardFrame.getAllMenuItems();
+      for (int i=0; i<dMenuItems.length; i++)
+	  {
+	      dMenuItems[i].addActionListener(this);
+
+	      if (dMenuItems[i].getLabel().equals(WhiteboardConstants.CUT_MENU_ITEM)) 
+		  iCut = i;
+	      else if (dMenuItems[i].getLabel().equals(WhiteboardConstants.COPY_MENU_ITEM)) 
+		  iCopy = i;
+	      else if (dMenuItems[i].getLabel().equals(WhiteboardConstants.PASTE_MENU_ITEM)) 
+		  iPaste = i;
+	      else if (dMenuItems[i].getLabel().equals(WhiteboardConstants.CLEAR_MENU_ITEM)) 
+		  iClear = i;
+	      else if (dMenuItems[i].getLabel().equals(WhiteboardConstants.FRONT_MENU_ITEM)) 
+		  iFront = i;
+	       else if (dMenuItems[i].getLabel().equals(WhiteboardConstants.BACK_MENU_ITEM)) 
+		  iBack = i;
+	  }
+}
+    
+    /* Drawing Icon Selection Event */
+
+    public void iconSelected (DrawingIconSelectionEvent aDISE) {
+	dCurrentSelectedIcon = aDISE.getIcon();
+      if (GlobalDebug.isOn)
+	  System.out.println("ShapeController.iconSelected(): " +
+			     dCurrentSelectedIcon.getCommand() + " is the selected icon");
+    }
+    
+    /* Mouse and MouseMotion Events */
+
+    private Shape lastShape = null;
+    private int lastX = -1, lastY = -1; /**location coordinates of mouse
+					 * press*/
+
+    public void mouseEntered (MouseEvent me) {
+	if (GlobalDebug.isOn)
+	    System.out.println("ShapeController.mouseEntered()");
+    }
+
+    
+    public void mouseExited (MouseEvent me) {
+	if (GlobalDebug.isOn)
+	  System.out.println("ShapeController.mouseExited()");
+    }
+    
+
+  public void mousePressed (MouseEvent me) {
+      bMove = false;
+
+      /**true if Move is the selected icon the palette*/
+      bMoveSelected = dCurrentSelectedIcon.getCommand().equals("Move");
+
+      if (GlobalDebug.isOn)
+	  System.out.println("ShapeController.mousePressed()"); 
+
+      if (!(dCurrentSelectedIcon.getCommand().equals("SelectBox")))
+	  {	
+	      Component oSource = (Component) me.getSource();
+	      lastX = me.getX();
+	      lastY = me.getY();
+	      if (oSource instanceof ShapeContainer)
+		  {
+		      if (GlobalDebug.isOn)
+			  System.out.println("Event Generator is ShapeContainer");		      		     
+		  }
+	      
+	      else if (oSource instanceof Shape)
+		  { 
+		      if (GlobalDebug.isOn)
+			  System.out.println("Event Generator is Shape");
+
+		      /**get the mouse press location coordinates
+		       * w.r.t. the ShapeContainer by adding the coordinates
+		       * of the location of the Shape on which mouse is
+		       * pressed
+		       */
+		      lastX += oSource.getLocation().getX();
+		      lastY += oSource.getLocation().getY();
+		      		
+
+		      /**true if Move is the selected icon on palette and
+		       * mouse is pressed on a selected shape
+		       */      
+		      bMove = (bMoveSelected&&((Shape)oSource).getSelectState());
+		      if (GlobalDebug.isOn) {
+			  if (bMove)
+			      System.out.println("ShapeController.mousePressed(): Move"); 
+			  else
+			       System.out.println("ShapeController.mousePressed(): DON'T Move"); 
+		      }
+		  }
+
+	      if (!bMoveSelected)
+		  {
+		      lastShape = dCurrentSelectedIcon.createShape(lastX, lastY,
+								   lastX, lastY);
+		      lastShape.setLocation(lastX, lastY);
+		      dShapeContainer.add(lastShape);
+		      lastShape.addMouseListener(this);
+		      lastShape.addMouseMotionListener(this);
+		  }
+	  }
+  }
+
+
+    
+    public void mouseReleased (MouseEvent me) {
+
+	int locationX = -1, locationY = -1; /**denote location of shape
+					     * to be drawn*/
+	if (GlobalDebug.isOn)
+	  System.out.println("ShapeController.mouseReleased()");
+	if (!(dCurrentSelectedIcon.getCommand().equals("SelectBox")))
+	    {
+		Component oSource = (Component) me.getSource();
+
+		/**coordinates of mouse release*/
+		int newX = me.getX();
+		int newY = me.getY();
+		if (oSource instanceof ShapeContainer)
+		    {		
+			if (GlobalDebug.isOn)
+			    System.out.println("Event Generator is ShapeContainer");
+			locationX = (lastX <= newX) ? lastX : newX;
+			locationY = (lastY <= newY) ? lastY : newY;			
+		    }
+		else if (oSource instanceof Shape)
+		    {
+			if (GlobalDebug.isOn)
+			    System.out.println("Event Generator is Shape");
+
+			/**get coordinates w.r.t. ShapeContainer*/
+			newX += oSource.getLocation().getX();
+			newY += oSource.getLocation().getY();
+			locationX = (lastX <= newX) ? lastX : newX;
+			locationY = (lastY <= newY) ? lastY : newY;
+
+			
+
+			 if (bMove) {
+			     /**selected shape(s) are to be moved*/
+
+			     /**get displacement of the selected shapes*/
+			     int displaceX = newX - lastX;
+			     int displaceY = newY - lastY;
+
+			     Enumeration e = dSelectedShapes.elements();
+			     Shape shape = null;
+			     int newLocationX = -1, newLocationY = -1, dimensionX = -1, dimensionY = -1;
+			     while (e.hasMoreElements())
+				 {
+				     shape = (Shape)e.nextElement();
+				     newLocationX =
+					 (int)shape.getLocation().getX() + displaceX;
+				     newLocationY = 
+					 (int)shape.getLocation().getY() + displaceY;
+				     dimensionX = shape.getPreferredSize().width;
+				     dimensionY =
+					 shape.getPreferredSize().height;
+
+				     /**modify and redraw shape*/
+				     shape.setLocation(newLocationX, newLocationY);	
+				     shape.setCoordinates(newLocationX,
+						  newLocationY, newLocationX+dimensionX, newLocationY+dimensionY);
+				     shape.repaint();
+				 }
+			 }
+		    }
+
+		if (!bMoveSelected) {
+		    lastShape.setLocation(locationX, locationY);
+		    lastShape.setCoordinates(lastX, lastY, newX, newY);
+		    lastShape.repaint();
+		}
+	
+	    }
+    }
+    
+
+
+    public void mouseClicked (MouseEvent me) {
+	Component oSource = (Component) me.getSource();
+	if (GlobalDebug.isOn)
+	    System.out.println("ShapeController.mouseClicked()");
+	
+	if (dCurrentSelectedIcon.getCommand().equals("SelectBox"))
+	    {
+		if (oSource instanceof Shape)
+		    {
+			/**toggle select state of a shape; if the shape
+			 * becomes selected, add to the SelectedVector,
+			 * else remove it*/
+			((Shape)oSource).toggleSelectState();
+			((Shape)oSource).repaint();
+			if (((Shape)oSource).getSelectState()) {
+			    if (GlobalDebug.isOn) 
+				System.out.println(" ---> Adding to Selected Shapes Vector");
+			    dSelectedShapes.add((Shape)oSource);
+			}
+			else {
+			    if (GlobalDebug.isOn) 
+				System.out.println(" ---> Removing shape from Selected Shapes Vector");
+			    
+			    dSelectedShapes.remove((Shape)oSource);
+		      }
+		      if (dSelectedShapes.size() > 0) {
+			  /**there is at least one selected shape*/
+			  dMenuItems[iCut].setEnabled(true);
+			  dMenuItems[iCopy].setEnabled(true);
+			  dMenuItems[iClear].setEnabled(true);
+			  dMenuItems[iFront].setEnabled(true);
+			  dMenuItems[iBack].setEnabled(true);
+		      }
+		      else {
+			  dMenuItems[iCut].setEnabled(false);
+			  dMenuItems[iCopy].setEnabled(false);
+			  dMenuItems[iClear].setEnabled(false);
+			  dMenuItems[iFront].setEnabled(false);
+			  dMenuItems[iBack].setEnabled(false);
+		      }
+			  
+		      
+		    }
+	    }
+	else
+	    if (!bMoveSelected)
+		dShapeContainer.remove(lastShape); /**remove the shape
+						    * created in response to
+						    * mouse pressed, because
+						    * mouse has not
+						    * been dragged
+						    * to draw the shape*/
+    }
+    
+    
+ 
+
+    public void mouseDragged (MouseEvent me) {
+	if (GlobalDebug.isOn)
+	    System.out.println("ShapeController.mouseDragged()"); 
+
+	if (!(dCurrentSelectedIcon.getCommand().equals("SelectBox")))
+	    {
+		int locationX = -1, locationY = -1;
+		int newX = me.getX();
+		int newY = me.getY();
+		Component oSource = (Component) me.getSource();
+		
+		if (oSource instanceof ShapeContainer) 
+		    {
+			if (GlobalDebug.isOn)
+			    System.out.println("Event Generator is ShapeContainer");
+			locationX = (lastX <= newX) ? lastX : newX;
+			locationY = (lastY <= newY) ? lastY : newY;
+		     }
+		else if (oSource instanceof Shape)
+		    {
+			 if (GlobalDebug.isOn)
+			     System.out.println("Event Generator is Shape");
+			 newX += oSource.getLocation().getX();			
+			 newY += oSource.getLocation().getY();
+			 locationX = (lastX <= newX) ? lastX : newX;
+			 locationY = (lastY <= newY) ? lastY : newY;
+			 
+			 if (bMove) {
+			     /**the mouse has been released; so modify the
+			      * moved shape(s) for a last time and
+			      * repaint()
+			      */
+			     int displaceX = newX - lastX;
+			     int displaceY = newY - lastY;
+			     lastX = newX;
+			     lastY = newY;
+			     Enumeration e = dSelectedShapes.elements();
+			     Shape shape = null;
+			     int newLocationX = -1, newLocationY = -1, dimensionX = -1, dimensionY = -1;
+			     while (e.hasMoreElements())
+				 {
+				     shape = (Shape)e.nextElement();
+				     newLocationX = (int)shape.getLocation().getX() +
+					 displaceX;
+				     newLocationY = (int)shape.getLocation().getY() +
+					 displaceY;
+				     dimensionX = shape.getPreferredSize().width;
+				     dimensionY = shape.getPreferredSize().height;
+				     shape.setLocation(newLocationX, newLocationY);	
+				     shape.setCoordinates(newLocationX,
+						  newLocationY, newLocationX+dimensionX, newLocationY+dimensionY);
+				     shape.repaint();
+				 }
+			 }
+		     }
+
+		 if (!bMoveSelected) {
+		     /**draw the pertinent shape*/
+		     lastShape.setCoordinates(lastX, lastY, newX, newY);
+		     lastShape.setLocation(locationX, locationY);
+		     lastShape.repaint();
+		 }
+	    }	 
+    }
+    
+    
+
+
+    public void mouseMoved (MouseEvent me) {
+	// null
+    }
+    
+
+
+    /** Action Listener (Menu Events) */
+    
+    public void actionPerformed (ActionEvent ae) {
+	String arg = (String)ae.getActionCommand();
+	
+	if (arg.equals(WhiteboardConstants.CUT_MENU_ITEM)) {	  
+	    Enumeration e = dSelectedShapes.elements();
+	    while (e.hasMoreElements())
+		{
+		    Shape shape = (Shape)e.nextElement();
+		    shape.setVisible(false);	
+		    shape.setSelectState(false);
+		  dShapeContainer.remove(shape);
+		}
+
+	    /**copy selected shapes to the clipboard*/
+	    dClipboard.set(dSelectedShapes.clone());
+
+	    /**flush selected shapes vector*/
+	    dSelectedShapes.removeAllElements();
+
+	    dMenuItems[iCut].setEnabled(false);
+	    dMenuItems[iCopy].setEnabled(false);
+	    dMenuItems[iClear].setEnabled(false);
+	    dMenuItems[iPaste].setEnabled(true);
+	    dMenuItems[iFront].setEnabled(false);
+	    dMenuItems[iBack].setEnabled(false);
+	}
+
+
+	else if (arg.equals(WhiteboardConstants.PASTE_MENU_ITEM)) {
+	    SelectedVector sv = (SelectedVector)dClipboard.get();
+	    Enumeration e = sv.elements();
+	    while (e.hasMoreElements())
+		{
+		    Shape shape = (Shape)(((Shape)e.nextElement()).clone());		      
+		    dShapeContainer.add(shape);
+		    shape.setSelectState(false);
+		    shape.addMouseListener(this);
+		    shape.addMouseMotionListener(this);
+		    shape.repaint();
+		}
+	}
+
+
+	else if (arg.equals(WhiteboardConstants.COPY_MENU_ITEM)) {
+	    Enumeration e = dSelectedShapes.elements();
+	    while (e.hasMoreElements())
+		{
+		    Shape shape = (Shape)e.nextElement();
+		    shape.setSelectState(false);
+		    shape.repaint();
+		}
+	    //	    dClipboard = Clipboard.getInstance();
+	    dClipboard.set(dSelectedShapes.clone());
+	    dSelectedShapes.removeAllElements();
+	    dMenuItems[iCut].setEnabled(false);
+	    dMenuItems[iCopy].setEnabled(false);
+	    dMenuItems[iClear].setEnabled(false);
+	    dMenuItems[iPaste].setEnabled(true);
+	    dMenuItems[iFront].setEnabled(false);
+	    dMenuItems[iBack].setEnabled(false);
+	}
+
+
+	else if (arg.equals(WhiteboardConstants.CLEAR_MENU_ITEM)) {	  
+	    Enumeration e = dSelectedShapes.elements();
+	    while (e.hasMoreElements())
+		{
+		  Shape shape = (Shape)e.nextElement();
+		  shape.setVisible(false);	
+		  shape.setSelectState(false);
+		  dShapeContainer.remove(shape);
+		}
+	    dSelectedShapes.removeAllElements();
+	    dMenuItems[iCut].setEnabled(false);
+	    dMenuItems[iCopy].setEnabled(false);
+	    dMenuItems[iClear].setEnabled(false);
+	    dMenuItems[iFront].setEnabled(false);
+	    dMenuItems[iBack].setEnabled(false);
+	}
+
+
+	
+	else if (arg.equals(WhiteboardConstants.NEW_MENU_ITEM)) {	  
+	    dShapeContainer.removeAll();
+	    dShapeContainer.repaint();
+	    dSelectedShapes.removeAllElements();
+	    dMenuItems[iCut].setEnabled(false);
+	    dMenuItems[iCopy].setEnabled(false);
+	    dMenuItems[iClear].setEnabled(false);
+	    dMenuItems[iFront].setEnabled(false);
+	    dMenuItems[iBack].setEnabled(false);
+	}
+
+
+	else if (arg.equals(WhiteboardConstants.SAVE_AS_MENU_ITEM)) {	  
+	    FileDialog fd = new FileDialog(dWhiteboardFrame, WhiteboardConstants.SAVE_AS_MENU_ITEM,
+					   FileDialog.SAVE);
+	    fd.setVisible(true);
+	    String strFilename = fd.getFile();
+	    if (GlobalDebug.isOn)
+		System.out.println("ShapeController.actionPerformed(): " +
+				   "filename is: " + strFilename); 
+	    if (strFilename != null)
+		{
+		    ObjectWriter writer =
+			ObjectWriter.openFileForWriting(strFilename);
+		    ShapeContainer sc = new ShapeContainer();
+		    Component[] arrayShapes = dShapeContainer.getComponents();
+		    for (int i = 0; i < arrayShapes.length; i++)
+			{
+			    Shape s = (Shape) ((Shape)arrayShapes[i]).clone();
+			    s.setSelectState(false);
+			    sc.add(s);		
+			}
+		    
+		    if (GlobalDebug.isOn)
+			System.out.println("ShapeController.ActionPerformed(): Written " + dShapeContainer.getComponentCount() + " shapes to the file");
+		    writer.writeObject(sc);
+		    writer.close();
+		}
+	}
+
+
+
+	else if (arg.equals(WhiteboardConstants.IMPORT_MENU_ITEM)) {	  
+	    FileDialog fd = new FileDialog(dWhiteboardFrame, WhiteboardConstants.IMPORT_MENU_ITEM);
+	    fd.setVisible(true);
+	    String strFilename = fd.getFile();
+	    if (GlobalDebug.isOn)
+		System.out.println("ShapeController.actionPerformed(): " +
+				   "filename is: " + strFilename); 
+	    if (strFilename != null)
+		{
+		    ObjectReader reader =
+			ObjectReader.openFileForReading(strFilename);
+		    ShapeContainer c =
+			(ShapeContainer)(reader.readObject());
+		    Component[] arrayShapes = c.getComponents();
+		    if (GlobalDebug.isOn)
+			System.out.println("ShapeController.ActionPerformed(): Read " + arrayShapes.length + " shapes from the file");		  
+		    for (int i = 0; i < arrayShapes.length; i++)
+			{
+			    Shape s = (Shape)arrayShapes[i];
+			    dShapeContainer.add(s);		
+			    s.addMouseListener(this);
+			    s.addMouseMotionListener(this);
+			}
+		    reader.close();
+		    dShapeContainer.repaint();
+		}
+	}
+
+
+
+	else if (arg.equals(WhiteboardConstants.EXIT_MENU_ITEM)) {	  
+	    WhiteboardWindowAdapter wwa = new
+		WhiteboardWindowAdapter(dWhiteboardFrame);
+	    WindowEvent we = new WindowEvent(dWhiteboardFrame, WindowEvent.WINDOW_CLOSING);
+	    wwa.windowClosing(we);
+	    System.exit(0);
+	}
+	
+
+
+
+	else if (arg.equals(WhiteboardConstants.FRONT_MENU_ITEM)) {
+	    if (dSelectedShapes.size() == 1)
+		{
+		    /**brings the selected shape to front*/		    
+		    Enumeration e = dSelectedShapes.elements();
+		    Shape shape = (Shape)e.nextElement();
+		    dShapeContainer.remove(shape);
+		    shape.setSelectState(false);
+		    dShapeContainer.add(shape, 0);
+		    dShapeContainer.repaint();
+		    dSelectedShapes.removeAllElements();
+		     dMenuItems[iCut].setEnabled(false);
+		     dMenuItems[iCopy].setEnabled(false);
+		     dMenuItems[iClear].setEnabled(false);
+		     dMenuItems[iFront].setEnabled(false);
+		     dMenuItems[iBack].setEnabled(false);
+
+	       }
+       }
+
+
+
+       else if (arg.equals(WhiteboardConstants.BACK_MENU_ITEM)) {
+	   if (dSelectedShapes.size() == 1)
+	       {
+		   /**sends the selected shape to back*/
+		   Enumeration e = dSelectedShapes.elements();
+		   Shape shape = (Shape)e.nextElement();
+		   dShapeContainer.remove(shape);
+		   shape.setSelectState(false);
+		   dShapeContainer.add(shape);
+		   dShapeContainer.repaint();
+		   dSelectedShapes.removeAllElements();
+		   dMenuItems[iCut].setEnabled(false);
+		   dMenuItems[iCopy].setEnabled(false);
+		   dMenuItems[iClear].setEnabled(false);
+		   dMenuItems[iFront].setEnabled(false);
+		   dMenuItems[iBack].setEnabled(false);
+
+	       }
+       }
+
+	else if (arg.equals(WhiteboardConstants.PRINT_MENU_ITEM)) {
+	    //	    PrintObject printShapeContainer = new PrintObject();
+	    
+	   ((ShapeContainer)dShapeContainer).printShapeContainer();
+	}
+
+       else if (arg.equals(WhiteboardConstants.ABOUT_MENU_ITEM)) {
+	   HelpDialog hd = new HelpDialog(dWhiteboardFrame,
+					 WhiteboardConstants.ABOUT_MENU_ITEM);
+	   hd.setVisible(true);
+       }
+
+  }
+}
+
+
+
+/**implements dialog for the about menuitem in help menu*/
+class HelpDialog extends Dialog implements ActionListener {
+    HelpDialog(Frame parent, String title) {
+	super(parent, title, false);
+	setLayout(new BorderLayout());
+	setSize(400,120);
+	add(BorderLayout.CENTER, new Label("This is a WhiteBoard Application created by Jatinder Pal Singh"));
+	Button b;
+	add(BorderLayout.SOUTH, b = new Button("OK"));
+	b.addActionListener(this);
+    }
+    public void actionPerformed(ActionEvent ae) {
+	dispose();
+    }
+}
+
+
+

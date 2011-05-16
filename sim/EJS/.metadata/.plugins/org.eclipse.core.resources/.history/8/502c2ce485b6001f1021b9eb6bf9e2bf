@@ -1,0 +1,5 @@
+package ejsTesting;
+
+public class EJSTesterWithIcon implements EJSTester {
+
+}

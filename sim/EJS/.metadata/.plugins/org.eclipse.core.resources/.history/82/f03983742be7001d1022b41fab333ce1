@@ -1,0 +1,67 @@
+/**
+ * The package contains definitions for the different parts of a simulation
+ * Copyright (c) June 2002 F. Esquembre
+ * @author F. Esquembre (http://fem.um.es).
+ */
+
+package org.colos.ejs.library;
+
+/**
+ * A base interface for the model of a simulation
+ */
+
+public interface Model {
+
+ /**
+  * Sets the simulation in which this model operates
+  * @param Simulation _simulation  The simulation that will use this
+  * object as model
+  */
+//  public void setSimulation (Simulation _simulation);
+
+ /**
+  * Gets the simulation in which this model runs (if any)
+  */
+  public Simulation getSimulation ();
+
+ /**
+  * Gets the view for this model (if any)
+  */
+  public View getView ();
+
+  /**
+   * Gets the applet in which this model runs (if any)
+   */
+   public LauncherApplet _getApplet ();
+
+
+ /**
+  * Sets the view for this model
+  */
+//  public void setView (View _aView);
+
+// --------------------------------------------------------
+// Model states
+// --------------------------------------------------------
+
+  public void reset ();
+
+  public void initialize ();
+
+  public void step ();
+
+  public void update ();
+
+// --------------------------------------------------------
+// Special for Ejs generated models
+// --------------------------------------------------------
+
+  public void _reset ();
+  public void _initialize ();
+  public void _alert(String _panel, String _title, String _message);
+  public void _freeMemory ();
+  public int _getStepsPerDisplay();
+
+} // End of class
+
+

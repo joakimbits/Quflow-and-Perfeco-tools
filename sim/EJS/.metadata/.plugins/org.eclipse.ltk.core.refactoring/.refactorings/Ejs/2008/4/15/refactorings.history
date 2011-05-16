@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;_resource&apos; in &apos;org.colos.ejs.osejs.Generate.warnAboutFiles(...)&apos; to &apos;_reason&apos;&#x0D;&#x0A;- Original project: &apos;Ejs&apos;&#x0D;&#x0A;- Original element: &apos;org.colos.ejs.osejs.Generate.warnAboutFiles(Osejs, Collection&lt;String&gt;, String)._resource&apos;&#x0D;&#x0A;- Renamed element: &apos;org.colos.ejs.osejs.Generate.warnAboutFiles(Osejs, Collection&lt;String&gt;, String)._reason&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;_resource&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;org.colos.ejs.osejs{Generate.java" name="_reason" references="true" selection="17801 9" stamp="1208024601512" version="1.0"/>
+</session>

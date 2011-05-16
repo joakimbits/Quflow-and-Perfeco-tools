@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;ElementsForRemoteLabs/src/org&apos; to &apos;es&apos;" description="Rename resource &apos;org&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/org" name="es" stamp="1291055821960" updateReferences="true"/>
+</session>

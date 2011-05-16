@@ -1,0 +1,26 @@
+package org.colos.ejs.model_elements.apache_numerics;
+
+/**
+ * Encapsulates access to org.apache.commons.math.stat.StatUtils
+ * @author Francisco Esquembre
+ * @version 1.0, August 2010
+ *
+ */
+public class Statistics {
+  
+  /**
+   * Standard constructor to be called by the simulation
+   */
+  public StatUtils() {}
+
+  /**
+   * Returns the mean of the array
+   */
+  public double mean(double[] values) { return org.apache.commons.math.stat.StatUtils.mean(values); }
+
+  /**
+   * Returns the mean of the array
+   */
+  public double variance(double[] values) { return org.apache.commons.math.stat.StatUtils.variance(values); }
+  
+}

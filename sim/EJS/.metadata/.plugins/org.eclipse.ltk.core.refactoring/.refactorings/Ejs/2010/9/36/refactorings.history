@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Ejs/src/org/colos/ejs/osejs/edition/variables/ModelElementTransferData.java&apos; to &apos;ModelElementInformation.java&apos;" description="Rename resource &apos;ModelElementTransferData.java&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/org/colos/ejs/osejs/edition/variables/ModelElementTransferData.java" name="ModelElementInformation.java" stamp="1283465147119" updateReferences="true"/>
+</session>

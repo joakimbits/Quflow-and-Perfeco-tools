@@ -1,0 +1,628 @@
+package es.uned.dia.interoperate.matlab.jimc;
+
+import es.uned.dia.interoperate.ExternalApp;
+import java.util.jar.*;
+import java.util.zip.*;
+import java.util.*;
+import java.io.*;
+
+import jmatlink.JMatLink;
+import java.lang.reflect.*;
+
+import org.opensourcephysics.display.OSPRuntime;
+import org.opensourcephysics.tools.Resource;
+import org.opensourcephysics.tools.ResourceLoader;
+
+/**
+ * Class to implement the communication protocol with MATLAB
+ * @author <a href="mailto:gfarias@bec.uned.es">Gonzalo Farias</a>
+ * @author <a href="mailto:fem@um.es">Francisco Esquembre</a> 
+ *
+ */
+public class MatlabExternalApp implements ExternalApp {
+
+  //static private boolean alreadyLoaded = false;
+  JMatLink matlabEng=null;
+
+  //protected boolean needsToExtract=false; // true if any file is not in place. Then it will work in Simulations.getTemporaryDir()
+  protected long id=-1;   // The integer id for the Matlab engine opened  
+  protected String initCommand = null; // An optional initialization command required for the correct reset
+
+  boolean startRequired = true; // Whether the simulation needs to be started
+  boolean waitForEverFlag=false; //Flag to wait for a variable
+  protected String userDir=null; // The users working directory for this instance
+  static String pathOfJimc=null;
+  static String pathOfJmatlink=null;
+  static String temporalDirectory=null;
+  public String commandUpdate=" "; 
+  protected String resultOfLastAction="";// A String with the result of the last method executed 
+
+  protected Object varContextObject=null; // The client of the external application
+  private java.util.Vector<String[]> linkVector=null;// A Vector of Strings to keep information of the connected variables
+  protected Field[] varContextFields=null; //An array of fields of the client
+  public Field varContextField;
+  public int[] linkIndex;
+  public int[] linkType;
+  static final int DOUBLE=0,ARRAYDOUBLE=1,ARRAYDOUBLE2D=2,STRING=3;
+  
+/*********************
+  Low level protocol
+**********************/
+  
+//--------------------------------------------------------------
+//Connection and configuration
+//--------------------------------------------------------------
+ /**
+  * Starts the connection with the external application  
+  * @return boolean true if the connection was successful
+  */    
+  public boolean connect(){
+    if (matlabEng==null){       
+      java.net.URI uri=null;
+      java.net.URI uribase=null;
+      java.net.URI urijar=null;
+      String libName;
+      if (OSPRuntime.isMac() || OSPRuntime.isLinux()) libName = "libJMatlink.jnilib";
+      else libName = "JMatlink.dll";
+      Resource res = ResourceLoader.getResource("./bin/_ejs_external/"+libName);
+      System.err.println ("Resource = "+res);
+      try{ 
+        uri = new java.net.URI("file:/"+pathOfJmatlink+"JMatlink.dll");
+        uribase = new java.net.URI(getBaseDirectory());
+        urijar = new java.net.URI(pathOfJimc);
+      }
+      catch(java.net.URISyntaxException e){ System.out.println(e);}              
+      File efile = new File(uri);   
+      File efilebase= new File(uribase);  
+      File efilejar=new File(urijar);
+
+      matlabEng = new JMatLink(efile.toString());
+      
+      id = matlabEng.engOpenSingleUse();      
+
+      //directory with latin characters     
+      matlabEng.engEvalString(id,"jim___str='"+"cd (''"+efilebase.toString()+"''),addpath(''"+efilejar.toString()+"'')" +"'");      
+      matlabEng.engEvalString(id,"jim___bytes=unicode2native(jim___str, 'ISO-8859-1')");
+      matlabEng.engEvalString(id,"jim___str=native2unicode(jim___bytes, 'UTF-8')");
+      matlabEng.engEvalString(id,"eval(jim___str)");
+      matlabEng.engEvalString(id,"clear jim___str jim___bytes");
+    }
+    
+    //Check connection
+    matlabEng.engEvalString(id,"ejsrandomkey=888");    
+    int key=(int)matlabEng.engGetScalar(id,"ejsrandomkey");
+    matlabEng.engEvalString(id,"clear ejsrandomkey");   
+    if (888!=key){
+      matlabEng=null;
+      resultOfLastAction=CONNECTION_FAILED;
+      return false;
+    }
+    resultOfLastAction=CONNECTION_OK;
+    return true;
+  }
+
+ /**
+  * Finishes the connection with the external application     
+  */         
+ public void disconnect(){    
+   if (matlabEng!=null){       
+     matlabEng.engEvalString (id,"bdclose ('all')");
+     matlabEng.engClose(id);
+     matlabEng=null;
+     id=-1;                                
+   }
+  }
+ 
+ /**
+  * Checks if the connection was successful
+  * @return boolean true if the connection was successful
+  */
+ public boolean isConnected(){
+   return (id!=-1 && matlabEng!=null); 
+ } 
+
+ /**
+  * Accepts an initialization command to use whenever the system is reset
+  * @param command String
+  */
+ public void setInitCommand (String command){
+   //process the command    
+   initCommand = command.trim();
+   initialize();     
+ }
+
+ /**
+  * Gets the initialization command
+  * @return String the initial command
+  */ 
+ public String getInitCommand(){
+   return initCommand;
+ }
+
+//--------------------------------------------------------------
+//Setting and getting values
+//--------------------------------------------------------------
+
+ /**
+  * Sets the value of the given variable of the application
+  * @param variable String the variable name
+  * @param value String the desired value
+  */
+ public void setValue(String variable, String value){
+   if (matlabEng==null) return;
+   matlabEng.engEvalString (id,variable + "= [" + value + "]");
+ }
+ 
+ /**
+  * Gets the value of a String variable of the application
+  * @param variable String the variable name
+  * @return String the value
+  */
+ public String getString (String variable){ // Strongly inspired in JMatLink
+   if (matlabEng==null) return "";
+   matlabEng.engEvalString(id,"EjsengGetCharArrayD=double(" + variable +")" );
+   double[][] arrayD = matlabEng.engGetArray(id,"EjsengGetCharArrayD");
+   if (arrayD==null) return null;
+   matlabEng.engEvalString(id,"clear EjsengGetCharArrayD");
+   String value[] = double2String(arrayD);
+   if (value.length<=0) return null;
+   return value[0];
+ }
+ 
+ /**
+  * Sets the value of the given variable of the application
+  * @param variable String the variable name
+  * @param value double the desired value
+  */ 
+ public void setValue(String variable, double value){
+   if (matlabEng==null) return;
+   matlabEng.engPutArray(id, variable, value);
+ }
+ 
+ /**
+  * Gets the value of a double variable of the application
+  * @param variable String the variable name
+  * @return double the value
+  */
+ public double getDouble (String variable){
+   if (matlabEng==null) return 0.0;
+   return matlabEng.engGetScalar(id,variable);
+ }
+
+ /**
+  * Sets the value of the given variable of the application
+  * @param variable String the variable name
+  * @param value double[] the desired value
+  */
+ public void setValue(String variable, double[] value){   
+   if (matlabEng==null) return;
+   matlabEng.engPutArray (id,variable,value);
+ }
+
+ /**
+  * Gets the value of a double[] variable of the application
+  * @param variable String the variable name
+  * @return double the value
+  */
+ public double[] getDoubleArray (String variable){
+ if (matlabEng==null) return null;
+ double[][] returnValue = matlabEng.engGetArray(id,variable);
+ return returnValue[0];
+}
+
+ /**
+  * Sets the value of the given variable of the application
+  * @param variable String the variable name
+  * @param value double[][] the desired value
+  */
+ public void setValue(String variable, double[][] value){
+   if (matlabEng==null) return;
+   matlabEng.engPutArray (id,variable,value);
+ }
+
+ /**
+  * Gets the value of a double[][] variable of the application
+  * @param variable String the variable name
+  * @return double the value
+  */
+ public double[][] getDoubleArray2D (String variable){
+   if (matlabEng==null) return null;
+   return matlabEng.engGetArray(id,variable);
+ } 
+
+//--------------------------------------------------------------
+//Control commands
+//--------------------------------------------------------------
+  
+ /**
+  * Evaluates a given command in the external application
+  * @param command String to be executed
+  */
+ public void eval (String command){
+   if (matlabEng==null) return;
+   matlabEng.engEvalString (id,command);
+ }
+
+ /**
+  * Resets the application
+  */
+ public void reset(){
+   if (matlabEng==null) return;
+   matlabEng.engEvalString (id,"bdclose ('all')");
+   matlabEng.engEvalString (id,"clear all");  
+   initialize();
+ }
+
+ /**
+  * The result of last action can be read using
+  * this method.   
+  * @return String the result of last action
+  */  
+ public String getActionResult(){
+   return resultOfLastAction;
+ }
+//--------------------------------------------------------------
+//Other low level methods
+//-------------------------------------------------------------- 
+ 
+ 
+/*********************
+  High level protocol
+**********************/
+  
+//--------------------------------------------------------------
+//Linking variables
+//--------------------------------------------------------------
+ 
+ /**
+  * Sets the client application
+  * @param clientApp Object the client application. Reflection is used to access the variables in the client.
+  */
+ public boolean setClient(Object clientApp){
+   if (clientApp==null) return (false);
+   varContextObject=clientApp; 
+   varContextFields=clientApp.getClass().getFields();
+   return (true);
+ }
+
+ /**
+  * Links a client variable with a variable of the external application
+  * @param clientVariable String the client variable
+  * @param externalVariable String the external variable
+  */
+ public boolean linkVariables(String clientVariable, String externalVariable){   
+   if (varContextObject==null) return (false);               
+   int type;
+   //Search if the ivar exists
+   for (int i=0; i < varContextFields.length; i++) {
+       if (clientVariable.equals((varContextFields[i]).getName())) {
+         //Detect type
+         if (varContextFields[i].getType().getName().equals("double")) type=DOUBLE;
+           else if (varContextFields[i].getType().getName().equals("[D")) type=ARRAYDOUBLE;
+         else if (varContextFields[i].getType().getName().equals("[[D")) type=ARRAYDOUBLE2D;
+         else if (varContextFields[i].getType().getName().equals("java.lang.String")) type=STRING;
+         else return (false);
+                                            
+        if (linkVector==null) {
+         linkVector=new java.util.Vector<String[]>();
+         linkIndex= new int[1];
+         linkIndex[0]=i;
+         linkType = new int[1]; 
+         linkType[0]=type;         
+       }else{
+         int[] _linkIndex=new int[linkIndex.length+1];
+           System.arraycopy(linkIndex,0,_linkIndex,0,linkIndex.length);
+           _linkIndex[linkIndex.length]=i; 
+         linkIndex=_linkIndex;
+         int[] _linkType=new int[linkType.length+1];
+           System.arraycopy(linkType,0,_linkType,0,linkType.length);
+           _linkType[linkType.length]=type;  
+         linkType=_linkType;         
+       }        
+        String[] _element={clientVariable,externalVariable};                
+        linkVector.addElement(_element);
+       return (true);        
+     }
+   }       
+   return(false);
+ }
+
+ /**
+  * Clears all linking between variables
+  */
+ public void clearLinks(){
+   varContextObject=null; 
+   varContextFields=null;   
+ }
+ 
+//--------------------------------------------------------------
+//Control commands
+//--------------------------------------------------------------
+ 
+ /**
+  * Some external applications, such as MATLAB, can continuously execute  
+  * a command after every step().
+  * @param command a String to be executed
+  */
+ public void setCommand(String command){
+   commandUpdate=command;
+ }
+
+ /**
+  * Gets the command to be executed by the external application.  
+  * @return String the command
+  */ 
+ public String getCommand(){
+   return commandUpdate;
+ }
+
+ /**
+  * Steps the application a given step or a number of times.
+  * If getCommand() is non-null the command is executed that number of times.
+  * If getCommand() is null, the dt parameter is passed down to the externall application,
+  * and the actual meaning of this parameter dt will depend on the implementing class
+  * @param dt double
+  */
+ public void step (double dt){    
+   setValues();
+   //Do Step  
+   int steps=(int)dt;
+   for (int i=0;i<steps;i++)
+       eval(commandUpdate);    
+   getValues();        
+ }
+
+ /**
+  * Synchronizes client and external applications
+  */
+ public void synchronize(){       
+ }
+ 
+//--------------------------------------------------------------
+//Remote methods
+//-------------------------------------------------------------- 
+ 
+ /**
+  * Sets the package size used to group valus of the external variables
+  */
+ public void setPackageSize(int size){
+ }
+
+ /**
+  * Empty the buffer
+  */
+ public void flush(){
+ }
+  
+//--------------------------------------------------------------
+//Other high level methods
+//--------------------------------------------------------------
+ 
+ /**
+  * Forces or not to the client to wait until an external variable is read. 
+  * @param set boolean 
+  */
+ public void setWaitForEver(boolean set){
+   waitForEverFlag=set;
+ }
+ 
+ 
+//--------------------------------------------------------------
+//Other public methods
+//-------------------------------------------------------------- 
+ 
+ /**
+  * sets all external variables with client values
+  */
+ public void setValues(){
+   int k=0;
+   String[] var;
+   String evar;
+   
+   //Set Values   
+   for (int i=0; i<linkVector.size(); i++){
+      var= (String[]) linkVector.elementAt(i);
+      evar=var[1];
+      try {       
+        varContextField= varContextFields[linkIndex[k]];      
+        switch (linkType[k++]){
+        case DOUBLE: setValue(evar,varContextField.getDouble(varContextObject)); break;
+        case ARRAYDOUBLE: setValue(evar,(double[])varContextField.get(varContextObject)); break;
+        case ARRAYDOUBLE2D: setValue(evar,(double[][])varContextField.get(varContextObject)); break;
+        case STRING: setValue(evar,(String)varContextField.get(varContextObject)); break; 
+        }
+        
+      } catch (java.lang.IllegalAccessException e) {
+        System.out.println("Error Step: setting a value " + e);
+      }           
+   }   
+ }
+  
+ /**
+  * gets all external values
+  */
+ public void getValues(){
+   //Get Values   
+   int k=0;
+   String[] var;
+   String evar;
+   
+   for (int i=0; i<linkVector.size(); i++){
+      var= (String[]) linkVector.elementAt(i);
+      evar=var[1];
+      try {       
+        varContextField= varContextFields[linkIndex[k]];      
+        switch (linkType[k++]){
+        case DOUBLE: varContextField.setDouble(varContextObject,getDouble(evar)); break;
+        case ARRAYDOUBLE: varContextField.set(varContextObject,getDoubleArray(evar));  break;
+        case ARRAYDOUBLE2D: varContextField.set(varContextObject,getDoubleArray2D(evar)); break;
+        case STRING: varContextField.set(varContextObject,getString(evar)); break;        
+        }
+        
+      } catch (java.lang.IllegalAccessException e) {
+        System.out.println("Error Step: getting a value " + e);
+      }           
+   }      
+ }
+ 
+
+ /**
+  * Package-internal constructor
+  */
+ public MatlabExternalApp () { 
+  if (pathOfJmatlink==null){
+         //get jim.jar
+         pathOfJimc=getJimjar();         
+         //get jmatlink
+         pathOfJmatlink=getJmatlink(pathOfJimc);  
+   }
+ }
+ 
+//--------------------------------------------------------------
+//Protected method
+//-------------------------------------------------------------- 
+ 
+ /**
+  * Initializes a Matlab session. 
+  */
+ protected void initialize () {
+   if (initCommand!=null) matlabEng.engEvalString (id,initCommand);
+ }
+ 
+ 
+ /**************************************************************   
+ Static utilities
+**************************************************************/
+/**
+* This queries Matlab until a given String is returned
+* The string must exist (sooner or later) in Matlab or the computer will hang
+* Strongly inspired in JMatLink
+*/
+static public String waitForString (JMatLink _matlab, long _id, String _variable, String _command) {    
+String request = "EjsGet"+_variable;
+double[][] arrayD=null;
+if (_command!=null) _matlab.engEvalString(_id,_command); // 051123 Lausanne. This was before inside the loop
+_matlab.engEvalString(_id,request+"=double(" + _variable +")" ); // 051123 Lausanne. This was before inside the loop
+int max=10;
+do {
+arrayD = _matlab.engGetArray(_id,request);
+max--;
+} while (arrayD==null && max>0); // A maximum of 10 times
+
+if (arrayD==null) return null;  //// Gonzalo 060420
+_matlab.engEvalString(_id,"clear "+request);
+String value[] = double2String(arrayD);
+if (value.length<=0) return null;
+return value[0];
+}
+
+/**
+* This queries Matlab until a given String is returned
+* The string must exist (sooner or later) in Matlab or the computer will hang
+* Strongly inspired in JMatLink
+*/
+static protected String[] double2String(double[][] d){ // Borrowed from JMatLink
+String encodeS[]=new String[d.length];  // String vector
+// for all rows
+for (int n=0; n<d.length; n++){
+byte b[] = new byte[d[n].length];
+// convert row from double to byte
+for (int i=0; i<d[n].length ;i++) b[i]=(byte)d[n][i];
+
+// convert byte to String
+try { encodeS[n] = new String(b, "UTF8");}
+catch (UnsupportedEncodingException e) { e.printStackTrace(); }
+}
+return encodeS;
+} 
+
+//--------------------------------------------------------------
+//private methods
+//-------------------------------------------------------------- 
+ 
+ private String getTemporalSystemDirectory(){        
+   String tempdir = System.getProperty("java.io.tmpdir");
+   return tempdir;
+ }
+
+ protected String getBaseDirectory(){
+   String pathOfJimc2=this.getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+   pathOfJimc2=pathOfJimc2.substring(0,pathOfJimc2.lastIndexOf("/"));  
+   return pathOfJimc2;
+ } 
+
+ private String createTemporalDirectory() throws java.net.URISyntaxException {
+   String temp_dir_name=null;
+   try{
+     File temp_file= File.createTempFile("_jim",null,new File(new java.net.URI(getBaseDirectory())));              
+     temp_dir_name=temp_file.getName();
+     temp_file.delete();                                                                 
+     File temp_dir = new File(new java.net.URI(getBaseDirectory()+"/"+temp_dir_name));           
+     temp_dir.mkdir();       
+     temp_dir.deleteOnExit();
+   }catch (java.io.IOException e){System.out.println("Error:"+e);} 
+   catch (Exception e) { e.printStackTrace(); }
+
+   return (getBaseDirectory()+"/"+temp_dir_name);
+ }
+
+ private String getJimjar(){  
+   try{         
+     File checkfile = new File(new java.net.URI(getBaseDirectory()+"/jimc.jar")); 
+     if (checkfile.exists()) return getBaseDirectory();
+     temporalDirectory=createTemporalDirectory();
+     //lookfor jimc.jar 
+     JarFile jarbase = new JarFile(new File (this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI()));
+     JarEntry entry1;        
+     for (Enumeration<JarEntry> e = jarbase.entries(); e.hasMoreElements(); ) {
+       entry1 = (JarEntry) e.nextElement();
+       if (entry1.getName().endsWith("jimc.jar")) {                          
+         //get jimc.jar          
+         File file = new File(new java.net.URI(temporalDirectory+"/jimc.jar"));       
+         if (!file.exists()){              
+           file.createNewFile();           
+           InputStream in = this.getClass().getResourceAsStream("/"+entry1.getName());                      
+           FileOutputStream out = new FileOutputStream(file);
+           byte[] buffer = new byte[1048];
+           while(in.available() > 0) {
+             int read = in.read(buffer);
+             out.write(buffer, 0, read);
+           }
+           out.close();
+           file.deleteOnExit();          
+         }            
+         break;            
+       }
+     }
+   }
+   catch (java.io.IOException e){System.out.println("Error:"+e);} 
+   catch (Exception e) { e.printStackTrace(); }
+   return temporalDirectory;   
+ }
+
+ private String getJmatlink(String _pathOfJimc){
+   try{
+     //get JMatlink.dll                
+     JarFile jar = new JarFile(new File(new java.net.URI(_pathOfJimc+"/jimc.jar")));             
+     ZipEntry entry2 = jar.getEntry("jimc/JMatlink.dll");          
+     File efile = new File(new java.net.URI("file:/"+getTemporalSystemDirectory().replace('\\','/')+"JMatlink.dll"));          
+
+     InputStream in = new BufferedInputStream(jar.getInputStream(entry2));
+     OutputStream out = new BufferedOutputStream(new FileOutputStream(efile));     
+     byte[] buffer = new byte[2048];
+     for (;;)  {
+       int nBytes = in.read(buffer);
+       if (nBytes <= 0) break;
+       out.write(buffer, 0, nBytes);
+     }          
+     out.flush();
+     out.close();
+     in.close(); 
+     efile.deleteOnExit();   
+   }
+   catch (java.io.IOException e){System.out.println("Error:"+e);} 
+   catch (Exception e) { e.printStackTrace(); }
+   return getTemporalSystemDirectory().replace('\\','/');
+ }
+
+}

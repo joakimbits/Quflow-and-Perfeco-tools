@@ -1,0 +1,11 @@
+what,kind,bundleId,bundleVersion,description,time
+executed,command,org.eclipse.ui.ide,3.4.0.I20080606-1300,org.eclipse.ui.project.buildAutomatically,1214841675939
+activated,view,org.eclipse.ui.ide,3.4.0.I20080606-1300,org.eclipse.ui.views.ResourceNavigator,1214841677522
+started,bundle,org.eclipse.compare,3.4.0.I20080604,org.eclipse.compare,1214841679052
+started,bundle,org.eclipse.debug.ui,3.4.0.v20080529-1300,org.eclipse.debug.ui,1214841679946
+started,bundle,org.eclipse.jdt.debug,3.4.0.v20080604,org.eclipse.jdt.debug,1214841680070
+deactivated,workbench,org.eclipse.ui.workbench,3.4.0.I20080606-1300,,1214841680087
+activated,workbench,org.eclipse.ui.workbench,3.4.0.I20080606-1300,,1214841680098
+deactivated,workbench,org.eclipse.ui.workbench,3.4.0.I20080606-1300,,1214842295779
+started,bundle,org.eclipse.epp.usagedata.ui,1.0.0.R200806162215,org.eclipse.epp.usagedata.ui,1214842295827
+started,bundle,org.eclipse.ui.browser,3.2.200.v20080507,org.eclipse.ui.browser,1214843043926

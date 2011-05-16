@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;destDir&apos; in &apos;org.colos.ejs.osejs.Osejs.chooseFilaUnderSource()&apos; to &apos;target&apos;&#x0D;&#x0A;- Original project: &apos;Ejs&apos;&#x0D;&#x0A;- Original element: &apos;org.colos.ejs.osejs.Osejs.chooseFilaUnderSource().destDir&apos;&#x0D;&#x0A;- Renamed element: &apos;org.colos.ejs.osejs.Osejs.chooseFilaUnderSource().target&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;destDir&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;org.colos.ejs.osejs{Osejs.java" name="target" references="true" selection="33645 7" stamp="1204404694296" version="1.0"/>
+</session>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;implementingElement&apos; in &apos;org.opensourcephysics.drawing3d.Element&apos; to &apos;implementingObject&apos;&#x0A;- Original project: &apos;Ejs&apos;&#x0A;- Original element: &apos;org.opensourcephysics.drawing3d.Element.implementingElement&apos;&#x0A;- Renamed element: &apos;org.opensourcephysics.drawing3d.Element.implementingObject&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;implementingElement&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;org.opensourcephysics.drawing3d{Element.java[Element^implementingElement" name="implementingObject" references="true" setter="false" stamp="1242126119736" textual="true" version="1.0"/>
+</session>

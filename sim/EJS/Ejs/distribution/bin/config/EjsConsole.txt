@@ -1,0 +1,10 @@
+JavaRoot=
+Language=Locale
+Minimized=false
+UserDir=
+ExternalApps=false
+LoadLastFile=true
+MatlabDir=
+VMparams=-Xmx256m
+Arguments=
+LookAndFeel=CROSS_PLATFORM
