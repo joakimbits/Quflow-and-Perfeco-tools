@@ -4,9 +4,11 @@ Algebra with symbols, physical constants, arrays and uncertainties
 """
 
 from re import compile
-from sympy import Basic, Symbol, Matrix, sympify, lambdify, solve
+from sympy import Basic, Symbol, Matrix, sympify, lambdify, solve, \
+     Sum, integrate
+from sympy import sum as summation
 from collections import Iterable
-from quantities import Quantity
+from quantities import Quantity, units, constants
 from numpy import ndarray, array
 from quantities.unitquantity import \
      UnitCurrency, UnitCurrent, UnitInformation, UnitLength, \
@@ -14,14 +16,25 @@ from quantities.unitquantity import \
      UnitTime
 from statistics import UncertainQuantity
 
-dimensions = (UnitCurrent, UnitInformation, UnitLength,
-              UnitLuminousIntensity, UnitMass, UnitSubstance,
-              UnitTemperature, UnitTime)
+
+class BaseUnits(dict):
+    dimensions = (UnitCurrent, UnitInformation, UnitLength,
+                  UnitLuminousIntensity, UnitMass, UnitSubstance,
+                  UnitTemperature, UnitTime)
+    def __call__( self, ** unit ):
+        units.set_default_units( ** unit )
+        self.update([('_'+ u.symbol, u)
+                     for u in [d._default_unit for d in self.dimensions]])
+
+set_default_units = base_units = BaseUnits()
+set_default_units()
+
 _Mul = compile(r'([A-Za-z0-9_)])(\s+)(?=[A-Za-z0-9_(])').sub
 _Eq = compile(r'^([^=]*)==(.*)').sub
 pythonify = lambda expr: _Eq( r'\1-(\2)', _Mul( r'\1*', expr ))
 dictmap = lambda l, f: dict(zip( l, map( f, l )))
 params = lambda dict: ', '.join(['%s=%r' %p for p in dict.iteritems()])
+
 
 class SymQuantity( Basic ):
     """
@@ -48,11 +61,6 @@ class SymQuantity( Basic ):
     result      = None # Symbolic expression in base units.
     implicit    = None # Applicable base units and data arrays.
     
-    # Class data
-    base_units  = (    # All base units.
-        dict([('_'+ u.symbol, u)
-              for u in [d._default_unit for d in dimensions]]))
-    
     def __new__( cls, quantity, symbol = None ):
         self = Basic.__new__( cls, quantity )
         try:
@@ -73,7 +81,7 @@ class SymQuantity( Basic ):
             self.result = Symbol(n_) * k
         else:
             self.result = q.magnitude * k
-        I.update(dictmap( units, self.base_units.get ))
+        I.update(dictmap( units, base_units.get ))
         return self
     
     def rescale( self, unit ):
@@ -123,6 +131,12 @@ class System( SymQuantity ):
     as substitutions. Remaining symbols can be solved for by using the symbol as
     an attribute. 
 
+    >>> eq = System('E == q (V - n q/C)'); eq.E
+    (C*V*q - n*q**2)/C
+    >>> integrate( _, Symbol('n') )
+    V*n*q - n**2*q**2/(2*C)
+    >>> _.diff(Symbol('n'))
+    V*q - n*q**2/C
     >>> charging = System('E == (n - C V/e)^2 e^2/(2 C)'); charging.E
     (-2*C*V*e*n + C**2*V**2 + e**2*n**2)/(2*C)
     >>> E = charging.E(V=0); E
@@ -170,13 +184,16 @@ class System( SymQuantity ):
         if A:
             # Evaluate all sub-expressions. May expand A + I + R.
             for n, v in A.copy().iteritems():
-                if isinstance( v, Basic ) and not v == Symbol(n) \
-                   and v.atoms(Symbol):
-                    v = v(E) if isinstance( v, System ) else System( v, E )
-                    A.update(v.applied)
-                    A[n] = v.result
-                    I.update(v.implicit)
-                    R.update(v.remaining)
+                if isinstance( v, Basic ) and not isinstance( v, Symbol ):
+                    try:
+                        assert len(v.atoms(Symbol)) > 1
+                        v = v(E) if isinstance( v, System ) else System( v, E )
+                        A.update(v.applied)
+                        A[n] = v.result
+                        I.update(v.implicit)
+                        R.update(v.remaining)
+                    except:
+                        pass
             # M /. E == M /. A now. A may contain sympy-incompatible objects.
             # Categorize A.
             Q = dict([(n, v) for n, v in A.iteritems()
