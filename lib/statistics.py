@@ -431,25 +431,12 @@ def corners( * quantities ):
             N = len(q)
             if N > 1: break
         except: pass
-    try: x = array([(q if (isinstance( q, Iterable )
-                           and (q.size if isinstance( q, ndarray )
-                                else len(q)) != 1)
-                     else array([q.magnitude if isinstance( q, Quantity )
-                                 else q]*N))
-                    for q in quantities])
-    except:
-        print quantities
-        for q in quantities:
-            try:
-                array(q) if (isinstance( q, ndarray ) and q.size != 1) \
-                         or (isinstance( q, Iterable ) and len(q) != 1) \
-                         else array([q]*N)
-            except:
-                print (q if (isinstance( q, Iterable )
-                             and (q.size if isinstance( q, ndarray )
-                                  else len(q)) != 1)
-                             else array([q]*N))
-                raise
+    x = array([(q if (isinstance( q, Iterable )
+                      and (q.size if isinstance( q, ndarray )
+                           else len(q)) != 1)
+                else array([q.magnitude if isinstance( q, Quantity )
+                            else q]*N))
+               for q in quantities])
     u = [q.units if isinstance( q, Quantity ) else dimensionless
          for q in quantities]
     z = zeros(N)
