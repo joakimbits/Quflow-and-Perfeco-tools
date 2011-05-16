@@ -40,14 +40,14 @@ class FreeElectron(HasTraits):
     ...         print 'M       so        er C      w       A           V     B'
     ...         print Ec.M.rescale(m_e), Ec.so, Ec.er, Ec.C.rescale(aF), Ec.w,
     ...         print Ec.A, Ec.V.rescale(V), Ec.B.rescale(T)
-    ...         print 'E (eV) n  m  l  s'
+    ...         print 'E (eV)  n  m  l  s'
     ...         for E, n, m, l, s in zip(Ec.rescale(eV), Ec.n, Ec.m, Ec.l, Ec.s):
     ...             print '%6.3f %2d %2d %2d %+1.1f'% (E, n, m, l, s)
     >>> view(vacuum, 20)
     Calculating 20 lowest states: eval sort fill
     M       so        er C      w       A           V     B
     1.0 m_e 0.0 nm*eV 1 10.0 aF 10.0 nm 100.0 nm**2 0.0 V 0.0 T
-    E (eV) n  m  l  s
+    E (eV)  n  m  l  s
      0.017  1  0  0 -0.5
      0.033  2  0 -1 -0.5
      0.050  3  0  1 -0.5
@@ -73,7 +73,7 @@ class FreeElectron(HasTraits):
     Calculating 10 lowest states: eval sort fill
     M       so        er C      w       A           V     B
     1.0 m_e 0.0 nm*eV 1 10.0 aF 10.0 nm 100.0 nm**2 0.09 V 0.0 T
-    E (eV) n  m  l  s
+    E (eV)  n  m  l  s
     -0.073  1  0  0 -0.5
     -0.057  2  0 -1 -0.5
     -0.040  3  0  1 -0.5
@@ -85,13 +85,11 @@ class FreeElectron(HasTraits):
      0.060  9  0  1 +0.5
      0.076 10  0 -2 +0.5
     <BLANKLINE>
-    >>> B0 = h/(e*vacuum.area); B0.rescale(T)
-    array(41.35667333632514) * T
-    >>> vacuum.magnetic_field = B0; view(vacuum, 10)
+    >>> vacuum.magnetic_field = h/(e*vacuum.area); view(vacuum, 10)
     Calculating 10 lowest states: eval sort fill
     M       so        er C      w       A           V     B
     1.0 m_e 0.0 nm*eV 1 10.0 aF 10.0 nm 100.0 nm**2 0.09 V 41.3566733363 T
-    E (eV) n  m  l  s
+    E (eV)  n  m  l  s
     -0.075  1  0 -1 -0.5
     -0.058  2  0  0 -0.5
     -0.042  3  0 -2 -0.5
@@ -224,6 +222,52 @@ class FreeElectron(HasTraits):
 
     def __repr__(self): return '%s: %r'%( self.name, list(self.cavity()) )
 
+
+def Nanoinductor(FreeElectron):
+    """
+    Nanoinductance simulator
+
+    Plots single-electronic energy levels E(Vg) of, tunneling current Ids(Vg,
+    Vds) through, and magnetic flux generation P(Vg) from a nano-metre sized
+    loop wave-guide.
+    
+    Tunable parameters
+    M = Effective mass (m_e).
+    C = Charging capacitance (aF).
+    w = Channel width (nm).
+    A = Loop area (nm^2).
+    T = Source temperature (K).
+    N = Number of states (20-2000).
+    
+    Assumtions
+    1. Hard-wall confinement.
+    2. Narrow width compared to loop diameter.
+    3. Purely Fermi distribution of states.
+    4. Completely ballistic transport.
+    5. Completely adiabatic contacts.
+    6. Infinite density of states in source and drain.
+    7. Small charge density:
+    7a. Confinement potential equals the gate voltage Vg.
+    7b. Chemical potential equals the source potential Vs.
+    7c. Tunneling current Ids saturates at Vds = Vg.
+    
+    Calculated properties at each setting
+    E = Energy spectrum (eV of each state).
+    m = Confinement spectrum (non-negative integer at each state).
+    l = Circulation spectrum (integer at each state).
+    s = Spin spectrum (+0.5 or -0.5 at each state).
+    
+    Calculated properties at each setting and gate voltage
+    p = Level population probabilities (0-1 of each energy level).
+    Q = Loop-internal charge (e).
+    G = Loop-internal conductance (e^2/h).
+    P = Loop-internal magnetic flux (h/e).
+    S = Loop-internal spin.
+    
+    Calculated property at each setting, gate voltage and bias voltage
+    Ids = Tunneling current (pA).
+    dos = Density of states at the source potential (1/eV).
+    """
 
 if __name__ == '__main__':
     import doctest
