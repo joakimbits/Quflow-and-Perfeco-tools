@@ -17,17 +17,78 @@ from quantities.unitquantity import \
 from statistics import UncertainQuantity
 
 
-class BaseUnits(dict):
-    dimensions = (UnitCurrent, UnitInformation, UnitLength,
-                  UnitLuminousIntensity, UnitMass, UnitSubstance,
-                  UnitTemperature, UnitTime)
-    def __call__( self, ** unit ):
-        units.set_default_units( ** unit )
-        self.update([('_'+ u.symbol, u)
-                     for u in [d._default_unit for d in self.dimensions]])
+class SymUnits(dict):
+    """
+    Conversion table from symbolic to numeric units, with support for default
+    units and formats.
 
-set_default_units = base_units = BaseUnits()
-set_default_units()
+    >>> from quantities import nm, m, F, UnitQuantity
+    >>> aF = UnitQuantity( 'attofarad', 1e-18*F, symbol = 'aF' )
+    >>> default.set_units_and_formats(nm, aF, aF/nm, '%.2f')
+    >>> (10*aF).simplified
+    array(1.0000000000000003e-35) * s**4*A**2/(kg*nm**2)
+    >>> default.rescale(_)
+    array(10.0) * aF
+    >>> print default.format(_), default.symquantity(_.units)
+    10.00 aF
+    """
+
+    _basis = dict([     # basis for dimensions
+        (d._default_unit._reference.dimensionality, d)
+        for d in (UnitCurrent, UnitInformation, UnitLength,
+                  UnitLuminousIntensity, UnitMass, UnitSubstance,
+                  UnitTemperature, UnitTime)])
+    _units = dict()     # units for dimensions
+    _patterns = dict()    # formats for units
+
+    def __init__( self, * units_and_patterns ):
+        B = self._basis
+        U = self._units
+        P = self._patterns
+        units_to_format = list()
+        for u_or_p in units_and_patterns:
+            if isinstance( u_or_p, str ) and '%' in u_or_p:
+                p = u_or_p
+                for u in units_to_format: P[u] = p
+                units_to_format = list()
+            else:
+                u = u_or_p
+                dims = u._reference.dimensionality
+                if dims in B: B[dims].set_default_unit(u)
+                U[dims] = u
+                units_to_format.append(u)
+        for dim, d in B.iteritems():
+            u = d._default_unit
+            self['_'+ u.symbol] = U[dim] = u
+            
+    set_units = set_units_and_formats = __init__
+
+    def units( self, quantity ):
+        if not isinstance( quantity, Quantity ):
+            quantity = Quantity(quantity)
+        u = quantity.units
+        return self._units.get( u._reference.dimensionality, u.simplified )
+
+    def rescale( self, quantity ):
+        if isinstance( quantity, Quantity ):
+            return quantity.rescale(self.units(quantity))
+        return quantity
+
+    def symquantity( self, quantity ):
+        return SymQuantity( self.rescale(quantity),
+                            simplified = False, _ = False )
+
+    def pattern( self, quantity ):
+        return self._patterns.get( self.units(quantity), '%g' )
+
+    def format( self, quantity ):
+        q = self.rescale(quantity)
+        f = self.pattern(q)
+        try: return f% q
+        except: return [f% qi for qi in q]
+
+default = SymUnits()
+
 
 _Mul = compile(r'([A-Za-z0-9_)])(\s+)(?=[A-Za-z0-9_(])').sub
 _Eq = compile(r'^([^=]*)==(.*)').sub
@@ -61,7 +122,7 @@ class SymQuantity( Basic ):
     result      = None # Symbolic expression in base units.
     implicit    = None # Applicable base units and data arrays.
     
-    def __new__( cls, quantity, symbol = None ):
+    def __new__( cls, quantity, symbol = None, simplified = True, _ = True ):
         self = Basic.__new__( cls, quantity )
         try:
             self.symbol = symbol or quantity.symbol
@@ -69,19 +130,20 @@ class SymQuantity( Basic ):
             self.symbol = symbol
         I = self.implicit = dict()
         units = set()
-        q = quantity.simplified
+        q = quantity.simplified if simplified else quantity
         k = 1
         for u, d in q.dimensionality.iteritems():
-            unit = '_'+ u.symbol
+            unit = '_'+ u.symbol if _ else u.symbol
             k *= Symbol(unit)**d
             units.add(unit)
+            default[unit] = u
         if q.shape or isinstance(q, UncertainQuantity):
             n_ = self.symbol +'_'
             I[n_] = q/q.units
             self.result = Symbol(n_) * k
         else:
             self.result = q.magnitude * k
-        I.update(dictmap( units, base_units.get ))
+        I.update(dictmap( units, default.get ))
         return self
     
     def rescale( self, unit ):
@@ -145,7 +207,7 @@ class System( SymQuantity ):
     >>> En = E( constants, C = System('n*0.1 aF'), aF=1E-18*F); En.rescale(eV)
     0.801088222000001*eV*n
     >>> En(n = 1).rescale(eV)
-    array(0.8010882220000002) * eV
+    array(0.8010882220000003) * eV
     """
     
     # Object data
@@ -160,11 +222,12 @@ class System( SymQuantity ):
     _skip = dictmap("COSINEQ", Symbol) # skip these when evaluating in sympy
 
     def __new__( cls, model, * setup, ** operation ):
-        parameters = setup + (operation,)
-        self = Basic.__new__( cls, model, * parameters )
+        return Basic.__new__( cls )
+
+    def __init__( self, model, * setup, ** operation ):
         # Collect parameter values
         environment = dict()
-        for s in parameters:
+        for s in setup + (operation,):
             if isinstance( s, dict ): environment.update(s)
             elif isinstance( s, System ): environment.update(s.environment)
             else: environment.update(s.__dict__)
@@ -225,11 +288,10 @@ class System( SymQuantity ):
         else:
             self.result = M
             self.implicit = dict()
-        return self
 
     def __call__( self, * setup, ** operation ):
-        return System( self.model, self.environment, self.implicit,
-                       * setup, ** operation )
+        return type(self)( self.model, self.environment, self.implicit,
+                               * setup, ** operation )
     
     def __getitem__( self, k ):
         return self.result.__getitem__(k)
@@ -241,12 +303,70 @@ class System( SymQuantity ):
     def __getattribute__( self, name, default=None ):
         if name in System.__dict__:
             return object.__getattribute__( self, name )
+        if name in self.applied: return self.applied[name]
         if name in self.environment: return self.environment[name]
         if name in self.remaining: 
             return System( solve( self.result, Symbol(name) ),
                            self.environment, self.implicit )
         return SymQuantity.__getattribute__( self, name, default )
         
+    def __repr__(self):
+        r = self.result
+        if isinstance( r, ndarray ) and r.size > 1:
+            V = dict([(n, v) for n, v in self.applied.iteritems()
+                      if isinstance( v, ndarray ) and v.size > 1])
+            head = [str(self.model)] + V.keys()
+            data = map( default.rescale, [r] + V.values() )
+            unit = [str(default.units(c)).split()[1] for c in data]
+            data = array([map( default.format, c ) for c in data])
+            table = array([head, unit] + list(data.T))
+            W = map( max, [map( len, c ) for c in table.T])
+            f = ' '.join(['%'+ str(w) +'s' for w in W])
+            return '\n'.join([f% tuple(row) for row in table])
+        else: return SymQuantity.__repr__(self)
+
+
+class Sorted(System):
+    """
+    Sorts array result in increasing order
+
+    Example: First spin-degenerate states in a flat nanoelectron loop.
+    >>> loop = Sorted(
+    ...     'Em + El', constants, Em = System('(m + 0.5)^2 h^2/(8 M w^2)'),
+    ...     El = System('((l - A B q/h + 1/2)^2 + 1/4) h^2/(8 pi M A)') )
+    >>> from quantities.constants import e, m_e
+    >>> from quantities import nm, eV, UnitQuantity
+    >>> from statistics import independent
+    >>> nanoloop = loop( q=e, M=m_e, w=10*nm, A=100*nm**2, B=0 )
+    >>> m, l = independent( array(range(3)), array(range( -1, 0 ) + range(2)) )
+    >>> scalar = UnitQuantity( 'scalar', 1, symbol = '#' )
+    >>> default.set_units_and_formats( eV, '%.4f', scalar )
+    >>> nanoloop( m=m, l=l )
+    El + Em     Em     El m  l
+         eV     eV     eV #  #
+     0.0015 0.0009 0.0006 0 -1
+     0.0015 0.0009 0.0006 0  0
+     0.0039 0.0009 0.0030 0  1
+     0.0091 0.0085 0.0006 1 -1
+     0.0091 0.0085 0.0006 1  0
+     0.0115 0.0085 0.0030 1  1
+     0.0241 0.0235 0.0006 2 -1
+     0.0241 0.0235 0.0006 2  0
+     0.0265 0.0235 0.0030 2  1
+    """
+
+    def __init__( self, model, * setup, ** operation ):
+        System.__init__( self, model, * setup, ** operation )
+        v = self.result
+        if isinstance( v, ndarray ) and v.size > 1:
+            order = v.argsort(kind = 'merge')
+            self.result = v[order]
+            A = self.applied
+            for n, v in A.copy().iteritems():
+                if isinstance( v, ndarray ) and v.size > 1:
+                    A[n] = v[order]
+
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
