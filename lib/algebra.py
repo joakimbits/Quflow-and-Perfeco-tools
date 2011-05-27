@@ -8,7 +8,7 @@ from sympy import Basic, Symbol, Matrix, sympify, lambdify, solve, \
      Sum, integrate
 from sympy import sum as summation
 from collections import Iterable
-from quantities import Quantity, units, constants
+from quantities import Quantity, UnitQuantity, units, constants
 from numpy import ndarray, array
 from quantities.unitquantity import \
      UnitCurrency, UnitCurrent, UnitInformation, UnitLength, \
@@ -88,7 +88,7 @@ class SymUnits(dict):
         except: return [f% qi for qi in q]
 
 default = SymUnits()
-
+default.set_units(UnitQuantity( 'scalar', 1, symbol = '#' ))
 
 _Mul = compile(r'([A-Za-z0-9_)])(\s+)(?=[A-Za-z0-9_(])').sub
 _Eq = compile(r'^([^=]*)==(.*)').sub
@@ -250,13 +250,13 @@ class System( SymQuantity ):
                 if isinstance( v, Basic ) and not isinstance( v, Symbol ):
                     try:
                         assert len(v.atoms(Symbol)) > 1
-                        v = v(E) if isinstance( v, System ) else System( v, E )
-                        A.update(v.applied)
-                        A[n] = v.result
-                        I.update(v.implicit)
-                        R.update(v.remaining)
                     except:
-                        pass
+                        continue
+                    v = v(E) if isinstance( v, System ) else System( v, E )
+                    A.update(v.applied)
+                    A[n] = v.result
+                    I.update(v.implicit)
+                    R.update(v.remaining)
             # M /. E == M /. A now. A may contain sympy-incompatible objects.
             # Categorize A.
             Q = dict([(n, v) for n, v in A.iteritems()
@@ -290,12 +290,19 @@ class System( SymQuantity ):
             self.implicit = dict()
 
     def __call__( self, * setup, ** operation ):
-        return type(self)( self.model, self.environment, self.implicit,
+        return type(self)( self.result, self.environment, self.implicit,
                                * setup, ** operation )
     
-    def __getitem__( self, k ):
-        return self.result.__getitem__(k)
-
+    def __instancecheck__( self, instance ):
+        return object.__instancecheck__( self, instance ) or isinstance(
+            self.result, instance )
+    def __subclasscheck__( self, subclass ):
+        return object.__subclasscheck__( self, subclass ) or issubclass(
+            self.result, subclass )    
+    def __getitem__( self, k ): return self.result[k]
+    def __len__( self, k ): return len(self.result)
+    def __float__(self): return float(self.result)
+    
     def rescale( self, unit ):
         if isinstance( self.result, Quantity ): return self.result.rescale(unit)
         else: return SymQuantity.rescale( self, unit )
@@ -303,20 +310,21 @@ class System( SymQuantity ):
     def __getattribute__( self, name, default=None ):
         if name in System.__dict__:
             return object.__getattribute__( self, name )
-        if name in self.applied: return self.applied[name]
-        if name in self.environment: return self.environment[name]
-        if name in self.remaining: 
-            return System( solve( self.result, Symbol(name) ),
-                           self.environment, self.implicit )
+        E, A, I, R, r = [object.__getattribute__( self, n ) for n in (
+            'environment', 'applied', 'implicit', 'remaining', 'result')]
+        if name in A: return System( A[name], E, A, I )
+        if name in E: return System( E[name], E, A )
+        if name in R: return System( solve( r, Symbol(name) ), E, A, I )
         return SymQuantity.__getattribute__( self, name, default )
-        
+
     def __repr__(self):
         r = self.result
         if isinstance( r, ndarray ) and r.size > 1:
+            N = len(r)
             V = dict([(n, v) for n, v in self.applied.iteritems()
                       if isinstance( v, ndarray ) and v.size > 1])
-            head = [str(self.model)] + V.keys()
-            data = map( default.rescale, [r] + V.values() )
+            head = ['', ''] + V.keys()
+            data = map( default.rescale, [range(N), r] + V.values() )
             unit = [str(default.units(c)).split()[1] for c in data]
             data = array([map( default.format, c ) for c in data])
             table = array([head, unit] + list(data.T))
@@ -326,33 +334,35 @@ class System( SymQuantity ):
         else: return SymQuantity.__repr__(self)
 
 
-class Sorted(System):
+class SortedSystem(System):
     """
-    Sorts array result in increasing order
+    Sorts array result in increasing order, cut to a maximum 'size' if such an
+    attribute is specified.
 
     Example: First spin-degenerate states in a flat nanoelectron loop.
-    >>> loop = Sorted(
-    ...     'Em + El', constants, Em = System('(m + 0.5)^2 h^2/(8 M w^2)'),
-    ...     El = System('((l - A B q/h + 1/2)^2 + 1/4) h^2/(8 pi M A)') )
     >>> from quantities.constants import e, m_e
     >>> from quantities import nm, eV, UnitQuantity
     >>> from statistics import independent
-    >>> nanoloop = loop( q=e, M=m_e, w=10*nm, A=100*nm**2, B=0 )
-    >>> m, l = independent( array(range(3)), array(range( -1, 0 ) + range(2)) )
-    >>> scalar = UnitQuantity( 'scalar', 1, symbol = '#' )
-    >>> default.set_units_and_formats( eV, '%.4f', scalar )
-    >>> nanoloop( m=m, l=l )
-    El + Em     Em     El m  l
-         eV     eV     eV #  #
-     0.0015 0.0009 0.0006 0 -1
-     0.0015 0.0009 0.0006 0  0
-     0.0039 0.0009 0.0030 0  1
-     0.0091 0.0085 0.0006 1 -1
-     0.0091 0.0085 0.0006 1  0
-     0.0115 0.0085 0.0030 1  1
-     0.0241 0.0235 0.0006 2 -1
-     0.0241 0.0235 0.0006 2  0
-     0.0265 0.0235 0.0030 2  1
+    >>> default.set_units_and_formats( eV, '%.4f' )
+    >>> loop = System( 'Em + El', constants,
+    ...     Em = System('(m + 0.5)^2 h^2/(8 M w^2)'),
+    ...     El = System('((l - A B q/h)^2 + 1/4) h^2/(8 pi M A)'),
+    ...     q = -e, M = m_e )
+    >>> nanoloop = loop( w = 20*nm, A = 1000*nm**2, B = 0 )
+    >>> m, l = independent( [0, 1], range( -4, 5 ) )
+    >>> SortedSystem( loop.model, nanoloop, m=m, l=l, size = 10 )
+                 Em     El m  l
+    #     eV     eV     eV #  #
+    0 0.0003 0.0002 0.0000 0  0
+    1 0.0004 0.0002 0.0001 0 -1
+    2 0.0004 0.0002 0.0001 0  1
+    3 0.0007 0.0002 0.0005 0 -2
+    4 0.0007 0.0002 0.0005 0  2
+    5 0.0013 0.0002 0.0011 0 -3
+    6 0.0013 0.0002 0.0011 0  3
+    7 0.0021 0.0021 0.0000 1  0
+    8 0.0022 0.0002 0.0019 0 -4
+    9 0.0022 0.0002 0.0019 0  4
     """
 
     def __init__( self, model, * setup, ** operation ):
@@ -360,6 +370,10 @@ class Sorted(System):
         v = self.result
         if isinstance( v, ndarray ) and v.size > 1:
             order = v.argsort(kind = 'merge')
+            try:
+                order = order[:self.environment['size']]
+            except:
+                pass
             self.result = v[order]
             A = self.applied
             for n, v in A.copy().iteritems():
