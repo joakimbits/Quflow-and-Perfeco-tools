@@ -5,8 +5,8 @@ Algebra with symbols, physical constants, arrays and uncertainties
 
 from re import compile
 from sympy import Basic, Symbol, Matrix, sympify, lambdify, solve, \
-     Sum, integrate
-from sympy import sum as summation
+     Sum, integrate, summation
+#from sympy import sum as summation
 from collections import Iterable
 from quantities import Quantity, UnitQuantity, units, constants
 from numpy import ndarray, array
