@@ -117,7 +117,7 @@ class Attributes(object):
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, ", ".join([
             "%s = %r" % v for v in ifilter(lambda (name, _): name[0] != '_',
-                                           self.__dict__.iteritems())]))
+                                           self.__dict__.items())]))
     def __enter__(self):
         """Show all attributes temporarily as global variables."""
         self._entries += 1
@@ -181,7 +181,7 @@ class Scope(Attributes):
         return "%s(%s)" % (self.__class__.__name__, ", ".join(
             [repr(s) if not s is self else "<recursion>" for s in self._scopes]
             + ["%s = %r" % v for v in ifilter(lambda (name, _): name[0] != '_',
-                                              self.__dict__.iteritems())]))
+                                              self.__dict__.items())]))
     def attach(self, * scopes, ** attributes):
         """Inherit more scopes and add more attributes"""
         self._scopes = scopes + self._scopes
@@ -232,7 +232,7 @@ class Workspaces(SpiroServer, Thread):
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, ", ".join(
             [repr(self._host)] +
-            ["%s = %r" % a for a in self.modules.iteritems()]))
+            ["%s = %r" % a for a in self.modules.items()]))
 
 class Workspace(Attributes):
     """
@@ -271,7 +271,7 @@ class Workspace(Attributes):
                             verbosity=verbosity)
         else: raise "Only a spiro connection scheme is supported."
         self._connection = c
-        for attr, val in attributes.iteritems(): setattr(c, attr, val)
+        for attr, val in attributes.items(): setattr(c, attr, val)
         attributes = dict([(attr, getattr(c, attr)) for attr in c.dir()])
         Attributes.__init__(self, ** attributes)
     def __repr__(self):
@@ -457,7 +457,7 @@ class Driver(Attributes):
         return "%s(%s)" % (self.__class__.__name__, "".join(
             [repr(self._device.resource_name)] +
             [", %s = %r" % (n, v) if n[0] != "_" and False else "" \
-             for n, v in self.__dict__.iteritems()]))
+             for n, v in self.__dict__.items()]))
     def __enter__(self):
         print "Entering", repr(self)
         Attributes.__enter__(self)
@@ -495,7 +495,7 @@ class Driver(Attributes):
             eval(self._pattern % values, glob, self._driver.__dict__)
     def command(self, ** commands):
         "defines simple name=pattern commands(s)"
-        for name, pattern in commands.iteritems():
+        for name, pattern in commands.items():
             self.commands[name] = pattern
             setattr(self, name, Driver.Command(self, pattern))
         if hasattr(self, '_scopes'):
@@ -503,7 +503,7 @@ class Driver(Attributes):
                 getattr(self, n) for n in commands.keys()]))
     def event(self, ** events):
         "defines simple name=pattern events(s)"
-        for name, pattern in events.iteritems():
+        for name, pattern in events.items():
             self.events[name] = pattern
             setattr(self, name, Driver.Event(self, pattern))
         if hasattr(self, '_scopes'):
@@ -511,7 +511,7 @@ class Driver(Attributes):
                 getattr(self, n) for n in events.keys()]))
     def procedure(self, ** procedures):
         "defines simple name=pattern procedure(s)"
-        for name, pattern in procedures.iteritems():
+        for name, pattern in procedures.items():
             self.procedures[name] = pattern
             setattr(self, name, Driver.Procedure(self, pattern))
         if hasattr(self, '_scopes'):

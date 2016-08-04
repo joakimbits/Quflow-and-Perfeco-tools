@@ -21,8 +21,8 @@ measurement. Setups includes zero or more of the following options:
     'videoBW':  Video bandwidth (Hz)}
 """
 
-from implicit import Inf, NaN, symetric, testCases,\
-     Absolute, InBand, OutOfBand, Combined
+from implicit import Inf, NaN, symetric, testCases, \
+    Absolute, InBand, OutOfBand, Combined
 
 try:
     Req
@@ -52,96 +52,96 @@ NaN: (kHz) means the shape [(dBm,MHz),...] is applicable for all setups.
 """
 
 Req['3GPP 4.3.1'] = {
-    'in-band': InBand ({
-            30: symetric ([(NaN,  1.8),
-              (Inf,  1.8), (Inf,    6),
-              (NaN,    6), (NaN,  Inf)]),
-           100: symetric ([(NaN,    6),
-              (Inf,    6), (Inf,  Inf)])}),
-    '100 kHz to 50 MHz': Absolute ({
-            10: [
-              (NaN, -Inf), (NaN,   .1),
-              (Inf,   .1), (Inf,   50),
-              (NaN,   50), (NaN,  Inf)]}),
-    '50 MHz to 500 MHz out-of-band': Combined (
-        Absolute ({
-          None: [
-              (NaN, -Inf), (NaN,   50),
-              (Inf,   50), (Inf,  500),
-              (NaN,  500), (NaN,  Inf)]}),
-        OutOfBand ({
-            30: symetric ([(NaN,    2),
-              (Inf,    2), (Inf,    5),
-              (NaN,    5), (NaN,  Inf)]),
-           100: symetric ([(NaN,    5),
-              (Inf,    5), (Inf,  Inf)])})),
-    '>500 MHz out-of-band': Combined (
-        Absolute ({
-          None: [
-              (NaN, -Inf), (NaN,  500),
-              (Inf,  500), (Inf,  Inf)]}),
-        OutOfBand ({
-            30: symetric ([(NaN,    2),
-              (Inf,    2), (Inf,    5),
-              (NaN,    5), (NaN,  Inf)]),
-           100: symetric ([(NaN,    5),
-              (Inf,    5), (Inf,   10),
-              (NaN,   10), (NaN,  Inf)]),
-           300: symetric ([(NaN,   10),
-              (Inf,   10), (Inf,   20),
-              (NaN,   20), (NaN,  Inf)]),
-          1000: symetric ([(NaN,   20),
-              (Inf,   20), (Inf,   30),
-              (NaN,   30), (NaN,  Inf)]),
-          3000: symetric ([(NaN,   30),
-              (Inf,   30), (Inf,  Inf)])})),
+    'in-band': InBand({
+        30: symetric([(NaN, 1.8),
+                      (Inf, 1.8), (Inf, 6),
+                      (NaN, 6), (NaN, Inf)]),
+        100: symetric([(NaN, 6),
+                       (Inf, 6), (Inf, Inf)])}),
+    '100 kHz to 50 MHz': Absolute({
+        10: [
+            (NaN, -Inf), (NaN, .1),
+            (Inf, .1), (Inf, 50),
+            (NaN, 50), (NaN, Inf)]}),
+    '50 MHz to 500 MHz out-of-band': Combined(
+        Absolute({
+            None: [
+                (NaN, -Inf), (NaN, 50),
+                (Inf, 50), (Inf, 500),
+                (NaN, 500), (NaN, Inf)]}),
+        OutOfBand({
+            30: symetric([(NaN, 2),
+                          (Inf, 2), (Inf, 5),
+                          (NaN, 5), (NaN, Inf)]),
+            100: symetric([(NaN, 5),
+                           (Inf, 5), (Inf, Inf)])})),
+    '>500 MHz out-of-band': Combined(
+        Absolute({
+            None: [
+                (NaN, -Inf), (NaN, 500),
+                (Inf, 500), (Inf, Inf)]}),
+        OutOfBand({
+            30: symetric([(NaN, 2),
+                          (Inf, 2), (Inf, 5),
+                          (NaN, 5), (NaN, Inf)]),
+            100: symetric([(NaN, 5),
+                           (Inf, 5), (Inf, 10),
+                           (NaN, 10), (NaN, Inf)]),
+            300: symetric([(NaN, 10),
+                           (Inf, 10), (Inf, 20),
+                           (NaN, 20), (NaN, Inf)]),
+            1000: symetric([(NaN, 20),
+                            (Inf, 20), (Inf, 30),
+                            (NaN, 30), (NaN, Inf)]),
+            3000: symetric([(NaN, 30),
+                            (Inf, 30), (Inf, Inf)])})),
     'General': (
-        Absolute ({
-          None: [
-              (NaN, -Inf), (NaN,   30),
-              (Inf,   30), (Inf, 4000),
-              (NaN, 4000), (NaN,  Inf)]}))}
+        Absolute({
+            None: [
+                (NaN, -Inf), (NaN, 30),
+                (Inf, 30), (Inf, 4000),
+                (NaN, 4000), (NaN, Inf)]}))}
 
-Req['3GPP 4.3.1 a'] = Combined (
+Req['3GPP 4.3.1 a'] = Combined(
     Req['3GPP 4.3.1']['General'],
     Req['3GPP 4.3.1']['in-band'])
 
-Req['3GPP 4.3.1 b'] = Combined (
+Req['3GPP 4.3.1 b'] = Combined(
     Req['3GPP 4.3.1']['General'],
-    Combined (
+    Combined(
         extend=True,
-        * [Req['3GPP 4.3.1'][i] for i in [
+        *[Req['3GPP 4.3.1'][i] for i in [
             '100 kHz to 50 MHz',
             '50 MHz to 500 MHz out-of-band',
             '>500 MHz out-of-band']]))
 
 Req['3GPP 4.3.3.1'] = {
-    'in-band': Combined (
+    'in-band': Combined(
         Req['3GPP 4.3.1 a'],
-        Absolute ({
+        Absolute({
             None: [
-                (-36,    0), (-36,  Inf)]})),
-    'out-of-band': Combined (
+                (-36, 0), (-36, Inf)]})),
+    'out-of-band': Combined(
         Req['3GPP 4.3.1 b'],
-        Absolute ({
+        Absolute({
             None: [
                 (-36, .009), (-36, 1000),
-                (-30, 1000), (-30,12750)]})),
-    'in-band for R-GSM 900': Combined (
+                (-30, 1000), (-30, 12750)]})),
+    'in-band for R-GSM 900': Combined(
         Req['3GPP 4.3.1 a'],
-        Absolute ({
+        Absolute({
             None: [
-                (-42,    0), (-42,  Inf)]})),
-    'idle mode, 100-kHz bandwidth': Combined (
+                (-42, 0), (-42, Inf)]})),
+    'idle mode, 100-kHz bandwidth': Combined(
         Req['3GPP 4.3.1 b'],
-        Absolute ({
+        Absolute({
             100: [
                 (-57, .009), (-57, 1000),
-                (-47, 1000), (-47,12750)]}),
-        Absolute ({
+                (-47, 1000), (-47, 12750)]}),
+        Absolute({
             100: [
-                (-59,  880), (-59,  915),
-                (NaN,  915), (NaN, 1710),
+                (-59, 880), (-59, 915),
+                (NaN, 915), (NaN, 1710),
                 (-53, 1710), (-53, 1785),
                 (NaN, 1785), (NaN, 1900),
                 (-76, 1900), (-76, 1980),
@@ -149,15 +149,15 @@ Req['3GPP 4.3.3.1'] = {
                 (-76, 2010), (-76, 2025),
                 (NaN, 2025), (NaN, 2110),
                 (-76, 2110), (-76, 2170)]}),
-        carrier = None),
-    '100-kHz bandwidth': Combined (
+        carrier=None),
+    '100-kHz bandwidth': Combined(
         Req['3GPP 4.3.1 b'],
-        Absolute ({
+        Absolute({
             100: [
-                (-60,  921), (-60,  925),
-                (-67,  925), (-67,  935),
-                (-79,  935), (-79,  960),
-                (NaN,  960), (NaN, 1805),
+                (-60, 921), (-60, 925),
+                (-67, 925), (-67, 935),
+                (-79, 935), (-79, 960),
+                (NaN, 960), (NaN, 1805),
                 (-71, 1805), (-71, 1880),
                 (NaN, 1880), (NaN, 1900),
                 (-66, 1900), (-66, 1980),
@@ -165,97 +165,110 @@ Req['3GPP 4.3.3.1'] = {
                 (-66, 2010), (-66, 2025),
                 (NaN, 2025), (NaN, 2110),
                 (-66, 2110), (-66, 2170)]},
-            average   =   50, # minimum # traces to average
-            filterBW  =100e3, # filter bandwidth (Hz)
-            videoBW   =100e3))}# video bandwidth (Hz)
+            average=50,  # minimum # traces to average
+            filterBW=100e3,  # filter bandwidth (Hz)
+            videoBW=100e3))}  # video bandwidth (Hz)
 
-Req['stability'] = Combined (
+Req['stability'] = Combined(
     Req['3GPP 4.3.3.1']['in-band'],
     Req['3GPP 4.3.3.1']['out-of-band'],
-    extend = True)
+    extend=True)
 
-def describe (setup):
+
+def describe(setup):
     params = []
-    for key, value in setup.iteritems ():
+    for key, value in setup.items():
         if key == 'carrier':
             if value:
-                params.append ("with %g MHz" % (value / 1e6))
+                params.append("with %g MHz" % (value / 1e6))
             else:
-                params.append ("without RF output")
+                params.append("without RF output")
         elif key == 'band':
-            params.append ("for %g-%g MHz" % tuple ([x / 1e6 for x in value]))
+            params.append("for %g-%g MHz" % tuple([x / 1e6 for x in value]))
         elif key == 'bw':
             if value:
-                params.append ("at %g kHz" % (value / 1e3))
+                params.append("at %g kHz" % (value / 1e3))
         else:
-            params.append ("%s=%s" % (key, str (value)))
-    return " ".join (params)
+            params.append("%s=%s" % (key, str(value)))
+    return " ".join(params)
 
-def view (* reqPath, ** transmitter):
+
+def view(*reqPath, **transmitter):
     req = Req
     for name in reqPath:
         try:
             req = req[name]
         except:
             req = req.__dict__[name]
-    if type (req) is dict:
-        r = req.keys ()
-        r.sort ()
-        return [view (* (list (reqPath) + [i]), ** transmitter) for i in r]
+    if type(req) is dict:
+        r = req.keys()
+        r.sort()
+        return [view(*(list(reqPath) + [i]), **transmitter) for i in r]
     else:
         req.path = reqPath
-        transmitter.setdefault ('carrier', 850e6)
-        transmitter.setdefault ('band', [800e6, 900e6])
-        print "%s - %s %s:" % (
-            ' '.join (reqPath),
+        transmitter.setdefault('carrier', 850e6)
+        transmitter.setdefault('band', [800e6, 900e6])
+        print
+        "%s - %s %s:" % (
+            ' '.join(reqPath),
             req.__class__.__name__,
-            describe (transmitter))
-        dump (req, ** transmitter)
+            describe(transmitter))
+        dump(req, **transmitter)
         return req
 
-def dump (req, ** transmitter):
-        transmitter.setdefault ('carrier', 849e6)
-        transmitter.setdefault ('band', [849e6, 849e6])
-        find = transmitter.copy ()
-        del find['carrier'], find['band']
-        r = req (** transmitter).items ()
-        r.sort ()
-        for setup, shape in r:
-            if [setup[k] for k in find.keys ()] == find.values () \
-            or [setup[k] for k in find.keys ()] == [None] * len (find):
-                description = describe (setup)
-                if description: print " %s:" % description
-                for (p0, f0), (p1, f1) in zip (shape[::2], shape[1::2]):
-                    if p0 == p1 < Inf and f0 < f1:
-                        print ' ', p0, 'in %g-%g MHz' % (f0/1e6, f1/1e6)
-                    elif p0 == p1 == Inf:
-                        print "  %g-%g MHz" % (f0/1e6, f1/1e6)
-        print
 
-def trace (* reqPath, ** transmitter):
-    route = transmitter.pop ('route', [])
-    req = view (* reqPath, ** transmitter)
-    if isinstance (req, Combined):
+def dump(req, **transmitter):
+    transmitter.setdefault('carrier', 849e6)
+    transmitter.setdefault('band', [849e6, 849e6])
+    find = transmitter.copy()
+    del find['carrier'], find['band']
+    r = req(**transmitter).items()
+    r.sort()
+    for setup, shape in r:
+        if [setup[k] for k in find.keys()] == find.values() \
+                or [setup[k] for k in find.keys()] == [None] * len(find):
+            description = describe(setup)
+            if description: print
+            " %s:" % description
+            for (p0, f0), (p1, f1) in zip(shape[::2], shape[1::2]):
+                if p0 == p1 < Inf and f0 < f1:
+                    print
+                    ' ', p0, 'in %g-%g MHz' % (f0 / 1e6, f1 / 1e6)
+                elif p0 == p1 == Inf:
+                    print
+                    "  %g-%g MHz" % (f0 / 1e6, f1 / 1e6)
+    print
+
+
+def trace(*reqPath, **transmitter):
+    route = transmitter.pop('route', [])
+    req = view(*reqPath, **transmitter)
+    if isinstance(req, Combined):
         try:
-            print " ".join (req.path),
+            print
+            " ".join(req.path),
         except:
-            print req,
-        if req.extend: print "is an extension of the following requirements:"
-        else:          print "is a combination of the following requirements:"
+            print
+            req,
+        if req.extend: print
+        "is an extension of the following requirements:"
+        else:          print
+        "is a combination of the following requirements:"
         print
-        for i, subReq in enumerate (req.stabilities):
-            subRoute = route + [str (i+1)]
-            print "-".join (subRoute)
-            options = transmitter.copy ()
+        for i, subReq in enumerate(req.stabilities):
+            subRoute = route + [str(i + 1)]
+            print
+            "-".join(subRoute)
+            options = transmitter.copy()
             options['route'] = subRoute
-            path = list (reqPath) + [str (i)]
-            if not hasattr (subReq, 'path'):
+            path = list(reqPath) + [str(i)]
+            if not hasattr(subReq, 'path'):
                 subReq.path = path
-                req.__dict__[str (i)] = subReq
-            subReq.__dict__.setdefault ('path', list (reqPath) + [str (i)])
-            trace (* subReq.path, ** options)
+                req.__dict__[str(i)] = subReq
+            subReq.__dict__.setdefault('path', list(reqPath) + [str(i)])
+            trace(*subReq.path, **options)
+
 
 if __name__ == '__main__':
-    view ()
-    trace ('stability', bw = 10e3)
-
+    view()
+    trace('stability', bw=10e3)

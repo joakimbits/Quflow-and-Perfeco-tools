@@ -150,7 +150,7 @@ class Absolute (Stability):
         {Measurement bandwith (kHz): Power limit (polygon) [dBm,MHz]}, ** other analyzer settings
         """
         self.limits = HashableDict ()
-        for bw, shape in limits.iteritems ():
+        for bw, shape in limits.items ():
             if bw: bw *= 1e3 
             analyzer.update ({'bw': bw})
             points = shape[:]
@@ -177,7 +177,7 @@ class InBand (Stability):
         f0 = min (band)
         f1 = max (band)
         interval = [(NaN, -Inf), (NaN, f0), (Inf, f0), (Inf, f1), (NaN, f1), (NaN, Inf)]
-        for bw, shape in self.shapes.iteritems ():
+        for bw, shape in self.shapes.items ():
             if bw: bw *= 1e3 
             self.analyzer.update ({'bw': bw})
             points = shape[:]
@@ -200,7 +200,7 @@ class OutOfBand (Stability):
         self.analyzer = analyzer
     def __call__(self, band, ** ignore):
         limit = HashableDict ()
-        for bw, shape in self.shapes.iteritems ():
+        for bw, shape in self.shapes.items ():
             if bw: bw *= 1e3 
             self.analyzer.update ({'bw': bw})
             points = shape[:]
@@ -238,13 +238,13 @@ class Combined (Stability):
             general = [(Inf, -Inf), (Inf, Inf)]
         generalSetup = {'bw': None}
         for explicit in explicits:
-            for setup, limit in explicit.iteritems ():
+            for setup, limit in explicit.items ():
                 if setup == generalSetup:
                     general = combine (general, limit, ** self.extend)
         combined = HashableDict ()
         combined[generalSetup] = general
         for explicit in explicits:
-            for setup, limit in explicit.iteritems ():
+            for setup, limit in explicit.items ():
                 if setup.get ('bw', None) != None:
                     s = self.setup.copy ()
                     s.update (setup)
@@ -315,7 +315,7 @@ def testCases (* requirements, ** stimuli):
     else:
         requirement = requirements[0]
     cases = HashableDict ()
-    for name, values in stimuli.iteritems ():
+    for name, values in stimuli.items ():
         if type(values) is list:
             for value in values:
                 stimuli[name] = value

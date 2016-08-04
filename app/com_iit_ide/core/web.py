@@ -32,7 +32,7 @@ class Page:
     """
     def __init__(self, content = "Hello World!", ** parameters):
         self.index = content
-        for name, value in parameters.iteritems ():
+        for name, value in parameters.items ():
             setattr (self, name, value)
     @page() # generate a web page using html parameters in self
     def default(self, * path, ** options):
@@ -47,7 +47,7 @@ class Page:
         """
         args = [self.index]
         kwds = self.__dict__.copy ()
-        for key, val in kwds.copy ().iteritems ():
+        for key, val in kwds.copy ().items ():
             if key[0] == '_' or val in args:
                 del kwds[key]
         r = "%s.%s (" % (self.__module__, self.__class__.__name__)
@@ -55,7 +55,7 @@ class Page:
         for a in args:
             r += s + repr (a)
             s = ", "
-        for k, v in kwds.iteritems ():
+        for k, v in kwds.items ():
             r += s + k + '=' + repr (v)
             s = ", "
         return r + ')'

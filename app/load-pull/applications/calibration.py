@@ -24,8 +24,8 @@ def calibrate (testCases, noises={}, gain=[], ** setup):
     # fmin, fmax = overall frequency range (Hz)
     from requirements.implicit import Inf
     intervals, fmin, fmax = {}, Inf, -Inf
-    for testCase, setups in testCases.iteritems ():
-        for setup2, shape in setups.iteritems ():
+    for testCase, setups in testCases.items ():
+        for setup2, shape in setups.items ():
             bw = setup2['bw']
             if bw:
                 lo, hi = intervals.get (bw, (Inf, -Inf))
@@ -55,7 +55,7 @@ def calibrate (testCases, noises={}, gain=[], ** setup):
                     outputs = ['points'])
         model.Show ()
         s.signal (None)
-        for bw, fRange in intervals.iteritems ():
+        for bw, fRange in intervals.items ():
             spectrum = s.analyzer (fRange, bw=bw, gain=NoGain)[0]
             noises[bw] = [(p - 10*log10 (bw) + NoiseAccuracy, f) \
                           for p, f in model (spectrum, NoiseAccuracy)]

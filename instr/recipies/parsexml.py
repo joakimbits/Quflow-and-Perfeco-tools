@@ -115,7 +115,7 @@ class GenericParser(object):
             tag = str(tag)
         except:
             pass
-        for key, value in attrs.iteritems():
+        for key, value in attrs.items():
             try:
                 # Attempt to convert Unicode to 8-bit strings
                 attrs[key] = str(value)
@@ -233,7 +233,7 @@ class ElementClass(object):
         if __attrs is None:
             # Use kwds; these should be appropriate Python values.
             # You can use this to set *arbitrary* instance attributes.
-            for key, value in kwds.iteritems():
+            for key, value in kwds.items():
                 # key is already the *output* of __fixname__!
                 setattr(self, key, value)
         else:
@@ -264,7 +264,7 @@ class ElementClass(object):
             name = self.__fixname__(name)
             if getattr(self, name) != getattr(other, name):
                 return False
-        for c, name in cls.__children__.iteritems():
+        for c, name in cls.__children__.items():
             if name.endswith("[]"):
                 name = name[:-2]
             if getattr(self, name) != getattr(other, name):
@@ -306,7 +306,7 @@ class ElementClass(object):
         else:
             f.write(">\n")
             entries = [(childname, key)
-                       for key, childname in self.__children__.iteritems()]
+                       for key, childname in self.__children__.items()]
             entries.sort()
             for childname, key in entries:
                 if childname.endswith("[]"):
@@ -328,7 +328,7 @@ class ElementClass(object):
 
     def __set_attributes__(self, attrs, __filler=0, strict=True):
         attrdefs = self.__attributes__
-        for key, value in attrs.iteritems():
+        for key, value in attrs.items():
             if key not in attrdefs:
                 if not strict:
                     continue

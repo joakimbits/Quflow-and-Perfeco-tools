@@ -8,13 +8,13 @@ from sympy import Basic, Symbol, Matrix, sympify, lambdify, solve, \
      Sum, integrate, summation
 #from sympy import sum as summation
 from collections import Iterable
-from quantities import Quantity, UnitQuantity, units, constants
+from quantities import Quantity, UnitQuantity, UncertainQuantity, \
+     units, constants
 from numpy import ndarray, array
 from quantities.unitquantity import \
      UnitCurrency, UnitCurrent, UnitInformation, UnitLength, \
      UnitLuminousIntensity, UnitMass, UnitSubstance, UnitTemperature, \
      UnitTime
-from statistics import UncertainQuantity
 
 
 class SymUnits(dict):
@@ -57,7 +57,7 @@ class SymUnits(dict):
                 if dims in B: B[dims].set_default_unit(u)
                 U[dims] = u
                 units_to_format.append(u)
-        for dim, d in B.iteritems():
+        for dim, d in B.items():
             u = d._default_unit
             self['_'+ u.symbol] = U[dim] = u
             
@@ -94,7 +94,7 @@ _Mul = compile(r'([A-Za-z0-9_)])(\s+)(?=[A-Za-z0-9_(])').sub
 _Eq = compile(r'^([^=]*)==(.*)').sub
 pythonify = lambda expr: _Eq( r'\1-(\2)', _Mul( r'\1*', expr ))
 dictmap = lambda l, f: dict(zip( l, map( f, l )))
-params = lambda dict: ', '.join(['%s=%r' %p for p in dict.iteritems()])
+params = lambda dict: ', '.join(['%s=%r' %p for p in dict.items()])
 
 
 class SymQuantity( Basic ):
@@ -132,7 +132,7 @@ class SymQuantity( Basic ):
         units = set()
         q = quantity.simplified if simplified else quantity
         k = 1
-        for u, d in q.dimensionality.iteritems():
+        for u, d in q.dimensionality.items():
             unit = '_'+ u.symbol if _ else u.symbol
             k *= Symbol(unit)**d
             units.add(unit)
@@ -151,7 +151,7 @@ class SymQuantity( Basic ):
             s = Symbol(unit.symbol)
         except:
             k = 1
-            for u, d in unit.dimensionality.iteritems():
+            for u, d in unit.dimensionality.items():
                 k *= Symbol('_'+ u.symbol)**d
             s = unit.magnitude * k
         return self.result/SymQuantity(unit) * s
@@ -246,7 +246,7 @@ class System( SymQuantity ):
         # Use I for objects in A that sympy can't handle.
         if A:
             # Evaluate all sub-expressions. May expand A + I + R.
-            for n, v in A.copy().iteritems():
+            for n, v in A.copy().items():
                 if isinstance( v, Basic ) and not isinstance( v, Symbol ):
                     try:
                         assert len(v.atoms(Symbol)) > 1
@@ -259,14 +259,14 @@ class System( SymQuantity ):
                     R.update(v.remaining)
             # M /. E == M /. A now. A may contain sympy-incompatible objects.
             # Categorize A.
-            Q = dict([(n, v) for n, v in A.iteritems()
+            Q = dict([(n, v) for n, v in A.items()
                       if isinstance( v, Quantity ) and not n[0]=='_'])
-            I.update([(n, v) for n, v in A.iteritems()
+            I.update([(n, v) for n, v in A.items()
                       if isinstance( v, Iterable ) and not n in Q])
             OK = dictmap( set(A).difference(Q).difference(I), A.get )
             # M /. E == M /. (OK + I + Q) now. Only OK is sympy-compatible.
             # Eliminate Q by expanding OK and I.
-            for n, q in Q.iteritems():
+            for n, q in Q.items():
                 q = SymQuantity( q, n )
                 I.update(q.implicit)
                 OK[n] = q.result
@@ -274,14 +274,14 @@ class System( SymQuantity ):
             # Evalute M /. OK symbolically.
             try:
                 result = M.subs(OK).evalf()
-            except Exception, err:
+            except Exception as err:
                 raise Exception('%s /. %s: %s'% (M, params(OK), err))
             # M /. E == result /. I now.
             # If possible, evaluate result /. I numerically.
             if not R and isinstance( result, Basic ):
                 try:
                     result = lambdify( I, result )(* I.values())
-                except Exception, err:
+                except Exception as err:
                     raise Exception('%s /. %s: %s' % (result, params(I), err))
                 self.implicit = dict()
             self.result = result
@@ -321,7 +321,7 @@ class System( SymQuantity ):
         r = self.result
         if isinstance( r, ndarray ) and r.size > 1:
             N = len(r)
-            V = dict([(n, v) for n, v in self.applied.iteritems()
+            V = dict([(n, v) for n, v in self.applied.items()
                       if isinstance( v, ndarray ) and v.size > 1])
             head = ['', ''] + V.keys()
             data = map( default.rescale, [range(N), r] + V.values() )
@@ -341,8 +341,8 @@ class SortedSystem(System):
 
     Example: First spin-degenerate states in a flat nanoelectron loop.
     >>> from quantities.constants import e, m_e
-    >>> from quantities import nm, eV, UnitQuantity
-    >>> from statistics import independent
+    >>> from quantities import nm, eV
+    >>> from ensambles import independent
     >>> default.set_units_and_formats( eV, '%.4f' )
     >>> loop = System( 'Em + El', constants,
     ...     Em = System('(m + 0.5)^2 h^2/(8 M w^2)'),
@@ -376,7 +376,7 @@ class SortedSystem(System):
                 pass
             self.result = v[order]
             A = self.applied
-            for n, v in A.copy().iteritems():
+            for n, v in A.copy().items():
                 if isinstance( v, ndarray ) and v.size > 1:
                     A[n] = v[order]
 

@@ -13,16 +13,19 @@ Changes:
 """
 
 from __future__ import division
-import sys
-import numpy as np
-from quantities import markup
-from quantities.quantity import Quantity, scale_other_units
-from quantities.registry import unit_registry
-from quantities.decorators import with_doc
+from quantities import Quantity, UncertainQuantity
 from quantities.units import dimensionless, pi
 from numpy import array, ndarray, zeros
 from collections import Iterable
 from math import erf, log
+
+'''
+import sys
+import numpy as np
+from quantities import markup
+from quantities.quantity import scale_other_units
+from quantities.registry import unit_registry
+from quantities.decorators import with_doc
 
 class UncertainQuantity(Quantity):
 
@@ -256,6 +259,8 @@ class UncertainQuantity(Quantity):
         self._uncertainty = sigma
 
 UncertainQuantity = UncertainQuantity
+'''
+
 
 #! Added functions and constants
 #! ------------------------------

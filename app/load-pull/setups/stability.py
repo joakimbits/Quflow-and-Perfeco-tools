@@ -119,14 +119,14 @@ class Stability:
         for x in arange (x0, x1, dx):
             x = load (x/milli)*milli # TODO: SI unit in Generator
             print "rotator", x, 'mm:'
-            for transmitter, setups in tests.iteritems ():
+            for transmitter, setups in tests.items ():
                 transmitter = transmitter.copy ()
                 f0 = carrier (transmitter.pop ('carrier', None))
                 del transmitter['band']
                 if transmitter: print " Ignoring", transmitter
                 v = 360 * 2*x*f0/c0
                 print " carrier", f0/1e6, "MHz, load", v, "deg:"
-                for setup, shape in setups.iteritems ():
+                for setup, shape in setups.items ():
                     bw = setup.get ('bw', None)
                     if bw:
                         print "  dector", bw/1e3, 'kHz:',

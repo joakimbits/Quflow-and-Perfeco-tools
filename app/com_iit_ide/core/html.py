@@ -128,7 +128,7 @@ def uri (up=[], down=[], protocol="", ** parameters):
     if s: s = s[:-1]    # strip away last '/'
     else: s = '.'
     separator = '?'
-    for name, value in parameters.iteritems ():
+    for name, value in parameters.items ():
         s += separator + name + '=' + repr (value)
         separator = '&'
     return protocol + s

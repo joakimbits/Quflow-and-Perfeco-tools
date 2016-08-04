@@ -38,7 +38,7 @@ class VI (UserDict, dict):
         return self.vi.GetControlValue (key)
     def copy(self):
         copy = {}
-        for name, value in self.iteritems ():
+        for name, value in self.items ():
             copy[name] = value
         return copy
     def __setattr__(self, name, value):
@@ -50,7 +50,7 @@ class VI (UserDict, dict):
                 self (* self.Get ())# Run the VI to update all output values
                 return
         if name == 'data': # UserDict data
-            for name, value in value.iteritems ():
+            for name, value in value.items ():
                 self[name] = value
         else:
             self.__dict__[name] = value
@@ -109,7 +109,7 @@ class VI (UserDict, dict):
                 'show': 'openFP',
                 'hide': 'CloseFPAfterCall',
                 'suspend': 'SuspendOnCall',
-                'interact': 'bringAppToFront'}.iteritems ():
+                'interact': 'bringAppToFront'}.items ():
                 options.setdefault (key, options.pop (option, False))
             result = self.vi.Call2 (names, values, ** options)
         else:
@@ -131,7 +131,7 @@ class Dialog (VI):
             'show': 'openFP',
             'hide': 'CloseFPAfterCall',
             'suspend': 'SuspendOnCall',
-            'interact': 'bringAppToFront'}.iteritems ():
+            'interact': 'bringAppToFront'}.items ():
             options.setdefault (key, options.pop (option, False))
         self.vi.Call2 (** options)
         return self.Fetch ()
