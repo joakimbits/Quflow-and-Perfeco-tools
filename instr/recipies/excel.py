@@ -14,8 +14,8 @@ class ExcelDocument(object):
     def __init__(self,filename):
         self.connection = win32com.client.Dispatch('ADODB.Connection')
         self.connection.Open(
-            'PROVIDER=Microsoft.Jet.OLEDB.4.0;'+
-            'DATA SOURCE=%s'%filename+
+            'PROVIDER=Microsoft.Jet.OLEDB.4.0;' +
+            'DATA SOURCE=%s'%filename +
             ';Extended Properties="Excel 8.0;HDR=1;IMEX=1"'
         )
 
@@ -55,7 +55,7 @@ class ExcelDocument(object):
 def strip(value):
     """ Strip the input value if it is a string and returns None
         if it had only whitespaces """
-    if isinstance(value,basestring):
+    if isinstance(value,str):
         value = value.strip()
         if len(value)==0:
             return None
@@ -71,13 +71,7 @@ class ExcelSheet(object):
         self.order_by = order_by
         if encoding:
             def encoder(value):
-                if isinstance(value,unicode):
-                    value = value.strip()
-                    if len(value)==0:
-                        return None
-                    else:
-                        return value.encode(encoding)
-                elif isinstance(value,str):
+                if isinstance(value,str):
                     value = value.strip()
                     if len(value)==0:
                         return None

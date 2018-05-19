@@ -1,0 +1,37 @@
+Skicka detta med 9600 bps, 7e1 No flow control. ASCII mode
+Checksumma i ascii mode enligt http://www.simplymodbus.ca/ASCII.htm
+
+Fråga temperaturer!
+:010300000003F9[CR+LF]
+Address 01
+Funktion 03 = Read Register
+0000 Start address
+0003 Number of bytes to read
+F9 Checksum 0-(1+3+3 = 7) = -7 
+
+Ger detta svar vid 35.0 grader
+:010302015E9B
+ Address 01
+Funktion 03
+Byte count 02
+015E = hex för 350
+(1+3+2+1+94 = 100) 0 - 101 = 9B hex
+
+
+Skicka detta för att ställa önskad temperatur till 35.0 grader
+:010600CB015ECF[CR+LF]
+01 - Address
+06 - Skriv single register
+00CB = Register 203 = 1SP Set Point channel1 (Obs, registervärdena ska ej minskas med 1 som i vanlig modbus!)
+015E = hex för 0350 grader.
+CF = Checksumma
+
+Följande svar fås direkt:
+:010600CB015ECF
+ 
+Klurigheter
+1hy - hysteresen måste vara > 0 för att regulatorn ska fungera. 0.1 grad är ok.
+SPL - Måste vara många minus för att fungera
+SPH - Max inställbart värde måste vara högre än inställbart värde
+
+Hela lista med parametrar måste sättas för att det ska vara begripligt. Menyerna visas inte om en vissa funktioner står på None.

@@ -25,14 +25,6 @@ class ExcelDocument(object):
         (self.path,) +  self.cursor)
     def __init__(self, fullname=None, sheet=None, row=None, column=None,
                  sheets=0, rows=0, columns=2, new=False):
-        def __init__(self, filename):
-            self.connection = win32com.client.Dispatch('ADODB.Connection')
-            self.connection.Open(
-                'PROVIDER=Microsoft.Jet.OLEDB.4.0;' +
-                'DATA SOURCE=%s' % filename +
-                ';Extended Properties="Excel 8.0;HDR=1;IMEX=1"'
-            )
-
         self._app = app = Dispatch("Excel.Application")
         print('Workbook =', app.ActiveWorkbook.FullName)
         app.Visible = 1

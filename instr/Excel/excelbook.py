@@ -1,117 +1,134 @@
 # -*- coding: cp1252 -*-
-""" This modules provides a lightweight API to access Excel data.
-    There are many ways to read Excel data, including ODBC. This module
-    uses ADODB and has the advantage of only requiring a file name and a
-    sheet name (no setup required).
-http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/440661
+"""
+Use cell ranges in Excel as 3D, 2D, 1D and 0D array objects.
+
+Gives easy access to values and attributes in the cell range as well as named
+cells and named cell ranges by automatic mapping of attributes across sheets.
 """
 
 from win32com.client import Dispatch
+from numpy import ndarray, array, asarray, asanyarray
 
-class ExcelDocument(object):
-    r""" Represents an opened Excel document with an active range.
+class Slice(ndarray):
+    "Represents an n-dimensional slice of an m-dimensional dataset"
+    def __repr__(self):
+        return self.__class__.__name__ + repr((self.path,) +  self.cells)
+    def __init__(self, path=None, sheet=None, row=None, column=None,
+                 sheets=0, rows=0, columns=2, new=False):
+        raise(NotImplementedError)
 
-    >>> book = ExcelDocument(r'D:\genovis-temp-regler\src\bakrecept.xls')
-    >>> book.cursor
+class ExcelRange(Slice):
+    r""" Represents an opened Excel workbook with an active cell range.
+
+    Depending on how many of the parameters 'sheets', 'rows' and 'columns'
+    are non-zero, the cell range can be either 0D, 1D, 2D or 3D.
+
+    Iterations are over consecutive row ranges in the workbook and start below
+    the active cell range (which typically contain the column headings).
+
+    The sheet indices (or sheet and row indices) can be omitted when indexing.
+    In this case these missing indices are copied from the indexed object.
+
+    >>> book = ExcelRange() # Active document and cell selection.
+    Traceback (most recent call last):
+      File "C:\Python27\Lib\doctest.py", line 1289, in __run
+        compileflags, 1) in test.globs
+      File "<doctest __main__.ExcelDocument[0]>", line 1, in <module>
+        recipy = ExcelDocument() # Connects to active document.
+      File "D:\genovis-temp-regler\src\exceldocument.py", line 41, in __init__
+        assert wb, "No ActiveWorkbook in Excel!"
+    AssertionError: No ActiveWorkbook in Excel!
+    >>> book = ExcelRange(r'D:\genovis-temp-regler\src\bakrecept.xls')
+    >>> recipy.cursor
     (1, 1, 9, 0, 0, 2)
     """
     name        = None # Name of document
     path        = None # Path to document
-    cursor      = None # Current sheet, row, column, sheets, rows, columns
+    cells       = None # Cell range (sheet, row, column, sheets, rows, columns)
     _app        = None # Connection to application
     _book       = None # Connection to document in application
-    _sheet      = None # Connection to sheet in document
-    def __repr__(self): return self.__class__.__name__ + repr(
-        (self.path,) +  self.cursor)
-    def __init__(self, fullname=None, sheet=None, row=None, column=None,
+    _sheets     = None # Connections to sheets in document
+    def __repr__(self):
+        return self.__class__.__name__ + repr((self.path,) +  self.cells)
+    def __init__(self, path=None, sheet=None, row=None, column=None,
                  sheets=0, rows=0, columns=2, new=False):
-        def __init__(self, filename):
-            self.connection = win32com.client.Dispatch('ADODB.Connection')
-            self.connection.Open(
-                'PROVIDER=Microsoft.Jet.OLEDB.4.0;' +
-                'DATA SOURCE=%s' % filename +
-                ';Extended Properties="Excel 8.0;HDR=1;IMEX=1"'
-            )
-
-        self._app = app = Dispatch("Excel.Application")
-        print('Workbook =', app.ActiveWorkbook.FullName)
-        app.Visible = 1
-        if fullname:
-            for book in app.Workbooks:
-                if book.FullName == fullname:
+        self._app = Dispatch("Excel.Application")
+        self._app.Visible = 1
+        if path:
+            for self._book in self._app.Workbooks:
+                if str(self._book.FullName) == str(path):
                     break
             else:
                 try:
-                    book = app.Workbooks.Open(fullname)
+                    self._book = self._app.Workbooks.Open(path)
                 except:
-                    book = app.Workbooks.Add()
-                    book.SaveAs(fullname)
+                    self._book = self._app.Workbooks.Add()
+                    self._book.SaveAs(path)
         else:
-            book = (app.ActiveWorkbook if not new else None) or app.Workbooks.Add()
-            fullname = book.FullName
-        self._book = book
-        self.path = fullname
-        self.name = book.Name
+            self._book = (self._app.ActiveWorkbook if not new else None
+                          ) or self._app.Workbooks.Add()
+            path = self._book.FullName
+        self.path = path
+        self.name = self._book.Name
+        Sheets = self._book.Sheets
+        self._sheets = [None] + [Sheets(i) for i in range(1, Sheets.count+1)]
         if sheet:
-            s = book.Sheets(sheet)
+            s = self._sheets[sheet]
         else:
-            s = book.ActiveSheet
-            sheet = s.Index
-        self._sheet = s
-        s.Activate()
-        c = app.ActiveCell
-        self.cursor = (sheet, row or c.Row, column or c.Column, sheets, rows, columns)
+            s = self._book.ActiveSheet
+            sheet = self._sheets.index(s)
+        s.Activate
+        c = s.ActiveCell
+        self.cells = (sheet, row or C.Row, column or c.Column,
+                      sheets, rows, columns)
+    def __array__(self):
+        return self.Value
     def __getattr__(self, attr):
-        r"""Reads a named cell value
-        >>> book = ExcelDocument(r'D:\genovis-temp-regler\src\bakrecept.xls')
-        >>> book.comport
+        """Reads a named cell value
+        >>> recipy = ExcelDocument() # Sheet opened earlier, with named cells
+        >>> recipy.comport
         u'COM28'
         """
         try:
-            return self._sheet.Range(attr).Value
+            return self._book.Range(attr).Value
         except:
-            raise AttributeError('No cell named %s found in %r' % (attr, self))
+            raise(AttributeError('No cell named %s found in %r' % (attr, self)))
     def __setattr__(self, attr, value):
-        r"""Writes a named cell value
-        >>> book = ExcelDocument(r'D:\genovis-temp-regler\src\bakrecept.xls')
-        >>> book.comport = 'COM1'
+        """Writes a named cell value
+        >>> recipy = ExcelDocument() # Sheet opened earlier, with named cells
+        >>> recipy.comport = 'COM1'
         """
-        if hasattr(self.__class__, attr):
+        if hasattr(ExcelDocument, attr):
             super(ExcelDocument, self).__setattr__(attr, value)
         else:
             try:
-                self._sheet.Range(attr).Value = value
+                self._book.Range(attr).Value = value
             except:
-                raise AttributeError('No cell named %s found in %r' % (attr, self))
+                raise(AttributeError('No cell named %s found in %r' % (attr, self)))
     def __getitem__(self, coord):
         r"""Move cursor to a cell or cell range and read value(s) there.
-        >>> book = ExcelDocument(r'D:\genovis-temp-regler\src\bakrecept.xls')
-        >>> book["degCmin"]
-        ((u'Program (\xb0C)', u'minuter'),)
-        >>> book.cursor
-        (1, 1, 9, 0, 1, 2)
-        >>> book[1, 1, 9, 0, 0, 2]
-        (u'Program (\xb0C)', u'minuter')
+        >>> recipy = ExcelDocument()
+        >>> recipy[1,1,9:11]
+        (u'Styrning (\xb0C)', u'minuter')
+        >>> recipy.cursor
+        (1, 1, 9, 0, 0, 2)
         """
         sheet, row, column, sheets, rows, columns = self.cursor
-        Cells = self._sheet.Cells
-        if isinstance(coord, slice): #[(1,11):(3,13)]
+        if isinstance(coord, slice): #[(1,1,11):(1,3,13)]
             a, b, step = coord.start, coord.stop, coord.step
-            assert step == None, "Cell ranges do not support intervals"
-            c = self._sheet.Range(Cells(*([a] if not isinstance(a,tuple) else a)),
-                                  Cells(*([b] if not isinstance(b,tuple) else b)).Offset(0,0))
-            v = c.Value
+            assert step == None, "Cells must be consecutive"
+            sheet, row, column = (sheet, row)[:3-len(a)] + a
+            sheets, rows, columns = (sheets, rows)[:3-len(b)] + (bi-ai for ai,bi in zip(a,b))
+            v = (s.Range(s.Cells(row, column),
+                         s.Cells(row+(rows or 1)-1, column+(columns or 1)-1)).Value
+                 for s in self.__sheets[sheet:sheet+(sheets or 1)])
         elif isinstance(coord, tuple):
             if len(coord) == 6: #[1,1,9,0,0,2]
                 sheet, row, column, sheets, rows, columns = coord
-                assert sheets==0, "Cell ranges can not span across sheets!"
-                if self.cursor[0] == sheet:
-                    s = self._sheet
-                else:
-                    s = self._sheet = self._book.Sheets(sheet)
-                Cells = s.Cells
-                c = s.Range(Cells(row, column),
-                            Cells(row+(rows or 1)-1, column+(columns or 1)-1))
+                c0 = self._sheets[sheet].Cells(row, column)
+                c1 = self._sheets[sheet+(sheets or 1)-1
+                                  ].Cells(row+(rows or 1)-1, column+(columns or 1)-1)
+                c = self._book.Range(c0, c1)
                 v = c.Value
                 if rows == columns == 0:
                     v = v[0,0]
@@ -148,20 +165,21 @@ class ExcelDocument(object):
             except:
                 c = self._sheet.Range(coord) # ["A1:B2"], ["degCmin"] etc
                 v, rows, columns = c.Value, c.Rows.Count, c.Columns.Count
-        self.cursor = (sheet, c.Row, c.Column, sheets, rows, columns)
+        self._sheet = s = c.Parent
+        self.cursor = (s.Name, c.Row, c.Column, rows, columns)
         return v
     def __setitem__(self, coord, value):
         """Write value(s) to a cell or cell range (does not move cursor)
         >>> recipy = ExcelDocument()
-        >>> recipy[2,11] = 1; recipy[2,11]
+        >>> recipy[1,11] = 1; recipy[1,11]
         1.0
-        >>> recipy[2,11:13] = [2, 3]; recipy[2:4,11:13]
+        >>> recipy[1,11:13] = [2, 3]; recipy[1:3,11:13]
         ((2.0, 3.0), (None, None))
-        >>> recipy[2:4,11] = [[4], [5]]; recipy[2:4,11:13]
+        >>> recipy[1:3,11] = [[4], [5]]; recipy[1:3,11:13]
         ((4.0, 3.0), (5.0, None))
-        >>> recipy[2:4,11:13] = [[1, 2], [3, 4]]; recipy[2:4,11:13]
+        >>> recipy[1:3,11:13] = [[1, 2], [3, 4]]; recipy[1:3,11:13]
         ((1.0, 2.0), (3.0, 4.0))
-        >>> recipy[(2,11):(4,13)] = [[5, 6], [7, 8]]; recipy[2:4,11:13]
+        >>> recipy[(1,11):(3,13)] = [[5, 6], [7, 8]]; recipy[1:3,11:13]
         ((5.0, 6.0), (7.0, 8.0))
         """
         self.Slice(coord).Value = value
@@ -170,12 +188,11 @@ class ExcelDocument(object):
         >>> recipy = ExcelDocument()
         >>> recipy.Slice("A1").Value
         u'Port'
-        >>> recipy.Slice((1,1,1,0,0,2)).Value
+        >>> recipy.Slice(("Sheet1",1,1,1,2)).Value
         ((u'Port', u'COM28'),)
         >>> recipy.Slice("comport").Value
         u'COM28'
         """
-        sheet, row, column, sheets, rows, columns = self.cursor
         Cells = self._sheet.Cells
         if isinstance(coord, slice): #[(1,11):(3,13)]
             a, b, step = coord.start, coord.stop, coord.step
@@ -183,16 +200,12 @@ class ExcelDocument(object):
             return self._sheet.Range(Cells(*([a] if not isinstance(a,tuple) else a)),
                                      Cells(*([b] if not isinstance(b,tuple) else b)).Offset(0,0))
         if isinstance(coord, tuple):
-            if len(coord) == 6: #[1,1,9,0,0,2]
-                sheet, row, column, sheets, rows, columns = coord
-                assert sheets==0, "Cell ranges can not span across sheets! ExcelBook will..."
-                if self.cursor[0] == sheet:
-                    s = self._sheet
-                else:
-                    s = self._book.Sheets(sheet)
+            if len(coord) == 5: #["Sheet1",1,9,1,2]
+                sheet, row, column, rows, columns = coord
+                s = self._book.Worksheets(sheet)
                 Cells = s.Cells
                 return s.Range(Cells(row, column),
-                               Cells(row+(rows or 1)-1, column+(columns or 1)-1))
+                               Cells(row+rows-1, column+columns-1))
             assert len(coord) == 2, "Only 2D coordinates are supported"
             a, b = coord
             if isinstance(a, slice) and isinstance(b, slice): #[1:3:9:11]
@@ -209,10 +222,7 @@ class ExcelDocument(object):
                 assert bstep == None, "Cell ranges do not support intervals"
                 return self._sheet.Range(Cells(a,b1), Cells(a,b2-1))
             return Cells(a,b) # [1,9]
-        try:
-            return Cells(coord) # ["A1"], ["comport"] etc
-        except:
-            return self._sheet.Range(coord) # ["A1:B2"], ["degCmin"] etc
+        return self._sheet.Range(coord) # ["A1"], ["comport"] etc
     def __iter__(self):
         r"""Iterate over rows under cursor
         >>> recipy = ExcelDocument()
@@ -225,21 +235,15 @@ class ExcelDocument(object):
         return self
     def next(self):
         r"""Move cursor down (by rows) and return value(s) there
-        >>> book = ExcelDocument(r'D:\genovis-temp-regler\src\bakrecept.xls')
-        >>> book[1,9:11]
-        (u'Program (\xb0C)', u'minuter')
-        >>> book.next()
+        >>> recipy = ExcelDocument()
+        >>> recipy[1,9:11]
+        (u'Styrning (\xb0C)', u'minuter')
+        >>> recipy.next()
         (30.0, 1.0)
         """
-        sheet, row, column, sheets, rows, columns = self.cursor
+        sheetname, row, column, rows, columns = self.cursor
         row += rows or 1
-        return self[sheet, row, column, sheets, rows, columns]
-    def close(self, **opts):
-        """Close workbook in Excel
-        >>> book = ExcelDocument()
-        >>> book.close(SaveChanges=False)
-        """
-        self._book.Close(**opts)
+        return self[sheetname, row, column, rows, columns]
 
 if __name__ == '__main__':
     import doctest

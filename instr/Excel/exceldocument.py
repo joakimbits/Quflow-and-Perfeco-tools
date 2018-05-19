@@ -25,16 +25,7 @@ class ExcelDocument(object):
         (self.path,) +  self.cursor)
     def __init__(self, fullname=None, sheet=None, row=None, column=None,
                  sheets=0, rows=0, columns=2, new=False):
-        def __init__(self, filename):
-            self.connection = win32com.client.Dispatch('ADODB.Connection')
-            self.connection.Open(
-                'PROVIDER=Microsoft.Jet.OLEDB.4.0;' +
-                'DATA SOURCE=%s' % filename +
-                ';Extended Properties="Excel 8.0;HDR=1;IMEX=1"'
-            )
-
         self._app = app = Dispatch("Excel.Application")
-        print('Workbook =', app.ActiveWorkbook.FullName)
         app.Visible = 1
         if fullname:
             for book in app.Workbooks:
@@ -47,7 +38,8 @@ class ExcelDocument(object):
                     book = app.Workbooks.Add()
                     book.SaveAs(fullname)
         else:
-            book = (app.ActiveWorkbook if not new else None) or app.Workbooks.Add()
+            book = (app.ActiveWorkbook if not new else None
+                    ) or app.Workbooks.Add()
             fullname = book.FullName
         self._book = book
         self.path = fullname
@@ -70,7 +62,7 @@ class ExcelDocument(object):
         try:
             return self._sheet.Range(attr).Value
         except:
-            raise AttributeError('No cell named %s found in %r' % (attr, self))
+            raise(AttributeError('No cell named %s found in %r' % (attr, self)))
     def __setattr__(self, attr, value):
         r"""Writes a named cell value
         >>> book = ExcelDocument(r'D:\genovis-temp-regler\src\bakrecept.xls')
@@ -82,7 +74,7 @@ class ExcelDocument(object):
             try:
                 self._sheet.Range(attr).Value = value
             except:
-                raise AttributeError('No cell named %s found in %r' % (attr, self))
+                raise(AttributeError('No cell named %s found in %r' % (attr, self)))
     def __getitem__(self, coord):
         r"""Move cursor to a cell or cell range and read value(s) there.
         >>> book = ExcelDocument(r'D:\genovis-temp-regler\src\bakrecept.xls')
