@@ -4,3 +4,5 @@ lib:   	Tools
 sim:  	System simulators
 instr: 	Instrument drivers
 app:  	Complete applications
+
+For Python 3.5 or later. Original Python 2 code exist in branch Python_2.
