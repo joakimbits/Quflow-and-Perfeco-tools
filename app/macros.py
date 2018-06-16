@@ -34,7 +34,7 @@ from traits.api import HasTraits, Button
 from traitsui.api import View, Item
 import win32api, win32ui, win32com, win32gui, win32clipboard
 
-from lib.Windows.keystrokes import keystroke, keystrokes, VK_RETURN
+from lib.Windows.keystrokes import keystroke, keystrokes, VK_HOME, VK_END, VK_RETURN, VK_DOWN
 from lib.Excel.exceldocument import ExcelDocument
 
 
@@ -80,6 +80,18 @@ class Window:
         win32gui.SetForegroundWindow(self._handle)
 
 
+class WaitWindow(Window):
+    def __init__ (self, name, dt, T):
+        for t in range(0, int(T/dt)):
+            try:
+                self.find_window_wildcard(name)
+                break
+            except:
+                sleep(dt)
+        else:
+            self.find_window_wildcard(name)
+
+
 class Macros(HasTraits):
 
     register_current_text = Button(u'Skriv utläggskommentar i Adobe Reader till dagboksrad i Excel')
@@ -89,12 +101,13 @@ class Macros(HasTraits):
         regID = "A%d" % excel[row, 2]
         scan = Window(".* - Adobe Reader")
         scan.set_foreground()
-        keystroke('a', ctrl = True)  # Select all text at cursor
+        keystroke(VK_HOME)  # Go to first character in text at cursor
+        keystroke(VK_HOME, shift = True)  # Select to last character in text
         keystroke('c', ctrl = True)  # Copy text
         sleep(.1)
         keystroke('p', ctrl = True)  # Print
         sleep(1)
-        print_dialog = Window("Print")
+        print_dialog = WaitWindow("Print", .1, 1)
         print_dialog.set_foreground()
         keystrokes('Cu')             # Select CutePDF printer
         keystroke('u', alt = True)   # Current page
@@ -109,7 +122,7 @@ class Macros(HasTraits):
         print_dialog.set_foreground()
         win32api.keybd_event(VK_RETURN, 0, 0, 0)  # Try bypassing keystroke function
         sleep(11)
-        cutepdf_dialog = Window("Save As")
+        cutepdf_dialog = WaitWindow("Save As", 1, 10)
         cutepdf_dialog.set_foreground()
         keystroke('n', alt = True)   # Filename:
         keystrokes(regID + ' ')      #  Register ID
@@ -124,37 +137,59 @@ class Macros(HasTraits):
         excel[row, 3] = comment[:i]
         excel[row, 4] = u'Förbrukningsmaterial' + comment[i:]
 
-    save_current_text = Button(u'Skriv ut pappersunderlag i Adobe Reader 9 med CutePDF')
+    save_current_text = Button(u'Skriv en utskriftskommentar')
     def _save_current_text_fired(self):
-        scan = Window(".*pappersunderlag.*")
-        scan.set_foreground()
-        keystroke('a', ctrl = True)  # Select all text at cursor
-        keystroke('c', ctrl = True)  # Copy text
+        self.scan = Window(".*pappersunderlag.*")
+        self.scan.set_foreground()
         sleep(.1)
+        keystroke(VK_HOME)  # Go to first character in text at cursor
+        keystroke(VK_END, shift = True)  # Select to last character in text
+        sleep(.1)
+        keystroke('c', ctrl = True)  # Copy text
         keystroke('p', ctrl = True)  # Print
-        sleep(1)
-        print_dialog = Window("Print")
+        print_dialog = WaitWindow("Print", .1, 1)
         print_dialog.set_foreground()
         keystroke('n', alt = True)   # Printer selection
-        sleep(.1)
-        keystrokes('Cute')           # Select CutePDF printer
-        sleep(.1)
+        keystroke('C')               # Select CutePDF printer
         keystroke('u', alt = True)   # Current page button
         sleep(.1)
         keystroke(' ')               # Toggle
-        sleep(.1)
-        keystroke('\r')             # Print
-        sleep(11)
-        cutepdf_dialog = Window("Save As")
+        keystroke('\r')              # Print
+        cutepdf_dialog = WaitWindow("Save As", 1, 10)
         cutepdf_dialog.set_foreground()
+        sleep(1)
         keystroke('n', alt = True)   # Filename:
         keystroke('v', ctrl = True)  #  Comment
         keystroke('s', alt = True)   # Save
-        sleep(1)
+        sleep(3)
         win32clipboard.OpenClipboard()
-        comment = win32clipboard.GetClipboardData(win32clipboard.CF_UNICODETEXT)
+        self.comment = win32clipboard.GetClipboardData(win32clipboard.CF_UNICODETEXT)
         win32clipboard.CloseClipboard()
-        print(comment)
+        print(self.comment)
+
+    def text_in_field(self):
+        keystroke(VK_HOME)  # Go to first character in text at cursor
+        keystroke(VK_END, shift = True)  # Select to last character in text
+        sleep(.1)
+        keystroke('c', ctrl = True)  # Copy text
+        sleep(.1)
+        win32clipboard.OpenClipboard()
+        text = win32clipboard.GetClipboardData(win32clipboard.CF_UNICODETEXT)
+        win32clipboard.CloseClipboard()
+        return text
+
+    save_all_texts = Button(u'Skriv utskriftskommentarer')
+    def _save_all_texts_fired(self):
+        while True:
+            self._save_current_text_fired()
+            self.scan.set_foreground()
+            text = None
+            while not text:
+                keystroke(VK_DOWN)
+                sleep(1)
+                text = self.text_in_field()
+            if text == self.comment:
+                break
 
     register_current_file = Button(u'Bokför filer till dagboksrader i Excel')
     def _register_current_file_fired(self):
@@ -200,6 +235,7 @@ class Macros(HasTraits):
                 0)
 
     view = View(Item('save_current_text', show_label = False),
+                Item('save_all_texts', show_label=False),
                 Item('register_current_file', show_label = False))
 
 
