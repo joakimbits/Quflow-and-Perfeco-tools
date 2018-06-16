@@ -20,19 +20,22 @@ Bokföring 2017.xlsx is a template for using the second macro. Most accounting ca
 column F, or declaring additional account amounts directly in the corrisponing cell. Column A will signal a red value
 if the debit and credit amounts do not match such as when no matching account name can be found.
 
-Requires pywin32, traitsui and PyQt4. In Pyzo:
->>> conda install pywin32 traitsui pyqt=4 
+Requires pywin32, traitsui, PyQt4 and pywinauto on Windows:
+    > conda install pywin32 traitsui pyqt=4
+    > pip install pywinauto
+
+pywinauto is only used for pressing the Enter button.
 """
 
 from time import sleep
-import re, os, shutil
+import re, os, shutil, ctypes
 
-import win32api, win32ui, win32com, win32gui, win32clipboard
 from traits.api import HasTraits, Button
 from traitsui.api import View, Item
+import win32api, win32ui, win32com, win32gui, win32clipboard
 
-from keystrokes import keystroke, keystrokes
-from exceldocument import ExcelDocument
+from lib.Windows.keystrokes import keystroke, keystrokes, VK_RETURN
+from lib.Excel.exceldocument import ExcelDocument
 
 
 def explorer_fileselection(folder = None):
@@ -69,6 +72,8 @@ class Window:
     def find_window_wildcard(self, wildcard):
         self._handle = None
         win32gui.EnumWindows(self._window_enum_callback, wildcard)
+        assert self._handle, "Can't find any open %s window" % wildcard
+
 
     def set_foreground(self):
         """put the window in the foreground"""
@@ -89,14 +94,23 @@ class Macros(HasTraits):
         sleep(.1)
         keystroke('p', ctrl = True)  # Print
         sleep(1)
-        print_dialog = Window("Skriv ut")
+        print_dialog = Window("Print")
         print_dialog.set_foreground()
-        #keystrokes('Cute')           # Select CutePDF printer
-        keystroke('d', alt = True)   # Current page
-        keystrokes('\t'*10 + ' ')    # Print
+        keystrokes('Cu')             # Select CutePDF printer
+        keystroke('u', alt = True)   # Current page
+        keystrokes('\t'*10)          # Tab to select the Print button
+        sleep(1)
+        keystroke(' ')               # Try Space
+        sleep(1)
+        keystroke('\r')              # Try Enter
+        sleep(1)
+        keystroke('\n')              # Try Ctrl-Enter
+        sleep(1)
+        print_dialog.set_foreground()
+        win32api.keybd_event(VK_RETURN, 0, 0, 0)  # Try bypassing keystroke function
         sleep(11)
-        #cutepdf_dialog = Window("Save As")
-        #cutepdf_dialog.set_foreground()
+        cutepdf_dialog = Window("Save As")
+        cutepdf_dialog.set_foreground()
         keystroke('n', alt = True)   # Filename:
         keystrokes(regID + ' ')      #  Register ID
         keystroke('v', ctrl = True)  #  Comment
@@ -110,9 +124,9 @@ class Macros(HasTraits):
         excel[row, 3] = comment[:i]
         excel[row, 4] = u'Förbrukningsmaterial' + comment[i:]
 
-    save_current_text = Button(u'Skriv ut sida med utläggskommentar i Adobe Reader')
+    save_current_text = Button(u'Skriv ut pappersunderlag i Adobe Reader 9 med CutePDF')
     def _save_current_text_fired(self):
-        scan = Window(".* - Adobe Reader")
+        scan = Window(".*pappersunderlag.*")
         scan.set_foreground()
         keystroke('a', ctrl = True)  # Select all text at cursor
         keystroke('c', ctrl = True)  # Copy text
@@ -121,16 +135,22 @@ class Macros(HasTraits):
         sleep(1)
         print_dialog = Window("Print")
         print_dialog.set_foreground()
-        #keystrokes('Cute')           # Select CutePDF printer
-        keystroke('u', alt = True)   # Current page
-        keystrokes('\t'*10 + ' ')    # Print
+        keystroke('n', alt = True)   # Printer selection
+        sleep(.1)
+        keystrokes('Cute')           # Select CutePDF printer
+        sleep(.1)
+        keystroke('u', alt = True)   # Current page button
+        sleep(.1)
+        keystroke(' ')               # Toggle
+        sleep(.1)
+        keystroke('\r')             # Print
         sleep(11)
-        #cutepdf_dialog = Window("Save As")
-        #cutepdf_dialog.set_foreground()
+        cutepdf_dialog = Window("Save As")
+        cutepdf_dialog.set_foreground()
         keystroke('n', alt = True)   # Filename:
         keystroke('v', ctrl = True)  #  Comment
         keystroke('s', alt = True)   # Save
-        #sleep(1)
+        sleep(1)
         win32clipboard.OpenClipboard()
         comment = win32clipboard.GetClipboardData(win32clipboard.CF_UNICODETEXT)
         win32clipboard.CloseClipboard()
