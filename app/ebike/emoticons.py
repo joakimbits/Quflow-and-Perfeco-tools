@@ -19,11 +19,10 @@ b = 0.9
 c = 0.99
 while True:
     sleep(20)
-    G = [c * a0 + (1 - c) * a
-         for a0, a in zip(A, accelerometer.get_values())]
-    A = [b * a0 + (1 - b) * a
-         for a0, a in zip(A, accelerometer.get_values())]
-    a_rms = sqrt(sum([(a-g)**2 for a, g in zip(A, G)]))
+    acc = accelerometer.get_values()
+    G = [c * a0 + (1 - c) * a for a0, a in zip(G, acc)]
+    A = [b * a0 + (1 - b) * a for a0, a in zip(A, acc)]
+    a_rms = sqrt(sum([(a - g)**2 for a, g in zip(A, G)]))
     i = (int(a_rms / da)) % len(images)
     display.show(images[i])
     print((int(a_rms / da), i))
