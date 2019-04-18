@@ -7,7 +7,7 @@ ToDo: def sm2py(s): "Convert s (text or filename) from Smath syntax to python3 s
 ToDo: def py2sm(s): "Convert s (text or filename) from python3 syntax to Smath syntax. Fails if not Smath compatible."
 """
 
-from rpn import rpn
+from .rpn import rpn
 from xml.etree.ElementTree import parse, iterparse
 
 def sm2rpn(name):
