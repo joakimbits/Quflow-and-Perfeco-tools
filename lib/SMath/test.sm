@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?application progid="SMath Studio Desktop" version="0.99.6884.37264"?>
+<worksheet xmlns="http://smath.info/schemas/worksheet/1.0">
+  <settings dpi="96">
+    <identity>
+      <id>3aab6147-b3b2-4d29-9945-e751d64433a9</id>
+      <revision>9</revision>
+    </identity>
+    <calculation>
+      <precision>4</precision>
+      <exponentialThreshold>5</exponentialThreshold>
+      <trailingZeros>false</trailingZeros>
+      <significantDigitsMode>false</significantDigitsMode>
+      <roundingMode>0</roundingMode>
+      <fractions>decimal</fractions>
+    </calculation>
+    <pageModel active="false" viewMode="2" printGrid="false" printAreas="true" simpleEqualsOnly="false" printBackgroundImages="true">
+      <paper id="1" orientation="Portrait" width="850" height="1100" />
+      <margins left="39" right="39" top="49" bottom="49" />
+      <header alignment="Center" color="#a9a9a9">&amp;[DATE] &amp;[TIME] - &amp;[FILENAME]</header>
+      <footer alignment="Center" color="#a9a9a9">&amp;[PAGENUM] / &amp;[COUNT]</footer>
+      <backgrounds />
+    </pageModel>
+    <dependencies>
+      <assembly name="SMath Studio Desktop" version="0.99.6884.37264" guid="a37cba83-b69c-4c71-9992-55ff666763bd" />
+      <assembly name="Math Region" version="0.99.6884.37264" guid="02f1ab51-215b-466e-a74d-5d8b1cf85e8d" />
+      <assembly name="SpecialFunctions" version="1.12.6884.37264" guid="2814e667-4e12-48b1-8d51-194e480eabc5" />
+      <assembly name="TextRegion" version="1.11.6884.37264" guid="485d28c5-349a-48b6-93be-12a35a1c1e39" />
+      <assembly name="ZedGraph Region (ZedGraph)" version="0.1.6888.24372" guid="b0e7602f-c9d4-4e6c-b6f1-087e4c6e8915" />
+      <assembly name="PlotRegion" version="1.11.6884.37264" guid="c451c2b5-798b-4f08-b9ec-b90963d1ddaa" />
+    </dependencies>
+  </settings>
+  <regions type="content">
+    <region id="0" left="0" top="0" width="729" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <text lang="swe">
+        <p>Boomroom examples for http://www.engineeringtoolbox.com/air-change-rate-room-d_867.html</p>
+      </text>
+    </region>
+    <region id="1" left="0" top="27" width="766" height="56" color="#000000" bgColor="#ffffff" fontSize="10">
+      <text lang="swe">
+        <p>The most extreme sound pressure is achieved by two valves that alternates between fully open
+and fully closed position. The sound pressure is proportional to the air exchange rate n/hr,
+and falls off as 1/f at high frequency.</p>
+      </text>
+    </region>
+    <region id="2" left="9" top="81" width="311" height="143" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">f</e>
+          <e type="operand">t</e>
+          <e type="function" args="2">inlet_onoff</e>
+          <e type="operand">tr</e>
+          <e type="operand">f</e>
+          <e type="operand">t</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">1</e>
+          <e type="function" args="2">mod</e>
+          <e type="operand">4</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">:</e>
+          <e type="operand">tr</e>
+          <e type="operand">1</e>
+          <e type="operator" args="2">&lt;</e>
+          <e type="operand">1</e>
+          <e type="operand">tr</e>
+          <e type="operand">3</e>
+          <e type="operator" args="2">&lt;</e>
+          <e type="operand">0</e>
+          <e type="operand">1</e>
+          <e type="function" args="3">if</e>
+          <e type="function" args="3">if</e>
+          <e type="operand">2</e>
+          <e type="operand">1</e>
+          <e type="function" args="4">line</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="3" left="342" top="81" width="319" height="143" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">f</e>
+          <e type="operand">t</e>
+          <e type="function" args="2">outlet_onoff</e>
+          <e type="operand">tr</e>
+          <e type="operand">f</e>
+          <e type="operand">t</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">1</e>
+          <e type="function" args="2">mod</e>
+          <e type="operand">4</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">:</e>
+          <e type="operand">tr</e>
+          <e type="operand">1</e>
+          <e type="operator" args="2">&lt;</e>
+          <e type="operand">0</e>
+          <e type="operand">tr</e>
+          <e type="operand">3</e>
+          <e type="operator" args="2">&lt;</e>
+          <e type="operand">1</e>
+          <e type="operand">0</e>
+          <e type="function" args="3">if</e>
+          <e type="function" args="3">if</e>
+          <e type="operand">2</e>
+          <e type="operand">1</e>
+          <e type="function" args="4">line</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="4" left="9" top="225" width="285" height="178" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">n</e>
+          <e type="operand">f</e>
+          <e type="operand">t</e>
+          <e type="function" args="3">onoff</e>
+          <e type="operand">tr</e>
+          <e type="operand">f</e>
+          <e type="operand">t</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">1</e>
+          <e type="function" args="2">mod</e>
+          <e type="operand">4</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">:</e>
+          <e type="operand">tud</e>
+          <e type="operand">tr</e>
+          <e type="operand">1</e>
+          <e type="operator" args="2">&lt;</e>
+          <e type="operand">tr</e>
+          <e type="operand">tr</e>
+          <e type="operand">3</e>
+          <e type="operator" args="2">&lt;</e>
+          <e type="operand">2</e>
+          <e type="operand">tr</e>
+          <e type="operator" args="2">-</e>
+          <e type="operand">tr</e>
+          <e type="operand">4</e>
+          <e type="operator" args="2">-</e>
+          <e type="function" args="3">if</e>
+          <e type="function" args="3">if</e>
+          <e type="operator" args="2">:</e>
+          <e type="operand">tud</e>
+          <e type="operand">4</e>
+          <e type="operand">f</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">/</e>
+          <e type="operand">n</e>
+          <e type="operand" style="unit">bar</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand" style="unit">hr</e>
+          <e type="operator" args="2">/</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">3</e>
+          <e type="operand">1</e>
+          <e type="function" args="5">line</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="5" left="360" top="369" width="30" height="26" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">1</e>
+          <e type="bracket">(</e>
+        </input>
+      </math>
+    </region>
+    <region id="6" left="0" top="405" width="773" height="40" color="#000000" bgColor="#ffffff" fontSize="10">
+      <text lang="swe">
+        <p>When the air flow is made proportional to the derivative of a wanted sound signal, the result
+is a correct sound reproduction.</p>
+      </text>
+    </region>
+    <region id="7" left="9" top="441" width="244" height="43" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">f</e>
+          <e type="operand">t</e>
+          <e type="function" args="2">inlet</e>
+          <e type="operand">1</e>
+          <e type="operand">2</e>
+          <e type="operand">π</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">f</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">t</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="1">cos</e>
+          <e type="operator" args="2">+</e>
+          <e type="operand">2</e>
+          <e type="operator" args="2">/</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="8" left="351" top="441" width="30" height="26" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">2</e>
+          <e type="bracket">(</e>
+        </input>
+      </math>
+    </region>
+    <region id="9" left="387" top="441" width="249" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <text lang="swe">
+        <p>Fraction of max flow in inlet</p>
+      </text>
+    </region>
+    <region id="10" left="9" top="477" width="250" height="43" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">f</e>
+          <e type="operand">t</e>
+          <e type="function" args="2">outlet</e>
+          <e type="operand">1</e>
+          <e type="operand">2</e>
+          <e type="operand">π</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">f</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">t</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="1">cos</e>
+          <e type="operator" args="2">-</e>
+          <e type="operand">2</e>
+          <e type="operator" args="2">/</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="11" left="351" top="477" width="30" height="26" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">3</e>
+          <e type="bracket">(</e>
+        </input>
+      </math>
+    </region>
+    <region id="12" left="387" top="477" width="151" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <text lang="swe">
+        <p>and outlet valve.</p>
+      </text>
+    </region>
+    <region id="13" left="9" top="513" width="280" height="43" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">n</e>
+          <e type="operand">f</e>
+          <e type="operand">t</e>
+          <e type="function" args="3">boom</e>
+          <e type="operand">2</e>
+          <e type="operand">π</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">f</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">t</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="1">sin</e>
+          <e type="operand">2</e>
+          <e type="operand">π</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">f</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">/</e>
+          <e type="operand">n</e>
+          <e type="operand" style="unit">bar</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand" style="unit">hr</e>
+          <e type="operator" args="2">/</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="14" left="351" top="522" width="30" height="26" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">4</e>
+          <e type="bracket">(</e>
+        </input>
+      </math>
+    </region>
+    <region id="15" left="387" top="522" width="373" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <text lang="swe">
+        <p>Resulting offset from average room pressure.</p>
+      </text>
+    </region>
+    <region id="16" left="9" top="558" width="240" height="158" color="#000000" bgColor="#ffffff" fontSize="10">
+      <plot type="2d" render="lines" scale_x="1.62186551697671" scale_y="0.435905944058523" scale_z="1.62186551697671" rotate_x="0" rotate_y="0" rotate_z="0" transpose_x="-103" transpose_y="1" transpose_z="0">
+        <input>
+          <e type="operand">20</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">x</e>
+          <e type="operand" style="unit">ms</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="2">inlet_onoff</e>
+          <e type="operand">20</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">x</e>
+          <e type="operand" style="unit">ms</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="2">outlet_onoff</e>
+          <e type="operator" args="1">-</e>
+          <e type="operand">12</e>
+          <e type="operand">20</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">x</e>
+          <e type="operand" style="unit">ms</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="3">onoff</e>
+          <e type="operand" style="unit">Pa</e>
+          <e type="operand">1</e>
+          <e type="operator" args="1">-</e>
+          <e type="operator" args="2">^</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">3</e>
+          <e type="operand">1</e>
+          <e type="function" args="5">sys</e>
+        </input>
+      </plot>
+    </region>
+    <region id="17" left="351" top="558" width="240" height="158" color="#000000" bgColor="#ffffff" fontSize="10">
+      <plot type="2d" render="lines" scale_x="1.62186551697671" scale_y="0.435905944058523" scale_z="1.62186551697671" rotate_x="0" rotate_y="0" rotate_z="0" transpose_x="-103" transpose_y="1" transpose_z="0">
+        <input>
+          <e type="operand">20</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">x</e>
+          <e type="operand" style="unit">ms</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="2">inlet</e>
+          <e type="operand">20</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">x</e>
+          <e type="operand" style="unit">ms</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="2">outlet</e>
+          <e type="operator" args="1">-</e>
+          <e type="operand">12</e>
+          <e type="operand">20</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">x</e>
+          <e type="operand" style="unit">ms</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="3">boom</e>
+          <e type="operand" style="unit">Pa</e>
+          <e type="operand">1</e>
+          <e type="operator" args="1">-</e>
+          <e type="operator" args="2">^</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">3</e>
+          <e type="operand">1</e>
+          <e type="function" args="5">sys</e>
+        </input>
+      </plot>
+    </region>
+    <region id="18" left="0" top="999" width="70" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">dx</e>
+          <e type="operand">0.1</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="19" left="72" top="999" width="94" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">dashx</e>
+          <e type="operand">1.5</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="20" left="171" top="999" width="94" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">dotx</e>
+          <e type="operand">0.75</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="21" left="270" top="999" width="345" height="26" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">x</e>
+          <e type="function" args="1">isdash</e>
+          <e type="operand">x</e>
+          <e type="operand">dashx</e>
+          <e type="operand">1.5</e>
+          <e type="operand">dotx</e>
+          <e type="operator" args="2">*</e>
+          <e type="operator" args="2">+</e>
+          <e type="function" args="2">mod</e>
+          <e type="operand">dashx</e>
+          <e type="operator" args="2">&lt;</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="22" left="270" top="1017" width="251" height="28" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">x</e>
+          <e type="function" args="1">isdot</e>
+          <e type="operand">x</e>
+          <e type="operand">2</e>
+          <e type="operand">dotx</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="2">mod</e>
+          <e type="operand">dx</e>
+          <e type="operator" args="2">&lt;</e>
+          <e type="bracket">(</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="23" left="0" top="1026" width="120" height="26" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">x</e>
+          <e type="operand">0</e>
+          <e type="operand">50</e>
+          <e type="operand">dx</e>
+          <e type="function" args="3">range</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="24" left="0" top="1044" width="150" height="144" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">i</e>
+          <e type="operand">0</e>
+          <e type="operator" args="2">:</e>
+          <e type="operand">xi</e>
+          <e type="operand">x</e>
+          <e type="operand">xi</e>
+          <e type="function" args="1">isdash</e>
+          <e type="operand">i</e>
+          <e type="operand">i</e>
+          <e type="operand">1</e>
+          <e type="operator" args="2">+</e>
+          <e type="operator" args="2">:</e>
+          <e type="operand">xdash</e>
+          <e type="operand">i</e>
+          <e type="function" args="2">el</e>
+          <e type="operand">xi</e>
+          <e type="operator" args="2">:</e>
+          <e type="operand">2</e>
+          <e type="operand">1</e>
+          <e type="function" args="4">line</e>
+          <e type="operand">0</e>
+          <e type="function" args="3">if</e>
+          <e type="operand">1</e>
+          <e type="operand">1</e>
+          <e type="function" args="3">line</e>
+          <e type="function" args="3">for</e>
+          <e type="operand">2</e>
+          <e type="operand">1</e>
+          <e type="function" args="4">line</e>
+        </input>
+      </math>
+    </region>
+    <region id="25" left="162" top="1044" width="142" height="144" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">i</e>
+          <e type="operand">0</e>
+          <e type="operator" args="2">:</e>
+          <e type="operand">xi</e>
+          <e type="operand">x</e>
+          <e type="operand">xi</e>
+          <e type="function" args="1">isdot</e>
+          <e type="operand">i</e>
+          <e type="operand">i</e>
+          <e type="operand">1</e>
+          <e type="operator" args="2">+</e>
+          <e type="operator" args="2">:</e>
+          <e type="operand">xdot</e>
+          <e type="operand">i</e>
+          <e type="function" args="2">el</e>
+          <e type="operand">xi</e>
+          <e type="operator" args="2">:</e>
+          <e type="operand">2</e>
+          <e type="operand">1</e>
+          <e type="function" args="4">line</e>
+          <e type="operand">0</e>
+          <e type="function" args="3">if</e>
+          <e type="operand">1</e>
+          <e type="operand">1</e>
+          <e type="function" args="3">line</e>
+          <e type="function" args="3">for</e>
+          <e type="operand">2</e>
+          <e type="operand">1</e>
+          <e type="function" args="4">line</e>
+        </input>
+      </math>
+    </region>
+    <region id="26" left="0" top="1179" width="537" height="36" color="#000000" bgColor="#ffffff" fontSize="10">
+      <math>
+        <input>
+          <e type="operand">xonoff</e>
+          <e type="operand">12.5</e>
+          <e type="operator" args="1">-</e>
+          <e type="operand">dx</e>
+          <e type="operator" args="2">+</e>
+          <e type="operand">12.5</e>
+          <e type="operand">dx</e>
+          <e type="operator" args="2">-</e>
+          <e type="operand">12.5</e>
+          <e type="operand">dx</e>
+          <e type="operator" args="2">+</e>
+          <e type="operand">37.5</e>
+          <e type="operand">dx</e>
+          <e type="operator" args="2">-</e>
+          <e type="operand">37.5</e>
+          <e type="operand">dx</e>
+          <e type="operator" args="2">+</e>
+          <e type="operand">62.5</e>
+          <e type="operand">dx</e>
+          <e type="operator" args="2">-</e>
+          <e type="operand">1</e>
+          <e type="operand">6</e>
+          <e type="function" args="8">mat</e>
+          <e type="function" args="1">transpose</e>
+          <e type="operator" args="2">:</e>
+        </input>
+      </math>
+    </region>
+    <region id="27" left="9" top="1233" width="283" height="220" color="#000000" bgColor="#ffffff" fontSize="10">
+      <zedgraph width="273" height="212">
+        <data encoding="base64">AAEAAAD/////AQAAAAAAAAAMAgAAAExaZWRHcmFwaFJlZ2lvbiwgVmVyc2lvbj0wLjEuNjg4OC4yNDM3MiwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsDAMAAABRU3lzdGVtLkRyYXdpbmcsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iMDNmNWY3ZjExZDUwYTNhBQEAAAASWmVkR3JhcGguR3JhcGhQYW5lGwAAAAZzY2hlbWEEcmVjdAZsZWdlbmQFdGl0bGUNaXNGb250c1NjYWxlZBBpc1BlbldpZHRoU2NhbGVkCHRpdGxlR2FwBGZpbGwGYm9yZGVyDWJhc2VEaW1lbnNpb24GbWFyZ2luDGdyYXBoT2JqTGlzdAN0YWcHc2NoZW1hMgZwb2ludHMFeEF4aXMGeDJBeGlzCXlBeGlzTGlzdAp5MkF4aXNMaXN0CWN1cnZlTGlzdAVjaGFydAtiYXJTZXR0aW5ncw9pc0lnbm9yZUluaXRpYWwPaXNCb3VuZGVkUmFuZ2VzD2lzSWdub3JlTWlzc2luZwxpc0FsaWduR3JpZHMIbGluZVR5cGUABAQEAAAABAQABAQCAAAEBAQEBAQEAAAAAAQIGVN5c3RlbS5EcmF3aW5nLlJlY3RhbmdsZUYDAAAAD1plZEdyYXBoLkxlZ2VuZAIAAAARWmVkR3JhcGguR2FwTGFiZWwCAAAAAQELDVplZEdyYXBoLkZpbGwCAAAAD1plZEdyYXBoLkJvcmRlcgIAAAALD1plZEdyYXBoLk1hcmdpbgIAAAAVWmVkR3JhcGguR3JhcGhPYmpMaXN0AgAAAAgIDlplZEdyYXBoLlhBeGlzAgAAAA9aZWRHcmFwaC5YMkF4aXMCAAAAElplZEdyYXBoLllBeGlzTGlzdAIAAAATWmVkR3JhcGguWTJBeGlzTGlzdAIAAAASWmVkR3JhcGguQ3VydmVMaXN0AgAAAA5aZWRHcmFwaC5DaGFydAIAAAAUWmVkR3JhcGguQmFyU2V0dGluZ3MCAAAAAQEBARFaZWRHcmFwaC5MaW5lVHlwZQIAAAACAAAACgAAAAX8////GVN5c3RlbS5EcmF3aW5nLlJlY3RhbmdsZUYEAAAAAXgBeQV3aWR0aAZoZWlnaHQAAAAACwsLCwMAAAAAAAAAAAAAAACAiEMAAFRDCQUAAAAJBgAAAAEAAAAAPwkHAAAACQgAAAAAAKBACQkAAAAJCgAAAAoMAAAAZAAAAAkLAAAACQwAAAAJDQAAAAkOAAAACQ8AAAAJEAAAAAkRAAAAAAAAAAXu////EVplZEdyYXBoLkxpbmVUeXBlAQAAAAd2YWx1ZV9fAAgCAAAAAAAAAAUFAAAAD1plZEdyYXBoLkxlZ2VuZAsAAAAGc2NoZW1hCHBvc2l0aW9uCGlzSFN0YWNrCWlzVmlzaWJsZQRmaWxsBmJvcmRlcghmb250U3BlYwhsb2NhdGlvbgNnYXAJaXNSZXZlcnNlE2lzU2hvd0xlZ2VuZFN5bWJvbHMABAAABAQEBAAAAAgSWmVkR3JhcGguTGVnZW5kUG9zAgAAAAEBDVplZEdyYXBoLkZpbGwCAAAAD1plZEdyYXBoLkJvcmRlcgIAAAARWmVkR3JhcGguRm9udFNwZWMCAAAAEVplZEdyYXBoLkxvY2F0aW9uAgAAAAsBAQIAAAAMAAAABe3///8SWmVkR3JhcGguTGVnZW5kUG9zAQAAAAd2YWx1ZV9fAAgCAAAAAAAAAAEACRQAAAAJFQAAAAkWAAAACRcAAAAAAAA/AAEFBgAAABFaZWRHcmFwaC5HYXBMYWJlbAYAAAAGc2NoZW1hBHRleHQJaXNWaXNpYmxlCGZvbnRTcGVjB3NjaGVtYTIDZ2FwAAEABAAACAERWmVkR3JhcGguRm9udFNwZWMCAAAACAsCAAAACgAAAAYYAAAABVRpdGxlAAkZAAAACgAAAJqZmT4FBwAAAA1aZWRHcmFwaC5GaWxsDwAAAAZzY2hlbWEFY29sb3Ibc2Vjb25kYXJ5VmFsdWVHcmFkaWVudENvbG9yBHR5cGUIaXNTY2FsZWQGYWxpZ25IBmFsaWduVghyYW5nZU1pbghyYW5nZU1heAljb2xvckxpc3QMcG9zaXRpb25MaXN0BWFuZ2xlBWltYWdlCHdyYXBNb2RlDHJhbmdlRGVmYXVsdAAEBAQABAQAAAICAAIEAAgUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABFaZWRHcmFwaC5GaWxsVHlwZQIAAAABD1plZEdyYXBoLkFsaWduSAIAAAAPWmVkR3JhcGguQWxpZ25WAgAAAAYGCyFTeXN0ZW0uRHJhd2luZy5EcmF3aW5nMkQuV3JhcE1vZGUDAAAABgIAAAAKAAAABeb///8UU3lzdGVtLkRyYXdpbmcuQ29sb3IEAAAABG5hbWUFdmFsdWUKa25vd25Db2xvcgVzdGF0ZQEAAAAJBwcDAAAACgAAAAAAAAAApAABAAHl////5v///woAAAAAAAAAAKQAAQAF5P///xFaZWRHcmFwaC5GaWxsVHlwZQEAAAAHdmFsdWVfXwAIAgAAAAEAAAABBeP///8PWmVkR3JhcGguQWxpZ25IAQAAAAd2YWx1ZV9fAAgCAAAAAQAAAAXi////D1plZEdyYXBoLkFsaWduVgEAAAAHdmFsdWVfXwAIAgAAAAEAAAAAAAAAAAAAAAAAAAAAAPA/CgoAAAAACgXh////IVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQEAAAAHdmFsdWVfXwAIAwAAAAAAAAD////////vfwUIAAAAD1plZEdyYXBoLkJvcmRlcgsAAAAHc2NoZW1hMAV3aWR0aAVzdHlsZQZkYXNoT24HZGFzaE9mZglpc1Zpc2libGULaXNBbnRpQWxpYXMFY29sb3IMZ3JhZGllbnRGaWxsBnNjaGVtYQ1pbmZsYXRlRmFjdG9yAAAEAAAAAAQEAAAICyJTeXN0ZW0uRHJhd2luZy5EcmF3aW5nMkQuRGFzaFN0eWxlAwAAAAsLAQEUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAADVplZEdyYXBoLkZpbGwCAAAACAsCAAAADAAAAAAAgD8F4P///yJTeXN0ZW0uRHJhd2luZy5EcmF3aW5nMkQuRGFzaFN0eWxlAQAAAAd2YWx1ZV9fAAgDAAAAAAAAAAAAgD8AAIA/AAAB3////+b///8KAAAAAAAAAAAjAAEACSIAAAALAAAAAAAAAAUJAAAAD1plZEdyYXBoLk1hcmdpbgUAAAAGc2NoZW1hBGxlZnQFcmlnaHQDdG9wBmJvdHRvbQAAAAAACAsLCwsCAAAACgAAAAAAIEEAACBBAAAgQQAAIEEFCgAAABVaZWRHcmFwaC5HcmFwaE9iakxpc3QDAAAADUxpc3RgMStfaXRlbXMMTGlzdGAxK19zaXplD0xpc3RgMStfdmVyc2lvbgQAABNaZWRHcmFwaC5HcmFwaE9ialtdAgAAAAgIAgAAAAkjAAAAAAAAAAAAAAAFCwAAAA5aZWRHcmFwaC5YQXhpcw8AAAAGc2NoZW1hBWNyb3NzCWNyb3NzQXV0bwhNYWpvclRpYwhNaW5vclRpYwltYWpvckdyaWQJbWlub3JHcmlkCWlzVmlzaWJsZQV0aXRsZQhtaW5TcGFjZQVjb2xvchRpc0F4aXNTZWdtZW50VmlzaWJsZQdheGlzR2FwBXNjYWxlB3NjaGVtYTIAAAAEBAQEAAQABAAABAAIBgERWmVkR3JhcGguTWFqb3JUaWMCAAAAEVplZEdyYXBoLk1pbm9yVGljAgAAABJaZWRHcmFwaC5NYWpvckdyaWQCAAAAElplZEdyYXBoLk1pbm9yR3JpZAIAAAABElplZEdyYXBoLkF4aXNMYWJlbAIAAAALFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAELFFplZEdyYXBoLkxpbmVhclNjYWxlAgAAAAgCAAAACgAAAAAAAAAAAAAAAQkkAAAACSUAAAAJJgAAAAknAAAAAQkoAAAAAAAAAAHX////5v///woAAAAAAAAAACMAAQABAACgQAkqAAAACgAAAAUMAAAAD1plZEdyYXBoLlgyQXhpcw8AAAAGc2NoZW1hBWNyb3NzCWNyb3NzQXV0bwhNYWpvclRpYwhNaW5vclRpYwltYWpvckdyaWQJbWlub3JHcmlkCWlzVmlzaWJsZQV0aXRsZQhtaW5TcGFjZQVjb2xvchRpc0F4aXNTZWdtZW50VmlzaWJsZQdheGlzR2FwBXNjYWxlB3NjaGVtYTIAAAAEBAQEAAQABAAABAAIBgERWmVkR3JhcGguTWFqb3JUaWMCAAAAEVplZEdyYXBoLk1pbm9yVGljAgAAABJaZWRHcmFwaC5NYWpvckdyaWQCAAAAElplZEdyYXBoLk1pbm9yR3JpZAIAAAABElplZEdyYXBoLkF4aXNMYWJlbAIAAAALFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAELFFplZEdyYXBoLkxpbmVhclNjYWxlAgAAAAgCAAAACgAAAAAAAAAAAAAAAQkrAAAACSwAAAAJLQAAAAkuAAAAAAkvAAAAAAAAAAHQ////5v///woAAAAAAAAAACMAAQABAACgQAkxAAAACwAAAAUNAAAAElplZEdyYXBoLllBeGlzTGlzdAMAAAANTGlzdGAxK19pdGVtcwxMaXN0YDErX3NpemUPTGlzdGAxK192ZXJzaW9uBAAAEFplZEdyYXBoLllBeGlzW10CAAAACAgCAAAACTIAAAABAAAAAQAAAAUOAAAAE1plZEdyYXBoLlkyQXhpc0xpc3QDAAAADUxpc3RgMStfaXRlbXMMTGlzdGAxK19zaXplD0xpc3RgMStfdmVyc2lvbgQAABFaZWRHcmFwaC5ZMkF4aXNbXQIAAAAICAIAAAAJMwAAAAEAAAABAAAABQ8AAAASWmVkR3JhcGguQ3VydmVMaXN0BAAAAAZtYXhQdHMNTGlzdGAxK19pdGVtcwxMaXN0YDErX3NpemUPTGlzdGAxK192ZXJzaW9uAAQAAAgUWmVkR3JhcGguQ3VydmVJdGVtW10CAAAACAgCAAAABgAAAAk0AAAAAwAAAMIAAAAFEAAAAA5aZWRHcmFwaC5DaGFydAUAAAAGc2NoZW1hBHJlY3QEZmlsbAZib3JkZXIKaXNSZWN0QXV0bwAEBAQACBlTeXN0ZW0uRHJhd2luZy5SZWN0YW5nbGVGAwAAAA1aZWRHcmFwaC5GaWxsAgAAAA9aZWRHcmFwaC5Cb3JkZXICAAAAAQIAAAAKAAAAAcv////8////wu/FQaqq8kAO02hD1b4zQwk2AAAACTcAAAABBREAAAAUWmVkR3JhcGguQmFyU2V0dGluZ3MHAAAABnNjaGVtYQ1taW5DbHVzdGVyR2FwCW1pbkJhckdhcBFjbHVzdGVyU2NhbGVXaWR0aBVjbHVzdGVyU2NhbGVXaWR0aEF1dG8EYmFzZQR0eXBlAAAAAAAEBAgLCwYBEFplZEdyYXBoLkJhckJhc2UCAAAAEFplZEdyYXBoLkJhclR5cGUCAAAAAgAAAAoAAAAAAIA/zcxMPgAAAAAAAPA/AQXI////EFplZEdyYXBoLkJhckJhc2UBAAAAB3ZhbHVlX18ACAIAAAAAAAAABcf///8QWmVkR3JhcGguQmFyVHlwZQEAAAAHdmFsdWVfXwAIAgAAAAAAAAABFAAAAAcAAAAKAAAAAcb////m////CgAAAAAAAAAApAABAAHF////5v///woAAAAAAAAAAKQAAQABxP///+T///8CAAAAAQHD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YXBoLk1pbm9yVGljCQAAAAZzY2hlbWEFY29sb3IEc2l6ZQhwZW5XaWR0aAlJc091dHNpZGUISXNJbnNpZGUKSXNPcHBvc2l0ZQ5pc0Nyb3NzT3V0c2lkZQ1pc0Nyb3NzSW5zaWRlAAQAAAAAAAAACBRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAALCwEBAQEBAgAAAAoAAAABpf///+b///8KAAAAAAAAAAAjAAEAAAAgQAAAgD8AAQEAAAUmAAAAElplZEdyYXBoLk1ham9yR3JpZAgAAAAGc2NoZW1hCWlzVmlzaWJsZQZkYXNoT24HZGFzaE9mZghwZW5XaWR0aAVjb2xvcgdzY2hlbWEyCmlzWmVyb0xpbmUAAAAAAAQAAAgBCwsLFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAgBAgAAAAoAAAAAAACAPwAAoEAAAIA/AaT////m////CgAAAAAAAAAAIwABAAoAAAAABScAAAASWmVkR3JhcGguTWlub3JHcmlkBgAAAAZzY2hlbWEJaXNWaXNpYmxlBmRhc2hPbgdkYXNoT2ZmCHBlbldpZHRoBWNvbG9yAAAAAAAECAELCwsUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAAgAAAAoAAAAAAACAPwAAIEEAAIA/AaP////m////CgAAAAAAAAAATgABAAUoAAAAElplZEdyYXBoLkF4aXNMYWJlbAkAAAAGc2NoZW1hBHRleHQJaXNWaXNpYmxlCGZvbnRTcGVjB3NjaGVtYTIDZ2FwB3NjaGVtYTMJaXNPbWl0TWFnDmlzVGl0bGVBdENyb3NzAAEABAAAAAAACAERWmVkR3JhcGguRm9udFNwZWMCAAAACAsIAQECAAAACgAAAAZeAAAACVRpbWUgKG1zKQAJXwAAAAoAAACamZk+CgAAAAABBSoAAAAUWmVkR3JhcGguTGluZWFyU2NhbGUhAAAABnNjaGVtYQNtaW4DbWF4CW1ham9yU3RlcAltaW5vclN0ZXAIZXhwb25lbnQHYmFzZVRpYwdtaW5BdXRvB21heEF1dG8NbWFqb3JTdGVwQXV0bw1taW5vclN0ZXBBdXRvB21hZ0F1dG8KZm9ybWF0QXV0bwhtaW5HcmFjZQhtYXhHcmFjZQNtYWcJaXNSZXZlcnNlFWlzUHJldmVudExhYmVsT3ZlcmxhcA1pc1VzZVRlblBvd2VyCWlzVmlzaWJsZRBpc1NraXBGaXJzdExhYmVsD2lzU2tpcExhc3RMYWJlbBBpc1NraXBDcm9zc0xhYmVsCnRleHRMYWJlbHMGZm9ybWF0CW1ham9yVW5pdAltaW5vclVuaXQOaXNMYWJlbHNJbnNpZGUFYWxpZ24GYWxpZ25ICGZvbnRTcGVjCGxhYmVsR2FwB3NjaGVtYTIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBBAQABAQEAAAIBgYGBgYGAQEBAQEBBgYIAQEBAQEBARFaZWRHcmFwaC5EYXRlVW5pdAIAAAARWmVkR3JhcGguRGF0ZVVuaXQCAAAAAQ9aZWRHcmFwaC5BbGlnblACAAAAD1plZEdyYXBoLkFsaWduSAIAAAARWmVkR3JhcGguRm9udFNwZWMCAAAACwgCAAAACwAAAAAAAAAAAAAAAAAAAAAASUAAAAAAAAAkQAAAAAAAABRAAAAAAAAA8D/////////vfwAAAAABAZqZmZmZmbk/mpmZmZmZuT8AAAAAAAEBAQAAAAoGYAAAAAJmMAWf////EVplZEdyYXBoLkRhdGVVbml0AQAAAAd2YWx1ZV9fAAgCAAAAAgAAAAGe////n////wIAAAAABZ3///8PWmVkR3JhcGguQWxpZ25QAQAAAAd2YWx1ZV9fAAgCAAAAAQAAAAGc////4////wEAAAAJZQAAAJqZmT4KAAAAASsAAAAkAAAACgAAAAGa////5v///woAAAAAAAAAACMAAQAAAKBAAACAPwEBAQAACgAAAAABLAAAACUAAAAKAAAAAZn////m////CgAAAAAAAAAAIwABAAAAIEAAAIA/AQEBAAABLQAAACYAAAAKAAAAAAAAgD8AAKBAAACAPwGY////5v///woAAAAAAAAAACMAAQAKAAAAAAEuAAAAJwAAAAoAAAAAAACAPwAAIEEAAIA/AZf////m////CgAAAAAAAAAATgABAAEvAAAAKAAAAAoAAAAGagAAAAABCWsAAAAKAAAAmpmZPgoAAAABAQExAAAAKgAAAAsAAAAAAAAAAAAAADMzMzMzM/M/mpmZmZmZyT+amZmZmZmpPwAAAAAAAPA/////////738BAQEBAQGamZmZmZm5P5qZmZmZmbk/AAAAAAABAQEAAAAKBmwAAAACZjEBk////5////8CAAAAAZL///+f////AgAAAAABkf///53///8BAAAAAZD////j////AQAAAAlxAAAAmpmZPgoAAAAHMgAAAAABAAAABAAAAAQOWmVkR3JhcGguWUF4aXMCAAAACXIAAAANAwczAAAAAAEAAAAEAAAABA9aZWRHcmFwaC5ZMkF4aXMCAAAACXMAAAANAwc0AAAAAAEAAAAEAAAABBJaZWRHcmFwaC5DdXJ2ZUl0ZW0CAAAACXQAAAAJdQAAAAl2AAAACgE2AAAABwAAAAoAAAABif///+b///8KAAAAAAAAAACkAAEAAYj////m////CgAAAAAAAAAApAABAAGH////5P///wIAAAABAYb////j////AQAAAAGF////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CgoAAAAACgGE////4f///wAAAAD////////vfwE3AAAACAAAAAwAAAAAAIA/AYP////g////AAAAAAAAgD8AAIA/AQABgv///+b///8KAAAAAAAAAAAjAAEACX8AAAALAAAAAAAAAAVCAAAADVplZEdyYXBoLkZpbGwPAAAABnNjaGVtYQVjb2xvchtzZWNvbmRhcnlWYWx1ZUdyYWRpZW50Q29sb3IEdHlwZQhpc1NjYWxlZAZhbGlnbkgGYWxpZ25WCHJhbmdlTWluCHJhbmdlTWF4CWNvbG9yTGlzdAxwb3NpdGlvbkxpc3QFYW5nbGUFaW1hZ2UId3JhcE1vZGUMcmFuZ2VEZWZhdWx0AAQEBAAEBAAABAcAAgQACBRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAAUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAEVplZEdyYXBoLkZpbGxUeXBlAgAAAAEPWmVkR3JhcGguQWxpZ25IAgAAAA9aZWRHcmFwaC5BbGlnblYCAAAABgYWU3lzdGVtLkRyYXdpbmcuQ29sb3JbXQMAAAALCyFTeXN0ZW0uRHJhd2luZy5EcmF3aW5nMkQuV3JhcE1vZGUDAAAABgIAAAAKAAAAAYD////m////CgAAAAAAAAAApAABAAF/////5v///woAAAAAAAAAAKQAAQABfv///+T///8AAAAAAQF9////4////wEAAAABfP///+L///8BAAAAAAAAAAAAAAAAAAAAAADwPwmFAAAACYYAAAAAAAAACgF5////4f///wAAAAD////////vfwFFAAAABwAAAAoAAAABeP///+b///8KAAAAAAAAAACkAAEAAXf////m////CgAAAAAAAAAApAABAAF2////5P///wAAAAABAXX////j////AQAAAAF0////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CgoAAAAACgFz////4f///wAAAAD////////vfwFGAAAACAAAAAwAAAAAAIA/AXL////g////AAAAAAAAgD8AAIA/AAABcf///+b///8KAAAAAAAAAAAjAAEACZAAAAALAAAAAAAAAAFOAAAABwAAAAoAAAABb////+b///8KAAAAAAAAAACkAAEAAW7////m////CgAAAAAAAAAApAABAAFt////5P///wAAAAABAWz////j////AQAAAAFr////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CgoAAAAACgFq////4f///wAAAAD////////vfwFPAAAACAAAAAwAAAAAAIA/AWn////g////AAAAAAAAgD8AAIA/AAABaP///+b///8KAAAAAAAAAAAjAAEACZkAAAALAAAAAAAAAAdXAAAAAAEAAAACAAAABBRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAABZv///+b///8KAAAAAAAAAACNAAEAAWX////m////CgAAAAAAAAAApAABAA9YAAAAAgAAAAsAAAAAAACAPwFfAAAAFgAAAAoAAAABZP///+b///8KAAAAAAAAAAAjAAEACUQAAAAAAAAACZ4AAAAJnwAAAAAAAAABYP///7n///8AAAAAAABgQQABX////+b///8KAAAAAAAAAAAjAAEAAAA0Qs3MTD0BZQAAABYAAAAKAAAAAV7////m////CgAAAAAAAAAAIwABAAajAAAABUFyaWFsAAAAAAmkAAAACaUAAAAAAAAAAVr///+5////AQAAAAAAYEEAAVn////m////CgAAAAAAAAAAIwABAAAANELNzEw9AWsAAAAWAAAACgAAAAFY////5v///woAAAAAAAAAACMAAQAJRAAAAAAAAAAJqgAAAAmrAAAAAAA0QwFU////uf///wEAAAAAAGBBAAFT////5v///woAAAAAAAAAACMAAQAAADRCzcxMPQFxAAAAFgAAAAoAAAABUv///+b///8KAAAAAAAAAAAjAAEACUQAAAAAAAAACbAAAAAJsQAAAAAANEMBTv///7n///8BAAAAAABgQQABTf///+b///8KAAAAAAAAAAAjAAEAAAA0Qs3MTD0FcgAAAA5aZWRHcmFwaC5ZQXhpcw8AAAAGc2NoZW1hBWNyb3NzCWNyb3NzQXV0bwhNYWpvclRpYwhNaW5vclRpYwltYWpvckdyaWQJbWlub3JHcmlkCWlzVmlzaWJsZQV0aXRsZQhtaW5TcGFjZQVjb2xvchRpc0F4aXNTZWdtZW50VmlzaWJsZQdheGlzR2FwBXNjYWxlB3NjaGVtYTIAAAAEBAQEAAQABAAABAAIBgERWmVkR3JhcGguTWFqb3JUaWMCAAAAEVplZEdyYXBoLk1pbm9yVGljAgAAABJaZWRHcmFwaC5NYWpvckdyaWQCAAAAElplZEdyYXBoLk1pbm9yR3JpZAIAAAABElplZEdyYXBoLkF4aXNMYWJlbAIAAAALFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAELFFplZEdyYXBoLkxpbmVhclNjYWxlAgAAAAgCAAAACgAAAAAAAAAAAAAAAQm0AAAACbUAAAAJtgAAAAm3AAAAAQm4AAAAAAAAAAFH////5v///woAAAAAAAAAACMAAQABAACgQAm6AAAACgAAAAVzAAAAD1plZEdyYXBoLlkyQXhpcw8AAAAGc2NoZW1hBWNyb3NzCWNyb3NzQXV0bwhNYWpvclRpYwhNaW5vclRpYwltYWpvckdyaWQJbWlub3JHcmlkCWlzVmlzaWJsZQV0aXRsZQhtaW5TcGFjZQVjb2xvchRpc0F4aXNTZWdtZW50VmlzaWJsZQdheGlzR2FwBXNjYWxlB3NjaGVtYTIAAAAEBAQEAAQABAAABAAIBgERWmVkR3JhcGguTWFqb3JUaWMCAAAAEVplZEdyYXBoLk1pbm9yVGljAgAAABJaZWRHcmFwaC5NYWpvckdyaWQCAAAAElplZEdyYXBoLk1pbm9yR3JpZAIAAAABElplZEdyYXBoLkF4aXNMYWJlbAIAAAALFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAELFFplZEdyYXBoLkxpbmVhclNjYWxlAgAAAAgCAAAACgAAAAAAAAAAAAAAAQm7AAAACbwAAAAJvQAAAAm+AAAAAAm/AAAAAAAAAAFA////5v///woAAAAAAAAAACMAAQABAACgQAnBAAAACgAAAAV0AAAAEVplZEdyYXBoLkxpbmVJdGVtDAAAAAZzY2hlbWEFbGFiZWwIaXNZMkF4aXMIaXNYMkF4aXMJaXNWaXNpYmxlEWlzT3ZlcnJpZGVPcmRpbmFsA1RhZwp5QXhpc0luZGV4BGxpbmsHc2NoZW1hMgZzeW1ib2wEbGluZQAEAAAAAAIABAAEBAgOWmVkR3JhcGguTGFiZWwCAAAAAQEBAQgNWmVkR3JhcGguTGluawIAAAAID1plZEdyYXBoLlN5bWJvbAIAAAANWmVkR3JhcGguTGluZQIAAAACAAAADAAAAAnCAAAAAAABAAoAAAAACcMAAAAKAAAACcQAAAAJxQAAAAF1AAAAdAAAAAwAAAAJxgAAAAAAAQAKAAAAAAnHAAAACgAAAAnIAAAACckAAAABdgAAAHQAAAAMAAAACcoAAAAAAAEACgAAAAAJywAAAAoAAAAJzAAAAAnNAAAABX8AAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABMv///+b///8KAAAAAAAAAACkAAEAATH////m////CgAAAAAAAAAApAABAAEw////5P///wAAAAABAS/////j////AQAAAAEu////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CdMAAAAJ1AAAAAAAAAAKASv////h////AAAAAP///////+9/B4UAAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAEq////5v///woAAAAAAAAAAI0AAQABKf///+b///8KAAAAAAAAAACkAAEAD4YAAAACAAAACwAAAAAAAIA/BZAAAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABKP///+b///8KAAAAAAAAAACkAAEAASf////m////CgAAAAAAAAAApAABAAEm////5P///wAAAAABASX////j////AQAAAAEk////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/Cd0AAAAJ3gAAAAAAAAAKASH////h////AAAAAP///////+9/BZkAAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABIP///+b///8KAAAAAAAAAACkAAEAAR/////m////CgAAAAAAAAAApAABAAEe////5P///wAAAAABAR3////j////AQAAAAEc////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CeUAAAAJ5gAAAAAAAAAKARn////h////AAAAAP///////+9/AZ4AAAAHAAAACgAAAAEY////5v///woAAAAAAAAAAKQAAQABF////+b///8KAAAAAAAAAACkAAEAARb////k////AAAAAAEBFf///+P///8BAAAAART////i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKARP////h////AAAAAP///////+9/AZ8AAAAIAAAADAAAAAAAgD8BEv///+D///8AAAAAAACAPwAAgD8AAAER////5v///woAAAAAAAAAACMAAQAJ8AAAAAsAAAAAAAAAAaQAAAAHAAAACgAAAAEP////5v///woAAAAAAAAAAKQAAQABDv///+b///8KAAAAAAAAAACkAAEAAQ3////k////AAAAAAEBDP///+P///8BAAAAAQv////i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAQr////h////AAAAAP///////+9/AaUAAAAIAAAADAAAAAAAgD8BCf///+D///8AAAAAAACAPwAAgD8AAAEI////5v///woAAAAAAAAAACMAAQAJ+QAAAAsAAAAAAAAAAaoAAAAHAAAACgAAAAEG////5v///woAAAAAAAAAAKQAAQABBf///+b///8KAAAAAAAAAACkAAEAAQT////k////AAAAAAEBA////+P///8BAAAAAQL////i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAQH////h////AAAAAP///////+9/AasAAAAIAAAADAAAAAAAgD8BAP///+D///8AAAAAAACAPwAAgD8AAAH//v//5v///woAAAAAAAAAACMAAQAJAgEAAAsAAAAAAAAAAbAAAAAHAAAACgAAAAH9/v//5v///woAAAAAAAAAAKQAAQAB/P7//+b///8KAAAAAAAAAACkAAEAAfv+///k////AAAAAAEB+v7//+P///8BAAAAAfn+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAfj+///h////AAAAAP///////+9/AbEAAAAIAAAADAAAAAAAgD8B9/7//+D///8AAAAAAACAPwAAgD8AAAH2/v//5v///woAAAAAAAAAACMAAQAJCwEAAAsAAAAAAAAAAbQAAAAkAAAACgAAAAH0/v//5v///woAAAAAAAAAACMAAQAAAKBAAACAPwABAQAACgAAAAABtQAAACUAAAAKAAAAAfP+///m////CgAAAAAAAAAAIwABAAAAIEAAAIA/AAEBAAABtgAAACYAAAAKAAAAAAAAgD8AAKBAAACAPwHy/v//5v///woAAAAAAAAAACMAAQAKAAAAAQG3AAAAJwAAAAoAAAAAAACAPwAAIEEAAIA/AfH+///m////CgAAAAAAAAAATgABAAG4AAAAKAAAAAoAAAAGEAEAAAF5AAkRAQAACgAAAJqZmT4KAAAAAAEBugAAACoAAAALAAAAAAAAAAAAFMAAAAAAAAAUQAAAAAAAAABAAAAAAAAA8D8AAAAAAADwP////////+9/AAAAAAEBmpmZmZmZuT+amZmZmZm5PwAAAAAAAQEBAAAACgYSAQAAAmYwAe3+//+f////AgAAAAHs/v//n////wIAAAAAAev+//+d////AQAAAAHq/v//4////wEAAAAJFwEAAJqZmT4KAAAAAbsAAAAkAAAACgAAAAHo/v//5v///woAAAAAAAAAACMAAQAAAKBAAACAPwEBAQAACgAAAAABvAAAACUAAAAKAAAAAef+///m////CgAAAAAAAAAAIwABAAAAIEAAAIA/AQEBAAABvQAAACYAAAAKAAAAAAAAgD8AAKBAAACAPwHm/v//5v///woAAAAAAAAAACMAAQAKAAAAAQG+AAAAJwAAAAoAAAAAAACAPwAAIEEAAIA/AeX+///m////CgAAAAAAAAAATgABAAG/AAAAKAAAAAoAAAAGHAEAAAJ5MgEJHQEAAAoAAACamZk+CgAAAAEBAcEAAAAqAAAACwAAAAAAAAAAABTAAAAAAAAAFEAAAAAAAADwP5qZmZmZmck/AAAAAAAA8D/////////vfwEBAQEBAZqZmZmZmbk/mpmZmZmZuT8AAAAAAAEBAQAAAAoGHgEAAAJmMAHh/v//n////wIAAAAB4P7//5////8CAAAAAAHf/v//nf///wEAAAAB3v7//+P///8BAAAACSMBAACamZk+CgAAAAXCAAAADlplZEdyYXBoLkxhYmVsBAAAAAZzY2hlbWEEdGV4dAlpc1Zpc2libGUIZm9udFNwZWMAAQACCAECAAAACgAAAAlqAAAAAQoFwwAAAA1aZWRHcmFwaC5MaW5rBgAAAAZzY2hlbWEFdGl0bGUDdXJsBnRhcmdldAlpc0VuYWJsZWQDVGFnAAEBAQACCAECAAAACgAAAAlqAAAACWoAAAAJagAAAAAKBcQAAAAPWmVkR3JhcGguU3ltYm9sCAAAAAZzY2hlbWEEc2l6ZQR0eXBlC2lzQW50aUFsaWFzCWlzVmlzaWJsZQRmaWxsBmJvcmRlcgp1c2VyU3ltYm9sAAAEAAAEBAIICxNaZWRHcmFwaC5TeW1ib2xUeXBlAgAAAAEBDVplZEdyYXBoLkZpbGwCAAAAD1plZEdyYXBoLkJvcmRlcgIAAAACAAAACwAAAAAA4EAF2/7//xNaZWRHcmFwaC5TeW1ib2xUeXBlAQAAAAd2YWx1ZV9fAAgCAAAADAAAAAABCSYBAAAJJwEAAAoFxQAAAA1aZWRHcmFwaC5MaW5lDwAAAAdzY2hlbWEwBXdpZHRoBXN0eWxlBmRhc2hPbgdkYXNoT2ZmCWlzVmlzaWJsZQtpc0FudGlBbGlhcwVjb2xvcgxncmFkaWVudEZpbGwGc2NoZW1hCHN0ZXBUeXBlCGlzU21vb3RoDXNtb290aFRlbnNpb24EZmlsbA9pc09wdGltaXplZERyYXcAAAQAAAAABAQABAAABAAICyJTeXN0ZW0uRHJhd2luZy5EcmF3aW5nMkQuRGFzaFN0eWxlAwAAAAsLAQEUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAADVplZEdyYXBoLkZpbGwCAAAACBFaZWRHcmFwaC5TdGVwVHlwZQIAAAABCw1aZWRHcmFwaC5GaWxsAgAAAAECAAAADAAAAAAAQEAB2P7//+D///8BAAAAAACAPwAAgD8BAAHX/v//5v///woAAAAAAAAAACUAAQAJKgEAAA4AAAAF1f7//xFaZWRHcmFwaC5TdGVwVHlwZQEAAAAHdmFsdWVfXwAIAgAAAAIAAAAAAAAAPwksAQAAAAHGAAAAwgAAAAoAAAAJagAAAAEKAccAAADDAAAACgAAAAlqAAAACWoAAAAJagAAAAAKAcgAAADEAAAACwAAAAAA4EAB0v7//9v+//8MAAAAAAEJLwEAAAkwAQAACgHJAAAAxQAAAAwAAAAAAEBAAc/+///g////AgAAAAAAgD8AAIA/AQABzv7//+b///8KAAAAAAAAAACNAAEACTMBAAAOAAAAAcz+///V/v//AgAAAAAAAAA/CTUBAAAAAcoAAADCAAAACgAAAAlqAAAAAQoBywAAAMMAAAAKAAAACWoAAAAJagAAAAlqAAAAAAoBzAAAAMQAAAALAAAAAADgQAHJ/v//2/7//wwAAAAAAQk4AQAACTkBAAAKAc0AAADFAAAADAAAAAAAQEABxv7//+D///8AAAAAAACAPwAAgD8BAAHF/v//5v///woAAAAAAAAAAE8AAQAJPAEAAA4AAAABw/7//9X+//8CAAAAAAAAAD8JPgEAAAAH0wAAAAABAAAAAgAAAAQUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAAcH+///m////CgAAAAAAAAAAjQABAAHA/v//5v///woAAAAAAAAAAKQAAQAP1AAAAAIAAAALAAAAAAAAgD8H3QAAAAABAAAAAgAAAAQUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAAb/+///m////CgAAAAAAAAAAjQABAAG+/v//5v///woAAAAAAAAAAKQAAQAP3gAAAAIAAAALAAAAAAAAgD8H5QAAAAABAAAAAgAAAAQUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAAb3+///m////CgAAAAAAAAAAjQABAAG8/v//5v///woAAAAAAAAAAKQAAQAP5gAAAAIAAAALAAAAAAAAgD8F8AAAAA1aZWRHcmFwaC5GaWxsDwAAAAZzY2hlbWEFY29sb3Ibc2Vjb25kYXJ5VmFsdWVHcmFkaWVudENvbG9yBHR5cGUIaXNTY2FsZWQGYWxpZ25IBmFsaWduVghyYW5nZU1pbghyYW5nZU1heAljb2xvckxpc3QMcG9zaXRpb25MaXN0BWFuZ2xlBWltYWdlCHdyYXBNb2RlDHJhbmdlRGVmYXVsdAAEBAQABAQAAAQHAAIEAAgUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABFaZWRHcmFwaC5GaWxsVHlwZQIAAAABD1plZEdyYXBoLkFsaWduSAIAAAAPWmVkR3JhcGguQWxpZ25WAgAAAAYGFlN5c3RlbS5EcmF3aW5nLkNvbG9yW10DAAAACwshU3lzdGVtLkRyYXdpbmcuRHJhd2luZzJELldyYXBNb2RlAwAAAAYCAAAACgAAAAG7/v//5v///woAAAAAAAAAAKQAAQABuv7//+b///8KAAAAAAAAAACkAAEAAbn+///k////AAAAAAEBuP7//+P///8BAAAAAbf+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8JSgEAAAlLAQAAAAAAAAoBtP7//+H///8AAAAA////////738F+QAAAA1aZWRHcmFwaC5GaWxsDwAAAAZzY2hlbWEFY29sb3Ibc2Vjb25kYXJ5VmFsdWVHcmFkaWVudENvbG9yBHR5cGUIaXNTY2FsZWQGYWxpZ25IBmFsaWduVghyYW5nZU1pbghyYW5nZU1heAljb2xvckxpc3QMcG9zaXRpb25MaXN0BWFuZ2xlBWltYWdlCHdyYXBNb2RlDHJhbmdlRGVmYXVsdAAEBAQABAQAAAQHAAIEAAgUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABFaZWRHcmFwaC5GaWxsVHlwZQIAAAABD1plZEdyYXBoLkFsaWduSAIAAAAPWmVkR3JhcGguQWxpZ25WAgAAAAYGFlN5c3RlbS5EcmF3aW5nLkNvbG9yW10DAAAACwshU3lzdGVtLkRyYXdpbmcuRHJhd2luZzJELldyYXBNb2RlAwAAAAYCAAAACgAAAAGz/v//5v///woAAAAAAAAAAKQAAQABsv7//+b///8KAAAAAAAAAACkAAEAAbH+///k////AAAAAAEBsP7//+P///8BAAAAAa/+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8JUgEAAAlTAQAAAAAAAAoBrP7//+H///8AAAAA////////738FAgEAAA1aZWRHcmFwaC5GaWxsDwAAAAZzY2hlbWEFY29sb3Ibc2Vjb25kYXJ5VmFsdWVHcmFkaWVudENvbG9yBHR5cGUIaXNTY2FsZWQGYWxpZ25IBmFsaWduVghyYW5nZU1pbghyYW5nZU1heAljb2xvckxpc3QMcG9zaXRpb25MaXN0BWFuZ2xlBWltYWdlCHdyYXBNb2RlDHJhbmdlRGVmYXVsdAAEBAQABAQAAAQHAAIEAAgUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABFaZWRHcmFwaC5GaWxsVHlwZQIAAAABD1plZEdyYXBoLkFsaWduSAIAAAAPWmVkR3JhcGguQWxpZ25WAgAAAAYGFlN5c3RlbS5EcmF3aW5nLkNvbG9yW10DAAAACwshU3lzdGVtLkRyYXdpbmcuRHJhd2luZzJELldyYXBNb2RlAwAAAAYCAAAACgAAAAGr/v//5v///woAAAAAAAAAAKQAAQABqv7//+b///8KAAAAAAAAAACkAAEAAan+///k////AAAAAAEBqP7//+P///8BAAAAAaf+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8JWgEAAAlbAQAAAAAAAAoBpP7//+H///8AAAAA////////738FCwEAAA1aZWRHcmFwaC5GaWxsDwAAAAZzY2hlbWEFY29sb3Ibc2Vjb25kYXJ5VmFsdWVHcmFkaWVudENvbG9yBHR5cGUIaXNTY2FsZWQGYWxpZ25IBmFsaWduVghyYW5nZU1pbghyYW5nZU1heAljb2xvckxpc3QMcG9zaXRpb25MaXN0BWFuZ2xlBWltYWdlCHdyYXBNb2RlDHJhbmdlRGVmYXVsdAAEBAQABAQAAAQHAAIEAAgUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABFaZWRHcmFwaC5GaWxsVHlwZQIAAAABD1plZEdyYXBoLkFsaWduSAIAAAAPWmVkR3JhcGguQWxpZ25WAgAAAAYGFlN5c3RlbS5EcmF3aW5nLkNvbG9yW10DAAAACwshU3lzdGVtLkRyYXdpbmcuRHJhd2luZzJELldyYXBNb2RlAwAAAAYCAAAACgAAAAGj/v//5v///woAAAAAAAAAAKQAAQABov7//+b///8KAAAAAAAAAACkAAEAAaH+///k////AAAAAAEBoP7//+P///8BAAAAAZ/+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8JYgEAAAljAQAAAAAAAAoBnP7//+H///8AAAAA////////738BEQEAABYAAAAKAAAAAZv+///m////CgAAAAAAAAAAIwABAAlEAAAAAAAAAAlnAQAACWgBAAAAADTDAZf+//+5////AQAAAAAAYEEAAZb+///m////CgAAAAAAAAAAIwABAAAANELNzEw9ARcBAAAWAAAACgAAAAGV/v//5v///woAAAAAAAAAACMAAQAJRAAAAAAAAAAJbQEAAAluAQAAAAC0QgGR/v//uf///wEAAAAAAGBBAAGQ/v//5v///woAAAAAAAAAACMAAQAAADRCzcxMPQEdAQAAFgAAAAoAAAABj/7//+b///8KAAAAAAAAAAAjAAEACUQAAAAAAAAACXMBAAAJdAEAAAAAAAABi/7//7n///8BAAAAAABgQQABiv7//+b///8KAAAAAAAAAAAjAAEAAAA0Qs3MTD0BIwEAABYAAAAKAAAAAYn+///m////CgAAAAAAAAAAIwABAAlEAAAAAAAAAAl5AQAACXoBAAAAALTCAYX+//+5////AQAAAAAAYEEAAYT+///m////CgAAAAAAAAAAIwABAAAANELNzEw9ASYBAAAHAAAACgAAAAGD/v//5v///woAAAAAAAAAACUAAQABgv7//+b///8KAAAAAAAAAACkAAEAAYH+///k////AAAAAAEBgP7//+P///8BAAAAAX/+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAX7+///h////AAAAAP///////+9/AScBAAAIAAAADAAAAAAAgD8Bff7//+D///8AAAAAAACAPwAAgD8BAAF8/v//5v///woAAAAAAAAAACUAAQAJhQEAAAsAAAAAAAAABSoBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABev7//+b///8KAAAAAAAAAACkAAEAAXn+///m////CgAAAAAAAAAApAABAAF4/v//5P///wAAAAABAXf+///j////AQAAAAF2/v//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CYsBAAAJjAEAAAAAAAAKAXP+///h////AAAAAP///////+9/ASwBAAAHAAAACgAAAAFy/v//5v///woAAAAAAAAAAI0AAQABcf7//+b///8KAAAAAAAAAACkAAEAAXD+///k////AAAAAAEBb/7//+P///8BAAAAAW7+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAW3+///h////AAAAAP///////+9/AS8BAAAHAAAACgAAAAFs/v//5v///woAAAAAAAAAAI0AAQABa/7//+b///8KAAAAAAAAAACkAAEAAWr+///k////AAAAAAEBaf7//+P///8BAAAAAWj+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAWf+///h////AAAAAP///////+9/ATABAAAIAAAADAAAAAAAgD8BZv7//+D///8AAAAAAACAPwAAgD8BAAFl/v//5v///woAAAAAAAAAAI0AAQAJnAEAAAsAAAAAAAAABTMBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABY/7//+b///8KAAAAAAAAAACkAAEAAWL+///m////CgAAAAAAAAAApAABAAFh/v//5P///wAAAAABAWD+///j////AQAAAAFf/v//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CaIBAAAJowEAAAAAAAAKAVz+///h////AAAAAP///////+9/ATUBAAAHAAAACgAAAAFb/v//5v///woAAAAAAAAAAI0AAQABWv7//+b///8KAAAAAAAAAACkAAEAAVn+///k////AAAAAAEBWP7//+P///8BAAAAAVf+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAVb+///h////AAAAAP///////+9/ATgBAAAHAAAACgAAAAFV/v//5v///woAAAAAAAAAAE8AAQABVP7//+b///8KAAAAAAAAAACkAAEAAVP+///k////AAAAAAEBUv7//+P///8BAAAAAVH+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAVD+///h////AAAAAP///////+9/ATkBAAAIAAAADAAAAAAAgD8BT/7//+D///8AAAAAAACAPwAAgD8BAAFO/v//5v///woAAAAAAAAAAE8AAQAJswEAAAsAAAAAAAAABTwBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABTP7//+b///8KAAAAAAAAAACkAAEAAUv+///m////CgAAAAAAAAAApAABAAFK/v//5P///wAAAAABAUn+///j////AQAAAAFI/v//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CbkBAAAJugEAAAAAAAAKAUX+///h////AAAAAP///////+9/AT4BAAAHAAAACgAAAAFE/v//5v///woAAAAAAAAAAI0AAQABQ/7//+b///8KAAAAAAAAAACkAAEAAUL+///k////AAAAAAEBQf7//+P///8BAAAAAUD+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAT/+///h////AAAAAP///////+9/B0oBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAE+/v//5v///woAAAAAAAAAAI0AAQABPf7//+b///8KAAAAAAAAAACkAAEAD0sBAAACAAAACwAAAAAAAIA/B1IBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAE8/v//5v///woAAAAAAAAAAI0AAQABO/7//+b///8KAAAAAAAAAACkAAEAD1MBAAACAAAACwAAAAAAAIA/B1oBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAE6/v//5v///woAAAAAAAAAAI0AAQABOf7//+b///8KAAAAAAAAAACkAAEAD1sBAAACAAAACwAAAAAAAIA/B2IBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAE4/v//5v///woAAAAAAAAAAI0AAQABN/7//+b///8KAAAAAAAAAACkAAEAD2MBAAACAAAACwAAAAAAAIA/AWcBAAAHAAAACgAAAAE2/v//5v///woAAAAAAAAAAKQAAQABNf7//+b///8KAAAAAAAAAACkAAEAATT+///k////AAAAAAEBM/7//+P///8BAAAAATL+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKATH+///h////AAAAAP///////+9/AWgBAAAIAAAADAAAAAAAgD8BMP7//+D///8AAAAAAACAPwAAgD8AAAEv/v//5v///woAAAAAAAAAACMAAQAJ0gEAAAsAAAAAAAAAAW0BAAAHAAAACgAAAAEt/v//5v///woAAAAAAAAAAKQAAQABLP7//+b///8KAAAAAAAAAACkAAEAASv+///k////AAAAAAEBKv7//+P///8BAAAAASn+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKASj+///h////AAAAAP///////+9/AW4BAAAIAAAADAAAAAAAgD8BJ/7//+D///8AAAAAAACAPwAAgD8AAAEm/v//5v///woAAAAAAAAAACMAAQAJ2wEAAAsAAAAAAAAAAXMBAAAHAAAACgAAAAEk/v//5v///woAAAAAAAAAAKQAAQABI/7//+b///8KAAAAAAAAAACkAAEAASL+///k////AAAAAAEBIf7//+P///8BAAAAASD+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAR/+///h////AAAAAP///////+9/AXQBAAAIAAAADAAAAAAAgD8BHv7//+D///8AAAAAAACAPwAAgD8AAAEd/v//5v///woAAAAAAAAAACMAAQAJ5AEAAAsAAAAAAAAAAXkBAAAHAAAACgAAAAEb/v//5v///woAAAAAAAAAAKQAAQABGv7//+b///8KAAAAAAAAAACkAAEAARn+///k////AAAAAAEBGP7//+P///8BAAAAARf+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKARb+///h////AAAAAP///////+9/AXoBAAAIAAAADAAAAAAAgD8BFf7//+D///8AAAAAAACAPwAAgD8AAAEU/v//5v///woAAAAAAAAAACMAAQAJ7QEAAAsAAAAAAAAABYUBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABEv7//+b///8KAAAAAAAAAACkAAEAARH+///m////CgAAAAAAAAAApAABAAEQ/v//5P///wAAAAABAQ/+///j////AQAAAAEO/v//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CfMBAAAJ9AEAAAAAAAAKAQv+///h////AAAAAP///////+9/B4sBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAEK/v//5v///woAAAAAAAAAAI0AAQABCf7//+b///8KAAAAAAAAAACkAAEAD4wBAAACAAAACwAAAAAAAIA/BZwBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABCP7//+b///8KAAAAAAAAAACkAAEAAQf+///m////CgAAAAAAAAAApAABAAEG/v//5P///wAAAAABAQX+///j////AQAAAAEE/v//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/Cf0BAAAJ/gEAAAAAAAAKAQH+///h////AAAAAP///////+9/B6IBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAEA/v//5v///woAAAAAAAAAAI0AAQAB//3//+b///8KAAAAAAAAAACkAAEAD6MBAAACAAAACwAAAAAAAIA/BbMBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAAB/v3//+b///8KAAAAAAAAAACkAAEAAf39///m////CgAAAAAAAAAApAABAAH8/f//5P///wAAAAABAfv9///j////AQAAAAH6/f//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CQcCAAAJCAIAAAAAAAAKAff9///h////AAAAAP///////+9/B7kBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAH2/f//5v///woAAAAAAAAAAI0AAQAB9f3//+b///8KAAAAAAAAAACkAAEAD7oBAAACAAAACwAAAAAAAIA/BdIBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAAB9P3//+b///8KAAAAAAAAAACkAAEAAfP9///m////CgAAAAAAAAAApAABAAHy/f//5P///wAAAAABAfH9///j////AQAAAAHw/f//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CRECAAAJEgIAAAAAAAAKAe39///h////AAAAAP///////+9/BdsBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAAB7P3//+b///8KAAAAAAAAAACkAAEAAev9///m////CgAAAAAAAAAApAABAAHq/f//5P///wAAAAABAen9///j////AQAAAAHo/f//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CRkCAAAJGgIAAAAAAAAKAeX9///h////AAAAAP///////+9/BeQBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAAB5P3//+b///8KAAAAAAAAAACkAAEAAeP9///m////CgAAAAAAAAAApAABAAHi/f//5P///wAAAAABAeH9///j////AQAAAAHg/f//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CSECAAAJIgIAAAAAAAAKAd39///h////AAAAAP///////+9/Be0BAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAAB3P3//+b///8KAAAAAAAAAACkAAEAAdv9///m////CgAAAAAAAAAApAABAAHa/f//5P///wAAAAABAdn9///j////AQAAAAHY/f//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CSkCAAAJKgIAAAAAAAAKAdX9///h////AAAAAP///////+9/B/MBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHU/f//5v///woAAAAAAAAAAI0AAQAB0/3//+b///8KAAAAAAAAAACkAAEAD/QBAAACAAAACwAAAAAAAIA/B/0BAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHS/f//5v///woAAAAAAAAAAI0AAQAB0f3//+b///8KAAAAAAAAAACkAAEAD/4BAAACAAAACwAAAAAAAIA/BwcCAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHQ/f//5v///woAAAAAAAAAAI0AAQABz/3//+b///8KAAAAAAAAAACkAAEADwgCAAACAAAACwAAAAAAAIA/BxECAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHO/f//5v///woAAAAAAAAAAI0AAQABzf3//+b///8KAAAAAAAAAACkAAEADxICAAACAAAACwAAAAAAAIA/BxkCAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHM/f//5v///woAAAAAAAAAAI0AAQABy/3//+b///8KAAAAAAAAAACkAAEADxoCAAACAAAACwAAAAAAAIA/ByECAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHK/f//5v///woAAAAAAAAAAI0AAQAByf3//+b///8KAAAAAAAAAACkAAEADyICAAACAAAACwAAAAAAAIA/BykCAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHI/f//5v///woAAAAAAAAAAI0AAQABx/3//+b///8KAAAAAAAAAACkAAEADyoCAAACAAAACwAAAAAAAIA/Cw==</data>
+        <input>
+          <e type="operand">xonoff</e>
+          <e type="operand">20</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">xonoff</e>
+          <e type="operand" style="unit">ms</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="2">inlet_onoff</e>
+          <e type="function" args="1">vectorize</e>
+          <e type="function" args="2">augment</e>
+          <e type="operand">xonoff</e>
+          <e type="operand">20</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">xonoff</e>
+          <e type="operand" style="unit">ms</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="2">outlet_onoff</e>
+          <e type="function" args="1">vectorize</e>
+          <e type="operator" args="1">-</e>
+          <e type="function" args="2">augment</e>
+          <e type="operand">xonoff</e>
+          <e type="operand">12</e>
+          <e type="operand">20</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">xonoff</e>
+          <e type="operand" style="unit">ms</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="3">onoff</e>
+          <e type="function" args="1">vectorize</e>
+          <e type="operand" style="unit">Pa</e>
+          <e type="operand">1</e>
+          <e type="operator" args="1">-</e>
+          <e type="operator" args="2">^</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="2">augment</e>
+          <e type="operand">3</e>
+          <e type="operand">1</e>
+          <e type="function" args="5">sys</e>
+        </input>
+      </zedgraph>
+    </region>
+    <region id="28" left="387" top="1233" width="283" height="220" color="#000000" bgColor="#ffffff" fontSize="10">
+      <zedgraph width="273" height="212">
+        <data encoding="base64">AAEAAAD/////AQAAAAAAAAAMAgAAAExaZWRHcmFwaFJlZ2lvbiwgVmVyc2lvbj0wLjEuNjg4OC4yNDM3MiwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsDAMAAABRU3lzdGVtLkRyYXdpbmcsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iMDNmNWY3ZjExZDUwYTNhBQEAAAASWmVkR3JhcGguR3JhcGhQYW5lGwAAAAZzY2hlbWEEcmVjdAZsZWdlbmQFdGl0bGUNaXNGb250c1NjYWxlZBBpc1BlbldpZHRoU2NhbGVkCHRpdGxlR2FwBGZpbGwGYm9yZGVyDWJhc2VEaW1lbnNpb24GbWFyZ2luDGdyYXBoT2JqTGlzdAN0YWcHc2NoZW1hMgZwb2ludHMFeEF4aXMGeDJBeGlzCXlBeGlzTGlzdAp5MkF4aXNMaXN0CWN1cnZlTGlzdAVjaGFydAtiYXJTZXR0aW5ncw9pc0lnbm9yZUluaXRpYWwPaXNCb3VuZGVkUmFuZ2VzD2lzSWdub3JlTWlzc2luZwxpc0FsaWduR3JpZHMIbGluZVR5cGUABAQEAAAABAQABAQCAAAEBAQEBAQEAAAAAAQIGVN5c3RlbS5EcmF3aW5nLlJlY3RhbmdsZUYDAAAAD1plZEdyYXBoLkxlZ2VuZAIAAAARWmVkR3JhcGguR2FwTGFiZWwCAAAAAQELDVplZEdyYXBoLkZpbGwCAAAAD1plZEdyYXBoLkJvcmRlcgIAAAALD1plZEdyYXBoLk1hcmdpbgIAAAAVWmVkR3JhcGguR3JhcGhPYmpMaXN0AgAAAAgIDlplZEdyYXBoLlhBeGlzAgAAAA9aZWRHcmFwaC5YMkF4aXMCAAAAElplZEdyYXBoLllBeGlzTGlzdAIAAAATWmVkR3JhcGguWTJBeGlzTGlzdAIAAAASWmVkR3JhcGguQ3VydmVMaXN0AgAAAA5aZWRHcmFwaC5DaGFydAIAAAAUWmVkR3JhcGguQmFyU2V0dGluZ3MCAAAAAQEBARFaZWRHcmFwaC5MaW5lVHlwZQIAAAACAAAACgAAAAX8////GVN5c3RlbS5EcmF3aW5nLlJlY3RhbmdsZUYEAAAAAXgBeQV3aWR0aAZoZWlnaHQAAAAACwsLCwMAAAAAAAAAAAAAAACAiEMAAFRDCQUAAAAJBgAAAAEAAAAAPwkHAAAACQgAAAAAAKBACQkAAAAJCgAAAAoMAAAAZAAAAAkLAAAACQwAAAAJDQAAAAkOAAAACQ8AAAAJEAAAAAkRAAAAAAAAAAXu////EVplZEdyYXBoLkxpbmVUeXBlAQAAAAd2YWx1ZV9fAAgCAAAAAAAAAAUFAAAAD1plZEdyYXBoLkxlZ2VuZAsAAAAGc2NoZW1hCHBvc2l0aW9uCGlzSFN0YWNrCWlzVmlzaWJsZQRmaWxsBmJvcmRlcghmb250U3BlYwhsb2NhdGlvbgNnYXAJaXNSZXZlcnNlE2lzU2hvd0xlZ2VuZFN5bWJvbHMABAAABAQEBAAAAAgSWmVkR3JhcGguTGVnZW5kUG9zAgAAAAEBDVplZEdyYXBoLkZpbGwCAAAAD1plZEdyYXBoLkJvcmRlcgIAAAARWmVkR3JhcGguRm9udFNwZWMCAAAAEVplZEdyYXBoLkxvY2F0aW9uAgAAAAsBAQIAAAAMAAAABe3///8SWmVkR3JhcGguTGVnZW5kUG9zAQAAAAd2YWx1ZV9fAAgCAAAAAAAAAAEACRQAAAAJFQAAAAkWAAAACRcAAAAAAAA/AAEFBgAAABFaZWRHcmFwaC5HYXBMYWJlbAYAAAAGc2NoZW1hBHRleHQJaXNWaXNpYmxlCGZvbnRTcGVjB3NjaGVtYTIDZ2FwAAEABAAACAERWmVkR3JhcGguRm9udFNwZWMCAAAACAsCAAAACgAAAAYYAAAABVRpdGxlAAkZAAAACgAAAJqZmT4FBwAAAA1aZWRHcmFwaC5GaWxsDwAAAAZzY2hlbWEFY29sb3Ibc2Vjb25kYXJ5VmFsdWVHcmFkaWVudENvbG9yBHR5cGUIaXNTY2FsZWQGYWxpZ25IBmFsaWduVghyYW5nZU1pbghyYW5nZU1heAljb2xvckxpc3QMcG9zaXRpb25MaXN0BWFuZ2xlBWltYWdlCHdyYXBNb2RlDHJhbmdlRGVmYXVsdAAEBAQABAQAAAICAAIEAAgUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABFaZWRHcmFwaC5GaWxsVHlwZQIAAAABD1plZEdyYXBoLkFsaWduSAIAAAAPWmVkR3JhcGguQWxpZ25WAgAAAAYGCyFTeXN0ZW0uRHJhd2luZy5EcmF3aW5nMkQuV3JhcE1vZGUDAAAABgIAAAAKAAAABeb///8UU3lzdGVtLkRyYXdpbmcuQ29sb3IEAAAABG5hbWUFdmFsdWUKa25vd25Db2xvcgVzdGF0ZQEAAAAJBwcDAAAACgAAAAAAAAAApAABAAHl////5v///woAAAAAAAAAAKQAAQAF5P///xFaZWRHcmFwaC5GaWxsVHlwZQEAAAAHdmFsdWVfXwAIAgAAAAEAAAABBeP///8PWmVkR3JhcGguQWxpZ25IAQAAAAd2YWx1ZV9fAAgCAAAAAQAAAAXi////D1plZEdyYXBoLkFsaWduVgEAAAAHdmFsdWVfXwAIAgAAAAEAAAAAAAAAAAAAAAAAAAAAAPA/CgoAAAAACgXh////IVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQEAAAAHdmFsdWVfXwAIAwAAAAAAAAD////////vfwUIAAAAD1plZEdyYXBoLkJvcmRlcgsAAAAHc2NoZW1hMAV3aWR0aAVzdHlsZQZkYXNoT24HZGFzaE9mZglpc1Zpc2libGULaXNBbnRpQWxpYXMFY29sb3IMZ3JhZGllbnRGaWxsBnNjaGVtYQ1pbmZsYXRlRmFjdG9yAAAEAAAAAAQEAAAICyJTeXN0ZW0uRHJhd2luZy5EcmF3aW5nMkQuRGFzaFN0eWxlAwAAAAsLAQEUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAADVplZEdyYXBoLkZpbGwCAAAACAsCAAAADAAAAAAAgD8F4P///yJTeXN0ZW0uRHJhd2luZy5EcmF3aW5nMkQuRGFzaFN0eWxlAQAAAAd2YWx1ZV9fAAgDAAAAAAAAAAAAgD8AAIA/AAAB3////+b///8KAAAAAAAAAAAjAAEACSIAAAALAAAAAAAAAAUJAAAAD1plZEdyYXBoLk1hcmdpbgUAAAAGc2NoZW1hBGxlZnQFcmlnaHQDdG9wBmJvdHRvbQAAAAAACAsLCwsCAAAACgAAAAAAIEEAACBBAAAgQQAAIEEFCgAAABVaZWRHcmFwaC5HcmFwaE9iakxpc3QDAAAADUxpc3RgMStfaXRlbXMMTGlzdGAxK19zaXplD0xpc3RgMStfdmVyc2lvbgQAABNaZWRHcmFwaC5HcmFwaE9ialtdAgAAAAgIAgAAAAkjAAAAAAAAAAAAAAAFCwAAAA5aZWRHcmFwaC5YQXhpcw8AAAAGc2NoZW1hBWNyb3NzCWNyb3NzQXV0bwhNYWpvclRpYwhNaW5vclRpYwltYWpvckdyaWQJbWlub3JHcmlkCWlzVmlzaWJsZQV0aXRsZQhtaW5TcGFjZQVjb2xvchRpc0F4aXNTZWdtZW50VmlzaWJsZQdheGlzR2FwBXNjYWxlB3NjaGVtYTIAAAAEBAQEAAQABAAABAAIBgERWmVkR3JhcGguTWFqb3JUaWMCAAAAEVplZEdyYXBoLk1pbm9yVGljAgAAABJaZWRHcmFwaC5NYWpvckdyaWQCAAAAElplZEdyYXBoLk1pbm9yR3JpZAIAAAABElplZEdyYXBoLkF4aXNMYWJlbAIAAAALFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAELFFplZEdyYXBoLkxpbmVhclNjYWxlAgAAAAgCAAAACgAAAAAAAAAAAAAAAQkkAAAACSUAAAAJJgAAAAknAAAAAQkoAAAAAAAAAAHX////5v///woAAAAAAAAAACMAAQABAACgQAkqAAAACgAAAAUMAAAAD1plZEdyYXBoLlgyQXhpcw8AAAAGc2NoZW1hBWNyb3NzCWNyb3NzQXV0bwhNYWpvclRpYwhNaW5vclRpYwltYWpvckdyaWQJbWlub3JHcmlkCWlzVmlzaWJsZQV0aXRsZQhtaW5TcGFjZQVjb2xvchRpc0F4aXNTZWdtZW50VmlzaWJsZQdheGlzR2FwBXNjYWxlB3NjaGVtYTIAAAAEBAQEAAQABAAABAAIBgERWmVkR3JhcGguTWFqb3JUaWMCAAAAEVplZEdyYXBoLk1pbm9yVGljAgAAABJaZWRHcmFwaC5NYWpvckdyaWQCAAAAElplZEdyYXBoLk1pbm9yR3JpZAIAAAABElplZEdyYXBoLkF4aXNMYWJlbAIAAAALFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAELFFplZEdyYXBoLkxpbmVhclNjYWxlAgAAAAgCAAAACgAAAAAAAAAAAAAAAQkrAAAACSwAAAAJLQAAAAkuAAAAAAkvAAAAAAAAAAHQ////5v///woAAAAAAAAAACMAAQABAACgQAkxAAAACwAAAAUNAAAAElplZEdyYXBoLllBeGlzTGlzdAMAAAANTGlzdGAxK19pdGVtcwxMaXN0YDErX3NpemUPTGlzdGAxK192ZXJzaW9uBAAAEFplZEdyYXBoLllBeGlzW10CAAAACAgCAAAACTIAAAABAAAAAQAAAAUOAAAAE1plZEdyYXBoLlkyQXhpc0xpc3QDAAAADUxpc3RgMStfaXRlbXMMTGlzdGAxK19zaXplD0xpc3RgMStfdmVyc2lvbgQAABFaZWRHcmFwaC5ZMkF4aXNbXQIAAAAICAIAAAAJMwAAAAEAAAABAAAABQ8AAAASWmVkR3JhcGguQ3VydmVMaXN0BAAAAAZtYXhQdHMNTGlzdGAxK19pdGVtcwxMaXN0YDErX3NpemUPTGlzdGAxK192ZXJzaW9uAAQAAAgUWmVkR3JhcGguQ3VydmVJdGVtW10CAAAACAgCAAAA9QEAAAk0AAAAAwAAAOkAAAAFEAAAAA5aZWRHcmFwaC5DaGFydAUAAAAGc2NoZW1hBHJlY3QEZmlsbAZib3JkZXIKaXNSZWN0QXV0bwAEBAQACBlTeXN0ZW0uRHJhd2luZy5SZWN0YW5nbGVGAwAAAA1aZWRHcmFwaC5GaWxsAgAAAA9aZWRHcmFwaC5Cb3JkZXICAAAAAQIAAAAKAAAAAcv////8////wu/FQaqq8kAO02hD1b4zQwk2AAAACTcAAAABBREAAAAUWmVkR3JhcGguQmFyU2V0dGluZ3MHAAAABnNjaGVtYQ1taW5DbHVzdGVyR2FwCW1pbkJhckdhcBFjbHVzdGVyU2NhbGVXaWR0aBVjbHVzdGVyU2NhbGVXaWR0aEF1dG8EYmFzZQR0eXBlAAAAAAAEBAgLCwYBEFplZEdyYXBoLkJhckJhc2UCAAAAEFplZEdyYXBoLkJhclR5cGUCAAAAAgAAAAoAAAAAAIA/zcxMPgAAAAAAAPA/AQXI////EFplZEdyYXBoLkJhckJhc2UBAAAAB3ZhbHVlX18ACAIAAAAAAAAABcf///8QWmVkR3JhcGguQmFyVHlwZQEAAAAHdmFsdWVfXwAIAgAAAAAAAAABFAAAAAcAAAAKAAAAAcb////m////CgAAAAAAAAAApAABAAHF////5v///woAAAAAAAAAAKQAAQABxP///+T///8CAAAAAQHD////4////wEAAAABwv///+L///8BAAAAAAAAAAAAAAAAAAAAAADwPwoKAAAAAAoBwf///+H///8AAAAA////////738BFQAAAAgAAAAMAAAAAACAPwHA////4P///wAAAAAAAIA/AACAPwEAAb/////m////CgAAAAAAAAAAIwABAAlCAAAACwAAAAAAAAAFFgAAABFaZWRHcmFwaC5Gb250U3BlYxAAAAAGc2NoZW1hCWZvbnRDb2xvcgZmYW1pbHkGaXNCb2xkCGlzSXRhbGljC2lzVW5kZXJsaW5lC2lzQW50aUFsaWFzBGZpbGwGYm9yZGVyBWFuZ2xlD3N0cmluZ0FsaWdubWVudARzaXplDGlzRHJvcFNoYWRvdw9kcm9wU2hhZG93Q29sb3IPZHJvcFNoYWRvd0FuZ2xlEGRyb3BTaGFkb3dPZmZzZXQABAEAAAAABAQABAAABAAACBRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAABAQEBDVplZEdyYXBoLkZpbGwCAAAAD1plZEdyYXBoLkJvcmRlcgIAAAALHlN5c3RlbS5EcmF3aW5nLlN0cmluZ0FsaWdubWVudAMAAAALARRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAALCwIAAAAKAAAAAb3////m////CgAAAAAAAAAAIwABAAZEAAAABUFyaWFsAAAAAAlFAAAACUYAAAAAAAAABbn///8eU3lzdGVtLkRyYXdpbmcuU3RyaW5nQWxpZ25tZW50AQAAAAd2YWx1ZV9fAAgDAAAAAQAAAAAAQEEAAbj////m////CgAAAAAAAAAAIwABAAAANELNzEw9BRcAAAARWmVkR3JhcGguTG9jYXRpb24IAAAABnNjaGVtYQZhbGlnblYGYWxpZ25IAXgBeQV3aWR0aAZoZWlnaHQPY29vcmRpbmF0ZUZyYW1lAAQEAAAAAAQID1plZEdyYXBoLkFsaWduVgIAAAAPWmVkR3JhcGguQWxpZ25IAgAAAAYGBgYSWmVkR3JhcGguQ29vcmRUeXBlAgAAAAIAAAAKAAAAAbf////i////AAAAAAG2////4////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAW1////ElplZEdyYXBoLkNvb3JkVHlwZQEAAAAHdmFsdWVfXwAIAgAAAAEAAAABGQAAABYAAAAKAAAAAbT////m////CgAAAAAAAAAAIwABAAlEAAAAAQAAAAlOAAAACU8AAAAAAAAAAbD///+5////AQAAAAAAgEEAAa/////m////CgAAAAAAAAAAIwABAAAANELNzEw9BSIAAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABrv///+b///8KAAAAAAAAAACkAAEAAa3////m////CgAAAAAAAAAApAABAAGs////5P///wAAAAABAav////j////AQAAAAGq////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CVcAAAAJWAAAAAAAAAAKAaf////h////AAAAAP///////+9/ByMAAAAAAQAAAAAAAAAEEVplZEdyYXBoLkdyYXBoT2JqAgAAAAUkAAAAEVplZEdyYXBoLk1ham9yVGljCwAAAAZzY2hlbWEFY29sb3IEc2l6ZQhwZW5XaWR0aAlJc091dHNpZGUISXNJbnNpZGUKSXNPcHBvc2l0ZQ5pc0Nyb3NzT3V0c2lkZQ1pc0Nyb3NzSW5zaWRlB3NjaGVtYTIPaXNCZXR3ZWVuTGFiZWxzAAQAAAAAAAAAAAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAsLAQEBAQEIAQIAAAAKAAAAAab////m////CgAAAAAAAAAAIwABAAAAoEAAAIA/AAEBAAAKAAAAAAUlAAAAEVplZEdyYXBoLk1pbm9yVGljCQAAAAZzY2hlbWEFY29sb3IEc2l6ZQhwZW5XaWR0aAlJc091dHNpZGUISXNJbnNpZGUKSXNPcHBvc2l0ZQ5pc0Nyb3NzT3V0c2lkZQ1pc0Nyb3NzSW5zaWRlAAQAAAAAAAAACBRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAALCwEBAQEBAgAAAAoAAAABpf///+b///8KAAAAAAAAAAAjAAEAAAAgQAAAgD8AAQEAAAUmAAAAElplZEdyYXBoLk1ham9yR3JpZAgAAAAGc2NoZW1hCWlzVmlzaWJsZQZkYXNoT24HZGFzaE9mZghwZW5XaWR0aAVjb2xvcgdzY2hlbWEyCmlzWmVyb0xpbmUAAAAAAAQAAAgBCwsLFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAgBAgAAAAoAAAAAAACAPwAAoEAAAIA/AaT////m////CgAAAAAAAAAAIwABAAoAAAAABScAAAASWmVkR3JhcGguTWlub3JHcmlkBgAAAAZzY2hlbWEJaXNWaXNpYmxlBmRhc2hPbgdkYXNoT2ZmCHBlbldpZHRoBWNvbG9yAAAAAAAECAELCwsUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAAgAAAAoAAAAAAACAPwAAIEEAAIA/AaP////m////CgAAAAAAAAAATgABAAUoAAAAElplZEdyYXBoLkF4aXNMYWJlbAkAAAAGc2NoZW1hBHRleHQJaXNWaXNpYmxlCGZvbnRTcGVjB3NjaGVtYTIDZ2FwB3NjaGVtYTMJaXNPbWl0TWFnDmlzVGl0bGVBdENyb3NzAAEABAAAAAAACAERWmVkR3JhcGguRm9udFNwZWMCAAAACAsIAQECAAAACgAAAAZeAAAACVRpbWUgKG1zKQAJXwAAAAoAAACamZk+CgAAAAABBSoAAAAUWmVkR3JhcGguTGluZWFyU2NhbGUhAAAABnNjaGVtYQNtaW4DbWF4CW1ham9yU3RlcAltaW5vclN0ZXAIZXhwb25lbnQHYmFzZVRpYwdtaW5BdXRvB21heEF1dG8NbWFqb3JTdGVwQXV0bw1taW5vclN0ZXBBdXRvB21hZ0F1dG8KZm9ybWF0QXV0bwhtaW5HcmFjZQhtYXhHcmFjZQNtYWcJaXNSZXZlcnNlFWlzUHJldmVudExhYmVsT3ZlcmxhcA1pc1VzZVRlblBvd2VyCWlzVmlzaWJsZRBpc1NraXBGaXJzdExhYmVsD2lzU2tpcExhc3RMYWJlbBBpc1NraXBDcm9zc0xhYmVsCnRleHRMYWJlbHMGZm9ybWF0CW1ham9yVW5pdAltaW5vclVuaXQOaXNMYWJlbHNJbnNpZGUFYWxpZ24GYWxpZ25ICGZvbnRTcGVjCGxhYmVsR2FwB3NjaGVtYTIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBBAQABAQEAAAIBgYGBgYGAQEBAQEBBgYIAQEBAQEBARFaZWRHcmFwaC5EYXRlVW5pdAIAAAARWmVkR3JhcGguRGF0ZVVuaXQCAAAAAQ9aZWRHcmFwaC5BbGlnblACAAAAD1plZEdyYXBoLkFsaWduSAIAAAARWmVkR3JhcGguRm9udFNwZWMCAAAACwgCAAAACwAAAAAAAAAAAAAAAAAAAAAASUAAAAAAAAAkQAAAAAAAABRAAAAAAAAA8D/////////vfwAAAAABAZqZmZmZmbk/mpmZmZmZuT8AAAAAAAEBAQAAAAoGYAAAAAJmMAWf////EVplZEdyYXBoLkRhdGVVbml0AQAAAAd2YWx1ZV9fAAgCAAAAAgAAAAGe////n////wIAAAAABZ3///8PWmVkR3JhcGguQWxpZ25QAQAAAAd2YWx1ZV9fAAgCAAAAAQAAAAGc////4////wEAAAAJZQAAAJqZmT4KAAAAASsAAAAkAAAACgAAAAGa////5v///woAAAAAAAAAACMAAQAAAKBAAACAPwEBAQAACgAAAAABLAAAACUAAAAKAAAAAZn////m////CgAAAAAAAAAAIwABAAAAIEAAAIA/AQEBAAABLQAAACYAAAAKAAAAAAAAgD8AAKBAAACAPwGY////5v///woAAAAAAAAAACMAAQAKAAAAAAEuAAAAJwAAAAoAAAAAAACAPwAAIEEAAIA/AZf////m////CgAAAAAAAAAATgABAAEvAAAAKAAAAAoAAAAGagAAAAABCWsAAAAKAAAAmpmZPgoAAAABAQExAAAAKgAAAAsAAAAAAAAAAAAAADMzMzMzM/M/mpmZmZmZyT+amZmZmZmpPwAAAAAAAPA/////////738BAQEBAQGamZmZmZm5P5qZmZmZmbk/AAAAAAABAQEAAAAKBmwAAAACZjEBk////5////8CAAAAAZL///+f////AgAAAAABkf///53///8BAAAAAZD////j////AQAAAAlxAAAAmpmZPgoAAAAHMgAAAAABAAAABAAAAAQOWmVkR3JhcGguWUF4aXMCAAAACXIAAAANAwczAAAAAAEAAAAEAAAABA9aZWRHcmFwaC5ZMkF4aXMCAAAACXMAAAANAwc0AAAAAAEAAAAEAAAABBJaZWRHcmFwaC5DdXJ2ZUl0ZW0CAAAACXQAAAAJdQAAAAl2AAAACgE2AAAABwAAAAoAAAABif///+b///8KAAAAAAAAAACkAAEAAYj////m////CgAAAAAAAAAApAABAAGH////5P///wIAAAABAYb////j////AQAAAAGF////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CgoAAAAACgGE////4f///wAAAAD////////vfwE3AAAACAAAAAwAAAAAAIA/AYP////g////AAAAAAAAgD8AAIA/AQABgv///+b///8KAAAAAAAAAAAjAAEACX8AAAALAAAAAAAAAAVCAAAADVplZEdyYXBoLkZpbGwPAAAABnNjaGVtYQVjb2xvchtzZWNvbmRhcnlWYWx1ZUdyYWRpZW50Q29sb3IEdHlwZQhpc1NjYWxlZAZhbGlnbkgGYWxpZ25WCHJhbmdlTWluCHJhbmdlTWF4CWNvbG9yTGlzdAxwb3NpdGlvbkxpc3QFYW5nbGUFaW1hZ2UId3JhcE1vZGUMcmFuZ2VEZWZhdWx0AAQEBAAEBAAABAcAAgQACBRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAAUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAEVplZEdyYXBoLkZpbGxUeXBlAgAAAAEPWmVkR3JhcGguQWxpZ25IAgAAAA9aZWRHcmFwaC5BbGlnblYCAAAABgYWU3lzdGVtLkRyYXdpbmcuQ29sb3JbXQMAAAALCyFTeXN0ZW0uRHJhd2luZy5EcmF3aW5nMkQuV3JhcE1vZGUDAAAABgIAAAAKAAAAAYD////m////CgAAAAAAAAAApAABAAF/////5v///woAAAAAAAAAAKQAAQABfv///+T///8AAAAAAQF9////4////wEAAAABfP///+L///8BAAAAAAAAAAAAAAAAAAAAAADwPwmFAAAACYYAAAAAAAAACgF5////4f///wAAAAD////////vfwFFAAAABwAAAAoAAAABeP///+b///8KAAAAAAAAAACkAAEAAXf////m////CgAAAAAAAAAApAABAAF2////5P///wAAAAABAXX////j////AQAAAAF0////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CgoAAAAACgFz////4f///wAAAAD////////vfwFGAAAACAAAAAwAAAAAAIA/AXL////g////AAAAAAAAgD8AAIA/AAABcf///+b///8KAAAAAAAAAAAjAAEACZAAAAALAAAAAAAAAAFOAAAABwAAAAoAAAABb////+b///8KAAAAAAAAAACkAAEAAW7////m////CgAAAAAAAAAApAABAAFt////5P///wAAAAABAWz////j////AQAAAAFr////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CgoAAAAACgFq////4f///wAAAAD////////vfwFPAAAACAAAAAwAAAAAAIA/AWn////g////AAAAAAAAgD8AAIA/AAABaP///+b///8KAAAAAAAAAAAjAAEACZkAAAALAAAAAAAAAAdXAAAAAAEAAAACAAAABBRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAABZv///+b///8KAAAAAAAAAACNAAEAAWX////m////CgAAAAAAAAAApAABAA9YAAAAAgAAAAsAAAAAAACAPwFfAAAAFgAAAAoAAAABZP///+b///8KAAAAAAAAAAAjAAEACUQAAAAAAAAACZ4AAAAJnwAAAAAAAAABYP///7n///8AAAAAAABgQQABX////+b///8KAAAAAAAAAAAjAAEAAAA0Qs3MTD0BZQAAABYAAAAKAAAAAV7////m////CgAAAAAAAAAAIwABAAlEAAAAAAAAAAmkAAAACaUAAAAAAAAAAVr///+5////AQAAAAAAYEEAAVn////m////CgAAAAAAAAAAIwABAAAANELNzEw9AWsAAAAWAAAACgAAAAFY////5v///woAAAAAAAAAACMAAQAJRAAAAAAAAAAJqgAAAAmrAAAAAAA0QwFU////uf///wEAAAAAAGBBAAFT////5v///woAAAAAAAAAACMAAQAAADRCzcxMPQFxAAAAFgAAAAoAAAABUv///+b///8KAAAAAAAAAAAjAAEACUQAAAAAAAAACbAAAAAJsQAAAAAANEMBTv///7n///8BAAAAAABgQQABTf///+b///8KAAAAAAAAAAAjAAEAAAA0Qs3MTD0FcgAAAA5aZWRHcmFwaC5ZQXhpcw8AAAAGc2NoZW1hBWNyb3NzCWNyb3NzQXV0bwhNYWpvclRpYwhNaW5vclRpYwltYWpvckdyaWQJbWlub3JHcmlkCWlzVmlzaWJsZQV0aXRsZQhtaW5TcGFjZQVjb2xvchRpc0F4aXNTZWdtZW50VmlzaWJsZQdheGlzR2FwBXNjYWxlB3NjaGVtYTIAAAAEBAQEAAQABAAABAAIBgERWmVkR3JhcGguTWFqb3JUaWMCAAAAEVplZEdyYXBoLk1pbm9yVGljAgAAABJaZWRHcmFwaC5NYWpvckdyaWQCAAAAElplZEdyYXBoLk1pbm9yR3JpZAIAAAABElplZEdyYXBoLkF4aXNMYWJlbAIAAAALFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAELFFplZEdyYXBoLkxpbmVhclNjYWxlAgAAAAgCAAAACgAAAAAAAAAAAAAAAQm0AAAACbUAAAAJtgAAAAm3AAAAAQm4AAAAAAAAAAFH////5v///woAAAAAAAAAACMAAQABAACgQAm6AAAACgAAAAVzAAAAD1plZEdyYXBoLlkyQXhpcw8AAAAGc2NoZW1hBWNyb3NzCWNyb3NzQXV0bwhNYWpvclRpYwhNaW5vclRpYwltYWpvckdyaWQJbWlub3JHcmlkCWlzVmlzaWJsZQV0aXRsZQhtaW5TcGFjZQVjb2xvchRpc0F4aXNTZWdtZW50VmlzaWJsZQdheGlzR2FwBXNjYWxlB3NjaGVtYTIAAAAEBAQEAAQABAAABAAIBgERWmVkR3JhcGguTWFqb3JUaWMCAAAAEVplZEdyYXBoLk1pbm9yVGljAgAAABJaZWRHcmFwaC5NYWpvckdyaWQCAAAAElplZEdyYXBoLk1pbm9yR3JpZAIAAAABElplZEdyYXBoLkF4aXNMYWJlbAIAAAALFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAELFFplZEdyYXBoLkxpbmVhclNjYWxlAgAAAAgCAAAACgAAAAAAAAAAAAAAAQm7AAAACbwAAAAJvQAAAAm+AAAAAAm/AAAAAAAAAAFA////5v///woAAAAAAAAAACMAAQABAACgQAnBAAAACgAAAAV0AAAAEVplZEdyYXBoLkxpbmVJdGVtDAAAAAZzY2hlbWEFbGFiZWwIaXNZMkF4aXMIaXNYMkF4aXMJaXNWaXNpYmxlEWlzT3ZlcnJpZGVPcmRpbmFsA1RhZwp5QXhpc0luZGV4BGxpbmsHc2NoZW1hMgZzeW1ib2wEbGluZQAEAAAAAAIABAAEBAgOWmVkR3JhcGguTGFiZWwCAAAAAQEBAQgNWmVkR3JhcGguTGluawIAAAAID1plZEdyYXBoLlN5bWJvbAIAAAANWmVkR3JhcGguTGluZQIAAAACAAAADAAAAAnCAAAAAAABAAoAAAAACcMAAAAKAAAACcQAAAAJxQAAAAF1AAAAdAAAAAwAAAAJxgAAAAAAAQAKAAAAAAnHAAAACgAAAAnIAAAACckAAAABdgAAAHQAAAAMAAAACcoAAAAAAAEACgAAAAAJywAAAAoAAAAJzAAAAAnNAAAABX8AAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABMv///+b///8KAAAAAAAAAACkAAEAATH////m////CgAAAAAAAAAApAABAAEw////5P///wAAAAABAS/////j////AQAAAAEu////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CdMAAAAJ1AAAAAAAAAAKASv////h////AAAAAP///////+9/B4UAAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAEq////5v///woAAAAAAAAAAI0AAQABKf///+b///8KAAAAAAAAAACkAAEAD4YAAAACAAAACwAAAAAAAIA/BZAAAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABKP///+b///8KAAAAAAAAAACkAAEAASf////m////CgAAAAAAAAAApAABAAEm////5P///wAAAAABASX////j////AQAAAAEk////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/Cd0AAAAJ3gAAAAAAAAAKASH////h////AAAAAP///////+9/BZkAAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABIP///+b///8KAAAAAAAAAACkAAEAAR/////m////CgAAAAAAAAAApAABAAEe////5P///wAAAAABAR3////j////AQAAAAEc////4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CeUAAAAJ5gAAAAAAAAAKARn////h////AAAAAP///////+9/AZ4AAAAHAAAACgAAAAEY////5v///woAAAAAAAAAAKQAAQABF////+b///8KAAAAAAAAAACkAAEAARb////k////AAAAAAEBFf///+P///8BAAAAART////i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKARP////h////AAAAAP///////+9/AZ8AAAAIAAAADAAAAAAAgD8BEv///+D///8AAAAAAACAPwAAgD8AAAER////5v///woAAAAAAAAAACMAAQAJ8AAAAAsAAAAAAAAAAaQAAAAHAAAACgAAAAEP////5v///woAAAAAAAAAAKQAAQABDv///+b///8KAAAAAAAAAACkAAEAAQ3////k////AAAAAAEBDP///+P///8BAAAAAQv////i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAQr////h////AAAAAP///////+9/AaUAAAAIAAAADAAAAAAAgD8BCf///+D///8AAAAAAACAPwAAgD8AAAEI////5v///woAAAAAAAAAACMAAQAJ+QAAAAsAAAAAAAAAAaoAAAAHAAAACgAAAAEG////5v///woAAAAAAAAAAKQAAQABBf///+b///8KAAAAAAAAAACkAAEAAQT////k////AAAAAAEBA////+P///8BAAAAAQL////i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAQH////h////AAAAAP///////+9/AasAAAAIAAAADAAAAAAAgD8BAP///+D///8AAAAAAACAPwAAgD8AAAH//v//5v///woAAAAAAAAAACMAAQAJAgEAAAsAAAAAAAAAAbAAAAAHAAAACgAAAAH9/v//5v///woAAAAAAAAAAKQAAQAB/P7//+b///8KAAAAAAAAAACkAAEAAfv+///k////AAAAAAEB+v7//+P///8BAAAAAfn+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAfj+///h////AAAAAP///////+9/AbEAAAAIAAAADAAAAAAAgD8B9/7//+D///8AAAAAAACAPwAAgD8AAAH2/v//5v///woAAAAAAAAAACMAAQAJCwEAAAsAAAAAAAAAAbQAAAAkAAAACgAAAAH0/v//5v///woAAAAAAAAAACMAAQAAAKBAAACAPwABAQAACgAAAAABtQAAACUAAAAKAAAAAfP+///m////CgAAAAAAAAAAIwABAAAAIEAAAIA/AAEBAAABtgAAACYAAAAKAAAAAAAAgD8AAKBAAACAPwHy/v//5v///woAAAAAAAAAACMAAQAKAAAAAQG3AAAAJwAAAAoAAAAAAACAPwAAIEEAAIA/AfH+///m////CgAAAAAAAAAATgABAAG4AAAAKAAAAAoAAAAGEAEAAAF5AAkRAQAACgAAAJqZmT4KAAAAAAEBugAAACoAAAALAAAAAAAAAAAAFMAAAAAAAAAUQAAAAAAAAABAAAAAAAAA8D8AAAAAAADwP////////+9/AAAAAAEBmpmZmZmZuT+amZmZmZm5PwAAAAAAAQEBAAAACgYSAQAAAmYwAe3+//+f////AgAAAAHs/v//n////wIAAAAAAev+//+d////AQAAAAHq/v//4////wEAAAAJFwEAAJqZmT4KAAAAAbsAAAAkAAAACgAAAAHo/v//5v///woAAAAAAAAAACMAAQAAAKBAAACAPwEBAQAACgAAAAABvAAAACUAAAAKAAAAAef+///m////CgAAAAAAAAAAIwABAAAAIEAAAIA/AQEBAAABvQAAACYAAAAKAAAAAAAAgD8AAKBAAACAPwHm/v//5v///woAAAAAAAAAACMAAQAKAAAAAQG+AAAAJwAAAAoAAAAAAACAPwAAIEEAAIA/AeX+///m////CgAAAAAAAAAATgABAAG/AAAAKAAAAAoAAAAGHAEAAAJ5MgEJHQEAAAoAAACamZk+CgAAAAEBAcEAAAAqAAAACwAAAAAAAAAAABDAAAAAAAAAEEAAAAAAAADwP5qZmZmZmck/AAAAAAAA8D/////////vfwEBAQEBAZqZmZmZmbk/mpmZmZmZuT8AAAAAAAEBAQAAAAoGHgEAAAJmMAHh/v//n////wIAAAAB4P7//5////8CAAAAAAHf/v//nf///wEAAAAB3v7//+P///8BAAAACSMBAACamZk+CgAAAAXCAAAADlplZEdyYXBoLkxhYmVsBAAAAAZzY2hlbWEEdGV4dAlpc1Zpc2libGUIZm9udFNwZWMAAQACCAECAAAACgAAAAlqAAAAAQoFwwAAAA1aZWRHcmFwaC5MaW5rBgAAAAZzY2hlbWEFdGl0bGUDdXJsBnRhcmdldAlpc0VuYWJsZWQDVGFnAAEBAQACCAECAAAACgAAAAlqAAAACWoAAAAJagAAAAAKBcQAAAAPWmVkR3JhcGguU3ltYm9sCAAAAAZzY2hlbWEEc2l6ZQR0eXBlC2lzQW50aUFsaWFzCWlzVmlzaWJsZQRmaWxsBmJvcmRlcgp1c2VyU3ltYm9sAAAEAAAEBAIICxNaZWRHcmFwaC5TeW1ib2xUeXBlAgAAAAEBDVplZEdyYXBoLkZpbGwCAAAAD1plZEdyYXBoLkJvcmRlcgIAAAACAAAACwAAAAAAQEAF2/7//xNaZWRHcmFwaC5TeW1ib2xUeXBlAQAAAAd2YWx1ZV9fAAgCAAAACwAAAAABCSYBAAAJJwEAAAoFxQAAAA1aZWRHcmFwaC5MaW5lDwAAAAdzY2hlbWEwBXdpZHRoBXN0eWxlBmRhc2hPbgdkYXNoT2ZmCWlzVmlzaWJsZQtpc0FudGlBbGlhcwVjb2xvcgxncmFkaWVudEZpbGwGc2NoZW1hCHN0ZXBUeXBlCGlzU21vb3RoDXNtb290aFRlbnNpb24EZmlsbA9pc09wdGltaXplZERyYXcAAAQAAAAABAQABAAABAAICyJTeXN0ZW0uRHJhd2luZy5EcmF3aW5nMkQuRGFzaFN0eWxlAwAAAAsLAQEUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAADVplZEdyYXBoLkZpbGwCAAAACBFaZWRHcmFwaC5TdGVwVHlwZQIAAAABCw1aZWRHcmFwaC5GaWxsAgAAAAECAAAADAAAAAAAgD8B2P7//+D///8AAAAAAACAPwAAgD8AAAHX/v//5v///woAAAAAAAAAACUAAQAJKgEAAA4AAAAF1f7//xFaZWRHcmFwaC5TdGVwVHlwZQEAAAAHdmFsdWVfXwAIAgAAAAIAAAAAAAAAPwksAQAAAAHGAAAAwgAAAAoAAAAJagAAAAEKAccAAADDAAAACgAAAAlqAAAACWoAAAAJagAAAAAKAcgAAADEAAAACwAAAAAAQEAB0v7//9v+//8LAAAAAAEJLwEAAAkwAQAACgHJAAAAxQAAAAwAAAAAAIA/Ac/+///g////AAAAAAAAgD8AAIA/AAABzv7//+b///8KAAAAAAAAAACNAAEACTMBAAAOAAAAAcz+///V/v//AgAAAAAAAAA/CTUBAAAAAcoAAADCAAAACgAAAAlqAAAAAQoBywAAAMMAAAAKAAAACWoAAAAJagAAAAlqAAAAAAoBzAAAAMQAAAALAAAAAADgQAHJ/v//2/7//wwAAAAAAQk4AQAACTkBAAAKAc0AAADFAAAADAAAAAAAQEABxv7//+D///8AAAAAAACAPwAAgD8BAAHF/v//5v///woAAAAAAAAAAE8AAQAJPAEAAA4AAAABw/7//9X+//8CAAAAAAAAAD8JPgEAAAAH0wAAAAABAAAAAgAAAAQUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAAcH+///m////CgAAAAAAAAAAjQABAAHA/v//5v///woAAAAAAAAAAKQAAQAP1AAAAAIAAAALAAAAAAAAgD8H3QAAAAABAAAAAgAAAAQUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAAb/+///m////CgAAAAAAAAAAjQABAAG+/v//5v///woAAAAAAAAAAKQAAQAP3gAAAAIAAAALAAAAAAAAgD8H5QAAAAABAAAAAgAAAAQUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAAb3+///m////CgAAAAAAAAAAjQABAAG8/v//5v///woAAAAAAAAAAKQAAQAP5gAAAAIAAAALAAAAAAAAgD8F8AAAAA1aZWRHcmFwaC5GaWxsDwAAAAZzY2hlbWEFY29sb3Ibc2Vjb25kYXJ5VmFsdWVHcmFkaWVudENvbG9yBHR5cGUIaXNTY2FsZWQGYWxpZ25IBmFsaWduVghyYW5nZU1pbghyYW5nZU1heAljb2xvckxpc3QMcG9zaXRpb25MaXN0BWFuZ2xlBWltYWdlCHdyYXBNb2RlDHJhbmdlRGVmYXVsdAAEBAQABAQAAAQHAAIEAAgUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABFaZWRHcmFwaC5GaWxsVHlwZQIAAAABD1plZEdyYXBoLkFsaWduSAIAAAAPWmVkR3JhcGguQWxpZ25WAgAAAAYGFlN5c3RlbS5EcmF3aW5nLkNvbG9yW10DAAAACwshU3lzdGVtLkRyYXdpbmcuRHJhd2luZzJELldyYXBNb2RlAwAAAAYCAAAACgAAAAG7/v//5v///woAAAAAAAAAAKQAAQABuv7//+b///8KAAAAAAAAAACkAAEAAbn+///k////AAAAAAEBuP7//+P///8BAAAAAbf+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8JSgEAAAlLAQAAAAAAAAoBtP7//+H///8AAAAA////////738F+QAAAA1aZWRHcmFwaC5GaWxsDwAAAAZzY2hlbWEFY29sb3Ibc2Vjb25kYXJ5VmFsdWVHcmFkaWVudENvbG9yBHR5cGUIaXNTY2FsZWQGYWxpZ25IBmFsaWduVghyYW5nZU1pbghyYW5nZU1heAljb2xvckxpc3QMcG9zaXRpb25MaXN0BWFuZ2xlBWltYWdlCHdyYXBNb2RlDHJhbmdlRGVmYXVsdAAEBAQABAQAAAQHAAIEAAgUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABFaZWRHcmFwaC5GaWxsVHlwZQIAAAABD1plZEdyYXBoLkFsaWduSAIAAAAPWmVkR3JhcGguQWxpZ25WAgAAAAYGFlN5c3RlbS5EcmF3aW5nLkNvbG9yW10DAAAACwshU3lzdGVtLkRyYXdpbmcuRHJhd2luZzJELldyYXBNb2RlAwAAAAYCAAAACgAAAAGz/v//5v///woAAAAAAAAAAKQAAQABsv7//+b///8KAAAAAAAAAACkAAEAAbH+///k////AAAAAAEBsP7//+P///8BAAAAAa/+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8JUgEAAAlTAQAAAAAAAAoBrP7//+H///8AAAAA////////738FAgEAAA1aZWRHcmFwaC5GaWxsDwAAAAZzY2hlbWEFY29sb3Ibc2Vjb25kYXJ5VmFsdWVHcmFkaWVudENvbG9yBHR5cGUIaXNTY2FsZWQGYWxpZ25IBmFsaWduVghyYW5nZU1pbghyYW5nZU1heAljb2xvckxpc3QMcG9zaXRpb25MaXN0BWFuZ2xlBWltYWdlCHdyYXBNb2RlDHJhbmdlRGVmYXVsdAAEBAQABAQAAAQHAAIEAAgUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABFaZWRHcmFwaC5GaWxsVHlwZQIAAAABD1plZEdyYXBoLkFsaWduSAIAAAAPWmVkR3JhcGguQWxpZ25WAgAAAAYGFlN5c3RlbS5EcmF3aW5nLkNvbG9yW10DAAAACwshU3lzdGVtLkRyYXdpbmcuRHJhd2luZzJELldyYXBNb2RlAwAAAAYCAAAACgAAAAGr/v//5v///woAAAAAAAAAAKQAAQABqv7//+b///8KAAAAAAAAAACkAAEAAan+///k////AAAAAAEBqP7//+P///8BAAAAAaf+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8JWgEAAAlbAQAAAAAAAAoBpP7//+H///8AAAAA////////738FCwEAAA1aZWRHcmFwaC5GaWxsDwAAAAZzY2hlbWEFY29sb3Ibc2Vjb25kYXJ5VmFsdWVHcmFkaWVudENvbG9yBHR5cGUIaXNTY2FsZWQGYWxpZ25IBmFsaWduVghyYW5nZU1pbghyYW5nZU1heAljb2xvckxpc3QMcG9zaXRpb25MaXN0BWFuZ2xlBWltYWdlCHdyYXBNb2RlDHJhbmdlRGVmYXVsdAAEBAQABAQAAAQHAAIEAAgUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAAFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABFaZWRHcmFwaC5GaWxsVHlwZQIAAAABD1plZEdyYXBoLkFsaWduSAIAAAAPWmVkR3JhcGguQWxpZ25WAgAAAAYGFlN5c3RlbS5EcmF3aW5nLkNvbG9yW10DAAAACwshU3lzdGVtLkRyYXdpbmcuRHJhd2luZzJELldyYXBNb2RlAwAAAAYCAAAACgAAAAGj/v//5v///woAAAAAAAAAAKQAAQABov7//+b///8KAAAAAAAAAACkAAEAAaH+///k////AAAAAAEBoP7//+P///8BAAAAAZ/+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8JYgEAAAljAQAAAAAAAAoBnP7//+H///8AAAAA////////738BEQEAABYAAAAKAAAAAZv+///m////CgAAAAAAAAAAIwABAAlEAAAAAAAAAAlnAQAACWgBAAAAADTDAZf+//+5////AQAAAAAAYEEAAZb+///m////CgAAAAAAAAAAIwABAAAANELNzEw9ARcBAAAWAAAACgAAAAGV/v//5v///woAAAAAAAAAACMAAQAJRAAAAAAAAAAJbQEAAAluAQAAAAC0QgGR/v//uf///wEAAAAAAGBBAAGQ/v//5v///woAAAAAAAAAACMAAQAAADRCzcxMPQEdAQAAFgAAAAoAAAABj/7//+b///8KAAAAAAAAAAAjAAEACUQAAAAAAAAACXMBAAAJdAEAAAAAAAABi/7//7n///8BAAAAAABgQQABiv7//+b///8KAAAAAAAAAAAjAAEAAAA0Qs3MTD0BIwEAABYAAAAKAAAAAYn+///m////CgAAAAAAAAAAIwABAAlEAAAAAAAAAAl5AQAACXoBAAAAALTCAYX+//+5////AQAAAAAAYEEAAYT+///m////CgAAAAAAAAAAIwABAAAANELNzEw9ASYBAAAHAAAACgAAAAGD/v//5v///woAAAAAAAAAACUAAQABgv7//+b///8KAAAAAAAAAAAlAAEAAYH+///k////AQAAAAEBgP7//+P///8BAAAAAX/+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAX7+///h////AAAAAP///////+9/AScBAAAIAAAADAAAAAAAgD8Bff7//+D///8AAAAAAACAPwAAgD8BAAF8/v//5v///woAAAAAAAAAACUAAQAJhQEAAAsAAAAAAAAABSoBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABev7//+b///8KAAAAAAAAAACkAAEAAXn+///m////CgAAAAAAAAAApAABAAF4/v//5P///wAAAAABAXf+///j////AQAAAAF2/v//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CYsBAAAJjAEAAAAAAAAKAXP+///h////AAAAAP///////+9/ASwBAAAHAAAACgAAAAFy/v//5v///woAAAAAAAAAAI0AAQABcf7//+b///8KAAAAAAAAAACkAAEAAXD+///k////AAAAAAEBb/7//+P///8BAAAAAW7+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAW3+///h////AAAAAP///////+9/AS8BAAAHAAAACgAAAAFs/v//5v///woAAAAAAAAAAI0AAQABa/7//+b///8KAAAAAAAAAACNAAEAAWr+///k////AQAAAAEBaf7//+P///8BAAAAAWj+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAWf+///h////AAAAAP///////+9/ATABAAAIAAAADAAAAAAAgD8BZv7//+D///8AAAAAAACAPwAAgD8BAAFl/v//5v///woAAAAAAAAAAI0AAQAJnAEAAAsAAAAAAAAABTMBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABY/7//+b///8KAAAAAAAAAACkAAEAAWL+///m////CgAAAAAAAAAApAABAAFh/v//5P///wAAAAABAWD+///j////AQAAAAFf/v//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CaIBAAAJowEAAAAAAAAKAVz+///h////AAAAAP///////+9/ATUBAAAHAAAACgAAAAFb/v//5v///woAAAAAAAAAAI0AAQABWv7//+b///8KAAAAAAAAAACkAAEAAVn+///k////AAAAAAEBWP7//+P///8BAAAAAVf+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAVb+///h////AAAAAP///////+9/ATgBAAAHAAAACgAAAAFV/v//5v///woAAAAAAAAAAE8AAQABVP7//+b///8KAAAAAAAAAACkAAEAAVP+///k////AAAAAAEBUv7//+P///8BAAAAAVH+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAVD+///h////AAAAAP///////+9/ATkBAAAIAAAADAAAAAAAgD8BT/7//+D///8AAAAAAACAPwAAgD8BAAFO/v//5v///woAAAAAAAAAAE8AAQAJswEAAAsAAAAAAAAABTwBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABTP7//+b///8KAAAAAAAAAACkAAEAAUv+///m////CgAAAAAAAAAApAABAAFK/v//5P///wAAAAABAUn+///j////AQAAAAFI/v//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CbkBAAAJugEAAAAAAAAKAUX+///h////AAAAAP///////+9/AT4BAAAHAAAACgAAAAFE/v//5v///woAAAAAAAAAAI0AAQABQ/7//+b///8KAAAAAAAAAACkAAEAAUL+///k////AAAAAAEBQf7//+P///8BAAAAAUD+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAT/+///h////AAAAAP///////+9/B0oBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAE+/v//5v///woAAAAAAAAAAI0AAQABPf7//+b///8KAAAAAAAAAACkAAEAD0sBAAACAAAACwAAAAAAAIA/B1IBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAE8/v//5v///woAAAAAAAAAAI0AAQABO/7//+b///8KAAAAAAAAAACkAAEAD1MBAAACAAAACwAAAAAAAIA/B1oBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAE6/v//5v///woAAAAAAAAAAI0AAQABOf7//+b///8KAAAAAAAAAACkAAEAD1sBAAACAAAACwAAAAAAAIA/B2IBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAE4/v//5v///woAAAAAAAAAAI0AAQABN/7//+b///8KAAAAAAAAAACkAAEAD2MBAAACAAAACwAAAAAAAIA/AWcBAAAHAAAACgAAAAE2/v//5v///woAAAAAAAAAAKQAAQABNf7//+b///8KAAAAAAAAAACkAAEAATT+///k////AAAAAAEBM/7//+P///8BAAAAATL+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKATH+///h////AAAAAP///////+9/AWgBAAAIAAAADAAAAAAAgD8BMP7//+D///8AAAAAAACAPwAAgD8AAAEv/v//5v///woAAAAAAAAAACMAAQAJ0gEAAAsAAAAAAAAAAW0BAAAHAAAACgAAAAEt/v//5v///woAAAAAAAAAAKQAAQABLP7//+b///8KAAAAAAAAAACkAAEAASv+///k////AAAAAAEBKv7//+P///8BAAAAASn+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKASj+///h////AAAAAP///////+9/AW4BAAAIAAAADAAAAAAAgD8BJ/7//+D///8AAAAAAACAPwAAgD8AAAEm/v//5v///woAAAAAAAAAACMAAQAJ2wEAAAsAAAAAAAAAAXMBAAAHAAAACgAAAAEk/v//5v///woAAAAAAAAAAKQAAQABI/7//+b///8KAAAAAAAAAACkAAEAASL+///k////AAAAAAEBIf7//+P///8BAAAAASD+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKAR/+///h////AAAAAP///////+9/AXQBAAAIAAAADAAAAAAAgD8BHv7//+D///8AAAAAAACAPwAAgD8AAAEd/v//5v///woAAAAAAAAAACMAAQAJ5AEAAAsAAAAAAAAAAXkBAAAHAAAACgAAAAEb/v//5v///woAAAAAAAAAAKQAAQABGv7//+b///8KAAAAAAAAAACkAAEAARn+///k////AAAAAAEBGP7//+P///8BAAAAARf+///i////AQAAAAAAAAAAAAAAAAAAAAAA8D8KCgAAAAAKARb+///h////AAAAAP///////+9/AXoBAAAIAAAADAAAAAAAgD8BFf7//+D///8AAAAAAACAPwAAgD8AAAEU/v//5v///woAAAAAAAAAACMAAQAJ7QEAAAsAAAAAAAAABYUBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABEv7//+b///8KAAAAAAAAAACkAAEAARH+///m////CgAAAAAAAAAApAABAAEQ/v//5P///wAAAAABAQ/+///j////AQAAAAEO/v//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CfMBAAAJ9AEAAAAAAAAKAQv+///h////AAAAAP///////+9/B4sBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAEK/v//5v///woAAAAAAAAAAI0AAQABCf7//+b///8KAAAAAAAAAACkAAEAD4wBAAACAAAACwAAAAAAAIA/BZwBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAABCP7//+b///8KAAAAAAAAAACkAAEAAQf+///m////CgAAAAAAAAAApAABAAEG/v//5P///wAAAAABAQX+///j////AQAAAAEE/v//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/Cf0BAAAJ/gEAAAAAAAAKAQH+///h////AAAAAP///////+9/B6IBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAEA/v//5v///woAAAAAAAAAAI0AAQAB//3//+b///8KAAAAAAAAAACkAAEAD6MBAAACAAAACwAAAAAAAIA/BbMBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAAB/v3//+b///8KAAAAAAAAAACkAAEAAf39///m////CgAAAAAAAAAApAABAAH8/f//5P///wAAAAABAfv9///j////AQAAAAH6/f//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CQcCAAAJCAIAAAAAAAAKAff9///h////AAAAAP///////+9/B7kBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAH2/f//5v///woAAAAAAAAAAI0AAQAB9f3//+b///8KAAAAAAAAAACkAAEAD7oBAAACAAAACwAAAAAAAIA/BdIBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAAB9P3//+b///8KAAAAAAAAAACkAAEAAfP9///m////CgAAAAAAAAAApAABAAHy/f//5P///wAAAAABAfH9///j////AQAAAAHw/f//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CRECAAAJEgIAAAAAAAAKAe39///h////AAAAAP///////+9/BdsBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAAB7P3//+b///8KAAAAAAAAAACkAAEAAev9///m////CgAAAAAAAAAApAABAAHq/f//5P///wAAAAABAen9///j////AQAAAAHo/f//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CRkCAAAJGgIAAAAAAAAKAeX9///h////AAAAAP///////+9/BeQBAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAAB5P3//+b///8KAAAAAAAAAACkAAEAAeP9///m////CgAAAAAAAAAApAABAAHi/f//5P///wAAAAABAeH9///j////AQAAAAHg/f//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CSECAAAJIgIAAAAAAAAKAd39///h////AAAAAP///////+9/Be0BAAANWmVkR3JhcGguRmlsbA8AAAAGc2NoZW1hBWNvbG9yG3NlY29uZGFyeVZhbHVlR3JhZGllbnRDb2xvcgR0eXBlCGlzU2NhbGVkBmFsaWduSAZhbGlnblYIcmFuZ2VNaW4IcmFuZ2VNYXgJY29sb3JMaXN0DHBvc2l0aW9uTGlzdAVhbmdsZQVpbWFnZQh3cmFwTW9kZQxyYW5nZURlZmF1bHQABAQEAAQEAAAEBwACBAAIFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAABRTeXN0ZW0uRHJhd2luZy5Db2xvcgMAAAARWmVkR3JhcGguRmlsbFR5cGUCAAAAAQ9aZWRHcmFwaC5BbGlnbkgCAAAAD1plZEdyYXBoLkFsaWduVgIAAAAGBhZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAsLIVN5c3RlbS5EcmF3aW5nLkRyYXdpbmcyRC5XcmFwTW9kZQMAAAAGAgAAAAoAAAAB3P3//+b///8KAAAAAAAAAACkAAEAAdv9///m////CgAAAAAAAAAApAABAAHa/f//5P///wAAAAABAdn9///j////AQAAAAHY/f//4v///wEAAAAAAAAAAAAAAAAAAAAAAPA/CSkCAAAJKgIAAAAAAAAKAdX9///h////AAAAAP///////+9/B/MBAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHU/f//5v///woAAAAAAAAAAI0AAQAB0/3//+b///8KAAAAAAAAAACkAAEAD/QBAAACAAAACwAAAAAAAIA/B/0BAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHS/f//5v///woAAAAAAAAAAI0AAQAB0f3//+b///8KAAAAAAAAAACkAAEAD/4BAAACAAAACwAAAAAAAIA/BwcCAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHQ/f//5v///woAAAAAAAAAAI0AAQABz/3//+b///8KAAAAAAAAAACkAAEADwgCAAACAAAACwAAAAAAAIA/BxECAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHO/f//5v///woAAAAAAAAAAI0AAQABzf3//+b///8KAAAAAAAAAACkAAEADxICAAACAAAACwAAAAAAAIA/BxkCAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHM/f//5v///woAAAAAAAAAAI0AAQABy/3//+b///8KAAAAAAAAAACkAAEADxoCAAACAAAACwAAAAAAAIA/ByECAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHK/f//5v///woAAAAAAAAAAI0AAQAByf3//+b///8KAAAAAAAAAACkAAEADyICAAACAAAACwAAAAAAAIA/BykCAAAAAQAAAAIAAAAEFFN5c3RlbS5EcmF3aW5nLkNvbG9yAwAAAAHI/f//5v///woAAAAAAAAAAI0AAQABx/3//+b///8KAAAAAAAAAACkAAEADyoCAAACAAAACwAAAAAAAIA/Cw==</data>
+        <input>
+          <e type="operand">xdash</e>
+          <e type="operand">20</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">xdash</e>
+          <e type="operand" style="unit">ms</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="2">inlet</e>
+          <e type="function" args="1">vectorize</e>
+          <e type="function" args="2">augment</e>
+          <e type="operand">xdot</e>
+          <e type="operand">20</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">xdot</e>
+          <e type="operand" style="unit">ms</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="2">outlet</e>
+          <e type="function" args="1">vectorize</e>
+          <e type="operator" args="1">-</e>
+          <e type="function" args="2">augment</e>
+          <e type="operand">x</e>
+          <e type="operand">12</e>
+          <e type="operand">20</e>
+          <e type="operand" style="unit">Hz</e>
+          <e type="operator" args="2">*</e>
+          <e type="operand">x</e>
+          <e type="operand" style="unit">ms</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="3">boom</e>
+          <e type="function" args="1">vectorize</e>
+          <e type="operand" style="unit">Pa</e>
+          <e type="operand">1</e>
+          <e type="operator" args="1">-</e>
+          <e type="operator" args="2">^</e>
+          <e type="operator" args="2">*</e>
+          <e type="function" args="2">augment</e>
+          <e type="operand">3</e>
+          <e type="operand">1</e>
+          <e type="function" args="5">sys</e>
+        </input>
+      </zedgraph>
+    </region>
+    <region id="29" left="108" top="1260" width="119" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <text lang="eng">
+        <p>Pressure (Pa)</p>
+      </text>
+    </region>
+    <region id="30" left="423" top="1269" width="119" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <text lang="eng">
+        <p>Pressure (Pa)</p>
+      </text>
+    </region>
+    <region id="31" left="189" top="1296" width="86" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <text lang="eng">
+        <p>Inlet air</p>
+      </text>
+    </region>
+    <region id="32" left="567" top="1296" width="86" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <text lang="eng">
+        <p>Inlet air</p>
+      </text>
+    </region>
+    <region id="33" left="81" top="1350" width="94" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <text lang="eng">
+        <p>Outlet air</p>
+      </text>
+    </region>
+    <region id="34" left="450" top="1350" width="98" height="24" color="#000000" bgColor="#ffffff" fontSize="10">
+      <text lang="eng">
+        <p>Outlet air </p>
+      </text>
+    </region>
+  </regions>
+</worksheet>
