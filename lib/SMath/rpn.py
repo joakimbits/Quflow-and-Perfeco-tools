@@ -1,135 +1,161 @@
 """
 RPN calculator
 
+Generates a python trace of all defined variables and functions
+
 Operators are (currently) defined like this:
 operators['+'] = operator(2, lambda x, y: x + y)
 operators['not'] = operator(1, lambda x: not x)
 """
-
-
-from sympy import sympify, Basic, Function
+from sympy import sympify, Basic, Function, lambdify
 from sympy.utilities.lambdify import implemented_function
+from textwrap import indent
 
 
-stack = []
-declarations = []
 operators = {}
-substitutions = {}
-replacements = {}
+
+
+class _:
+    line = 0
+    trace = []
+    stack = []
+    declarations = []
+    substitutions = {}
+    replacements = {}
+
+
+def clear():
+    """Forget everything"""
+    _.line = 0
+    for m in _.trace, _.stack, _.substitutions, _.replacements:
+        m.clear()
+
+
+def push(e=None):
+    """ --- e"""
+    _.stack.append((e, len(_.trace), _.substitutions.copy(), _.replacements.copy()))
+
+
+def pop():
+    """e ---"""
+    e, _.line, _.substitutions, _.replacements = _.stack.pop()
+    return e
 
 
 def use(e):
     """sympify, substitute and replace e"""
-    e = sympify(e).subs(substitutions)
-    for r in replacements.items():
-        e = e.replace(*r)
+    e = sympify(e).subs(_.substitutions)
+    for r in _.replacements.items():
+        try:
+            e = e.replace(*r)
+        except TypeError as err:
+            pass
     return e
-
-
-def assignment():
-    """value name --- ; substitutions[name] = use(value)"""
-    name = stack.pop()
-    substitutions[name] = use(stack.pop())
 
 
 def operator(n, op):
     """pars[-n:] --- op(*pars)"""
-    return lambda: stack.append(op(*reversed([use(stack.pop()) for i in range(n)])))
+    return lambda: push(op(*reversed([use(pop()) for i in range(n)])))
 
 
-def declare():
-    """pars[-n:] name n --- ; Begin capturing code for a function <name>(*pars)"""
-    global stack
-    n, name = int(stack.pop()), stack.pop()
-    names, stack = stack[-n:], stack[:-n]
-    declarations.append((name, names, []))
+def bracket():
+    """e --- [e]"""
+    push([pop()])
 
 
-def define():
-    """ --- ; End capturing code for a function"""
-    name, names, code = declarations.pop()
-    expression = execute(code).pop()
-    f = eval("lambda %s: %r" % (", ".join(names), expression))
-    replacements[Function(name)] = implemented_function(name, f)
-
-
-def call():
+def function():
     """pars[-n:] name n --- <name>(*pars)"""
-    n, name = int(stack.pop()), stack.pop()
-    f = replacements.get(name, None) or Function(name)
-    return stack.append(f(*reversed([use(stack.pop()) for i in range(n)])))
+    n, name = int(pop()), pop()
+    if name == 'if':
+        name = 'if_'
+    f = _.replacements.get(name, None) or Function(name)
+    return push(f(*reversed([use(pop()) for i in range(n)])))
 
 
-def parse(line):
-    commands = []
-    for t in line.split():
-        # next line, using default parameters, is intentional.
-        commands.append(operators.get(t, lambda t=t: stack.append(t)))
-    return commands
-
-
-def execute(code):
-    for t in code:
-        if declarations and t != define:
-            declarations[-1][-1].append(t)
-        elif isinstance(t, Basic):
-            stack.append(t)
+def assignment():
+    """object expression --- ; use expression for object and trace it as python"""
+    expr, obj = pop(), pop()
+    if isinstance(expr, Function) and expr.name == 'line':
+        expr = expr.args[-3]  # SMath line: <assignments>, expr, <two numbers>.
+    if isinstance(obj, Function):
+        _.trace = _.trace[:_.line] \
+                + ["def %r:" % obj] \
+                + [indent(r, "    ") for r in _.trace[_.line:]] \
+                + ["    return %r" % expr]
+        try:
+            tmp = {}
+            exec("\n".join(_.trace[_.line:]), {**locals(), **globals()}, tmp)
+            f, = tmp.values()
+        except:
+            f = lambda: NotImplementedError
+        obj = Function(obj.name)
+        try:
+            _.replacements[obj] = implemented_function(obj, f)
+            push(Function('let')(obj, _.replacements[obj]))
+        except SyntaxError as err:
+            pass
+    else:
+        if len(_.trace) > _.line:
+            _.trace = _.trace[:_.line] \
+                    + ["def %s():" % obj] \
+                    + [indent(r, "    ") for r in _.trace[_.line:]] \
+                    + ["    return %r" % expr] \
+                    + ["%s = %s()" % (obj, obj)]
         else:
-            t()
-    return stack
+            _.trace.append("%s = %s" % (obj, expr))
+        #substitutions[str(obj)] = expr
+        try:
+            push(Function('let')(obj, expr))
+        except Exception as err:
+            raise type(err)("%s\n%r %r" % (err, obj, expr))
+    _.line = len(_.trace)
 
 
-operators.update({
-    '+': operator(2, lambda x, y: x + y),
-    '-': operator(2, lambda x, y: x - y),
-    '*': operator(2, lambda x, y: x * y),
-    '/': operator(2, lambda x, y: x / y),
-    '=': assignment,
-    ':': declare,
-    ';': define,
-    '()': call})
+operators['('] = bracket
+operators[')'] = function
+operators[':'] = assignment
+for op in "+ - * / % ** // == != > < >= <= & | ^ << >> and or in is".split() + ['not in', 'is not']:
+    operators[op] = operator(2, eval("lambda x, y: x %s y" % op))
+for op in "~ not".split():
+    operators[op] = operator(1, eval("lambda x: %s y" % op))
 
 
-def rpn(line, raw=False):
-    """
-    Parse and execute math in reverse polish notation for a global stack and context
+def execute(*math):
+    for e in math:
+        op = operators.get(e, None)
+        if op:
+            op()
+        else:
+            push(e)
+    return _.stack
 
-    The line can contain operands (pushed to the stack) and operators on the stack.
 
-    rpn   --- result
-    ================
-    a b + --- a+b
-    a b - --- a-b
-    a b * --- a*b
-    a b / --- a/b
-    a b = b --- a
-    x y f 2 : x y * ; a b f 2 () --- a*b
+def rpn(line=""):
+    r"""Parse and execute a line of math in reverse polish notation
+    Returns a numerically evaluated copy of the stack.
 
-    Notes:
-    * Operands are sympified and evaluated within the current context
-    (variable substitutions and function replacements) before being used.
-    * The stack is (by default) numerically evaluated before being returned.
-    * If raw=True, the stack and context is returned as-is.
+    Operands are appended as-is (here: strings) to the global stack, and operators modify the end of the stack.
+    Operands are sympified and evaluated within the current context when consumed by an operator.
 
     >>> rpn('2 pi * 1 2 / -')
     [5.78318530717959]
-    >>> rpn('b a + fun 2 () 2 3 fun 2 ()')
+    >>> rpn('b a + fun 2 ) 2 3 fun 2 )')
     [fun(-1/2 + 2*pi, a + b), fun(2, 3)]
-    >>> rpn('0 a =')
-    [fun(-1/2 + 2*pi, b), fun(2, 3)]
-    >>> rpn('x y fun 2 : x y * ;')
-    [fun(-1/2 + 2*pi, b), 6.00000000000000]
-    >>> rpn('1 b =')
-    [5.78318530717959, 6.00000000000000]
-    >>> rpn('', raw=True)
+    >>> rpn('a 0 :'), trace
+    ([fun(-1/2 + 2*pi, b), fun(2, 3)], ['a = 0'])
+    >>> rpn('x y fun 2 ) x y * :'), trace[-1]
+    ([fun(-1/2 + 2*pi, b), 6.00000000000000], 'fun = lambda x, y: x*y')
+    >>> rpn('b 1 :'), trace[-1]
+    ([5.78318530717959, 6.00000000000000], 'b = 1')
+    >>> stack, substitutions, replacements
     ([fun(-1/2 + 2*pi, a + b), fun(2, 3)], {'a': 0, 'b': 1}, {fun: fun})
-    """
-    execute(parse(line))
-    if raw:
-        return stack, substitutions, replacements
-    return [use(t).evalf() for t in stack]
-
-
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
+    >>> for line in trace: print(line)
+    a = 0
+    fun = lambda x, y: x*y
+    b = 1
+    >>> for e in stack: print(e, "==", use(e).evalf())
+    fun(-1/2 + 2*pi, a + b) == 5.78318530717959
+    fun(2, 3) == 6.00000000000000
+   """
+    execute(*line.split())
+    return [use(t).evalf() for t in _.stack]
