@@ -44,7 +44,11 @@ def pop():
 
 def use(e):
     """sympify, substitute and replace e"""
-    e = sympify(e).subs(_.substitutions)
+    e = sympify(e)
+    try:
+        e = e.subs(_.substitutions)
+    except:
+        pass
     for r in _.replacements.items():
         try:
             e = e.replace(*r)
@@ -74,7 +78,7 @@ def function():
 
 def assignment():
     """object expression --- ; use expression for object and trace it as python"""
-    expr, obj = pop(), pop()
+    expr, obj = sympify(pop()), pop()
     if isinstance(expr, Function) and expr.name == 'line':
         expr = expr.args[-3]  # SMath line: <assignments>, expr, <two numbers>.
     if isinstance(obj, Function):
@@ -103,12 +107,11 @@ def assignment():
                     + ["%s = %s()" % (obj, obj)]
         else:
             _.trace.append("%s = %s" % (obj, expr))
-        #substitutions[str(obj)] = expr
+        _.substitutions[str(obj)] = expr
         try:
             push(Function('let')(obj, expr))
         except Exception as err:
             raise type(err)("%s\n%r %r" % (err, obj, expr))
-    _.line = len(_.trace)
 
 
 operators['('] = bracket
@@ -141,21 +144,29 @@ def rpn(line=""):
     [5.78318530717959]
     >>> rpn('b a + fun 2 ) 2 3 fun 2 )')
     [fun(-1/2 + 2*pi, a + b), fun(2, 3)]
-    >>> rpn('a 0 :'), trace
-    ([fun(-1/2 + 2*pi, b), fun(2, 3)], ['a = 0'])
-    >>> rpn('x y fun 2 ) x y * :'), trace[-1]
-    ([fun(-1/2 + 2*pi, b), 6.00000000000000], 'fun = lambda x, y: x*y')
-    >>> rpn('b 1 :'), trace[-1]
-    ([5.78318530717959, 6.00000000000000], 'b = 1')
-    >>> stack, substitutions, replacements
-    ([fun(-1/2 + 2*pi, a + b), fun(2, 3)], {'a': 0, 'b': 1}, {fun: fun})
-    >>> for line in trace: print(line)
+    >>> rpn('a 0 :'), _.trace
+    ([fun(-1/2 + 2*pi, b), fun(2, 3), let(0, 0)], ['a = 0'])
+    >>> rpn('x y fun 2 ) x y * :'), _.trace[_.line:]
+    ([fun(-1/2 + 2*pi, b), 6.00000000000000, let(0, 0), let(fun, fun)], ['def fun(x, y):', '    return x*y'])
+    >>> rpn('b 1 :'), _.trace[_.line:]
+    ([5.78318530717959, 6.00000000000000, let(0, 0), let(fun, fun), let(1, 1)], ['b = 1'])
+    >>> _.stack
+    [(fun(-1/2 + 2*pi, a + b), 0, {}, {}), (fun(2, 3), 0, {}, {}), (let(a, 0), 1, {'a': 0}, {}), (let(fun, fun), 3, {'a': 0}, {fun: fun}), (let(b, 1), 4, {'a': 0, 'b': 1}, {fun: fun})]
+    >>> _.substitutions
+    {'a': 0, 'b': 1}
+    >>> _.replacements
+    {fun: fun}
+    >>> for line in _.trace: print(line)
     a = 0
-    fun = lambda x, y: x*y
+    def fun(x, y):
+        return x*y
     b = 1
-    >>> for e in stack: print(e, "==", use(e).evalf())
+    >>> for e, line, substitutions, replacements  in _.stack: print(e, "==", use(e).evalf())
     fun(-1/2 + 2*pi, a + b) == 5.78318530717959
     fun(2, 3) == 6.00000000000000
+    let(a, 0) == let(0, 0)
+    let(fun, fun) == let(fun, fun)
+    let(b, 1) == let(1, 1)
    """
     execute(*line.split())
-    return [use(t).evalf() for t in _.stack]
+    return [use(t[0]).evalf() for t in _.stack]
