@@ -202,12 +202,14 @@ class Macros(HasTraits):
         comment_i = ''
         for path in sorted(paths):
             folder, name = os.path.split(path)
+            name = " ".join(name.split(' A0 '))  # Fixup after bug
             comment, ext = os.path.splitext(name)
             assert ' ' in comment, path + " saknar datum"
             _space = comment.index(' ')
             assert _space == 10, path + " saknar datum"
             date = comment[:_space]
             _paranthesis = comment.index(' (') if ' (' in comment else len(comment)
+            _rparanthesis = comment.index(') ') if ') ' in comment else len(comment)
             if comment[:_paranthesis] != comment_i:
                 i += 1
                 comment_i = comment[:_paranthesis]
@@ -217,6 +219,10 @@ class Macros(HasTraits):
             if comment[_space:_space+9] == ' Faktura ':
                 account = u'Försäljning'
                 explanation = comment[_space+8:_paranthesis]
+            elif '(' in comment:
+                account = comment[_paranthesis + 2:_rparanthesis]
+                explanation = comment[_space:_paranthesis] + comment[_rparanthesis + 1:]
+                print(repr((account, explanation)))
             else:
                 account = u'Förbrukningsmaterial'
                 for a in accounts:
@@ -224,15 +230,36 @@ class Macros(HasTraits):
                         account = a
                         break
                 explanation = comment[_space:_paranthesis]
+            words = explanation.split(' ')
+            brutto = 0
+            vat = 0.25
+            fake_vat = (u'Import varor EU', u'Import tjänster EU', u'Import varor ej EU', u'Import tjänster ej EU')
+            for j, number in enumerate(reversed(words)):
+                number = number.replace(',', '.')
+                if len(number) == 0:
+                    break
+                elif number[-1] == '%':
+                    vat = int(number[:-1])/100
+                else:
+                    try:
+                        netto = float(number)
+                        brutto = netto * (1 + (0 if account in fake_vat else vat))
+                        explanation = ' '.join(words[:len(words) - 1 - j])
+                        break
+                    except:
+                        pass
             excel[row + i, 3] = date
             excel[row + i, 4] = account + explanation
-            win32api.ShellExecute(
+            if brutto:
+                excel[row + i, 5] = brutto
+                excel[row + i, 6] = vat
+            """win32api.ShellExecute(
                 0,
                 "open",
                 new_name,
                 "",
                 folder,
-                0)
+                0)"""
 
     view = View(Item('save_current_text', show_label = False),
                 Item('save_all_texts', show_label=False),
