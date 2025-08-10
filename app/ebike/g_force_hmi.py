@@ -57,7 +57,7 @@ A0 = G0 = accelerometer.get_values()[1:3]
 g_memory = 0.99
 a_memory = 0.9
 parked = None
-min_parked_steering_arm_angle = 75
+min_parked_steering_arm_angle = 50
 
 def hmi():
     global horn_ms_index, g_force_index, sound_index, sound_index0, sound_control_was_touched
